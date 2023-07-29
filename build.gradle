@@ -1,0 +1,81 @@
+plugins {
+    id 'java'
+    id 'com.github.johnrengelman.shadow' version '7.1.2'
+}
+
+group 'lee.code.towns'
+version '1.0.0'
+
+repositories {
+    mavenCentral()
+    maven {
+        name = "paper-repo"
+        url = "https://repo.papermc.io/repository/maven-public/"
+    }
+    maven {
+        name = "mojang-libraries"
+        url = "https://libraries.minecraft.net"
+    }
+}
+
+artifacts {
+    archives shadowJar
+}
+
+dependencies {
+    //lombok
+    compileOnly 'org.projectlombok:lombok:1.18.28'
+    annotationProcessor 'org.projectlombok:lombok:1.18.28'
+    testCompileOnly 'org.projectlombok:lombok:1.18.28'
+    testAnnotationProcessor 'org.projectlombok:lombok:1.18.28'
+
+    //paper
+    compileOnly "dev.folia:folia-api:1.20.1-R0.1-SNAPSHOT"
+    compileOnly 'com.mojang:authlib:1.5.25'
+
+    //ormlite
+    implementation 'com.j256.ormlite:ormlite-core:6.1'
+    implementation 'com.j256.ormlite:ormlite-jdbc:6.1'
+}
+
+shadowJar {
+    // Set the name of the main JAR
+    archiveFileName = "${project.name}-${project.version}.jar"
+
+    // Configure the dependencies to be included in the main JAR
+    dependencies {
+        include(dependency('com.j256.ormlite:ormlite-core:6.1'))
+        include(dependency('com.j256.ormlite:ormlite-jdbc:6.1'))
+    }
+
+    relocate 'com.j256.ormlite', 'lee.code.towns.ormlite'
+}
+
+
+def targetJavaVersion = 17
+java {
+    def javaVersion = JavaVersion.toVersion(targetJavaVersion)
+    sourceCompatibility = javaVersion
+    targetCompatibility = javaVersion
+    if (JavaVersion.current() < javaVersion) {
+        toolchain.languageVersion = JavaLanguageVersion.of(targetJavaVersion)
+    }
+}
+
+tasks.withType(JavaCompile).configureEach {
+    if (targetJavaVersion >= 10 || JavaVersion.current().isJava10Compatible()) {
+        options.release = targetJavaVersion
+    }
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = "UTF-8"
+}
+
+processResources {
+    def props = [version: version]
+    inputs.properties props
+    filesMatching('plugin.yml') {
+        expand props
+    }
+}
