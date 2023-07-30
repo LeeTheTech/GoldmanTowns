@@ -89,9 +89,12 @@ public class CommandManager implements CommandExecutor {
 
     private void performSubCommandAsync(Player player, UUID uuid, SubCommand subCommand, String[] args) {
         asyncTasks.put(uuid, Bukkit.getAsyncScheduler().runNow(towns, scheduledTask -> {
-            subCommand.perform(player, args);
-            asyncLocks.remove(uuid);
-            asyncTasks.remove(uuid);
+            try {
+                subCommand.perform(player, args);
+            } finally {
+                asyncLocks.remove(uuid);
+                asyncTasks.remove(uuid);
+            }
         }));
     }
 
