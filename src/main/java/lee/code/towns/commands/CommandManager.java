@@ -13,6 +13,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -23,7 +24,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class CommandManager implements CommandExecutor {
 
     @Getter private final ArrayList<SubCommand> subCommands = new ArrayList<>();
-    private final ConcurrentHashMap<UUID, ScheduledTask> playerTasks = new ConcurrentHashMap<>();
+    private final ConcurrentHashMap<UUID, ScheduledTask> asyncTasks = new ConcurrentHashMap<>();
     private final Towns towns;
 
     public CommandManager(Towns towns) {
@@ -34,32 +35,12 @@ public class CommandManager implements CommandExecutor {
     @Override
     public boolean onCommand(@NonNull CommandSender sender, @NonNull Command command, @NonNull String label, String[] args) {
         if (sender instanceof Player player) {
-            final UUID uuid = player.getUniqueId();
             if (args.length > 0) {
                 for (SubCommand subCommand : subCommands) {
                     if (args[0].equalsIgnoreCase(subCommand.getName())) {
-                        if (player.hasPermission(subCommand.getPermission())) {
-                            /////
-                            if (subCommand.performAsync()) {
-                                synchronized (uuid) {
-                                    if (playerTasks.containsKey(uuid)) {
-                                        if (!playerTasks.get(uuid).getExecutionState().equals(ScheduledTask.ExecutionState.FINISHED)) {
-                                            player.sendMessage(Lang.ERROR_ONE_COMMAND_AT_A_TIME.getComponent(null));
-                                            return true;
-                                        }
-                                    }
-                                    playerTasks.put(player.getUniqueId(), Bukkit.getAsyncScheduler().runNow(towns, scheduledTask -> {
-                                        subCommand.perform(player, args);
-                                        playerTasks.remove(uuid);
-                                    }));
-                                }
-                            /////
-                            } else {
-                                subCommand.perform(player, args);
-                            }
-                        } else {
-                            player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_NO_PERMISSION.getComponent(null)));
-                        }
+                        if (!player.hasPermission(subCommand.getPermission())) player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_NO_PERMISSION.getComponent(null)));
+                        if (subCommand.performAsync()) performAsync(player, subCommand, args);
+                        else subCommand.perform(player, args);
                         return true;
                     }
                 }
@@ -68,12 +49,33 @@ public class CommandManager implements CommandExecutor {
         } else if (args.length > 0) {
             for (SubCommand subCommand : subCommands) {
                 if (args[0].equalsIgnoreCase(subCommand.getName())) {
-                    subCommand.performConsole(sender, args);
+                    if (subCommand.performAsync()) performAsync(sender, subCommand, args);
+                    else subCommand.performConsole(sender, args);
                     return true;
                 }
             }
         }
         return true;
+    }
+
+    public void performAsync(CommandSender sender, SubCommand subCommand, String[] args) {
+        if (sender instanceof Player player) {
+            final UUID uuid = player.getUniqueId();
+            synchronized (uuid) {
+                if (asyncTasks.containsKey(uuid)) {
+                    if (!asyncTasks.get(uuid).getExecutionState().equals(ScheduledTask.ExecutionState.FINISHED)) {
+                        player.sendMessage(Lang.ERROR_ONE_COMMAND_AT_A_TIME.getComponent(null));
+                        return;
+                    }
+                }
+                asyncTasks.put(uuid, Bukkit.getAsyncScheduler().runNow(towns, scheduledTask -> {
+                    subCommand.perform(player, args);
+                    asyncTasks.remove(uuid);
+                }));
+            }
+        } else if (sender instanceof ConsoleCommandSender console) {
+            Bukkit.getAsyncScheduler().runNow(towns, scheduledTask -> subCommand.performConsole(console, args));
+        }
     }
 
     public void sendHelpMessage(CommandSender sender) {

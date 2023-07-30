@@ -26,7 +26,6 @@ import java.util.UUID;
 public class DatabaseManager {
 
     private final Towns towns;
-    private final CacheManager cacheManager;
     private Dao<ChunkTable, String> chunkDao;
     private Dao<PlayerTable, UUID> playerDao;
     private Dao<PermissionTable, Integer> permissionDao;
@@ -36,7 +35,6 @@ public class DatabaseManager {
 
     public DatabaseManager(Towns towns) {
         this.towns = towns;
-        this.cacheManager = towns.getCacheManager();
     }
 
     private String getDatabaseURL() {
@@ -69,6 +67,7 @@ public class DatabaseManager {
     }
 
     private void createOrCacheTables() throws SQLException {
+        final CacheManager cacheManager = towns.getCacheManager();
         //Permission data
         TableUtils.createTableIfNotExists(connectionSource, PermissionTable.class);
         permissionDao = DaoManager.createDao(connectionSource, PermissionTable.class);
@@ -109,7 +108,7 @@ public class DatabaseManager {
     private PermissionTable queryPermPlayerTable(PlayerTable playerTable) {
         try {
             final QueryBuilder<PermissionTable, Integer> queryBuilder = permissionDao.queryBuilder();
-            queryBuilder.where().eq("uuid", playerTable)
+            queryBuilder.where().eq("uuid", playerTable.getUniqueId())
                     .and()
                     .like("permission_type", PermissionType.PLAYER);
             return queryBuilder.query().get(0);

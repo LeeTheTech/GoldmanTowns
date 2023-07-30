@@ -6,7 +6,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.Date;
 import java.util.UUID;
 
 @Setter
@@ -16,7 +15,7 @@ import java.util.UUID;
 public class PlayerTable {
 
     @DatabaseField(id = true, canBeNull = false)
-    private UUID uniqueID;
+    private UUID uniqueId;
 
     @DatabaseField(columnName = "town")
     private String town;
@@ -31,9 +30,9 @@ public class PlayerTable {
     private String spawn;
 
     @DatabaseField(columnName = "last_joined")
-    private Date lastJoined;
+    private String lastJoined;
 
-    public PlayerTable(UUID uniqueID) {
-        this.uniqueID = uniqueID;
+    public PlayerTable(UUID uniqueId) {
+        this.uniqueId = uniqueId;
     }
 }

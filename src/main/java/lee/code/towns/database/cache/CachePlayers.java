@@ -43,7 +43,7 @@ public class CachePlayers {
     }
 
     public void setPlayerTable(PlayerTable playerTable) {
-        playersCache.put(playerTable.getUniqueID(), playerTable);
+        playersCache.put(playerTable.getUniqueId(), playerTable);
     }
 
     public boolean hasTown(UUID uuid) {
