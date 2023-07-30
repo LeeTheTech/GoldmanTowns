@@ -1,5 +1,6 @@
 package lee.code.towns.managers;
 
+import io.papermc.paper.threadedregions.scheduler.ScheduledTask;
 import lee.code.towns.Towns;
 import lee.code.towns.enums.ChunkRenderType;
 import org.bukkit.*;
@@ -9,6 +10,7 @@ import org.bukkit.util.Vector;
 import java.util.HashSet;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.TimeUnit;
 
 public class BorderParticleManager {
     private final Towns towns;
@@ -17,7 +19,7 @@ public class BorderParticleManager {
         this.towns = towns;
     }
 
-    private final ConcurrentHashMap<UUID, Integer> borderTaskID = new ConcurrentHashMap<>();
+    private final ConcurrentHashMap<UUID, ScheduledTask> borderTaskID = new ConcurrentHashMap<>();
 
     public boolean hasBorderActive(UUID uuid) {
         return borderTaskID.containsKey(uuid);
@@ -121,15 +123,19 @@ public class BorderParticleManager {
 
     public void scheduleBorder(Player player) {
         if (borderTaskID.containsKey(player.getUniqueId())) return;
-        final int taskID = Bukkit.getScheduler().scheduleSyncRepeatingTask(towns, () -> Bukkit.getScheduler().runTaskAsynchronously(towns, () -> {
-            final HashSet<String> chunks = towns.getCacheManager().getCacheChunks().getChunkList(player.getUniqueId());
-            renderBorderParticlesAroundChunks(player, chunks);
-        }), 0L, 20L);
-        borderTaskID.put(player.getUniqueId(), taskID);
+        borderTaskID.put(player.getUniqueId(), Bukkit.getAsyncScheduler().runAtFixedRate(towns,
+                (scheduledTask) -> {
+                    final HashSet<String> chunks = towns.getCacheManager().getCacheChunks().getChunkList(player.getUniqueId());
+                    renderBorderParticlesAroundChunks(player, chunks);
+                },
+                0,
+                1,
+                TimeUnit.SECONDS
+                ));
     }
 
     public void stopBorder(UUID uuid) {
-        Bukkit.getScheduler().cancelTask(borderTaskID.get(uuid));
+        borderTaskID.get(uuid).cancel();
         borderTaskID.remove(uuid);
     }
 }

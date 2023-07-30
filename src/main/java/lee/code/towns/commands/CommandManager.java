@@ -2,6 +2,8 @@ package lee.code.towns.commands;
 
 import io.papermc.paper.threadedregions.scheduler.ScheduledTask;
 import lee.code.towns.Towns;
+import lee.code.towns.commands.cmds.BorderCMD;
+import lee.code.towns.commands.cmds.ClaimCMD;
 import lee.code.towns.commands.cmds.CreateCMD;
 import lee.code.towns.commands.cmds.HelpCMD;
 import lee.code.towns.lang.Lang;
@@ -37,6 +39,8 @@ public class CommandManager implements CommandExecutor {
     private void registerSubCommands() {
         subCommands.add(new CreateCMD(towns));
         subCommands.add(new HelpCMD(towns));
+        subCommands.add(new BorderCMD(towns));
+        subCommands.add(new ClaimCMD(towns));
     }
 
     @Override

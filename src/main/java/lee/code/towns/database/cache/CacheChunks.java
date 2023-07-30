@@ -4,6 +4,8 @@ import lee.code.towns.database.DatabaseManager;
 import lee.code.towns.database.tables.ChunkTable;
 import lee.code.towns.database.tables.PermissionTable;
 import lee.code.towns.enums.PermissionType;
+import org.bukkit.Chunk;
+import org.bukkit.World;
 
 import java.util.HashSet;
 import java.util.UUID;
@@ -39,6 +41,10 @@ public class CacheChunks {
         return playerChunkListCache.get(uuid);
     }
 
+    public boolean hasClaimedChunks(UUID uuid) {
+        return playerChunkListCache.containsKey(uuid);
+    }
+
     //Chunk Data
     private void updateChunkDatabase(ChunkTable chunkTable) {
         databaseManager.updateChunkTable(chunkTable);
@@ -57,6 +63,23 @@ public class CacheChunks {
         return chunksCache.containsKey(chunk);
     }
 
+    public boolean isConnectedChunk(UUID uuid, Chunk chunk) {
+        final int[] offset = {-1, 0, 1};
+        final World world = chunk.getWorld();
+        final int baseX = chunk.getX();
+        final int baseZ = chunk.getZ();
+
+        for (int x : offset) {
+            for (int z : offset) {
+                final String sChunk = world.getName() + "," + (baseX + x) + "," + (baseZ + z);
+                if (isClaimed(sChunk)) {
+                    if (isChunkOwner(sChunk, uuid)) return true;
+                }
+            }
+        }
+        return false;
+    }
+
     public void claim(String chunk, UUID uuid) {
         final ChunkTable chunkTable = new ChunkTable(chunk, uuid);
         final PermissionTable permissionTable = new PermissionTable(uuid, PermissionType.CHUNK);
@@ -70,6 +93,10 @@ public class CacheChunks {
 
     public UUID getChunkOwner(String chunk) {
         return chunksCache.get(chunk).getOwner();
+    }
+
+    public boolean isChunkOwner(String chunk, UUID uuid) {
+        return chunksCache.get(chunk).getOwner().equals(uuid);
     }
 
 
