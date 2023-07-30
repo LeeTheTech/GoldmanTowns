@@ -5,6 +5,8 @@ import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
+import net.kyori.adventure.text.serializer.plain.PlainComponentSerializer;
+import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -45,6 +47,10 @@ public class CoreUtil {
     public static Component parseColorComponent(String text) {
         final LegacyComponentSerializer serializer = LegacyComponentSerializer.legacyAmpersand();
         return (Component.empty().decoration(TextDecoration.ITALIC, false)).append(serializer.deserialize(text));
+    }
+
+    public static String stripColorCodes(String text) {
+        return PlainTextComponentSerializer.plainText().serialize(LegacyComponentSerializer.legacyAmpersand().deserialize(text));
     }
 
     public static String getTextBeforeCharacter(String input, char character) {

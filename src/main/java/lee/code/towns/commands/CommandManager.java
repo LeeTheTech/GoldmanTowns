@@ -104,9 +104,8 @@ public class CommandManager implements CommandExecutor {
 
         for (SubCommand subCommand : subCommands) {
             if (sender.hasPermission(subCommand.getPermission())) {
-                final String suggestCommand = CoreUtil.getTextBeforeCharacter(subCommand.getSyntax(), '&');
                 final Component helpSubCommand = Lang.COMMAND_HELP_SUB_COMMAND.getComponent(new String[] { String.valueOf(number), subCommand.getSyntax() })
-                        .clickEvent(ClickEvent.clickEvent(ClickEvent.Action.SUGGEST_COMMAND, suggestCommand))
+                        .clickEvent(ClickEvent.clickEvent(ClickEvent.Action.SUGGEST_COMMAND, CoreUtil.stripColorCodes(subCommand.getSyntax())))
                         .hoverEvent(Lang.COMMAND_HELP_SUB_COMMAND_HOVER.getComponent(new String[] { subCommand.getDescription() }));
                 lines.add(helpSubCommand);
                 number++;
