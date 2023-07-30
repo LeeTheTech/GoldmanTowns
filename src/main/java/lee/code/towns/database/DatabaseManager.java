@@ -117,7 +117,7 @@ public class DatabaseManager {
         }
     }
 
-    public synchronized void createPlayerTable(PlayerTable playerTable) {
+    public void createPlayerTable(PlayerTable playerTable) {
         Bukkit.getAsyncScheduler().runNow(towns, scheduledTask -> {
             try {
                 playerDao.create(playerTable);
@@ -127,7 +127,7 @@ public class DatabaseManager {
         });
     }
 
-    public synchronized void updatePlayerTable(PlayerTable playerTable) {
+    public void updatePlayerTable(PlayerTable playerTable) {
         Bukkit.getAsyncScheduler().runNow(towns, scheduledTask -> {
             try {
                 playerDao.update(playerTable);
@@ -137,7 +137,7 @@ public class DatabaseManager {
         });
     }
 
-    public synchronized void createChunkTable(ChunkTable chunkTable) {
+    public void createChunkTable(ChunkTable chunkTable) {
         Bukkit.getAsyncScheduler().runNow(towns, scheduledTask -> {
             try {
                 chunkDao.create(chunkTable);
@@ -147,7 +147,7 @@ public class DatabaseManager {
         });
     }
 
-    public synchronized void updateChunkTable(ChunkTable chunkTable) {
+    public void updateChunkTable(ChunkTable chunkTable) {
         Bukkit.getAsyncScheduler().runNow(towns, scheduledTask -> {
             try {
                 chunkDao.update(chunkTable);
@@ -157,7 +157,7 @@ public class DatabaseManager {
         });
     }
 
-    public synchronized void deleteChunkTable(ChunkTable chunkTable) {
+    public void deleteChunkTable(ChunkTable chunkTable) {
         Bukkit.getAsyncScheduler().runNow(towns, scheduledTask -> {
             try {
                 chunkDao.delete(chunkTable);
@@ -167,7 +167,7 @@ public class DatabaseManager {
         });
     }
 
-    public synchronized void updatePermissionTable(PermissionTable permissionTable) {
+    public void updatePermissionTable(PermissionTable permissionTable) {
         Bukkit.getAsyncScheduler().runNow(towns, scheduledTask -> {
             try {
                 permissionDao.update(permissionTable);
@@ -177,7 +177,7 @@ public class DatabaseManager {
         });
     }
 
-    public synchronized void createPermissionTable(PermissionTable permissionTable) {
+    public void createPermissionTable(PermissionTable permissionTable) {
         Bukkit.getAsyncScheduler().runNow(towns, scheduledTask -> {
             try {
                 permissionDao.create(permissionTable);

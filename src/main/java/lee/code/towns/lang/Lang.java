@@ -7,7 +7,7 @@ import net.kyori.adventure.text.Component;
 @AllArgsConstructor
 public enum Lang {
     PREFIX("&e&lTowns &6➔ "),
-    USAGE("&6&lUsage&7: &e"),
+    USAGE("&6&lUsage&7: "),
     COMMAND_HELP_DIVIDER("&a▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬"),
     COMMAND_HELP_TITLE("                      &2-== &6&l&nTowns Help&r &2==-"),
     COMMAND_HELP_SUB_COMMAND("&3{0}&b. &e{1}"),

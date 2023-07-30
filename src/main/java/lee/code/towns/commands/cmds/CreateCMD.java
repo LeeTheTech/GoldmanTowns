@@ -35,7 +35,7 @@ public class CreateCMD extends SubCommand {
 
     @Override
     public String getSyntax() {
-        return "/towns create &f<name>";
+        return "&e/towns create &f<name>";
     }
 
     @Override

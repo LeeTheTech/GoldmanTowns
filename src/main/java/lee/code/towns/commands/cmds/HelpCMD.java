@@ -27,7 +27,7 @@ public class HelpCMD extends SubCommand {
 
     @Override
     public String getSyntax() {
-        return "/towns help";
+        return "&e/towns help";
     }
 
     @Override
