@@ -13,7 +13,7 @@ import lee.code.towns.Towns;
 import lee.code.towns.database.cache.CacheManager;
 import lee.code.towns.database.tables.ChunkTable;
 import lee.code.towns.database.tables.PermissionTable;
-import lee.code.towns.database.tables.PermissionType;
+import lee.code.towns.enums.PermissionType;
 import lee.code.towns.database.tables.PlayerTable;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -132,6 +132,16 @@ public class DatabaseManager {
         Bukkit.getAsyncScheduler().runNow(towns, scheduledTask -> {
             try {
                 playerDao.update(playerTable);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        });
+    }
+
+    public synchronized void createChunkTable(ChunkTable chunkTable) {
+        Bukkit.getAsyncScheduler().runNow(towns, scheduledTask -> {
+            try {
+                chunkDao.create(chunkTable);
             } catch (SQLException e) {
                 e.printStackTrace();
             }

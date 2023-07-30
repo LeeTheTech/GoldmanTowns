@@ -2,6 +2,7 @@ package lee.code.towns.database.tables;
 
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
+import lee.code.towns.enums.PermissionType;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

@@ -27,6 +27,9 @@ public class PlayerTable {
     @DatabaseField(columnName = "town_members")
     private String townMembers;
 
+    @DatabaseField(columnName = "spawn")
+    private String spawn;
+
     @DatabaseField(columnName = "last_joined")
     private Date lastJoined;
 

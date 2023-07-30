@@ -2,8 +2,10 @@ package lee.code.towns.database.cache;
 
 import lee.code.towns.database.DatabaseManager;
 import lee.code.towns.database.tables.PermissionTable;
-import lee.code.towns.database.tables.PermissionType;
+import lee.code.towns.enums.PermissionType;
 import lee.code.towns.database.tables.PlayerTable;
+import lee.code.towns.utils.CoreUtil;
+import org.bukkit.Location;
 
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
@@ -42,6 +44,34 @@ public class CachePlayers {
 
     public void setPlayerTable(PlayerTable playerTable) {
         playersCache.put(playerTable.getUniqueID(), playerTable);
+    }
+
+    public boolean hasTown(UUID uuid) {
+        return playersCache.get(uuid).getTown() != null;
+    }
+
+    public String getTown(UUID uuid) {
+        return playersCache.get(uuid).getTown();
+    }
+
+    public void setTown(UUID uuid, String town, Location spawn) {
+        final PlayerTable playerTable = playersCache.get(uuid);
+        playerTable.setTown(town);
+        playerTable.setSpawn(CoreUtil.serializeLocation(spawn));
+        updatePlayerDatabase(playerTable);
+    }
+
+    public boolean hasJoinedTown(UUID uuid) {
+        return playersCache.get(uuid).getJoinedTown() != null;
+    }
+
+    public String getJoinedTown(UUID uuid) {
+        return playersCache.get(uuid).getJoinedTown();
+    }
+
+    public boolean isTownTaken(String name) {
+        return playersCache.values().stream()
+                .anyMatch(playerData -> playerData.getTown() != null && playerData.getTown().equals(name));
     }
 
     //Permission Data
