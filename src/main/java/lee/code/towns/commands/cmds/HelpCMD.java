@@ -41,6 +41,11 @@ public class HelpCMD extends SubCommand {
     }
 
     @Override
+    public boolean performAsyncSynchronized() {
+        return false;
+    }
+
+    @Override
     public void perform(Player player, String[] args) {
         performSender(player, args);
     }

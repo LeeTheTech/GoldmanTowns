@@ -49,6 +49,11 @@ public class CreateCMD extends SubCommand {
     }
 
     @Override
+    public boolean performAsyncSynchronized() {
+        return true;
+    }
+
+    @Override
     public void perform(Player player, String[] args) {
         final UUID uuid = player.getUniqueId();
         final String chunk = ChunkUtil.serializeChunkLocation(player.getLocation().getChunk());

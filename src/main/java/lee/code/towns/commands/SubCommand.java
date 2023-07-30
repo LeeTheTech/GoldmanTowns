@@ -11,6 +11,7 @@ public abstract class SubCommand {
     public abstract String getSyntax();
     public abstract String getPermission();
     public abstract boolean performAsync();
+    public abstract boolean performAsyncSynchronized();
     public abstract void perform(Player player, String[] args);
     public abstract void performConsole(CommandSender console, String[] args);
     public abstract void performSender(CommandSender sender, String[] args);

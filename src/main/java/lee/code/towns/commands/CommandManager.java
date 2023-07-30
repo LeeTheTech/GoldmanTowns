@@ -26,6 +26,7 @@ public class CommandManager implements CommandExecutor {
 
     @Getter private final ArrayList<SubCommand> subCommands = new ArrayList<>();
     private final ConcurrentHashMap<UUID, ScheduledTask> asyncTasks = new ConcurrentHashMap<>();
+    private final ConcurrentHashMap<UUID, Object> asyncLocks = new ConcurrentHashMap<>();
     private final Towns towns;
 
     public CommandManager(Towns towns) {
@@ -67,21 +68,31 @@ public class CommandManager implements CommandExecutor {
     public void performAsync(CommandSender sender, SubCommand subCommand, String[] args) {
         if (sender instanceof Player player) {
             final UUID uuid = player.getUniqueId();
-            synchronized (uuid) {
-                if (asyncTasks.containsKey(uuid)) {
-                    if (!asyncTasks.get(uuid).getExecutionState().equals(ScheduledTask.ExecutionState.FINISHED)) {
-                        player.sendMessage(Lang.ERROR_ONE_COMMAND_AT_A_TIME.getComponent(null));
-                        return;
-                    }
+            if (asyncTasks.containsKey(uuid)) {
+                if (!asyncTasks.get(uuid).getExecutionState().equals(ScheduledTask.ExecutionState.FINISHED)) {
+                    player.sendMessage(Lang.ERROR_ONE_COMMAND_AT_A_TIME.getComponent(null));
+                    return;
                 }
-                asyncTasks.put(uuid, Bukkit.getAsyncScheduler().runNow(towns, scheduledTask -> {
-                    subCommand.perform(player, args);
-                    asyncTasks.remove(uuid);
-                }));
+            }
+            if (subCommand.performAsyncSynchronized()) {
+                asyncLocks.computeIfAbsent(uuid, key -> new Object());
+                synchronized (asyncLocks.get(uuid)) {
+                    performSubCommandAsync(player, uuid, subCommand, args);
+                }
+            } else {
+                performSubCommandAsync(player, uuid, subCommand, args);
             }
         } else if (sender instanceof ConsoleCommandSender console) {
             Bukkit.getAsyncScheduler().runNow(towns, scheduledTask -> subCommand.performConsole(console, args));
         }
+    }
+
+    private void performSubCommandAsync(Player player, UUID uuid, SubCommand subCommand, String[] args) {
+        asyncTasks.put(uuid, Bukkit.getAsyncScheduler().runNow(towns, scheduledTask -> {
+            subCommand.perform(player, args);
+            asyncLocks.remove(uuid);
+            asyncTasks.remove(uuid);
+        }));
     }
 
     public void sendHelpMessage(CommandSender sender) {
