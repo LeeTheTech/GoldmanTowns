@@ -3,6 +3,7 @@ package lee.code.towns.commands;
 import io.papermc.paper.threadedregions.scheduler.ScheduledTask;
 import lee.code.towns.Towns;
 import lee.code.towns.commands.cmds.CreateCMD;
+import lee.code.towns.commands.cmds.HelpCMD;
 import lee.code.towns.lang.Lang;
 import lee.code.towns.utils.CoreUtil;
 import lombok.Getter;
@@ -29,7 +30,12 @@ public class CommandManager implements CommandExecutor {
 
     public CommandManager(Towns towns) {
         this.towns = towns;
+        registerSubCommands();
+    }
+
+    private void registerSubCommands() {
         subCommands.add(new CreateCMD(towns));
+        subCommands.add(new HelpCMD(towns));
     }
 
     @Override
