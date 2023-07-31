@@ -4,18 +4,16 @@ import lee.code.towns.database.DatabaseManager;
 import lee.code.towns.database.tables.ChunkTable;
 import lee.code.towns.database.tables.PermissionTable;
 import lee.code.towns.enums.PermissionType;
-import org.bukkit.Chunk;
-import org.bukkit.World;
+import org.apache.commons.lang3.StringUtils;
 
-import java.util.HashSet;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class CacheChunks {
 
     private final DatabaseManager databaseManager;
     private final ConcurrentHashMap<String, ChunkTable> chunksCache = new ConcurrentHashMap<>();
-    private final ConcurrentHashMap<UUID, HashSet<String>> playerChunkListCache = new ConcurrentHashMap<>();
+    private final ConcurrentHashMap<UUID, Set<String>> playerChunkListCache = new ConcurrentHashMap<>();
     private final ConcurrentHashMap<String, PermissionTable> permissionCache = new ConcurrentHashMap<>();
 
     public CacheChunks(DatabaseManager databaseManager) {
@@ -27,7 +25,7 @@ public class CacheChunks {
         if (playerChunkListCache.containsKey(uuid)) {
             playerChunkListCache.get(uuid).add(chunk);
         } else {
-            final HashSet<String> chunks = new HashSet<>();
+            final Set<String> chunks = Collections.synchronizedSet(new HashSet<>());
             chunks.add(chunk);
             playerChunkListCache.put(uuid, chunks);
         }
@@ -37,7 +35,7 @@ public class CacheChunks {
         playerChunkListCache.get(uuid).remove(chunk);
     }
 
-    public HashSet<String> getChunkList(UUID uuid) {
+    public Set<String> getChunkList(UUID uuid) {
         return playerChunkListCache.get(uuid);
     }
 
@@ -71,15 +69,16 @@ public class CacheChunks {
         return chunksCache.containsKey(chunk);
     }
 
-    public boolean isConnectedChunk(UUID uuid, Chunk chunk) {
+    public boolean isConnectedChunk(UUID uuid, String chunk) {
+        final String[] chunkParts = StringUtils.split(chunk, ",");
         final int[] offset = {-1, 0, 1};
-        final World world = chunk.getWorld();
-        final int baseX = chunk.getX();
-        final int baseZ = chunk.getZ();
+        final String world = chunkParts[0];
+        final int baseX = Integer.parseInt(chunkParts[1]);
+        final int baseZ = Integer.parseInt(chunkParts[2]);
 
         for (int x : offset) {
             for (int z : offset) {
-                final String sChunk = world.getName() + "," + (baseX + x) + "," + (baseZ + z);
+                final String sChunk = world + "," + (baseX + x) + "," + (baseZ + z);
                 if (isClaimed(sChunk)) {
                     if (isChunkOwner(sChunk, uuid)) return true;
                 }

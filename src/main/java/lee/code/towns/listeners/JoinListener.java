@@ -1,23 +1,22 @@
 package lee.code.towns.listeners;
 
 import lee.code.towns.Towns;
-import lee.code.towns.database.cache.CacheManager;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
 
 public class JoinListener implements Listener {
 
-    private final CacheManager cacheManager;
+    private final Towns towns;
 
     public JoinListener(Towns towns) {
-        this.cacheManager = towns.getCacheManager();
+        this.towns = towns;
     }
 
     @EventHandler
     public void onJoin(AsyncPlayerPreLoginEvent e) {
-        if (!cacheManager.getCachePlayers().hasPlayerData(e.getUniqueId())) {
-            cacheManager.getCachePlayers().createPlayerData(e.getUniqueId());
+        if (!towns.getCacheManager().getCachePlayers().hasPlayerData(e.getUniqueId())) {
+            towns.getCacheManager().getCachePlayers().createPlayerData(e.getUniqueId());
         }
     }
 }

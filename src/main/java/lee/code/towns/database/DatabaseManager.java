@@ -120,7 +120,7 @@ public class DatabaseManager {
     public void createPlayerTable(PlayerTable playerTable) {
         Bukkit.getAsyncScheduler().runNow(towns, scheduledTask -> {
             try {
-                playerDao.create(playerTable);
+                playerDao.createIfNotExists(playerTable);
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -140,7 +140,7 @@ public class DatabaseManager {
     public void createChunkTable(ChunkTable chunkTable) {
         Bukkit.getAsyncScheduler().runNow(towns, scheduledTask -> {
             try {
-                chunkDao.create(chunkTable);
+                chunkDao.createIfNotExists(chunkTable);
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -180,7 +180,7 @@ public class DatabaseManager {
     public void createPermissionTable(PermissionTable permissionTable) {
         Bukkit.getAsyncScheduler().runNow(towns, scheduledTask -> {
             try {
-                permissionDao.create(permissionTable);
+                permissionDao.createIfNotExists(permissionTable);
             } catch (SQLException e) {
                 e.printStackTrace();
             }

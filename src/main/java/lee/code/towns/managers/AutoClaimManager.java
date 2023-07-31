@@ -4,10 +4,10 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class AutoClaimManager {
-
     private final ConcurrentHashMap<UUID, String> autoClaiming = new ConcurrentHashMap<>();
     private final ConcurrentHashMap<UUID, Object> autoClaimLock = new ConcurrentHashMap<>();
 
+    //Async lock
     public Object getAutoClaimLock(UUID uuid) {
         autoClaimLock.computeIfAbsent(uuid, key -> new Object());
         return autoClaimLock.get(uuid);
@@ -17,6 +17,7 @@ public class AutoClaimManager {
         autoClaimLock.remove(uuid);
     }
 
+    //Auto claiming
     public boolean isAutoClaiming(UUID uuid) {
         return autoClaiming.containsKey(uuid);
     }
@@ -25,15 +26,15 @@ public class AutoClaimManager {
         autoClaiming.remove(uuid);
     }
 
-    public String getLastAutoClaimChunk(UUID uuid) {
-        return autoClaiming.get(uuid);
-    }
-
     public void setAutoClaiming(UUID uuid, String chunk) {
         autoClaiming.put(uuid, chunk);
     }
 
-    public void setLastAutoClaim(UUID uuid, String chunk) {
+    public void setLastAutoClaimChunkChecked(UUID uuid, String chunk) {
         autoClaiming.put(uuid, chunk);
+    }
+
+    public String getLastAutoClaimChunkChecked(UUID uuid) {
+        return autoClaiming.get(uuid);
     }
 }

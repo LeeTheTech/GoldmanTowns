@@ -7,7 +7,7 @@ import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
-import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
@@ -25,7 +25,7 @@ public class BorderParticleManager {
         return borderTaskID.containsKey(uuid);
     }
 
-    private void renderBorderParticlesAroundChunks(Player player, HashSet<String> chunks) {
+    private void renderBorderParticlesAroundChunks(Player player, Set<String> chunks) {
         final int playerY = player.getLocation().getBlockY();
         final int maxDistanceChunks = 10;
 
@@ -101,17 +101,17 @@ public class BorderParticleManager {
             default -> Particle.VILLAGER_HAPPY;
         };
 
-        final long minX = chunk.getX() * 16L;
-        final long minZ = chunk.getZ() * 16L;
-        final long minY = location.getBlockY();
+        final int minX = chunk.getX() * 16;
+        final int minZ = chunk.getZ() * 16;
+        final int minY = location.getBlockY();
 
-        final long maxX = minX + 16;
-        final long maxZ = minZ + 16;
-        final long maxY = minY + 5;
+        final int maxX = minX + 16;
+        final int maxZ = minZ + 16;
+        final int maxY = minY + 5;
 
-        for (long y = minY; y < maxY; y++) {
-            for (long x = minX; x <= maxX; x++) {
-                for (long z = minZ; z <= maxZ; z++) {
+        for (int y = minY; y < maxY; y++) {
+            for (int x = minX; x <= maxX; x++) {
+                for (int z = minZ; z <= maxZ; z++) {
                     location.getWorld().spawnParticle(particle, minX, y, z, 0);
                     location.getWorld().spawnParticle(particle, x, y, minZ, 0);
                     location.getWorld().spawnParticle(particle, maxX, y, z, 0);
@@ -125,7 +125,7 @@ public class BorderParticleManager {
         if (borderTaskID.containsKey(player.getUniqueId())) return;
         borderTaskID.put(player.getUniqueId(), Bukkit.getAsyncScheduler().runAtFixedRate(towns,
                 (scheduledTask) -> {
-                    final HashSet<String> chunks = towns.getCacheManager().getCacheChunks().getChunkList(player.getUniqueId());
+                    final Set<String> chunks = towns.getCacheManager().getCacheChunks().getChunkList(player.getUniqueId());
                     renderBorderParticlesAroundChunks(player, chunks);
                 },
                 0,

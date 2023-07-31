@@ -6,6 +6,7 @@ import lee.code.towns.database.DatabaseManager;
 import lee.code.towns.database.cache.CacheManager;
 import lee.code.towns.listeners.AutoClaimListener;
 import lee.code.towns.listeners.JoinListener;
+import lee.code.towns.listeners.QuitListener;
 import lee.code.towns.managers.AutoClaimManager;
 import lee.code.towns.managers.BorderParticleManager;
 import lombok.Getter;
@@ -40,6 +41,7 @@ public class Towns extends JavaPlugin {
     private void registerListeners() {
         getServer().getPluginManager().registerEvents(new JoinListener(this), this);
         getServer().getPluginManager().registerEvents(new AutoClaimListener(this), this);
+        getServer().getPluginManager().registerEvents(new QuitListener(this), this);
     }
 
     private void registerCommands() {

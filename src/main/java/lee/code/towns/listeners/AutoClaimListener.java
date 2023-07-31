@@ -15,7 +15,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
 
-import java.util.HashSet;
 import java.util.UUID;
 
 public class AutoClaimListener implements Listener {
@@ -33,7 +32,8 @@ public class AutoClaimListener implements Listener {
         if (autoClaimManager.isAutoClaiming(uuid)) {
             final Location location = e.getTo();
             final String chunk = ChunkUtil.serializeChunkLocation(location.getChunk());
-            if (autoClaimManager.getLastAutoClaimChunk(uuid).equals(chunk)) return;
+            if (autoClaimManager.getLastAutoClaimChunkChecked(uuid).equals(chunk)) return;
+            autoClaimManager.setLastAutoClaimChunkChecked(uuid, chunk);
             final AutoClaimEvent autoClaimEvent = new AutoClaimEvent(e.getPlayer(), location, chunk);
             Bukkit.getServer().getPluginManager().callEvent(autoClaimEvent);
         }
@@ -42,28 +42,28 @@ public class AutoClaimListener implements Listener {
     @EventHandler
     public void onAutoClaim(AutoClaimEvent e) {
         final AutoClaimManager autoClaimManager = towns.getAutoClaimManager();
-        synchronized (autoClaimManager.getAutoClaimLock(e.getPlayer().getUniqueId())) {
+        final Player player = e.getPlayer();
+        final UUID uuid = player.getUniqueId();
+        final String chunk = e.getChunk();
+        synchronized (autoClaimManager.getAutoClaimLock(uuid)) {
             try {
                 Bukkit.getAsyncScheduler().runNow(towns, scheduledTask -> {
-                    final Player player = e.getPlayer();
-                    final UUID uuid = player.getUniqueId();
-                    final HashSet<String> chunksAroundPlayer = ChunkUtil.getChunksAroundChunk(autoClaimManager.getLastAutoClaimChunk(uuid));
-                    final String chunk = e.getChunk();
-                    if (chunksAroundPlayer == null || !chunksAroundPlayer.contains(chunk)) {
+                    final CacheManager cacheManager = towns.getCacheManager();
+                    final BorderParticleManager borderParticleManager = towns.getBorderParticleManager();
+
+                    if (!cacheManager.getCacheChunks().isConnectedChunk(uuid, chunk)) {
                         autoClaimManager.removeAutoClaiming(uuid);
                         player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_AUTO_CLAIM_RANGE.getComponent(new String[] { Lang.OFF.getString() })));
                         return;
                     }
-                    final CacheManager cacheManager = towns.getCacheManager();
-                    final BorderParticleManager borderParticleManager = towns.getBorderParticleManager();
-                    autoClaimManager.setLastAutoClaim(uuid, chunk);
+
                     if (cacheManager.getCacheChunks().isClaimed(chunk)) return;
                     cacheManager.getCacheChunks().claim(chunk, uuid);
                     borderParticleManager.spawnParticleChunkBorder(player.getLocation(), e.getLocation().getChunk(), ChunkRenderType.CLAIM);
                     player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_CLAIM_SUCCESS.getComponent(new String[] { chunk })));
                 });
             } finally {
-                autoClaimManager.removeAutoClaimLock(e.getPlayer().getUniqueId());
+                autoClaimManager.removeAutoClaimLock(uuid);
             }
         }
     }

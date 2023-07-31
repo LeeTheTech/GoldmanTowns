@@ -65,7 +65,7 @@ public class ClaimCMD extends SubCommand {
             player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_CLAIM_ALREADY_CLAIMED.getComponent(new String[] { chunk, chunkTown })));
             return;
         }
-        if (!cacheManager.getCacheChunks().isConnectedChunk(uuid, player.getLocation().getChunk()) && cacheManager.getCacheChunks().hasClaimedChunks(uuid)) {
+        if (!cacheManager.getCacheChunks().isConnectedChunk(uuid, chunk) && cacheManager.getCacheChunks().hasClaimedChunks(uuid)) {
             player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_CLAIM_NOT_CONNECTED_CHUNK.getComponent(new String[] { chunk })));
             return;
         }
