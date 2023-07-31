@@ -54,6 +54,14 @@ public class CacheChunks {
         databaseManager.createChunkTable(chunkTable);
     }
 
+    private void deleteChunkData(String chunk) {
+        databaseManager.deleteChunkTable(chunksCache.get(chunk));
+        databaseManager.deletePermissionTable(permissionCache.get(chunk));
+        playerChunkListCache.get(getChunkOwner(chunk)).remove(chunk);
+        chunksCache.remove(chunk);
+        permissionCache.remove(chunk);
+    }
+
     public void setChunkTable(ChunkTable chunkTable) {
         chunksCache.put(chunkTable.getChunk(), chunkTable);
         addToPlayerChunkListCache(chunkTable.getOwner(), chunkTable.getChunk());
@@ -99,6 +107,9 @@ public class CacheChunks {
         return chunksCache.get(chunk).getOwner().equals(uuid);
     }
 
+    public void unclaimChunk(String chunk) {
+        deleteChunkData(chunk);
+    }
 
     //Permission Data
     private void createPermissionDatabase(PermissionTable permissionTable) {

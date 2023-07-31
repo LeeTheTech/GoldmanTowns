@@ -186,4 +186,14 @@ public class DatabaseManager {
             }
         });
     }
+
+    public void deletePermissionTable(PermissionTable permissionTable) {
+        Bukkit.getAsyncScheduler().runNow(towns, scheduledTask -> {
+            try {
+                permissionDao.delete(permissionTable);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        });
+    }
 }

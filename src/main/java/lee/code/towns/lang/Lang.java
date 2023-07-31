@@ -30,6 +30,9 @@ public enum Lang {
     ERROR_CLAIM_NOT_CONNECTED_CHUNK("&cThe chunk &3{0} &cis not connected to a chunk you own already."),
     ERROR_NO_TOWN("&cYou're currently not apart of a town so you can't run this command."),
     ERROR_NOT_TOWN_OWNER("&cYou need to be the town owner to run this command."),
+    ERROR_UNCLAIM_NOT_CLAIMED("&cThe chunk &3{0} &cis not claimed."),
+    ERROR_UNCLAIM_NOT_OWNER("&cYou're not the owner of chunk &3{0} &cso you can't unclaim it."),
+    COMMAND_UNCLAIM_SUCCESS("&aYou successfully unclaimed the chunk &3{0}&a."),
     ;
     @Getter private final String string;
 
