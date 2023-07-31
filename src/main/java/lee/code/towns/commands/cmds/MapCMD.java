@@ -57,6 +57,7 @@ public class MapCMD extends SubCommand {
 
     @Override
     public void perform(Player player, String[] args) {
+        //TODO add better messages for hover
         final CacheManager cacheManager = towns.getCacheManager();
         final Chunk chunk = player.getLocation().getChunk();
         final String chunkString = ChunkUtil.serializeChunkLocation(chunk);

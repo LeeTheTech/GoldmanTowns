@@ -1,11 +1,14 @@
 package lee.code.towns.utils;
 
 import lee.code.towns.lang.Lang;
+import org.apache.commons.lang3.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
+
+import java.util.HashSet;
 
 public class ChunkUtil {
 
@@ -36,5 +39,23 @@ public class ChunkUtil {
                 else player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.TELEPORT_CHUNK_FAILED.getComponent(new String[] { chunkString })));
             });
         });
+    }
+
+    public static HashSet<String> getChunksAroundChunk(String chunk) {
+        final String[] chunkData = StringUtils.split(chunk, ",");
+        final int[] offset = {-1, 0, 1};
+        final String world = chunkData[0];
+        if (world == null) return null;
+        final int baseX = Integer.parseInt(chunkData[1]);
+        final int baseZ = Integer.parseInt(chunkData[2]);
+
+        final HashSet<String> chunksAroundPlayer = new HashSet<>();
+        for (int x : offset) {
+            for (int z : offset) {
+                final String targetChunk = world + "," + (baseX + x) + "," + (baseZ + z);
+                chunksAroundPlayer.add(targetChunk);
+            }
+        }
+        return chunksAroundPlayer;
     }
 }

@@ -38,6 +38,7 @@ public class CommandManager implements CommandExecutor {
         subCommands.add(new HelpCMD(towns));
         subCommands.add(new BorderCMD(towns));
         subCommands.add(new ClaimCMD(towns));
+        subCommands.add(new AutoClaimCMD(towns));
         subCommands.add(new UnclaimCMD(towns));
         subCommands.add(new MapCMD(towns));
         subCommands.add(new SpawnCMD(towns));

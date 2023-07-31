@@ -19,6 +19,7 @@ public enum Lang {
     COMMAND_CREATE_SUCCESS("&aYou successfully created the town &3{0}&a!"),
     COMMAND_BORDER_SUCCESS("&aYou successfully toggled town border {0}&a."),
     COMMAND_CLAIM_SUCCESS("&aYou successfully claimed the chunk &3{0}&a."),
+    COMMAND_UNCLAIM_SUCCESS("&aYou successfully unclaimed the chunk &3{0}&a."),
     COMMAND_MAP_HEADER("&a----------- &7[ &2&lMap Key &7] &a-----------"),
     COMMAND_MAP_FOOTER("&a----------------------------------"),
     COMMAND_MAP_LINE_1("    &e\\ {0}&lN &e/ &6&lYOU&7: &9■ &6&lOWNER&7: &2■ &6&lWILD&7: &7■"),
@@ -27,6 +28,7 @@ public enum Lang {
     COMMAND_SPAWN_SUCCESS("&aYou successfully teleported to your town spawn."),
     COMMAND_SET_SPAWN_SUCCESS("&aYou successfully set your town spawn!"),
     COMMAND_SPAWN_FAILED("&cFailed to teleport to town spawn."),
+    COMMAND_AUTO_CLAIM_SUCCESS("&aYou successfully toggled auto claim {0}&a."),
     TELEPORT_CHUNK_SUCCESS("&aYou successfully teleported the chunk &3{0}&a."),
     TELEPORT_CHUNK_FAILED("&cFailed to teleport to chunk &3{0}&c."),
     ERROR_NO_PERMISSION("&cYou sadly do not have permission for this."),
@@ -38,12 +40,13 @@ public enum Lang {
     ERROR_CREATE_CHUNK_CLAIMED("&cThe chunk you're standing on is already owned by &3{0}&c, you need to find a location in the wild to create a town."),
     ERROR_CLAIM_ALREADY_CLAIMED("&cThe chunk &3{0} &cis already owned by the town &3{1}&c."),
     ERROR_CLAIM_NOT_CONNECTED_CHUNK("&cThe chunk &3{0} &cis not connected to a chunk you own already."),
+    ERROR_AUTO_CLAIM_NOT_OWNER("&cYou can only toggle on auto claim when you're within your town."),
     ERROR_SET_SPAWN_NOT_CLAIMED("&cYou can only set your town spawn in chunks you own."),
     ERROR_NO_TOWN("&cYou're currently not apart of a town so you can't run this command."),
     ERROR_NOT_TOWN_OWNER("&cYou need to be the town owner to run this command."),
     ERROR_UNCLAIM_NOT_CLAIMED("&cThe chunk &3{0} &cis not claimed."),
     ERROR_UNCLAIM_NOT_OWNER("&cYou're not the owner of chunk &3{0} &cso you can't unclaim it."),
-    COMMAND_UNCLAIM_SUCCESS("&aYou successfully unclaimed the chunk &3{0}&a."),
+    ERROR_AUTO_CLAIM_RANGE("&cYou are now out of range from your last auto claim, auto claim has been toggled {0}&c."),
     ;
     @Getter private final String string;
 
