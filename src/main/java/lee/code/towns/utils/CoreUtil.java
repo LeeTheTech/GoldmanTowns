@@ -10,7 +10,9 @@ import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
+import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
+import org.bukkit.util.Vector;
 
 import java.util.List;
 import java.util.regex.Matcher;
@@ -96,5 +98,25 @@ public class CoreUtil {
         if (location == null) return null;
         final String[] split = location.split(",", 6);
         return new Location(Bukkit.getWorld(split[0]), Double.parseDouble(split[1]), Double.parseDouble(split[2]), Double.parseDouble(split[3]), (float) Double.parseDouble(split[4]), (float) Double.parseDouble(split[5]));
+    }
+
+    public static BlockFace getPlayerFacingDirection(Player player) {
+        final Vector direction = player.getLocation().getDirection();
+        final double dx = direction.getX();
+        final double dz = direction.getZ();
+
+        if (Math.abs(dx) > Math.abs(dz)) {
+            if (dx < 0) {
+                return BlockFace.WEST;
+            } else {
+                return BlockFace.EAST;
+            }
+        } else {
+            if (dz < 0) {
+                return BlockFace.NORTH;
+            } else {
+                return BlockFace.SOUTH;
+            }
+        }
     }
 }

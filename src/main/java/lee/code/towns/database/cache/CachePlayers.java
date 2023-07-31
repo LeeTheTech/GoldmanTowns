@@ -66,12 +66,32 @@ public class CachePlayers {
     }
 
     public String getJoinedTown(UUID uuid) {
+        return playersCache.get(playersCache.get(uuid).getJoinedTown()).getTown();
+    }
+
+    public UUID getJoinedTownOwner(UUID uuid) {
         return playersCache.get(uuid).getJoinedTown();
     }
 
-    public boolean isTownTaken(String name) {
+    public boolean isTownNameTaken(String name) {
         return playersCache.values().stream()
                 .anyMatch(playerData -> playerData.getTown() != null && playerData.getTown().equals(name));
+    }
+
+    public boolean isCitizen(UUID owner, UUID target) {
+        return playersCache.get(owner).getTownMembers().contains(target.toString());
+    }
+
+    public Location getTownSpawn(UUID uuid) {
+        final PlayerTable playerTable = playersCache.get(uuid);
+        if (playerTable.getSpawn() != null) return CoreUtil.parseLocation(playerTable.getSpawn());
+        else return CoreUtil.parseLocation(playersCache.get(playerTable.getJoinedTown()).getSpawn());
+    }
+
+    public void setTownSpawn(UUID uuid, Location location) {
+        final PlayerTable playerTable = playersCache.get(uuid);
+        playerTable.setSpawn(CoreUtil.serializeLocation(location));
+        updatePlayerDatabase(playerTable);
     }
 
     //Permission Data

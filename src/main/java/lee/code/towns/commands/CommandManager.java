@@ -39,6 +39,10 @@ public class CommandManager implements CommandExecutor {
         subCommands.add(new BorderCMD(towns));
         subCommands.add(new ClaimCMD(towns));
         subCommands.add(new UnclaimCMD(towns));
+        subCommands.add(new MapCMD(towns));
+        subCommands.add(new SpawnCMD(towns));
+        subCommands.add(new SetSpawnCMD(towns));
+        subCommands.add(new TeleportCMD());
     }
 
     @Override

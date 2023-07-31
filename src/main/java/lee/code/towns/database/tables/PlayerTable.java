@@ -21,7 +21,7 @@ public class PlayerTable {
     private String town;
 
     @DatabaseField(columnName = "joined_town")
-    private String joinedTown;
+    private UUID joinedTown;
 
     @DatabaseField(columnName = "town_members")
     private String townMembers;
