@@ -20,6 +20,7 @@ import java.util.UUID;
 public class AutoClaimListener implements Listener {
 
     private final Towns towns;
+    private final Object synchronizedThreadLock = new Object();
 
     public AutoClaimListener(Towns towns) {
         this.towns = towns;
@@ -45,26 +46,22 @@ public class AutoClaimListener implements Listener {
         final Player player = e.getPlayer();
         final UUID uuid = player.getUniqueId();
         final String chunk = e.getChunk();
-        synchronized (autoClaimManager.getAutoClaimLock(uuid)) {
-            try {
-                Bukkit.getAsyncScheduler().runNow(towns, scheduledTask -> {
-                    final CacheManager cacheManager = towns.getCacheManager();
-                    final BorderParticleManager borderParticleManager = towns.getBorderParticleManager();
+        synchronized (synchronizedThreadLock) {
+            Bukkit.getAsyncScheduler().runNow(towns, scheduledTask -> {
+                final CacheManager cacheManager = towns.getCacheManager();
+                final BorderParticleManager borderParticleManager = towns.getBorderParticleManager();
 
-                    if (!cacheManager.getCacheChunks().isConnectedChunk(uuid, chunk)) {
-                        autoClaimManager.removeAutoClaiming(uuid);
-                        player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_AUTO_CLAIM_RANGE.getComponent(new String[] { Lang.OFF.getString() })));
-                        return;
-                    }
+                if (!cacheManager.getCacheChunks().isConnectedChunk(uuid, chunk)) {
+                    autoClaimManager.removeAutoClaiming(uuid);
+                    player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_AUTO_CLAIM_RANGE.getComponent(new String[] { Lang.OFF.getString() })));
+                    return;
+                }
 
-                    if (cacheManager.getCacheChunks().isClaimed(chunk)) return;
-                    cacheManager.getCacheChunks().claim(chunk, uuid);
-                    borderParticleManager.spawnParticleChunkBorder(player.getLocation(), e.getLocation().getChunk(), ChunkRenderType.CLAIM);
-                    player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_CLAIM_SUCCESS.getComponent(new String[] { chunk })));
-                });
-            } finally {
-                autoClaimManager.removeAutoClaimLock(uuid);
-            }
+                if (cacheManager.getCacheChunks().isClaimed(chunk)) return;
+                cacheManager.getCacheChunks().claim(chunk, uuid);
+                borderParticleManager.spawnParticleChunkBorder(player.getLocation(), e.getLocation().getChunk(), ChunkRenderType.CLAIM);
+                player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_CLAIM_SUCCESS.getComponent(new String[] { chunk })));
+            });
         }
     }
 }

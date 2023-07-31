@@ -25,7 +25,7 @@ public class CommandManager implements CommandExecutor {
 
     @Getter private final ArrayList<SubCommand> subCommands = new ArrayList<>();
     private final ConcurrentHashMap<UUID, ScheduledTask> asyncTasks = new ConcurrentHashMap<>();
-    private final ConcurrentHashMap<UUID, Object> asyncLocks = new ConcurrentHashMap<>();
+    private final Object synchronizedThreadLock = new Object();
     private final Towns towns;
 
     public CommandManager(Towns towns) {
@@ -82,8 +82,7 @@ public class CommandManager implements CommandExecutor {
                 }
             }
             if (subCommand.performAsyncSynchronized()) {
-                asyncLocks.computeIfAbsent(uuid, key -> new Object());
-                synchronized (asyncLocks.get(uuid)) {
+                synchronized (synchronizedThreadLock) {
                     performSubCommandAsync(player, uuid, subCommand, args);
                 }
             } else {
@@ -99,7 +98,6 @@ public class CommandManager implements CommandExecutor {
             try {
                 subCommand.perform(player, args);
             } finally {
-                asyncLocks.remove(uuid);
                 asyncTasks.remove(uuid);
             }
         }));
