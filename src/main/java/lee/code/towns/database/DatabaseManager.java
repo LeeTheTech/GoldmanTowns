@@ -180,7 +180,7 @@ public class DatabaseManager {
         });
     }
 
-    public void updatePermissionTable(PermissionTable permissionTable) {
+    public synchronized void updatePermissionTable(PermissionTable permissionTable) {
         Bukkit.getAsyncScheduler().runNow(towns, scheduledTask -> {
             try {
                 permissionDao.update(permissionTable);
