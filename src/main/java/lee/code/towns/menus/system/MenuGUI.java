@@ -14,6 +14,7 @@ public abstract class MenuGUI implements InventoryHandler {
     protected MenuPlayerData menuPlayerData;
     protected int page = 0;
     protected int index = 0;
+    protected int maxItemsPerPage = 45;
     private Inventory inventory;
     private final DelayManager delayManager = new DelayManager();
     private final Map<Integer, MenuButton> buttonMap = new HashMap<>();

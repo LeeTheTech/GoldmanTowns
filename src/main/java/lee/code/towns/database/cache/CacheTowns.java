@@ -9,8 +9,7 @@ import lee.code.towns.enums.TownRole;
 import lee.code.towns.utils.CoreUtil;
 import org.bukkit.Location;
 
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class CacheTowns {
@@ -210,5 +209,9 @@ public class CacheTowns {
     public void deleteRole(UUID uuid, String role) {
         deletePermissionDatabase(rolePermissionCache.get(uuid).get(role));
         rolePermissionCache.remove(uuid);
+    }
+
+    public List<String> getAllRoles(UUID uuid) {
+        return new ArrayList<>(Collections.list(rolePermissionCache.get(uuid).keys()));
     }
 }

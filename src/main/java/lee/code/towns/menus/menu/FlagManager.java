@@ -52,7 +52,7 @@ public class FlagManager extends MenuGUI {
                             towns.getMenuManager().openMenu(new FlagManagerChunk(menuPlayerData, towns, chunk), player);
                         }
                         case ROLE_SELECTION_MANAGER -> {
-                            towns.getMenuManager().openMenu(new RoleSelectionManager(menuPlayerData), player);
+                            towns.getMenuManager().openMenu(new RoleSelectionManager(menuPlayerData, towns), player);
                         }
                     }
                 });
