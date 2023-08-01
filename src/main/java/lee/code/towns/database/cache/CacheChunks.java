@@ -181,5 +181,6 @@ public class CacheChunks {
             case CHUNK_FLAGS_ENABLED -> permissionTable.setChunkFlagsEnabled(result);
             case TELEPORT -> permissionTable.setTeleport(result);
         }
+        updatePermissionDatabase(permissionTable);
     }
 }

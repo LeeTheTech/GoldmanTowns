@@ -41,7 +41,7 @@ public class FlagManager extends MenuGUI {
                 .consumer(event -> {
                     switch (menuItem.getMenuRout()) {
                         case FLAG_MANAGER_GLOBAL -> {
-                            towns.getMenuManager().openMenu(new FlagManagerGlobal(menuPlayerData), player);
+                            towns.getMenuManager().openMenu(new FlagManagerGlobal(menuPlayerData, towns), player);
                         }
                         case FLAG_MANAGER_CHUNK -> {
                             final String chunk = ChunkUtil.serializeChunkLocation(player.getLocation().getChunk());
