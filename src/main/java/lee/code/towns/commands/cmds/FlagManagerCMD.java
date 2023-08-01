@@ -4,6 +4,7 @@ import lee.code.towns.Towns;
 import lee.code.towns.commands.SubCommand;
 import lee.code.towns.lang.Lang;
 import lee.code.towns.menus.menu.FlagManager;
+import lee.code.towns.menus.system.MenuPlayerData;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -50,7 +51,8 @@ public class FlagManagerCMD extends SubCommand {
 
     @Override
     public void perform(Player player, String[] args) {
-        towns.getMenuManager().openMenu(new FlagManager(towns, player.getUniqueId()), player);
+        final MenuPlayerData menuPlayerData = towns.getMenuManager().getMenuPlayerData(player.getUniqueId());
+        towns.getMenuManager().openMenu(new FlagManager(menuPlayerData, towns), player);
     }
 
     @Override

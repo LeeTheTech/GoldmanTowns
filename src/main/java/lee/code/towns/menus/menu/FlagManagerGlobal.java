@@ -32,6 +32,7 @@ public class FlagManagerGlobal extends MenuGUI {
 
     @Override
     public void decorate(Player player) {
+        addFillerGlass();
         final UUID uuid = player.getUniqueId();
         addButton(10, createFlagButton(FlagMenuItem.BREAK, uuid));
         addButton(11, createFlagButton(FlagMenuItem.BUILD, uuid));
@@ -66,7 +67,7 @@ public class FlagManagerGlobal extends MenuGUI {
         return new MenuButton()
                 .creator(p -> MenuItem.BACK.createItem())
                 .consumer(e -> {
-                    towns.getMenuManager().openMenu(new FlagManager(towns, player.getUniqueId()), player);
+                    towns.getMenuManager().openMenu(new FlagManager(menuPlayerData, towns), player);
                 });
     }
 }

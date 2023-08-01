@@ -32,6 +32,7 @@ public class FlagManagerChunk extends MenuGUI {
 
     @Override
     public void decorate(Player player) {
+        addFillerGlass();
         addButton(4, createFlagButton(FlagMenuItem.CHUNK_FLAGS_ENABLED));
         addButton(19, createFlagButton(FlagMenuItem.BREAK));
         addButton(20, createFlagButton(FlagMenuItem.BUILD));
@@ -66,7 +67,7 @@ public class FlagManagerChunk extends MenuGUI {
         return new MenuButton()
                 .creator(p -> MenuItem.BACK.createItem())
                 .consumer(e -> {
-                    towns.getMenuManager().openMenu(new FlagManager(towns, player.getUniqueId()), player);
+                    towns.getMenuManager().openMenu(new FlagManager(menuPlayerData, towns), player);
                 });
     }
 }

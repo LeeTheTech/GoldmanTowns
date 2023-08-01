@@ -1,5 +1,6 @@
 package lee.code.towns.menus.system;
 
+import lee.code.towns.menus.menu.enums.MenuItem;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
@@ -16,6 +17,7 @@ public abstract class MenuGUI implements InventoryHandler {
     protected int index = 0;
     protected int maxItemsPerPage = 45;
     private Inventory inventory;
+    public final ItemStack fillerGlass = MenuItem.FILLER_GLASS.createItem();
     private final DelayManager delayManager = new DelayManager();
     private final Map<Integer, MenuButton> buttonMap = new HashMap<>();
 
@@ -42,6 +44,12 @@ public abstract class MenuGUI implements InventoryHandler {
         });
     }
 
+    public void addFillerGlass() {
+        for (int i = 0; i < getInventory().getSize(); i++) {
+            inventory.setItem(i, fillerGlass);
+        }
+    }
+
     @Override
     public void onClick(InventoryClickEvent event) {
         event.setCancelled(true);
@@ -55,7 +63,7 @@ public abstract class MenuGUI implements InventoryHandler {
 
     @Override
     public void onOpen(InventoryOpenEvent event) {
-        this.decorate((Player) event.getPlayer());
+        decorate((Player) event.getPlayer());
     }
 
     @Override

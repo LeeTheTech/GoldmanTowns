@@ -5,19 +5,18 @@ import lee.code.towns.lang.Lang;
 import lee.code.towns.menus.system.MenuButton;
 import lee.code.towns.menus.system.MenuGUI;
 import lee.code.towns.menus.menu.enums.MenuItem;
+import lee.code.towns.menus.system.MenuPlayerData;
 import lee.code.towns.utils.ChunkUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 
-import java.util.UUID;
-
 public class FlagManager extends MenuGUI {
 
     private final Towns towns;
 
-    public FlagManager(Towns towns, UUID uuid) {
-        super(towns.getMenuManager().getMenuPlayerData(uuid));
+    public FlagManager(MenuPlayerData menuPlayerData, Towns towns) {
+        super(menuPlayerData);
         this.towns = towns;
         setInventory();
     }
@@ -29,6 +28,7 @@ public class FlagManager extends MenuGUI {
 
     @Override
     public void decorate(Player player) {
+        addFillerGlass();
         addButton(10, createButton(MenuItem.FLAG_MANAGER_CHUNK, player));
         addButton(13, createButton(MenuItem.FLAG_MANAGER_GLOBAL, player));
         addButton(16, createButton(MenuItem.FLAG_MANAGER_ROLE, player));

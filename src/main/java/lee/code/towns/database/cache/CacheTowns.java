@@ -7,6 +7,7 @@ import lee.code.towns.enums.PermissionType;
 import lee.code.towns.database.tables.TownsTable;
 import lee.code.towns.enums.TownRole;
 import lee.code.towns.utils.CoreUtil;
+import lee.code.towns.utils.PermissionUtil;
 import org.bukkit.Location;
 
 import java.util.*;
@@ -118,65 +119,27 @@ public class CacheTowns {
 
     public void setGlobalPermissionFlag(UUID uuid, Flag flag, boolean result) {
         final PermissionTable permissionTable = permissionCache.get(uuid);
-        switch (flag) {
-            case BUILD -> permissionTable.setBuild(result);
-            case INTERACT -> permissionTable.setInteract(result);
-            case BREAK -> permissionTable.setBreakBlock(result);
-            case DAMAGE -> permissionTable.setDamage(result);
-            case PVP -> permissionTable.setPvp(result);
-            case PVE -> permissionTable.setPve(result);
-            case REDSTONE -> permissionTable.setRedstone(result);
-            case EXPLOSION -> permissionTable.setExplosion(result);
-            case MONSTER_SPAWNING -> permissionTable.setMobSpawning(result);
-            case CHUNK_FLAGS_ENABLED -> permissionTable.setChunkFlagsEnabled(result);
-            case TELEPORT -> permissionTable.setTeleport(result);
-        }
+        PermissionUtil.setPermissionFlag(permissionTable, flag, result);
         updatePermissionDatabase(permissionTable);
     }
 
     public boolean checkGlobalPermissionFlag(UUID uuid, Flag flag) {
         final PermissionTable permissionTable = permissionCache.get(uuid);
-        switch (flag) {
-            case BUILD -> {
-                return permissionTable.isBuild();
-            }
-            case INTERACT -> {
-                return permissionTable.isInteract();
-            }
-            case BREAK -> {
-                return permissionTable.isBreakBlock();
-            }
-            case DAMAGE -> {
-                return permissionTable.isDamage();
-            }
-            case PVP -> {
-                return permissionTable.isPvp();
-            }
-            case PVE -> {
-                return permissionTable.isPve();
-            }
-            case REDSTONE -> {
-                return permissionTable.isRedstone();
-            }
-            case EXPLOSION -> {
-                return permissionTable.isExplosion();
-            }
-            case MONSTER_SPAWNING -> {
-                return permissionTable.isMobSpawning();
-            }
-            case CHUNK_FLAGS_ENABLED -> {
-                return permissionTable.isChunkFlagsEnabled();
-            }
-            case TELEPORT -> {
-                return permissionTable.isTeleport();
-            }
-            default -> {
-                return false;
-            }
-        }
+        return PermissionUtil.checkPermissionFlag(permissionTable, flag);
     }
 
     //Role Permission Data
+
+    public void setRolePermissionFlag(UUID uuid, String role, Flag flag, boolean result) {
+        final PermissionTable permissionTable = rolePermissionCache.get(uuid).get(role);
+        PermissionUtil.setPermissionFlag(permissionTable, flag, result);
+        updatePermissionDatabase(permissionTable);
+    }
+
+    public boolean checkRolePermissionFlag(UUID uuid, String role, Flag flag) {
+        final PermissionTable permissionTable = rolePermissionCache.get(uuid).get(role);
+        return PermissionUtil.checkPermissionFlag(permissionTable, flag);
+    }
 
     private void createDefaultRolePermissionTable(UUID uuid) {
         final PermissionTable permissionTable = new PermissionTable(uuid, PermissionType.ROLE);
