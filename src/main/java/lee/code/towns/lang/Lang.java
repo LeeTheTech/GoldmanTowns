@@ -11,6 +11,8 @@ public enum Lang {
     USAGE("&6&lUsage&7: "),
     ON("&2&lON"),
     OFF("&c&lOFF"),
+    TRUE("&2true"),
+    FALSE("&cfalse"),
     COMMAND_HELP_DIVIDER("&a▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬"),
     COMMAND_HELP_TITLE("                      &2-== &6&l&nTowns Help&r &2==-"),
     COMMAND_HELP_SUB_COMMAND("&3{0}&b. &e{1}"),
@@ -31,6 +33,12 @@ public enum Lang {
     COMMAND_AUTO_CLAIM_SUCCESS("&aYou successfully toggled auto claim {0}&a."),
     TELEPORT_CHUNK_SUCCESS("&aYou successfully teleported the chunk &3{0}&a."),
     TELEPORT_CHUNK_FAILED("&cFailed to teleport to chunk &3{0}&c."),
+    MENU_FLAG_MANAGER_TITLE("&2&lFlag Manager"),
+    MENU_FLAG_MANAGER_CHUNK_TITLE("&2&lChunk Flag Manager"),
+    MENU_FLAG_MANAGER_GLOBAL_TITLE("&2&lGlobal Flag Manager"),
+    MENU_FLAG_MANAGER_ROLE_TITLE("&2&lRole Flag Manager"),
+    MENU_ROLE_SELECTION_MANAGER_TITLE("&2&lRole Selection Manager"),
+    MENU_FLAG("&aEnabled&8: {0}"),
     ERROR_NO_PERMISSION("&cYou sadly do not have permission for this."),
     ERROR_NOT_CONSOLE_COMMAND("&cThis command does not work in console."),
     ERROR_ONE_COMMAND_AT_A_TIME("&cYou're currently processing another town command, please wait for it to finish."),
@@ -47,14 +55,15 @@ public enum Lang {
     ERROR_UNCLAIM_NOT_CLAIMED("&cThe chunk &3{0} &cis not claimed."),
     ERROR_UNCLAIM_NOT_OWNER("&cYou're not the owner of chunk &3{0} &cso you can't unclaim it."),
     ERROR_AUTO_CLAIM_RANGE("&cYou are now out of range from your last auto claim, auto claim has been toggled {0}&c."),
+    ERROR_FLAG_MANAGER_CHUNK_NOT_CLAIMED("&cThe chunk you're standing on is not claimed by you."),
     ;
     @Getter private final String string;
 
     public String getString(String[] variables) {
         String value = string;
-        if (variables == null || variables.length == 0) return CoreUtil.parseColorString(value);
+        if (variables == null || variables.length == 0) return value;
         for (int i = 0; i < variables.length; i++) value = value.replace("{" + i + "}", variables[i]);
-        return CoreUtil.parseColorString(value);
+        return value;
     }
 
     public Component getComponent(String[] variables) {

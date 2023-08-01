@@ -30,8 +30,8 @@ public class PermissionTable {
     @DatabaseField(columnName = "role")
     private String role;
 
-    @DatabaseField(columnName = "chunk_perms_enabled", canBeNull = false)
-    private boolean chunkPermsEnabled;
+    @DatabaseField(columnName = "chunk_flags_enabled", canBeNull = false)
+    private boolean chunkFlagsEnabled;
 
     @DatabaseField(columnName = "invite", canBeNull = false)
     private boolean invite;
@@ -72,7 +72,7 @@ public class PermissionTable {
     public PermissionTable(UUID uniqueID, PermissionType permissionType) {
         this.uniqueID = uniqueID;
         this.permissionType = permissionType;
-        this.chunkPermsEnabled = false;
+        this.chunkFlagsEnabled = false;
         this.invite = false;
         this.changeFlags = false;
         this.interact = false;
