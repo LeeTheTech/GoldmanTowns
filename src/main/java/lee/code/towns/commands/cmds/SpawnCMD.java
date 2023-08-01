@@ -2,7 +2,7 @@ package lee.code.towns.commands.cmds;
 
 import lee.code.towns.Towns;
 import lee.code.towns.commands.SubCommand;
-import lee.code.towns.database.cache.CacheManager;
+import lee.code.towns.database.CacheManager;
 import lee.code.towns.lang.Lang;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
@@ -54,8 +54,8 @@ public class SpawnCMD extends SubCommand {
     public void perform(Player player, String[] args) {
         final CacheManager cacheManager = towns.getCacheManager();
         final UUID uuid = player.getUniqueId();
-        if (cacheManager.getCachePlayers().hasTown(uuid) || cacheManager.getCachePlayers().hasJoinedTown(uuid)) {
-            final Location townSpawn = cacheManager.getCachePlayers().getTownSpawn(uuid);
+        if (cacheManager.getCacheTowns().hasTown(uuid) || cacheManager.getCacheTowns().hasJoinedTown(uuid)) {
+            final Location townSpawn = cacheManager.getCacheTowns().getTownSpawn(uuid);
             player.teleportAsync(townSpawn).thenAccept(result -> {
                 if (result) player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_SPAWN_SUCCESS.getComponent(null)));
                 else player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_SPAWN_FAILED.getComponent(null)));

@@ -15,8 +15,8 @@ public class JoinListener implements Listener {
 
     @EventHandler
     public void onJoin(AsyncPlayerPreLoginEvent e) {
-        if (!towns.getCacheManager().getCachePlayers().hasPlayerData(e.getUniqueId())) {
-            towns.getCacheManager().getCachePlayers().createPlayerData(e.getUniqueId());
+        if (!towns.getCacheManager().getCacheTowns().hasPlayerData(e.getUniqueId())) {
+            towns.getCacheManager().getCacheTowns().createPlayerData(e.getUniqueId());
         }
     }
 }

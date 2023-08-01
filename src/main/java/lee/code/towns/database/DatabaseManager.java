@@ -10,24 +10,24 @@ import com.j256.ormlite.stmt.QueryBuilder;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
 import lee.code.towns.Towns;
-import lee.code.towns.database.cache.CacheManager;
 import lee.code.towns.database.tables.ChunkTable;
 import lee.code.towns.database.tables.PermissionTable;
 import lee.code.towns.enums.PermissionType;
-import lee.code.towns.database.tables.PlayerTable;
+import lee.code.towns.database.tables.TownsTable;
 import lombok.AccessLevel;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 
 import java.io.File;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.UUID;
 
 public class DatabaseManager {
 
     private final Towns towns;
     private Dao<ChunkTable, String> chunkDao;
-    private Dao<PlayerTable, UUID> playerDao;
+    private Dao<TownsTable, UUID> townsDao;
     private Dao<PermissionTable, Integer> permissionDao;
 
     @Getter(AccessLevel.NONE)
@@ -82,12 +82,13 @@ public class DatabaseManager {
         }
 
         //Player data
-        TableUtils.createTableIfNotExists(connectionSource, PlayerTable.class);
-        playerDao = DaoManager.createDao(connectionSource, PlayerTable.class);
+        TableUtils.createTableIfNotExists(connectionSource, TownsTable.class);
+        townsDao = DaoManager.createDao(connectionSource, TownsTable.class);
 
-        for (PlayerTable playerTable : playerDao.queryForAll()) {
-            cacheManager.getCachePlayers().setPlayerTable(playerTable);
-            cacheManager.getCachePlayers().setPermissionTable(queryPermPlayerTable(playerTable));
+        for (TownsTable townsTable : townsDao.queryForAll()) {
+            cacheManager.getCacheTowns().setPlayerTable(townsTable);
+            cacheManager.getCacheTowns().setPermissionTable(queryPermTownsTable(townsTable));
+            cacheManager.getCacheTowns().setRolePermissionTable(queryPermTownsRoleTable(townsTable));
         }
     }
 
@@ -105,32 +106,44 @@ public class DatabaseManager {
         }
     }
 
-    private PermissionTable queryPermPlayerTable(PlayerTable playerTable) {
+    private PermissionTable queryPermTownsTable(TownsTable townsTable) {
         try {
             final QueryBuilder<PermissionTable, Integer> queryBuilder = permissionDao.queryBuilder();
-            queryBuilder.where().eq("uuid", playerTable.getUniqueId())
+            queryBuilder.where().eq("uuid", townsTable.getUniqueId())
                     .and()
-                    .like("permission_type", PermissionType.PLAYER);
+                    .like("permission_type", PermissionType.TOWN);
             return queryBuilder.query().get(0);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public void createPlayerTable(PlayerTable playerTable) {
+    private List<PermissionTable> queryPermTownsRoleTable(TownsTable townsTable) {
+        try {
+            final QueryBuilder<PermissionTable, Integer> queryBuilder = permissionDao.queryBuilder();
+            queryBuilder.where().eq("uuid", townsTable.getUniqueId())
+                    .and()
+                    .like("permission_type", PermissionType.ROLE);
+            return queryBuilder.query();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void createTownsTable(TownsTable townsTable) {
         Bukkit.getAsyncScheduler().runNow(towns, scheduledTask -> {
             try {
-                playerDao.createIfNotExists(playerTable);
+                townsDao.createIfNotExists(townsTable);
             } catch (SQLException e) {
                 e.printStackTrace();
             }
         });
     }
 
-    public void updatePlayerTable(PlayerTable playerTable) {
+    public void updateTownsTable(TownsTable townsTable) {
         Bukkit.getAsyncScheduler().runNow(towns, scheduledTask -> {
             try {
-                playerDao.update(playerTable);
+                townsDao.update(townsTable);
             } catch (SQLException e) {
                 e.printStackTrace();
             }

@@ -2,7 +2,7 @@ package lee.code.towns.commands.cmds;
 
 import lee.code.towns.Towns;
 import lee.code.towns.commands.SubCommand;
-import lee.code.towns.database.cache.CacheManager;
+import lee.code.towns.database.CacheManager;
 import lee.code.towns.lang.Lang;
 import lee.code.towns.utils.ChunkUtil;
 import lee.code.towns.utils.CoreUtil;
@@ -82,7 +82,7 @@ public class MapCMD extends SubCommand {
                 final NamedTextColor color;
                 if (chunkString.equals(targetChunkString)) color = NamedTextColor.BLUE;
                 else if (isClaimed && cacheManager.getCacheChunks().isChunkOwner(targetChunkString, player.getUniqueId())) color = NamedTextColor.DARK_GREEN;
-                else if (isClaimed && cacheManager.getCachePlayers().isCitizen(cacheManager.getCacheChunks().getChunkOwner(targetChunkString), player.getUniqueId())) color = NamedTextColor.GREEN;
+                else if (isClaimed && cacheManager.getCacheTowns().isCitizen(cacheManager.getCacheChunks().getChunkOwner(targetChunkString), player.getUniqueId())) color = NamedTextColor.GREEN;
                 else if (isClaimed) color = NamedTextColor.RED;
                 else color = NamedTextColor.GRAY;
 

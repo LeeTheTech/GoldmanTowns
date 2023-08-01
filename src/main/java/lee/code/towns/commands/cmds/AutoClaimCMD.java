@@ -2,7 +2,7 @@ package lee.code.towns.commands.cmds;
 
 import lee.code.towns.Towns;
 import lee.code.towns.commands.SubCommand;
-import lee.code.towns.database.cache.CacheManager;
+import lee.code.towns.database.CacheManager;
 import lee.code.towns.lang.Lang;
 import lee.code.towns.managers.AutoClaimManager;
 import lee.code.towns.utils.ChunkUtil;

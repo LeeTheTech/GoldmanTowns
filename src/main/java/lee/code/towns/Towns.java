@@ -3,7 +3,7 @@ package lee.code.towns;
 import lee.code.towns.commands.CommandManager;
 import lee.code.towns.commands.TabCompletion;
 import lee.code.towns.database.DatabaseManager;
-import lee.code.towns.database.cache.CacheManager;
+import lee.code.towns.database.CacheManager;
 import lee.code.towns.listeners.AutoClaimListener;
 import lee.code.towns.listeners.JoinListener;
 import lee.code.towns.listeners.QuitListener;

@@ -11,8 +11,8 @@ import java.util.UUID;
 @Setter
 @Getter
 @NoArgsConstructor
-@DatabaseTable(tableName = "players")
-public class PlayerTable {
+@DatabaseTable(tableName = "towns")
+public class TownsTable {
 
     @DatabaseField(id = true, canBeNull = false)
     private UUID uniqueId;
@@ -32,7 +32,13 @@ public class PlayerTable {
     @DatabaseField(columnName = "last_joined")
     private String lastJoined;
 
-    public PlayerTable(UUID uniqueId) {
+    @DatabaseField(columnName = "roles")
+    private String roles;
+
+    @DatabaseField(columnName = "citizen_roles")
+    private String citizenRoles;
+
+    public TownsTable(UUID uniqueId) {
         this.uniqueId = uniqueId;
     }
 }

@@ -2,7 +2,7 @@ package lee.code.towns.commands.cmds;
 
 import lee.code.towns.Towns;
 import lee.code.towns.commands.SubCommand;
-import lee.code.towns.database.cache.CacheManager;
+import lee.code.towns.database.CacheManager;
 import lee.code.towns.enums.ChunkRenderType;
 import lee.code.towns.lang.Lang;
 import lee.code.towns.utils.ChunkUtil;
@@ -59,16 +59,16 @@ public class CreateCMD extends SubCommand {
         final String chunk = ChunkUtil.serializeChunkLocation(player.getLocation().getChunk());
         final CacheManager cacheManager = towns.getCacheManager();
         if (args.length > 1) {
-            if (cacheManager.getCachePlayers().hasTown(uuid)) {
-                player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_CREATE_HAS_TOWN.getComponent(new String[] { cacheManager.getCachePlayers().getTown(uuid) })));
+            if (cacheManager.getCacheTowns().hasTown(uuid)) {
+                player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_CREATE_HAS_TOWN.getComponent(new String[] { cacheManager.getCacheTowns().getTown(uuid) })));
                 return;
             }
-            if (cacheManager.getCachePlayers().hasJoinedTown(uuid)) {
-                player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_CREATE_HAS_JOINED_TOWN.getComponent(new String[] { cacheManager.getCachePlayers().getJoinedTown(uuid) })));
+            if (cacheManager.getCacheTowns().hasJoinedTown(uuid)) {
+                player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_CREATE_HAS_JOINED_TOWN.getComponent(new String[] { cacheManager.getCacheTowns().getJoinedTown(uuid) })));
                 return;
             }
             final String town = CoreUtil.removeSpecialCharacters(CoreUtil.buildStringFromArgs(args, 1));
-            if (cacheManager.getCachePlayers().isTownNameTaken(town)) {
+            if (cacheManager.getCacheTowns().isTownNameTaken(town)) {
                 player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_CREATE_ALREADY_EXIST.getComponent(new String[] { town })));
                 return;
             }
@@ -77,7 +77,7 @@ public class CreateCMD extends SubCommand {
                 return;
             }
             cacheManager.getCacheChunks().claim(chunk, uuid);
-            cacheManager.getCachePlayers().setTown(uuid, town, player.getLocation());
+            cacheManager.getCacheTowns().setTown(uuid, town, player.getLocation());
             towns.getBorderParticleManager().spawnParticleChunkBorder(player.getLocation(), player.getLocation().getChunk(), ChunkRenderType.CLAIM);
             Bukkit.getServer().sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_CREATE_ANNOUNCEMENT_TOWN_CREATED.getComponent(new String[] { player.getName(), town })));
             player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_CREATE_SUCCESS.getComponent(new String[] { town })));

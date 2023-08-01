@@ -2,7 +2,7 @@ package lee.code.towns.commands.cmds;
 
 import lee.code.towns.Towns;
 import lee.code.towns.commands.SubCommand;
-import lee.code.towns.database.cache.CacheManager;
+import lee.code.towns.database.CacheManager;
 import lee.code.towns.enums.ChunkRenderType;
 import lee.code.towns.lang.Lang;
 import lee.code.towns.utils.ChunkUtil;
@@ -56,12 +56,12 @@ public class ClaimCMD extends SubCommand {
         final CacheManager cacheManager = towns.getCacheManager();
         final String chunk = ChunkUtil.serializeChunkLocation(player.getLocation().getChunk());
         final UUID uuid = player.getUniqueId();
-        if (!cacheManager.getCachePlayers().hasTown(uuid)) {
+        if (!cacheManager.getCacheTowns().hasTown(uuid)) {
             player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_NOT_TOWN_OWNER.getComponent(null)));
             return;
         }
         if (cacheManager.getCacheChunks().isClaimed(chunk)) {
-            final String chunkTown = cacheManager.getCachePlayers().getTown(cacheManager.getCacheChunks().getChunkOwner(chunk));
+            final String chunkTown = cacheManager.getCacheTowns().getTown(cacheManager.getCacheChunks().getChunkOwner(chunk));
             player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_CLAIM_ALREADY_CLAIMED.getComponent(new String[] { chunk, chunkTown })));
             return;
         }

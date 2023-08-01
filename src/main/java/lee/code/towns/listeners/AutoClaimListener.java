@@ -1,7 +1,7 @@
 package lee.code.towns.listeners;
 
 import lee.code.towns.Towns;
-import lee.code.towns.database.cache.CacheManager;
+import lee.code.towns.database.CacheManager;
 import lee.code.towns.enums.ChunkRenderType;
 import lee.code.towns.events.AutoClaimEvent;
 import lee.code.towns.lang.Lang;
