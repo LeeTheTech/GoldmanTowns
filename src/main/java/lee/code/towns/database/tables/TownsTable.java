@@ -32,8 +32,8 @@ public class TownsTable {
     @DatabaseField(columnName = "last_joined")
     private String lastJoined;
 
-    @DatabaseField(columnName = "citizen_roles")
-    private String citizenRoles;
+    @DatabaseField(columnName = "player_roles")
+    private String playerRoles;
 
     public TownsTable(UUID uniqueId) {
         this.uniqueId = uniqueId;

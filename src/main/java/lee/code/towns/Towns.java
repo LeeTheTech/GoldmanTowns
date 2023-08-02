@@ -10,6 +10,7 @@ import lee.code.towns.listeners.QuitListener;
 import lee.code.towns.listeners.chunks.*;
 import lee.code.towns.managers.AutoClaimManager;
 import lee.code.towns.managers.BorderParticleManager;
+import lee.code.towns.managers.InviteManager;
 import lee.code.towns.menus.system.MenuListener;
 import lee.code.towns.menus.system.MenuManager;
 import lombok.Getter;
@@ -22,6 +23,7 @@ public class Towns extends JavaPlugin {
     @Getter private BorderParticleManager borderParticleManager;
     @Getter private AutoClaimManager autoClaimManager;
     @Getter private MenuManager menuManager;
+    @Getter private InviteManager inviteManager;
     @Getter private Data data;
     private DatabaseManager databaseManager;
 
@@ -33,6 +35,7 @@ public class Towns extends JavaPlugin {
         this.cacheManager = new CacheManager(databaseManager);
         this.commandManager = new CommandManager(this);
         this.menuManager = new MenuManager();
+        this.inviteManager = new InviteManager(this);
         this.data = new Data();
 
         registerCommands();

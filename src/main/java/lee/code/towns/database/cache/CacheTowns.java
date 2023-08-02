@@ -90,6 +90,21 @@ public class CacheTowns {
         return townsCache.get(owner).getTownMembers().contains(target.toString());
     }
 
+    public void addCitizen(UUID owner, UUID target) {
+        final TownsTable townsTable = townsCache.get(owner);
+        if (townsTable.getTownMembers() == null) townsTable.setTownMembers(target.toString());
+        else townsTable.setTownMembers(townsTable.getTownMembers() + "," + target);
+        updateTownsDatabase(townsTable);
+    }
+
+    public void removeCitizen(UUID owner, UUID target) {
+        final TownsTable townsTable = townsCache.get(owner);
+        final List<String> citizens = new ArrayList<>(List.of(townsTable.getTownMembers().split(",")));
+        citizens.remove(target.toString());
+        townsTable.setTownMembers(StringUtils.join(citizens, ","));
+        updateTownsDatabase(townsTable);
+    }
+
     public Location getTownSpawn(UUID uuid) {
         final TownsTable townsTable = townsCache.get(uuid);
         if (townsTable.getSpawn() != null) return CoreUtil.parseLocation(townsTable.getSpawn());
@@ -198,8 +213,8 @@ public class CacheTowns {
     }
 
     private void cachePlayerRoles(TownsTable townsTable) {
-        if (townsTable.getCitizenRoles() == null) return;
-        final String[] pairs = townsTable.getCitizenRoles().split(",");
+        if (townsTable.getPlayerRoles() == null) return;
+        final String[] pairs = townsTable.getPlayerRoles().split(",");
         for (String pair : pairs) {
             final String[] parts = pair.split("\\+");
             if (parts.length == 2) {
@@ -216,17 +231,17 @@ public class CacheTowns {
 
     public void setPlayerRole(UUID uuid, UUID target, String role) {
         final TownsTable townsTable = townsCache.get(uuid);
-        if (townsTable.getCitizenRoles() == null) townsTable.setCitizenRoles(target + "+" + role);
-        else townsTable.setCitizenRoles(townsTable.getCitizenRoles() + "," + target + "+" + role);
+        if (townsTable.getPlayerRoles() == null) townsTable.setPlayerRoles(target + "+" + role);
+        else townsTable.setPlayerRoles(townsTable.getPlayerRoles() + "," + target + "+" + role);
         setPlayerRoleCache(uuid, target, role);
         updateTownsDatabase(townsTable);
     }
 
     public void removePlayerRole(UUID uuid, UUID target) {
         final TownsTable townsTable = townsCache.get(uuid);
-        final List<String> newRoles = new ArrayList<>(List.of(townsTable.getCitizenRoles().split(",")));
+        final List<String> newRoles = new ArrayList<>(List.of(townsTable.getPlayerRoles().split(",")));
         newRoles.remove(target + "+" + getPlayerRole(uuid, target));
-        townsTable.setCitizenRoles(StringUtils.join(newRoles, ","));
+        townsTable.setPlayerRoles(StringUtils.join(newRoles, ","));
         removePlayerRoleCache(uuid, target);
         updateTownsDatabase(townsTable);
     }
