@@ -32,12 +32,12 @@ public class SetSpawnCMD extends SubCommand {
 
     @Override
     public String getSyntax() {
-        return "&e/towns spawn";
+        return "&e/towns setspawn";
     }
 
     @Override
     public String getPermission() {
-        return "towns.command.spawn";
+        return "towns.command.setspawn";
     }
 
     @Override

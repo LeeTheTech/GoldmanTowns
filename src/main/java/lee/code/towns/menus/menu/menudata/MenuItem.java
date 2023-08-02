@@ -1,4 +1,4 @@
-package lee.code.towns.menus.menu.enums;
+package lee.code.towns.menus.menu.menudata;
 
 import lee.code.towns.lang.Lang;
 import lee.code.towns.utils.ItemUtil;

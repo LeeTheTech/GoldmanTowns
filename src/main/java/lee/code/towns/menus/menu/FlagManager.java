@@ -4,7 +4,7 @@ import lee.code.towns.Towns;
 import lee.code.towns.lang.Lang;
 import lee.code.towns.menus.system.MenuButton;
 import lee.code.towns.menus.system.MenuGUI;
-import lee.code.towns.menus.menu.enums.MenuItem;
+import lee.code.towns.menus.menu.menudata.MenuItem;
 import lee.code.towns.menus.system.MenuPlayerData;
 import lee.code.towns.utils.ChunkUtil;
 import org.bukkit.Bukkit;

@@ -1,6 +1,6 @@
 package lee.code.towns.menus.system;
 
-import lee.code.towns.menus.menu.enums.MenuItem;
+import lee.code.towns.menus.menu.menudata.MenuItem;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
