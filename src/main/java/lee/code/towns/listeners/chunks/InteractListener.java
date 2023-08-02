@@ -57,7 +57,7 @@ public class InteractListener implements Listener {
     @EventHandler
     public void onInteract(InteractEvent e) {
         final CacheManager cacheManager = towns.getCacheManager();
-        final boolean result = cacheManager.checkPlayerLocationFlag(e.getPlayer().getUniqueId(), e.getLocation(), Flag.INTERACT);
+        final boolean result = cacheManager.checkPlayerLocationFlag(e.getPlayer().getUniqueId(), e.getLocation(), Flag.INTERACT, true);
         e.setCancelled(result);
         if (result) e.getPlayer().sendActionBar(Lang.ERROR_LOCATION_PERMISSION.getComponent(new String[] { cacheManager.getChunkTownName(e.getLocation()), CoreUtil.capitalize(Flag.INTERACT.name()), Lang.FALSE.getString() }));
     }

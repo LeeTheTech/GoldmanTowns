@@ -43,7 +43,7 @@ public class TeleportListener implements Listener {
     @EventHandler
     public void onTeleport(TeleportEvent e) {
         final CacheManager cacheManager = towns.getCacheManager();
-        final boolean result = cacheManager.checkPlayerLocationFlag(e.getPlayer().getUniqueId(), e.getLocation(), Flag.TELEPORT);
+        final boolean result = cacheManager.checkPlayerLocationFlag(e.getPlayer().getUniqueId(), e.getLocation(), Flag.TELEPORT, true);
         e.setCancelled(result);
         if (result) e.getPlayer().sendActionBar(Lang.ERROR_LOCATION_PERMISSION.getComponent(new String[] { cacheManager.getChunkTownName(e.getLocation()), CoreUtil.capitalize(Flag.TELEPORT.name()), Lang.FALSE.getString() }));
     }

@@ -24,6 +24,8 @@ public class DamageListener implements Listener {
 
     @EventHandler
     public void onEntityDamage(EntityDamageEvent e) {
+        if (towns.getData().getMonsterTypes().contains(e.getEntity().getType())) return;
+        if (e.getCause().equals(EntityDamageEvent.DamageCause.ENTITY_ATTACK)) return;
         final DamageEvent damageEvent = new DamageEvent(e.getEntity().getLocation());
         Bukkit.getServer().getPluginManager().callEvent(damageEvent);
         if (damageEvent.isCancelled()) e.setCancelled(true);

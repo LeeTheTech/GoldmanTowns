@@ -18,11 +18,11 @@ public class CacheManager {
         this.cacheTowns = new CacheTowns(databaseManager);
     }
 
-    public boolean checkPlayerLocationFlag(UUID uuid, Location location, Flag flag) {
+    public boolean checkPlayerLocationFlag(UUID uuid, Location location, Flag flag, boolean ownerBypass) {
         final String chunk = ChunkUtil.serializeChunkLocation(location.getChunk());
         if (!cacheChunks.isClaimed(chunk)) return false;
         final UUID owner = cacheChunks.getChunkOwner(chunk);
-        if (uuid.equals(owner)) return false;
+        if (ownerBypass && uuid.equals(owner)) return false;
         if (cacheTowns.isCitizen(owner, uuid)) {
             final String role = cacheTowns.getPlayerRole(owner, uuid);
             return !cacheTowns.checkRolePermissionFlag(owner, role, flag);

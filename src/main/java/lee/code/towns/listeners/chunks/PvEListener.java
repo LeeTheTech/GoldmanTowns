@@ -24,6 +24,7 @@ public class PvEListener implements Listener {
 
     @EventHandler
     public void onEntityDamageByEntityListener(EntityDamageByEntityEvent e) {
+        if (towns.getData().getMonsterTypes().contains(e.getEntity().getType())) return;
         if (e.getDamager() instanceof Player attacker) {
             if (!(e.getEntity() instanceof Player)) {
                 final PvEEvent pveEvent = new PvEEvent(attacker, e.getEntity().getLocation());
@@ -60,7 +61,7 @@ public class PvEListener implements Listener {
     @EventHandler
     public void onPvE(PvEEvent e) {
         final CacheManager cacheManager = towns.getCacheManager();
-        final boolean result = cacheManager.checkPlayerLocationFlag(e.getAttacker().getUniqueId(), e.getLocation(), Flag.PVE);
+        final boolean result = cacheManager.checkPlayerLocationFlag(e.getAttacker().getUniqueId(), e.getLocation(), Flag.PVE, true);
         e.setCancelled(result);
         if (result) e.getAttacker().sendActionBar(Lang.ERROR_LOCATION_PERMISSION.getComponent(new String[] { cacheManager.getChunkTownName(e.getLocation()), Flag.PVE.name(), Lang.FALSE.getString() }));
     }
