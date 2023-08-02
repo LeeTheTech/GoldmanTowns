@@ -32,9 +32,6 @@ public class TownsTable {
     @DatabaseField(columnName = "last_joined")
     private String lastJoined;
 
-    @DatabaseField(columnName = "roles")
-    private String roles;
-
     @DatabaseField(columnName = "citizen_roles")
     private String citizenRoles;
 

@@ -81,7 +81,7 @@ public class PermissionTable {
         this.damage = false;
         this.pvp = false;
         this.pve = false;
-        this.redstone = false;
+        this.redstone = true;
         this.explosion = false;
         this.mobSpawning = false;
         this.teleport = false;

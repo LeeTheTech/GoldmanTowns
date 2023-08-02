@@ -86,7 +86,7 @@ public class DatabaseManager {
         townsDao = DaoManager.createDao(connectionSource, TownsTable.class);
 
         for (TownsTable townsTable : townsDao.queryForAll()) {
-            cacheManager.getCacheTowns().setPlayerTable(townsTable);
+            cacheManager.getCacheTowns().setTownsTable(townsTable);
             cacheManager.getCacheTowns().setPermissionTable(queryPermTownsTable(townsTable));
             cacheManager.getCacheTowns().setRolePermissionTable(queryPermTownsRoleTable(townsTable));
         }
@@ -130,7 +130,7 @@ public class DatabaseManager {
         }
     }
 
-    public void createTownsTable(TownsTable townsTable) {
+    public synchronized void createTownsTable(TownsTable townsTable) {
         Bukkit.getAsyncScheduler().runNow(towns, scheduledTask -> {
             try {
                 townsDao.createIfNotExists(townsTable);
@@ -140,7 +140,7 @@ public class DatabaseManager {
         });
     }
 
-    public void updateTownsTable(TownsTable townsTable) {
+    public synchronized void updateTownsTable(TownsTable townsTable) {
         Bukkit.getAsyncScheduler().runNow(towns, scheduledTask -> {
             try {
                 townsDao.update(townsTable);
@@ -150,7 +150,7 @@ public class DatabaseManager {
         });
     }
 
-    public void createChunkTable(ChunkTable chunkTable) {
+    public synchronized void createChunkTable(ChunkTable chunkTable) {
         Bukkit.getAsyncScheduler().runNow(towns, scheduledTask -> {
             try {
                 chunkDao.createIfNotExists(chunkTable);
@@ -160,7 +160,7 @@ public class DatabaseManager {
         });
     }
 
-    public void updateChunkTable(ChunkTable chunkTable) {
+    public synchronized void updateChunkTable(ChunkTable chunkTable) {
         Bukkit.getAsyncScheduler().runNow(towns, scheduledTask -> {
             try {
                 chunkDao.update(chunkTable);
@@ -170,7 +170,7 @@ public class DatabaseManager {
         });
     }
 
-    public void deleteChunkTable(ChunkTable chunkTable) {
+    public synchronized void deleteChunkTable(ChunkTable chunkTable) {
         Bukkit.getAsyncScheduler().runNow(towns, scheduledTask -> {
             try {
                 chunkDao.delete(chunkTable);
@@ -190,7 +190,7 @@ public class DatabaseManager {
         });
     }
 
-    public void createPermissionTable(PermissionTable permissionTable) {
+    public synchronized void createPermissionTable(PermissionTable permissionTable) {
         Bukkit.getAsyncScheduler().runNow(towns, scheduledTask -> {
             try {
                 permissionDao.createIfNotExists(permissionTable);
@@ -200,7 +200,7 @@ public class DatabaseManager {
         });
     }
 
-    public void deletePermissionTable(PermissionTable permissionTable) {
+    public synchronized void deletePermissionTable(PermissionTable permissionTable) {
         Bukkit.getAsyncScheduler().runNow(towns, scheduledTask -> {
             try {
                 permissionDao.delete(permissionTable);

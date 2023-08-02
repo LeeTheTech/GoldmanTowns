@@ -40,6 +40,7 @@ public enum Lang {
     MENU_ROLE_SELECTION_MANAGER_TITLE("&2&lRole Selection Manager"),
     MENU_FLAG("&aEnabled&8: {0}"),
     MENU_ROLE_NAME("&e&l{0}"),
+    ERROR_LOCATION_PERMISSION("&2&lTown&7: &6{0} &8| &2&l{1}&7: &6{2}"),
     ERROR_NO_PERMISSION("&cYou sadly do not have permission for this."),
     ERROR_NOT_CONSOLE_COMMAND("&cThis command does not work in console."),
     ERROR_ONE_COMMAND_AT_A_TIME("&cYou're currently processing another town command, please wait for it to finish."),

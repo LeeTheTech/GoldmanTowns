@@ -7,6 +7,7 @@ import lee.code.towns.database.CacheManager;
 import lee.code.towns.listeners.AutoClaimListener;
 import lee.code.towns.listeners.JoinListener;
 import lee.code.towns.listeners.QuitListener;
+import lee.code.towns.listeners.chunks.*;
 import lee.code.towns.managers.AutoClaimManager;
 import lee.code.towns.managers.BorderParticleManager;
 import lee.code.towns.menus.system.MenuListener;
@@ -21,6 +22,7 @@ public class Towns extends JavaPlugin {
     @Getter private BorderParticleManager borderParticleManager;
     @Getter private AutoClaimManager autoClaimManager;
     @Getter private MenuManager menuManager;
+    @Getter private Data data;
     private DatabaseManager databaseManager;
 
     @Override
@@ -31,10 +33,13 @@ public class Towns extends JavaPlugin {
         this.cacheManager = new CacheManager(databaseManager);
         this.commandManager = new CommandManager(this);
         this.menuManager = new MenuManager();
+        this.data = new Data();
+
         registerCommands();
         registerListeners();
 
         databaseManager.initialize(true);
+        data.loadData();
     }
 
     @Override
@@ -47,6 +52,16 @@ public class Towns extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new AutoClaimListener(this), this);
         getServer().getPluginManager().registerEvents(new QuitListener(this), this);
         getServer().getPluginManager().registerEvents(new MenuListener(menuManager), this);
+        getServer().getPluginManager().registerEvents(new BreakListener(this), this);
+        getServer().getPluginManager().registerEvents(new BuildListener(this), this);
+        getServer().getPluginManager().registerEvents(new DamageListener(this), this);
+        getServer().getPluginManager().registerEvents(new ExplosionListener(this), this);
+        getServer().getPluginManager().registerEvents(new InteractListener(this), this);
+        getServer().getPluginManager().registerEvents(new MonsterSpawningListener(this), this);
+        getServer().getPluginManager().registerEvents(new PvEListener(this), this);
+        getServer().getPluginManager().registerEvents(new PvPListener(this), this);
+        getServer().getPluginManager().registerEvents(new RedstoneListener(this), this);
+        getServer().getPluginManager().registerEvents(new TeleportListener(this), this);
     }
 
     private void registerCommands() {

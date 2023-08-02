@@ -8,6 +8,7 @@ import lee.code.towns.database.tables.TownsTable;
 import lee.code.towns.enums.TownRole;
 import lee.code.towns.utils.CoreUtil;
 import lee.code.towns.utils.PermissionUtil;
+import org.apache.commons.lang3.StringUtils;
 import org.bukkit.Location;
 
 import java.util.*;
@@ -19,36 +20,37 @@ public class CacheTowns {
     private final ConcurrentHashMap<UUID, TownsTable> townsCache = new ConcurrentHashMap<>();
     private final ConcurrentHashMap<UUID, PermissionTable> permissionCache = new ConcurrentHashMap<>();
     private final ConcurrentHashMap<UUID, ConcurrentHashMap<String, PermissionTable>> rolePermissionCache = new ConcurrentHashMap<>();
-
+    private final ConcurrentHashMap<UUID, ConcurrentHashMap<UUID, String>> playerRoleCache = new ConcurrentHashMap<>();
     public CacheTowns(DatabaseManager databaseManager) {
         this.databaseManager = databaseManager;
     }
 
     //Player Data
-    private void createPlayerDatabase(TownsTable townsTable) {
+    private void createTownsDatabase(TownsTable townsTable) {
         databaseManager.createTownsTable(townsTable);
     }
 
-    private void updatePlayerDatabase(TownsTable townsTable) {
+    private void updateTownsDatabase(TownsTable townsTable) {
         databaseManager.updateTownsTable(townsTable);
     }
 
     public void createPlayerData(UUID uuid) {
         final TownsTable townsTable = new TownsTable(uuid);
         final PermissionTable permissionTable = new PermissionTable(uuid, PermissionType.TOWN);
-        setPlayerTable(townsTable);
+        setTownsTable(townsTable);
         setPermissionTable(permissionTable);
-        createPlayerDatabase(townsTable);
+        createTownsDatabase(townsTable);
         createPermissionDatabase(permissionTable);
         createDefaultRolePermissionTable(uuid);
     }
 
-    public boolean hasPlayerData(UUID uuid) {
+    public boolean hasTownsData(UUID uuid) {
         return townsCache.containsKey(uuid);
     }
 
-    public void setPlayerTable(TownsTable townsTable) {
+    public void setTownsTable(TownsTable townsTable) {
         townsCache.put(townsTable.getUniqueId(), townsTable);
+        cachePlayerRoles(townsTable);
     }
 
     public boolean hasTown(UUID uuid) {
@@ -63,7 +65,7 @@ public class CacheTowns {
         final TownsTable townsTable = townsCache.get(uuid);
         townsTable.setTown(town);
         townsTable.setSpawn(CoreUtil.serializeLocation(spawn));
-        updatePlayerDatabase(townsTable);
+        updateTownsDatabase(townsTable);
     }
 
     public boolean hasJoinedTown(UUID uuid) {
@@ -84,6 +86,7 @@ public class CacheTowns {
     }
 
     public boolean isCitizen(UUID owner, UUID target) {
+        if (townsCache.get(owner).getTownMembers() == null) return false;
         return townsCache.get(owner).getTownMembers().contains(target.toString());
     }
 
@@ -96,7 +99,7 @@ public class CacheTowns {
     public void setTownSpawn(UUID uuid, Location location) {
         final TownsTable townsTable = townsCache.get(uuid);
         townsTable.setSpawn(CoreUtil.serializeLocation(location));
-        updatePlayerDatabase(townsTable);
+        updateTownsDatabase(townsTable);
     }
 
     //Permission Data
@@ -176,5 +179,55 @@ public class CacheTowns {
 
     public List<String> getAllRoles(UUID uuid) {
         return new ArrayList<>(Collections.list(rolePermissionCache.get(uuid).keys()));
+    }
+
+    //Player Role Data
+
+    private void setPlayerRoleCache(UUID uuid, UUID target, String role) {
+        if (playerRoleCache.containsKey(uuid)) {
+            playerRoleCache.get(uuid).put(target, role);
+        } else {
+            final ConcurrentHashMap<UUID, String> roles = new ConcurrentHashMap<>();
+            roles.put(target, role);
+            playerRoleCache.put(uuid, roles);
+        }
+    }
+
+    private void removePlayerRoleCache(UUID uuid, UUID target) {
+        playerRoleCache.get(uuid).remove(target);
+    }
+
+    private void cachePlayerRoles(TownsTable townsTable) {
+        if (townsTable.getCitizenRoles() == null) return;
+        final String[] pairs = townsTable.getCitizenRoles().split(",");
+        for (String pair : pairs) {
+            final String[] parts = pair.split("\\+");
+            if (parts.length == 2) {
+                final String target = parts[0];
+                final String role = parts[1];
+                setPlayerRoleCache(townsTable.getUniqueId(), UUID.fromString(target), role);
+            }
+        }
+    }
+
+    public String getPlayerRole(UUID uuid, UUID target) {
+        return playerRoleCache.get(uuid).get(target);
+    }
+
+    public void setPlayerRole(UUID uuid, UUID target, String role) {
+        final TownsTable townsTable = townsCache.get(uuid);
+        if (townsTable.getCitizenRoles() == null) townsTable.setCitizenRoles(target + "+" + role);
+        else townsTable.setCitizenRoles(townsTable.getCitizenRoles() + "," + target + "+" + role);
+        setPlayerRoleCache(uuid, target, role);
+        updateTownsDatabase(townsTable);
+    }
+
+    public void removePlayerRole(UUID uuid, UUID target) {
+        final TownsTable townsTable = townsCache.get(uuid);
+        final List<String> newRoles = new ArrayList<>(List.of(townsTable.getCitizenRoles().split(",")));
+        newRoles.remove(target + "+" + getPlayerRole(uuid, target));
+        townsTable.setCitizenRoles(StringUtils.join(newRoles, ","));
+        removePlayerRoleCache(uuid, target);
+        updateTownsDatabase(townsTable);
     }
 }

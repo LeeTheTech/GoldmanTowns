@@ -6,6 +6,7 @@ import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
+import org.apache.commons.lang3.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -117,5 +118,10 @@ public class CoreUtil {
                 return BlockFace.SOUTH;
             }
         }
+    }
+
+    public static String capitalize(String message) {
+        final String format = message.toLowerCase().replaceAll("_", " ");
+        return StringUtils.capitalize(format);
     }
 }
