@@ -31,6 +31,8 @@ public enum Lang {
     COMMAND_SET_SPAWN_SUCCESS("&aYou successfully set your town spawn!"),
     COMMAND_SPAWN_FAILED("&cFailed to teleport to town spawn."),
     COMMAND_AUTO_CLAIM_SUCCESS("&aYou successfully toggled auto claim {0}&a."),
+    COMMAND_ROLE_SET_SUCCESS("&aYou successfully set player &6{0} &ato the town role &3{1}&a."),
+    COMMAND_ROLE_CREATE_SUCCESS("&aYou successfully created the town role &3{0}&a."),
     TELEPORT_CHUNK_SUCCESS("&aYou successfully teleported the chunk &3{0}&a."),
     TELEPORT_CHUNK_FAILED("&cFailed to teleport to chunk &3{0}&c."),
     MENU_FLAG_MANAGER_TITLE("&2&lFlag Manager"),
@@ -58,6 +60,10 @@ public enum Lang {
     ERROR_UNCLAIM_NOT_OWNER("&cYou're not the owner of chunk &3{0} &cso you can't unclaim it."),
     ERROR_AUTO_CLAIM_RANGE("&cYou are now out of range from your last auto claim, auto claim has been toggled {0}&c."),
     ERROR_FLAG_MANAGER_CHUNK_NOT_CLAIMED("&cThe chunk you're standing on is not claimed by you."),
+    ERROR_PLAYER_NOT_FOUND("&cThe player &6{0} &ccould not be found."),
+    ERROR_ROLE_SET_ROLE_NOT_FOUND("&cYou do not have a town role called &3{0}&c."),
+    ERROR_ROLE_SET_PLAYER_NOT_CITIZEN("&cThe player &6{0} &cis not a town citizen, the player needs to be apart of the town before you can set a town role for the player."),
+    ERROR_ROLE_CREATE_ROLE_EXISTS("&cThe role &3{0} &calready exists."),
     ;
     @Getter private final String string;
 

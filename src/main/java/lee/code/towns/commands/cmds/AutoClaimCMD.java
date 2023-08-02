@@ -48,7 +48,7 @@ public class AutoClaimCMD extends SubCommand {
 
     @Override
     public boolean performAsyncSynchronized() {
-        return true;
+        return false;
     }
 
     @Override

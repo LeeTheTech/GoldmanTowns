@@ -68,17 +68,6 @@ public class CoreUtil {
                 .collect(Collectors.toList());
     }
 
-    public static String removeSpecialCharacters(String input) {
-        final StringBuilder output = new StringBuilder();
-        final String regex = "[^a-zA-Z0-9]";
-        for (int i = 0; i < input.length(); i++) {
-            final char c = input.charAt(i);
-            if (Character.toString(c).matches(regex)) continue;
-            output.append(c);
-        }
-        return output.toString();
-    }
-
     public static String buildStringFromArgs(String[] words, int startIndex) {
         final StringBuilder sb = new StringBuilder();
         for (int i = startIndex; i < words.length; i++) {
@@ -123,5 +112,16 @@ public class CoreUtil {
     public static String capitalize(String message) {
         final String format = message.toLowerCase().replaceAll("_", " ");
         return StringUtils.capitalize(format);
+    }
+
+    public static String removeSpecialCharacters(String input) {
+        final StringBuilder output = new StringBuilder();
+        final String regex = "[^a-zA-Z0-9]";
+        for (int i = 0; i < input.length(); i++) {
+            final char c = input.charAt(i);
+            if (Character.toString(c).matches(regex)) continue;
+            output.append(c);
+        }
+        return output.toString();
     }
 }

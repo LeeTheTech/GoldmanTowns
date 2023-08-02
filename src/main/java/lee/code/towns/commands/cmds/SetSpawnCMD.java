@@ -47,7 +47,7 @@ public class SetSpawnCMD extends SubCommand {
 
     @Override
     public boolean performAsyncSynchronized() {
-        return false;
+        return true;
     }
 
     @Override
