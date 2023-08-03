@@ -49,7 +49,6 @@ public class AutoClaimListener implements Listener {
         synchronized (synchronizedThreadLock) {
             Bukkit.getAsyncScheduler().runNow(towns, scheduledTask -> {
                 final CacheManager cacheManager = towns.getCacheManager();
-                final BorderParticleManager borderParticleManager = towns.getBorderParticleManager();
 
                 if (!cacheManager.getCacheChunks().isConnectedChunk(uuid, chunk)) {
                     autoClaimManager.removeAutoClaiming(uuid);
@@ -57,9 +56,15 @@ public class AutoClaimListener implements Listener {
                     return;
                 }
 
+                if (cacheManager.getCacheTowns().getMaxChunkClaims(uuid) < cacheManager.getCacheChunks().getChunkClaims(uuid) + 1) {
+                    autoClaimManager.removeAutoClaiming(uuid);
+                    player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_AUTO_CLAIM_MAX_CLAIMS.getComponent(new String[] { String.valueOf(cacheManager.getCacheTowns().getMaxChunkClaims(uuid)) })));
+                    return;
+                }
+
                 if (cacheManager.getCacheChunks().isClaimed(chunk)) return;
                 cacheManager.getCacheChunks().claim(chunk, uuid);
-                borderParticleManager.spawnParticleChunkBorder(player.getLocation(), e.getLocation().getChunk(), ChunkRenderType.CLAIM);
+                towns.getBorderParticleManager().spawnParticleChunkBorder(player.getLocation(), e.getLocation().getChunk(), ChunkRenderType.CLAIM);
                 player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_CLAIM_SUCCESS.getComponent(new String[] { chunk })));
             });
         }

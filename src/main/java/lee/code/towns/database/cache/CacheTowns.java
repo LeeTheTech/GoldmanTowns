@@ -9,7 +9,9 @@ import lee.code.towns.enums.TownRole;
 import lee.code.towns.utils.CoreUtil;
 import lee.code.towns.utils.PermissionUtil;
 import org.apache.commons.lang3.StringUtils;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.OfflinePlayer;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -25,7 +27,7 @@ public class CacheTowns {
         this.databaseManager = databaseManager;
     }
 
-    //Player Data
+    //Towns Data
     private void createTownsDatabase(TownsTable townsTable) {
         databaseManager.createTownsTable(townsTable);
     }
@@ -44,6 +46,10 @@ public class CacheTowns {
         createDefaultRolePermissionTable(uuid);
     }
 
+    private TownsTable getTownTable(UUID uuid) {
+        return townsCache.get(uuid);
+    }
+
     public boolean hasTownsData(UUID uuid) {
         return townsCache.containsKey(uuid);
     }
@@ -54,30 +60,30 @@ public class CacheTowns {
     }
 
     public boolean hasTown(UUID uuid) {
-        return townsCache.get(uuid).getTown() != null;
+        return getTownTable(uuid).getTown() != null;
     }
 
     public String getTown(UUID uuid) {
-        return townsCache.get(uuid).getTown();
+        return getTownTable(uuid).getTown();
     }
 
     public void setTown(UUID uuid, String town, Location spawn) {
-        final TownsTable townsTable = townsCache.get(uuid);
+        final TownsTable townsTable = getTownTable(uuid);
         townsTable.setTown(town);
         townsTable.setSpawn(CoreUtil.serializeLocation(spawn));
         updateTownsDatabase(townsTable);
     }
 
     public boolean hasJoinedTown(UUID uuid) {
-        return townsCache.get(uuid).getJoinedTown() != null;
+        return getTownTable(uuid).getJoinedTown() != null;
     }
 
     public String getJoinedTown(UUID uuid) {
-        return townsCache.get(townsCache.get(uuid).getJoinedTown()).getTown();
+        return getTownTable(getTownTable(uuid).getJoinedTown()).getTown();
     }
 
     public UUID getJoinedTownOwner(UUID uuid) {
-        return townsCache.get(uuid).getJoinedTown();
+        return getTownTable(uuid).getJoinedTown();
     }
 
     public boolean isTownNameTaken(String name) {
@@ -85,20 +91,39 @@ public class CacheTowns {
                 .anyMatch(playerData -> playerData.getTown() != null && playerData.getTown().equals(name));
     }
 
+    public boolean hasCitizens(UUID uuid) {
+        return getTownTable(uuid).getTownMembers() != null;
+    }
+
+    public String getCitizens(UUID uuid) {
+        return getTownTable(uuid).getTownMembers();
+    }
+
+    public String getCitizenNames(UUID uuid) {
+        if (getTownTable(uuid).getTownMembers() == null) return "None";
+        final String[] split = townsCache.get(uuid).getTownMembers().split(",");
+        final HashSet<String> playerNames = new HashSet<>();
+        for (String citizen : split) {
+            final OfflinePlayer oPlayer = Bukkit.getOfflinePlayer(UUID.fromString(citizen));
+            playerNames.add(oPlayer.getName());
+        }
+        return StringUtils.join(playerNames, ", ");
+    }
+
     public boolean isCitizen(UUID owner, UUID target) {
-        if (townsCache.get(owner).getTownMembers() == null) return false;
-        return townsCache.get(owner).getTownMembers().contains(target.toString());
+        if (getTownTable(owner).getTownMembers() == null) return false;
+        return getTownTable(owner).getTownMembers().contains(target.toString());
     }
 
     public void addCitizen(UUID owner, UUID target) {
-        final TownsTable townsTable = townsCache.get(owner);
+        final TownsTable townsTable = getTownTable(owner);
         if (townsTable.getTownMembers() == null) townsTable.setTownMembers(target.toString());
         else townsTable.setTownMembers(townsTable.getTownMembers() + "," + target);
         updateTownsDatabase(townsTable);
     }
 
     public void removeCitizen(UUID owner, UUID target) {
-        final TownsTable townsTable = townsCache.get(owner);
+        final TownsTable townsTable = getTownTable(owner);
         final List<String> citizens = new ArrayList<>(List.of(townsTable.getTownMembers().split(",")));
         citizens.remove(target.toString());
         townsTable.setTownMembers(StringUtils.join(citizens, ","));
@@ -106,18 +131,28 @@ public class CacheTowns {
     }
 
     public Location getTownSpawn(UUID uuid) {
-        final TownsTable townsTable = townsCache.get(uuid);
+        final TownsTable townsTable = getTownTable(uuid);
         if (townsTable.getSpawn() != null) return CoreUtil.parseLocation(townsTable.getSpawn());
         else return CoreUtil.parseLocation(townsCache.get(townsTable.getJoinedTown()).getSpawn());
     }
 
     public void setTownSpawn(UUID uuid, Location location) {
-        final TownsTable townsTable = townsCache.get(uuid);
+        final TownsTable townsTable = getTownTable(uuid);
         townsTable.setSpawn(CoreUtil.serializeLocation(location));
         updateTownsDatabase(townsTable);
     }
 
+    public int getMaxChunkClaims(UUID uuid) {
+        final int defaultAmount = 10;
+        final int size = hasCitizens(uuid) ? getTownTable(uuid).getTownMembers().split(",").length : 0;
+        return (size * 2 + defaultAmount);
+    }
+
     //Permission Data
+
+    private PermissionTable getPermissionTable(UUID uuid) {
+        return permissionCache.get(uuid);
+    }
 
     private void deletePermissionDatabase(PermissionTable permissionTable) {
         databaseManager.deletePermissionTable(permissionTable);
@@ -136,26 +171,30 @@ public class CacheTowns {
     }
 
     public void setGlobalPermissionFlag(UUID uuid, Flag flag, boolean result) {
-        final PermissionTable permissionTable = permissionCache.get(uuid);
+        final PermissionTable permissionTable = getPermissionTable(uuid);
         PermissionUtil.setPermissionFlag(permissionTable, flag, result);
         updatePermissionDatabase(permissionTable);
     }
 
     public boolean checkGlobalPermissionFlag(UUID uuid, Flag flag) {
-        final PermissionTable permissionTable = permissionCache.get(uuid);
+        final PermissionTable permissionTable = getPermissionTable(uuid);
         return PermissionUtil.checkPermissionFlag(permissionTable, flag);
     }
 
     //Role Permission Data
 
+    private PermissionTable getRolePermissionTable(UUID uuid, String role) {
+        return rolePermissionCache.get(uuid).get(role);
+    }
+
     public void setRolePermissionFlag(UUID uuid, String role, Flag flag, boolean result) {
-        final PermissionTable permissionTable = rolePermissionCache.get(uuid).get(role);
+        final PermissionTable permissionTable = getRolePermissionTable(uuid, role);
         PermissionUtil.setPermissionFlag(permissionTable, flag, result);
         updatePermissionDatabase(permissionTable);
     }
 
     public boolean checkRolePermissionFlag(UUID uuid, String role, Flag flag) {
-        final PermissionTable permissionTable = rolePermissionCache.get(uuid).get(role);
+        final PermissionTable permissionTable =  getRolePermissionTable(uuid, role);
         return PermissionUtil.checkPermissionFlag(permissionTable, flag);
     }
 
@@ -230,7 +269,7 @@ public class CacheTowns {
     }
 
     public void setPlayerRole(UUID uuid, UUID target, String role) {
-        final TownsTable townsTable = townsCache.get(uuid);
+        final TownsTable townsTable = getTownTable(uuid);
         if (townsTable.getPlayerRoles() == null) townsTable.setPlayerRoles(target + "+" + role);
         else townsTable.setPlayerRoles(townsTable.getPlayerRoles() + "," + target + "+" + role);
         setPlayerRoleCache(uuid, target, role);
@@ -238,7 +277,7 @@ public class CacheTowns {
     }
 
     public void removePlayerRole(UUID uuid, UUID target) {
-        final TownsTable townsTable = townsCache.get(uuid);
+        final TownsTable townsTable = getTownTable(uuid);
         final List<String> newRoles = new ArrayList<>(List.of(townsTable.getPlayerRoles().split(",")));
         newRoles.remove(target + "+" + getPlayerRole(uuid, target));
         townsTable.setPlayerRoles(StringUtils.join(newRoles, ","));

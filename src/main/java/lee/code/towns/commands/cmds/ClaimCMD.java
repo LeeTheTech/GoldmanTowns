@@ -69,6 +69,10 @@ public class ClaimCMD extends SubCommand {
             player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_CLAIM_NOT_CONNECTED_CHUNK.getComponent(new String[] { chunk })));
             return;
         }
+        if (cacheManager.getCacheTowns().getMaxChunkClaims(uuid) < cacheManager.getCacheChunks().getChunkClaims(uuid) + 1) {
+            player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_CLAIM_MAX_CLAIMS.getComponent(new String[] { String.valueOf(cacheManager.getCacheTowns().getMaxChunkClaims(uuid)) })));
+            return;
+        }
         cacheManager.getCacheChunks().claim(chunk, uuid);
         towns.getBorderParticleManager().spawnParticleChunkBorder(player.getLocation(), player.getLocation().getChunk(), ChunkRenderType.CLAIM);
         player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_CLAIM_SUCCESS.getComponent(new String[] { chunk })));
