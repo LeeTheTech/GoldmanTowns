@@ -23,8 +23,8 @@ public class TownsTable {
     @DatabaseField(columnName = "joined_town")
     private UUID joinedTown;
 
-    @DatabaseField(columnName = "town_members")
-    private String townMembers;
+    @DatabaseField(columnName = "town_citizens")
+    private String townCitizens;
 
     @DatabaseField(columnName = "spawn")
     private String spawn;
@@ -34,6 +34,9 @@ public class TownsTable {
 
     @DatabaseField(columnName = "player_roles")
     private String playerRoles;
+
+    @DatabaseField(columnName = "town_public")
+    private boolean townPublic;
 
     public TownsTable(UUID uniqueId) {
         this.uniqueId = uniqueId;

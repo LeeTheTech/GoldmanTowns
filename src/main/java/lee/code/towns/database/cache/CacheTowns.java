@@ -92,16 +92,16 @@ public class CacheTowns {
     }
 
     public boolean hasCitizens(UUID uuid) {
-        return getTownTable(uuid).getTownMembers() != null;
+        return getTownTable(uuid).getTownCitizens() != null;
     }
 
     public String getCitizens(UUID uuid) {
-        return getTownTable(uuid).getTownMembers();
+        return getTownTable(uuid).getTownCitizens();
     }
 
     public String getCitizenNames(UUID uuid) {
-        if (getTownTable(uuid).getTownMembers() == null) return "None";
-        final String[] split = townsCache.get(uuid).getTownMembers().split(",");
+        if (getTownTable(uuid).getTownCitizens() == null) return "None";
+        final String[] split = townsCache.get(uuid).getTownCitizens().split(",");
         final HashSet<String> playerNames = new HashSet<>();
         for (String citizen : split) {
             final OfflinePlayer oPlayer = Bukkit.getOfflinePlayer(UUID.fromString(citizen));
@@ -111,22 +111,22 @@ public class CacheTowns {
     }
 
     public boolean isCitizen(UUID owner, UUID target) {
-        if (getTownTable(owner).getTownMembers() == null) return false;
-        return getTownTable(owner).getTownMembers().contains(target.toString());
+        if (getTownTable(owner).getTownCitizens() == null) return false;
+        return getTownTable(owner).getTownCitizens().contains(target.toString());
     }
 
     public void addCitizen(UUID owner, UUID target) {
         final TownsTable townsTable = getTownTable(owner);
-        if (townsTable.getTownMembers() == null) townsTable.setTownMembers(target.toString());
-        else townsTable.setTownMembers(townsTable.getTownMembers() + "," + target);
+        if (townsTable.getTownCitizens() == null) townsTable.setTownCitizens(target.toString());
+        else townsTable.setTownCitizens(townsTable.getTownCitizens() + "," + target);
         updateTownsDatabase(townsTable);
     }
 
     public void removeCitizen(UUID owner, UUID target) {
         final TownsTable townsTable = getTownTable(owner);
-        final List<String> citizens = new ArrayList<>(List.of(townsTable.getTownMembers().split(",")));
+        final List<String> citizens = new ArrayList<>(List.of(townsTable.getTownCitizens().split(",")));
         citizens.remove(target.toString());
-        townsTable.setTownMembers(StringUtils.join(citizens, ","));
+        townsTable.setTownCitizens(StringUtils.join(citizens, ","));
         updateTownsDatabase(townsTable);
     }
 
@@ -144,8 +144,18 @@ public class CacheTowns {
 
     public int getMaxChunkClaims(UUID uuid) {
         final int defaultAmount = 10;
-        final int size = hasCitizens(uuid) ? getTownTable(uuid).getTownMembers().split(",").length : 0;
+        final int size = hasCitizens(uuid) ? getTownTable(uuid).getTownCitizens().split(",").length : 0;
         return (size * 2 + defaultAmount);
+    }
+
+    public boolean isTownPublic(UUID uuid) {
+        return getTownTable(uuid).isTownPublic();
+    }
+
+    public void setTownPublic(UUID uuid, boolean result) {
+        final TownsTable townsTable = getTownTable(uuid);
+        townsTable.setTownPublic(result);
+        updateTownsDatabase(townsTable);
     }
 
     //Permission Data

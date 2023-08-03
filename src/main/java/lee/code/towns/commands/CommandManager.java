@@ -47,6 +47,7 @@ public class CommandManager implements CommandExecutor {
         subCommands.add(new RoleCMD(towns));
         subCommands.add(new InviteCMD(towns));
         subCommands.add(new InfoCMD(towns));
+        subCommands.add(new PublicCMD(towns));
         subCommands.add(new TeleportCMD());
     }
 

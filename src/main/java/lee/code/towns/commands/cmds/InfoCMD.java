@@ -59,11 +59,13 @@ public class InfoCMD extends SubCommand {
         if (cacheTowns.hasTown(uuid) || cacheTowns.hasJoinedTown(uuid)) {
             final List<Component> lines = new ArrayList<>();
             final UUID owner = cacheTowns.hasTown(uuid) ? uuid : cacheTowns.getJoinedTownOwner(uuid);
+            final String status = cacheTowns.isTownPublic(owner) ? Lang.PUBLIC.getString() : Lang.PRIVATE.getString();
             lines.add(Lang.COMMAND_INFO_HEADER.getComponent(null));
             lines.add(Component.text(""));
             lines.add(Lang.COMMAND_INFO_TOWN_NAME.getComponent(new String[] { cacheTowns.getTown(owner) }));
+            lines.add(Lang.COMMAND_INFO_TOWN_PUBLIC.getComponent(new String[] { status }));
             lines.add(Lang.COMMAND_INFO_TOWN_CITIZENS.getComponent(new String[] { cacheTowns.getCitizenNames(owner) }));
-            lines.add(Lang.COMMAND_INFO_TOWN_CHUNKS.getComponent(new String[] { String.valueOf(cacheChunks.getChunkClaims(uuid)), String.valueOf(cacheTowns.getMaxChunkClaims(uuid)) }));
+            lines.add(Lang.COMMAND_INFO_TOWN_CHUNKS.getComponent(new String[] { String.valueOf(cacheChunks.getChunkClaims(owner)), String.valueOf(cacheTowns.getMaxChunkClaims(owner)) }));
             lines.add(Component.text(""));
             lines.add(Lang.COMMAND_INFO_FOOTER.getComponent(null));
             for (Component line : lines) player.sendMessage(line);
