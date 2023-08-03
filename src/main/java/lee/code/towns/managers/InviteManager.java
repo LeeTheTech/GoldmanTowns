@@ -3,6 +3,7 @@ package lee.code.towns.managers;
 import lee.code.towns.Towns;
 import lee.code.towns.lang.Lang;
 import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
 import java.util.UUID;
@@ -33,10 +34,15 @@ public class InviteManager {
     public void teleportTimeoutTimer(UUID playerID, UUID targetID) {
         Bukkit.getServer().getAsyncScheduler().runDelayed(towns, scheduledTask -> {
             if (hasActiveInvite(playerID, targetID)) {
-                final Player player = Bukkit.getPlayer(playerID);
-                final Player target = Bukkit.getPlayer(targetID);
-                if (player != null && target != null && player.isOnline()) {
-                    player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_INVITE_TIMEOUT.getComponent(new String[] { target.getName() })));
+                final OfflinePlayer oPlayer = Bukkit.getOfflinePlayer(playerID);
+                final OfflinePlayer oTarget = Bukkit.getOfflinePlayer(targetID);
+                if (oPlayer.isOnline()) {
+                    final Player player = oPlayer.getPlayer();
+                    if (player != null) player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_INVITE_TIMEOUT_PLAYER.getComponent(new String[] { oTarget.getName() })));
+                }
+                if (oTarget.isOnline()) {
+                    final Player target = oTarget.getPlayer();
+                    if (target != null) target.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_INVITE_TIMEOUT_TARGET.getComponent(new String[] { oPlayer.getName() })));
                 }
                 removeActiveInvite(playerID);
             }

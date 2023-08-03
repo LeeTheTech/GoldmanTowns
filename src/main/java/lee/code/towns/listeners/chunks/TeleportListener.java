@@ -24,6 +24,7 @@ public class TeleportListener implements Listener {
 
     @EventHandler
     public void onPlayerTeleportListener(PlayerTeleportEvent e) {
+        if (!e.getCause().equals(PlayerTeleportEvent.TeleportCause.CHORUS_FRUIT)) return;
         final TeleportEvent teleportEvent = new TeleportEvent(e.getPlayer(), e.getTo());
         Bukkit.getServer().getPluginManager().callEvent(teleportEvent);
         if (teleportEvent.isCancelled()) e.setCancelled(true);

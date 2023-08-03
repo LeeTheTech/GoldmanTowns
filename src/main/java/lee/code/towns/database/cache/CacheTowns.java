@@ -8,6 +8,7 @@ import lee.code.towns.database.tables.TownsTable;
 import lee.code.towns.enums.TownRole;
 import lee.code.towns.utils.CoreUtil;
 import lee.code.towns.utils.PermissionUtil;
+import net.kyori.adventure.text.Component;
 import org.apache.commons.lang3.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -74,6 +75,18 @@ public class CacheTowns {
         updateTownsDatabase(townsTable);
     }
 
+    public void setJoinedTown(UUID uuid, UUID townOwner) {
+        final TownsTable townsTable = getTownTable(uuid);
+        townsTable.setJoinedTown(townOwner);
+        updateTownsDatabase(townsTable);
+    }
+
+    public void removeJoinedTown(UUID uuid) {
+        final TownsTable townsTable = getTownTable(uuid);
+        townsTable.setJoinedTown(null);
+        updateTownsDatabase(townsTable);
+    }
+
     public boolean hasJoinedTown(UUID uuid) {
         return getTownTable(uuid).getJoinedTown() != null;
     }
@@ -84,6 +97,11 @@ public class CacheTowns {
 
     public UUID getJoinedTownOwner(UUID uuid) {
         return getTownTable(uuid).getJoinedTown();
+    }
+
+    public UUID getPlayerTownOwner(UUID target) {
+        if (hasTown(target)) return target;
+        else return getJoinedTownOwner(target);
     }
 
     public boolean isTownNameTaken(String name) {
@@ -120,6 +138,8 @@ public class CacheTowns {
         if (townsTable.getTownCitizens() == null) townsTable.setTownCitizens(target.toString());
         else townsTable.setTownCitizens(townsTable.getTownCitizens() + "," + target);
         updateTownsDatabase(townsTable);
+        setJoinedTown(target, owner);
+        setPlayerRole(owner, target, TownRole.CITIZEN.name());
     }
 
     public void removeCitizen(UUID owner, UUID target) {
@@ -128,6 +148,7 @@ public class CacheTowns {
         citizens.remove(target.toString());
         townsTable.setTownCitizens(StringUtils.join(citizens, ","));
         updateTownsDatabase(townsTable);
+        removeJoinedTown(target);
     }
 
     public Location getTownSpawn(UUID uuid) {
@@ -156,6 +177,10 @@ public class CacheTowns {
         final TownsTable townsTable = getTownTable(uuid);
         townsTable.setTownPublic(result);
         updateTownsDatabase(townsTable);
+    }
+
+    public void sendTownMessage(UUID uuid,  Component message) {
+
     }
 
     //Permission Data

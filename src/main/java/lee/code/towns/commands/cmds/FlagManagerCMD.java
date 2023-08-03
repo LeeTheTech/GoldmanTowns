@@ -10,6 +10,7 @@ import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class FlagManagerCMD extends SubCommand {
 
@@ -51,7 +52,12 @@ public class FlagManagerCMD extends SubCommand {
 
     @Override
     public void perform(Player player, String[] args) {
-        final MenuPlayerData menuPlayerData = towns.getMenuManager().getMenuPlayerData(player.getUniqueId());
+        final UUID uuid = player.getUniqueId();
+        if (!towns.getCacheManager().getCacheTowns().hasTown(uuid)) {
+            player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_NOT_TOWN_OWNER.getComponent(null)));
+            return;
+        }
+        final MenuPlayerData menuPlayerData = towns.getMenuManager().getMenuPlayerData(uuid);
         towns.getMenuManager().openMenu(new FlagManager(menuPlayerData, towns), player);
     }
 

@@ -130,8 +130,7 @@ public class InviteCMD extends SubCommand {
 
             final Component spacer = Component.text(" ");
 
-            target.sendMessage(Lang.PREFIX.getComponent(null)
-                    .append(Lang.COMMAND_INVITE_TARGET_SUCCESS.getComponent(new String[] { cacheManager.getCacheTowns().getTown(player.getUniqueId()) }))
+            target.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_INVITE_TARGET_SUCCESS.getComponent(new String[] { cacheManager.getCacheTowns().getTown(player.getUniqueId()) }))
                     .append(spacer)
                     .append(accept)
                     .append(spacer)

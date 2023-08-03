@@ -52,10 +52,11 @@ public class BorderCMD extends SubCommand {
 
     @Override
     public void perform(Player player, String[] args) {
+        //TODO add options (Rented, Town)
         final CacheManager cacheManager = towns.getCacheManager();
         final UUID uuid = player.getUniqueId();
-        if (!cacheManager.getCacheTowns().hasTown(uuid) && !cacheManager.getCacheTowns().hasJoinedTown(uuid)) {
-            player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_NO_TOWN.getComponent(null)));
+        if (!cacheManager.getCacheTowns().hasTown(uuid)) {
+            player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_NOT_TOWN_OWNER.getComponent(null)));
             return;
         }
         final BorderParticleManager borderParticleManager = towns.getBorderParticleManager();

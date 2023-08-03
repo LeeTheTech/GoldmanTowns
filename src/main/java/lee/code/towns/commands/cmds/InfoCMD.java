@@ -6,6 +6,7 @@ import lee.code.towns.database.cache.CacheChunks;
 import lee.code.towns.database.cache.CacheTowns;
 import lee.code.towns.lang.Lang;
 import net.kyori.adventure.text.Component;
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -58,12 +59,13 @@ public class InfoCMD extends SubCommand {
         final UUID uuid = player.getUniqueId();
         if (cacheTowns.hasTown(uuid) || cacheTowns.hasJoinedTown(uuid)) {
             final List<Component> lines = new ArrayList<>();
-            final UUID owner = cacheTowns.hasTown(uuid) ? uuid : cacheTowns.getJoinedTownOwner(uuid);
+            final UUID owner = cacheTowns.getPlayerTownOwner(uuid);
             final String status = cacheTowns.isTownPublic(owner) ? Lang.PUBLIC.getString() : Lang.PRIVATE.getString();
             lines.add(Lang.COMMAND_INFO_HEADER.getComponent(null));
             lines.add(Component.text(""));
-            lines.add(Lang.COMMAND_INFO_TOWN_NAME.getComponent(new String[] { cacheTowns.getTown(owner) }));
             lines.add(Lang.COMMAND_INFO_TOWN_PUBLIC.getComponent(new String[] { status }));
+            lines.add(Lang.COMMAND_INFO_TOWN_NAME.getComponent(new String[] { cacheTowns.getTown(owner) }));
+            lines.add(Lang.COMMAND_INFO_TOWN_OWNER.getComponent(new String[] { Bukkit.getOfflinePlayer(owner).getName() }));
             lines.add(Lang.COMMAND_INFO_TOWN_CITIZENS.getComponent(new String[] { cacheTowns.getCitizenNames(owner) }));
             lines.add(Lang.COMMAND_INFO_TOWN_CHUNKS.getComponent(new String[] { String.valueOf(cacheChunks.getChunkClaims(owner)), String.valueOf(cacheTowns.getMaxChunkClaims(owner)) }));
             lines.add(Component.text(""));

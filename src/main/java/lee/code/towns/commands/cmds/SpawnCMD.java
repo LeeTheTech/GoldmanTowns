@@ -55,7 +55,8 @@ public class SpawnCMD extends SubCommand {
         final CacheManager cacheManager = towns.getCacheManager();
         final UUID uuid = player.getUniqueId();
         if (cacheManager.getCacheTowns().hasTown(uuid) || cacheManager.getCacheTowns().hasJoinedTown(uuid)) {
-            final Location townSpawn = cacheManager.getCacheTowns().getTownSpawn(uuid);
+            final UUID owner = cacheManager.getCacheTowns().getPlayerTownOwner(uuid);
+            final Location townSpawn = cacheManager.getCacheTowns().getTownSpawn(owner);
             player.teleportAsync(townSpawn).thenAccept(result -> {
                 if (result) player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_SPAWN_SUCCESS.getComponent(null)));
                 else player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_SPAWN_FAILED.getComponent(null)));

@@ -6,7 +6,6 @@ import lee.code.towns.enums.ChunkRenderType;
 import lee.code.towns.events.AutoClaimEvent;
 import lee.code.towns.lang.Lang;
 import lee.code.towns.managers.AutoClaimManager;
-import lee.code.towns.managers.BorderParticleManager;
 import lee.code.towns.utils.ChunkUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -43,29 +42,28 @@ public class AutoClaimListener implements Listener {
     @EventHandler
     public void onAutoClaim(AutoClaimEvent e) {
         final AutoClaimManager autoClaimManager = towns.getAutoClaimManager();
+        final CacheManager cacheManager = towns.getCacheManager();
         final Player player = e.getPlayer();
         final UUID uuid = player.getUniqueId();
         final String chunk = e.getChunk();
         synchronized (synchronizedThreadLock) {
             Bukkit.getAsyncScheduler().runNow(towns, scheduledTask -> {
-                final CacheManager cacheManager = towns.getCacheManager();
-
                 if (!cacheManager.getCacheChunks().isConnectedChunk(uuid, chunk)) {
                     autoClaimManager.removeAutoClaiming(uuid);
                     player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_AUTO_CLAIM_RANGE.getComponent(new String[] { Lang.OFF.getString() })));
                     return;
                 }
-
-                if (cacheManager.getCacheTowns().getMaxChunkClaims(uuid) < cacheManager.getCacheChunks().getChunkClaims(uuid) + 1) {
+                final int currentChunks = cacheManager.getCacheChunks().getChunkClaims(uuid);
+                final int maxChunks = cacheManager.getCacheTowns().getMaxChunkClaims(uuid);
+                if (maxChunks < currentChunks + 1) {
                     autoClaimManager.removeAutoClaiming(uuid);
-                    player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_AUTO_CLAIM_MAX_CLAIMS.getComponent(new String[] { String.valueOf(cacheManager.getCacheTowns().getMaxChunkClaims(uuid)) })));
+                    player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_AUTO_CLAIM_MAX_CLAIMS.getComponent(new String[] { String.valueOf(maxChunks) })));
                     return;
                 }
-
                 if (cacheManager.getCacheChunks().isClaimed(chunk)) return;
                 cacheManager.getCacheChunks().claim(chunk, uuid);
                 towns.getBorderParticleManager().spawnParticleChunkBorder(player.getLocation(), e.getLocation().getChunk(), ChunkRenderType.CLAIM);
-                player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_CLAIM_SUCCESS.getComponent(new String[] { chunk })));
+                player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_CLAIM_SUCCESS.getComponent(new String[] { chunk, String.valueOf(currentChunks + 1), String.valueOf(maxChunks) })));
             });
         }
     }
