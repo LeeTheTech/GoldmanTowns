@@ -1,12 +1,12 @@
 package lee.code.towns.database.cache.towns.data;
 
 import lee.code.towns.database.DatabaseManager;
-import lee.code.towns.database.cache.DatabaseHandler;
+import lee.code.towns.database.cache.handlers.DatabaseHandler;
+import lee.code.towns.database.cache.handlers.FlagHandler;
 import lee.code.towns.database.tables.PermissionTable;
 import lee.code.towns.enums.Flag;
 import lee.code.towns.enums.PermissionType;
 import lee.code.towns.enums.TownRole;
-import lee.code.towns.utils.PermissionUtil;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -28,13 +28,13 @@ public class TownRoleData extends DatabaseHandler {
 
     public void setRolePermissionFlag(UUID uuid, String role, Flag flag, boolean result) {
         final PermissionTable permissionTable = getRolePermissionTable(uuid, role);
-        PermissionUtil.setPermissionFlag(permissionTable, flag, result);
+        FlagHandler.setPermissionFlag(permissionTable, flag, result);
         updatePermissionDatabase(permissionTable);
     }
 
     public boolean checkRolePermissionFlag(UUID uuid, String role, Flag flag) {
         final PermissionTable permissionTable =  getRolePermissionTable(uuid, role);
-        return PermissionUtil.checkPermissionFlag(permissionTable, flag);
+        return FlagHandler.checkPermissionFlag(permissionTable, flag);
     }
 
     public void createDefaultRolePermissionTable(UUID uuid) {

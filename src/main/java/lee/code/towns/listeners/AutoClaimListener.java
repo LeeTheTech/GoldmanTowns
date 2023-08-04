@@ -61,7 +61,7 @@ public class AutoClaimListener implements Listener {
                     return;
                 }
                 if (cacheManager.getCacheChunks().isClaimed(chunk)) return;
-                cacheManager.getCacheChunks().claim(chunk, uuid);
+                cacheManager.getCacheChunks().claimChunk(chunk, uuid);
                 towns.getBorderParticleManager().spawnParticleChunkBorder(player.getLocation(), e.getLocation().getChunk(), ChunkRenderType.CLAIM);
                 player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_CLAIM_SUCCESS.getComponent(new String[] { chunk, String.valueOf(currentChunks + 1), String.valueOf(maxChunks) })));
             });

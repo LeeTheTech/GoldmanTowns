@@ -49,6 +49,7 @@ public enum Lang {
     COMMAND_INVITE_TARGET_SUCCESS("&aWould you like to join the town &6{0}&a?"),
     COMMAND_INVITE_ACCEPT_TARGET_SUCCESS("&aThe player &6{0} &aaccepted your town invite!"),
     COMMAND_INVITE_ACCEPT_SUCCESS("&aYou accepted &6{0} &atown invite!"),
+    COMMAND_INVITE_ACCEPT_JOINED_TOWN("&aThe player &6{0} &ahas joined the town!"),
     COMMAND_INVITE_DENY_TARGET_SUCCESS("&7The player &6{0} &7denied your town invite."),
     COMMAND_INVITE_DENY_SUCCESS("&7You denied &6{0}'s &7town invite."),
     COMMAND_INVITE_SUCCESS("&aYou successfully invited &6{0} &ato your town."),

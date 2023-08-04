@@ -76,6 +76,7 @@ public class InviteCMD extends SubCommand {
                         }
                         cacheManager.getCacheTowns().addCitizen(targetID, player.getUniqueId());
                         inviteManager.removeActiveInvite(targetID);
+                        cacheManager.getCacheTowns().sendTownMessage(targetID, Lang.PREFIX.getComponent(null).append(Lang.COMMAND_INVITE_ACCEPT_JOINED_TOWN.getComponent(new String[] { player.getName() } )));
                         final Player target = Bukkit.getPlayer(targetID);
                         if (target != null && target.isOnline()) target.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_INVITE_ACCEPT_TARGET_SUCCESS.getComponent(new String[] { player.getName() })));
                         player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_INVITE_ACCEPT_SUCCESS.getComponent(new String[] { targetName })));

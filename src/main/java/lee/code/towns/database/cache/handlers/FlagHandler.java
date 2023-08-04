@@ -1,9 +1,9 @@
-package lee.code.towns.utils;
+package lee.code.towns.database.cache.handlers;
 
 import lee.code.towns.database.tables.PermissionTable;
 import lee.code.towns.enums.Flag;
 
-public class PermissionUtil {
+public class FlagHandler {
 
     public static void setPermissionFlag(PermissionTable permissionTable, Flag flag, boolean result) {
         switch (flag) {
@@ -68,5 +68,9 @@ public class PermissionUtil {
                 return false;
             }
         }
+    }
+
+    public static boolean isRoleFlag(Flag flag) {
+        return !flag.equals(Flag.DAMAGE) && !flag.equals(Flag.PVP) && !flag.equals(Flag.PVE);
     }
 }

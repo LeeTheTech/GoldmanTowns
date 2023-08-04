@@ -1,7 +1,7 @@
 package lee.code.towns.menus.menu;
 
 import lee.code.towns.Towns;
-import lee.code.towns.database.cache.CacheChunks;
+import lee.code.towns.database.cache.chunks.CacheChunks;
 import lee.code.towns.lang.Lang;
 import lee.code.towns.menus.menu.menudata.FlagMenuItem;
 import lee.code.towns.menus.menu.menudata.MenuItem;
@@ -50,11 +50,11 @@ public class FlagManagerChunk extends MenuGUI {
 
     private MenuButton createFlagButton(FlagMenuItem flagMenuItem) {
         return new MenuButton()
-                .creator(p -> flagMenuItem.createItem(towns.getCacheManager().getCacheChunks().checkChunkPermissionFlag(chunk, flagMenuItem.getFlag())))
+                .creator(p -> flagMenuItem.createItem(towns.getCacheManager().getCacheChunks().getChunkPermData().checkChunkPermissionFlag(chunk, flagMenuItem.getFlag())))
                 .consumer(e -> {
                     final CacheChunks cacheChunks = towns.getCacheManager().getCacheChunks();
-                    final boolean newResult = !cacheChunks.checkChunkPermissionFlag(chunk, flagMenuItem.getFlag());
-                    cacheChunks.setChunkPermissionFlag(chunk, flagMenuItem.getFlag(), newResult);
+                    final boolean newResult = !cacheChunks.getChunkPermData().checkChunkPermissionFlag(chunk, flagMenuItem.getFlag());
+                    cacheChunks.getChunkPermData().setChunkPermissionFlag(chunk, flagMenuItem.getFlag(), newResult);
                     final ItemStack item = e.getCurrentItem();
                     if (item == null) return;
                     final ItemStack newItem = flagMenuItem.createItem(newResult);

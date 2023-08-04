@@ -78,7 +78,7 @@ public class DatabaseManager {
 
         for (ChunkTable chunkTable : chunkDao.queryForAll()) {
             cacheManager.getCacheChunks().setChunkTable(chunkTable);
-            cacheManager.getCacheChunks().setPermissionTable(queryPermChunkTable(chunkTable));
+            cacheManager.getCacheChunks().getChunkPermData().setPermissionTable(queryPermChunkTable(chunkTable));
         }
 
         //Player data

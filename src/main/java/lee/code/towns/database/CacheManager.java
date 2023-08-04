@@ -1,6 +1,7 @@
 package lee.code.towns.database;
 
-import lee.code.towns.database.cache.CacheChunks;
+import lee.code.towns.database.cache.chunks.CacheChunks;
+import lee.code.towns.database.cache.handlers.FlagHandler;
 import lee.code.towns.database.cache.towns.CacheTowns;
 import lee.code.towns.database.tables.TownsTable;
 import lee.code.towns.enums.Flag;
@@ -25,11 +26,13 @@ public class CacheManager {
         final UUID owner = cacheChunks.getChunkOwner(chunk);
         if (ownerBypass && uuid.equals(owner)) return false;
         if (cacheTowns.isCitizen(owner, uuid)) {
-            final String role = cacheTowns.getPlayerRoleData().getPlayerRole(owner, uuid);
-            return !cacheTowns.getRoleData().checkRolePermissionFlag(owner, role, flag);
+            if (FlagHandler.isRoleFlag(flag)) {
+                final String role = cacheTowns.getPlayerRoleData().getPlayerRole(owner, uuid);
+                return !cacheTowns.getRoleData().checkRolePermissionFlag(owner, role, flag);
+            }
         }
-        if (cacheChunks.checkChunkPermissionFlag(chunk, Flag.CHUNK_FLAGS_ENABLED)) {
-            return !cacheChunks.checkChunkPermissionFlag(chunk, flag);
+        if (cacheChunks.getChunkPermData().checkChunkPermissionFlag(chunk, Flag.CHUNK_FLAGS_ENABLED)) {
+            return !cacheChunks.getChunkPermData().checkChunkPermissionFlag(chunk, flag);
         }
         return !cacheTowns.getPermData().checkGlobalPermissionFlag(owner, flag);
     }
@@ -38,8 +41,8 @@ public class CacheManager {
         final String chunk = ChunkUtil.serializeChunkLocation(location.getChunk());
         if (!cacheChunks.isClaimed(chunk)) return false;
         final UUID owner = cacheChunks.getChunkOwner(chunk);
-        if (cacheChunks.checkChunkPermissionFlag(chunk, Flag.CHUNK_FLAGS_ENABLED)) {
-            return !cacheChunks.checkChunkPermissionFlag(chunk, flag);
+        if (cacheChunks.getChunkPermData().checkChunkPermissionFlag(chunk, Flag.CHUNK_FLAGS_ENABLED)) {
+            return !cacheChunks.getChunkPermData().checkChunkPermissionFlag(chunk, flag);
         }
         return !cacheTowns.getPermData().checkGlobalPermissionFlag(owner, flag);
     }

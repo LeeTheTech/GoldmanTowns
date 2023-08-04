@@ -1,7 +1,7 @@
 package lee.code.towns.database.cache.towns;
 
 import lee.code.towns.database.DatabaseManager;
-import lee.code.towns.database.cache.DatabaseHandler;
+import lee.code.towns.database.cache.handlers.DatabaseHandler;
 import lee.code.towns.database.cache.towns.data.TownPermData;
 import lee.code.towns.database.cache.towns.data.TownPlayerRoleData;
 import lee.code.towns.database.cache.towns.data.TownRoleData;
@@ -16,9 +16,11 @@ import org.apache.commons.lang3.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.entity.Player;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 public class CacheTowns extends DatabaseHandler {
 
@@ -39,9 +41,8 @@ public class CacheTowns extends DatabaseHandler {
         final PermissionTable permissionTable = new PermissionTable(uuid, PermissionType.TOWN);
         setTownsTable(townsTable);
         permData.setPermissionTable(permissionTable);
+        createPermissionDatabase(permissionTable);
         createTownsDatabase(townsTable);
-        permData.createPermissionDatabase(permissionTable);
-        roleData.createDefaultRolePermissionTable(uuid);
     }
 
     public TownsTable getTownTable(UUID uuid) {
@@ -65,10 +66,17 @@ public class CacheTowns extends DatabaseHandler {
         return getTownTable(uuid).getTown();
     }
 
-    public void setTownName(UUID uuid, String town, Location spawn) {
+    public void createNewTown(UUID uuid, String town, Location spawn) {
         final TownsTable townsTable = getTownTable(uuid);
         townsTable.setTown(town);
         townsTable.setSpawn(CoreUtil.serializeLocation(spawn));
+        updateTownsDatabase(townsTable);
+        roleData.createDefaultRolePermissionTable(uuid);
+    }
+
+    public void setTownName(UUID uuid, String town) {
+        final TownsTable townsTable = getTownTable(uuid);
+        townsTable.setTown(town);
         updateTownsDatabase(townsTable);
     }
 
@@ -114,11 +122,10 @@ public class CacheTowns extends DatabaseHandler {
         return getTownTable(uuid).getTownCitizens();
     }
 
-    public List<UUID> getCitizensList(UUID uuid) {
-        if (!hasCitizens(uuid)) return new ArrayList<>();
-        final List<String> list = new ArrayList<>(List.of(getTownTable(uuid).getTownCitizens().split(",")));
+    public Set<UUID> getCitizensList(UUID uuid) {
+        if (!hasCitizens(uuid)) return Collections.synchronizedSet(new HashSet<>());
+        final Set<String> list = Collections.synchronizedSet(new HashSet<>(List.of(getTownTable(uuid).getTownCitizens().split(","))));
         return list.stream()
-                .map(String::trim)
                 .map(str -> {
                     try {
                         return UUID.fromString(str);
@@ -127,7 +134,7 @@ public class CacheTowns extends DatabaseHandler {
                     }
                 })
                 .filter(Objects::nonNull)
-                .toList();
+                .collect(Collectors.toSet());
     }
 
     public String getCitizenNames(UUID uuid) {
@@ -157,7 +164,7 @@ public class CacheTowns extends DatabaseHandler {
 
     public void removeCitizen(UUID owner, UUID target) {
         final TownsTable townsTable = getTownTable(owner);
-        final List<String> citizens = new ArrayList<>(List.of(townsTable.getTownCitizens().split(",")));
+        final Set<String> citizens = Collections.synchronizedSet(new HashSet<>(List.of(townsTable.getTownCitizens().split(","))));
         citizens.remove(target.toString());
         townsTable.setTownCitizens(StringUtils.join(citizens, ","));
         updateTownsDatabase(townsTable);
@@ -192,7 +199,16 @@ public class CacheTowns extends DatabaseHandler {
         updateTownsDatabase(townsTable);
     }
 
-    public void sendTownMessage(UUID uuid,  Component message) {
-
+    public void sendTownMessage(UUID uuid, Component message) {
+        final UUID owner = getPlayerTownOwner(uuid);
+        final Set<UUID> players = getCitizensList(owner);
+        players.add(owner);
+        players.forEach(citizen -> {
+            final OfflinePlayer oPlayer = Bukkit.getOfflinePlayer(citizen);
+            if (oPlayer.isOnline()) {
+                final Player player = oPlayer.getPlayer();
+                if (player != null) player.sendMessage(message);
+            }
+        });
     }
 }

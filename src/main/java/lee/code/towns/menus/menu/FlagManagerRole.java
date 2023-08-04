@@ -39,14 +39,7 @@ public class FlagManagerRole extends MenuGUI {
         addButton(10, createFlagButton(FlagMenuItem.BREAK, uuid));
         addButton(11, createFlagButton(FlagMenuItem.BUILD, uuid));
         addButton(12, createFlagButton(FlagMenuItem.INTERACT, uuid));
-        addButton(13, createFlagButton(FlagMenuItem.DAMAGE, uuid));
-        addButton(14, createFlagButton(FlagMenuItem.PVP, uuid));
-        addButton(15, createFlagButton(FlagMenuItem.PVE, uuid));
-        addButton(16, createFlagButton(FlagMenuItem.MONSTER_SPAWNING, uuid));
-        addButton(21, createFlagButton(FlagMenuItem.REDSTONE, uuid));
-        addButton(22, createFlagButton(FlagMenuItem.EXPLOSION, uuid));
-        addButton(23, createFlagButton(FlagMenuItem.TELEPORT, uuid));
-        addButton(24, createFlagButton(FlagMenuItem.INVITE, uuid));
+        addButton(14, createFlagButton(FlagMenuItem.INVITE, uuid));
         addButton(40, backButton(player));
         super.decorate(player);
     }

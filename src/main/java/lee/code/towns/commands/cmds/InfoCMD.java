@@ -2,7 +2,7 @@ package lee.code.towns.commands.cmds;
 
 import lee.code.towns.Towns;
 import lee.code.towns.commands.SubCommand;
-import lee.code.towns.database.cache.CacheChunks;
+import lee.code.towns.database.cache.chunks.CacheChunks;
 import lee.code.towns.database.cache.towns.CacheTowns;
 import lee.code.towns.lang.Lang;
 import net.kyori.adventure.text.Component;
