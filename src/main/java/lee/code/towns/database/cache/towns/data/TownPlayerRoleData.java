@@ -4,9 +4,7 @@ import lee.code.towns.database.cache.towns.CacheTowns;
 import lee.code.towns.database.tables.TownsTable;
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class TownPlayerRoleData {
@@ -63,7 +61,7 @@ public class TownPlayerRoleData {
 
     public void removePlayerRole(UUID uuid, UUID target) {
         final TownsTable townsTable = cacheTowns.getTownTable(uuid);
-        final List<String> newRoles = new ArrayList<>(List.of(townsTable.getPlayerRoles().split(",")));
+        final Set<String> newRoles = Collections.synchronizedSet(new HashSet<>(List.of(townsTable.getPlayerRoles().split(","))));
         newRoles.remove(target + "+" + getPlayerRole(uuid, target));
         townsTable.setPlayerRoles(StringUtils.join(newRoles, ","));
         removePlayerRoleCache(uuid, target);

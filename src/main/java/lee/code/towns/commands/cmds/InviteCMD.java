@@ -7,8 +7,6 @@ import lee.code.towns.database.CacheManager;
 import lee.code.towns.lang.Lang;
 import lee.code.towns.managers.InviteManager;
 import lee.code.towns.utils.CoreUtil;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.event.ClickEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -101,7 +99,6 @@ public class InviteCMD extends SubCommand {
                 player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_INVITE_NO_TOWN.getComponent(null)));
                 return;
             }
-
             final String targetName = args[1];
             if (!CoreUtil.getOnlinePlayers().contains(targetName)) {
                 player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_PLAYER_NOT_ONLINE.getComponent(new String[] { targetName })));
@@ -112,6 +109,14 @@ public class InviteCMD extends SubCommand {
                 player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_PLAYER_NOT_FOUND.getComponent(new String[] { targetName })));
                 return;
             }
+            if (target.equals(player)) {
+                player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_INVITE_SELF.getComponent(null)));
+                return;
+            }
+            if (cacheManager.getCacheTowns().hasTown(target.getUniqueId()) || cacheManager.getCacheTowns().hasJoinedTown(target.getUniqueId())) {
+                player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_INVITE_APART_OF_TOWN.getComponent(new String[] { targetName })));
+                return;
+            }
             if (inviteManager.hasActiveInvite(player.getUniqueId(), target.getUniqueId())) {
                 player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_INVITE_PENDING.getComponent(new String[] { targetName })));
                 return;
@@ -120,23 +125,12 @@ public class InviteCMD extends SubCommand {
             inviteManager.setActiveInvite(player.getUniqueId(), target.getUniqueId());
             player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_INVITE_SUCCESS.getComponent(new String[] { target.getName() })));
 
-            final Component accept = Lang.ACCEPT.getComponent(null)
-                    .clickEvent(ClickEvent.clickEvent(ClickEvent.Action.RUN_COMMAND, "/towns invite " + player.getName() + " accept"))
-                    .hoverEvent(Lang.COMMAND_ACCEPT_INVITE_HOVER.getComponent(new String[] { player.getName() }));
-
-
-            final Component deny = Lang.DENY.getComponent(null)
-                    .clickEvent(ClickEvent.clickEvent(ClickEvent.Action.RUN_COMMAND, "/towns invite " + player.getName() + " deny"))
-                    .hoverEvent(Lang.COMMAND_DENY_INVITE_HOVER.getComponent(new String[] { player.getName() }));
-
-            final Component spacer = Component.text(" ");
-
-            target.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_INVITE_TARGET_SUCCESS.getComponent(new String[] { cacheManager.getCacheTowns().getTownName(player.getUniqueId()) }))
-                    .append(spacer)
-                    .append(accept)
-                    .append(spacer)
-                    .append(deny));
-
+            CoreUtil.sendConfirmMessage(target, Lang.PREFIX.getComponent(null).append(Lang.COMMAND_INVITE_TARGET_SUCCESS.getComponent(new String[] { cacheManager.getCacheTowns().getTownName(player.getUniqueId()) })),
+                    "/towns invite " + player.getName(),
+                    Lang.COMMAND_ACCEPT_INVITE_HOVER.getComponent(new String[] { player.getName() }),
+                    Lang.COMMAND_DENY_INVITE_HOVER.getComponent(new String[] { player.getName() }),
+                    false
+                    );
         } else player.sendMessage(Lang.USAGE.getComponent(null).append(CoreUtil.parseColorComponent(getSyntax())));
     }
 

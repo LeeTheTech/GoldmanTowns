@@ -11,6 +11,7 @@ public enum SubSyntax {
     COMMAND_ROLE_CREATE_SYNTAX("&e/town role create &f<name>"),
     COMMAND_INVITE_OPTION_SYNTAX("&e/town invite &f<player> <accept/deny>"),
     COMMAND_ABANDON_OPTION_SYNTAX("&e/town abandon &f<confirm/deny>"),
+    COMMAND_LEAVE_OPTION_SYNTAX("&e/town leave &f<confirm/deny>"),
     ;
     private final String string;
 

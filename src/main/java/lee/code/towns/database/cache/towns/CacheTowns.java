@@ -96,7 +96,7 @@ public class CacheTowns extends DatabaseHandler {
         return getTownTable(uuid).getJoinedTown() != null;
     }
 
-    public String getJoinedTown(UUID uuid) {
+    public String getJoinedTownName(UUID uuid) {
         return getTownTable(getTownTable(uuid).getJoinedTown()).getTown();
     }
 
@@ -140,7 +140,7 @@ public class CacheTowns extends DatabaseHandler {
     public String getCitizenNames(UUID uuid) {
         if (getTownTable(uuid).getTownCitizens() == null) return "None";
         final String[] split = getTownTable(uuid).getTownCitizens().split(",");
-        final HashSet<String> playerNames = new HashSet<>();
+        final Set<String> playerNames = Collections.synchronizedSet(new HashSet<>());
         for (String citizen : split) {
             final OfflinePlayer oPlayer = Bukkit.getOfflinePlayer(UUID.fromString(citizen));
             playerNames.add(oPlayer.getName());
@@ -166,9 +166,11 @@ public class CacheTowns extends DatabaseHandler {
         final TownsTable townsTable = getTownTable(owner);
         final Set<String> citizens = Collections.synchronizedSet(new HashSet<>(List.of(townsTable.getTownCitizens().split(","))));
         citizens.remove(target.toString());
-        townsTable.setTownCitizens(StringUtils.join(citizens, ","));
+        if (citizens.isEmpty()) townsTable.setTownCitizens(null);
+        else townsTable.setTownCitizens(StringUtils.join(citizens, ","));
         updateTownsDatabase(townsTable);
         removeJoinedTown(target);
+        playerRoleData.removePlayerRole(owner, target);
     }
 
     public Location getTownSpawn(UUID uuid) {
@@ -210,5 +212,9 @@ public class CacheTowns extends DatabaseHandler {
                 if (player != null) player.sendMessage(message);
             }
         });
+    }
+
+    public void leaveTown(UUID uuid) {
+        removeCitizen(getJoinedTownOwner(uuid), uuid);
     }
 }

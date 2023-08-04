@@ -7,10 +7,7 @@ import lee.code.towns.database.CacheManager;
 import lee.code.towns.lang.Lang;
 import lee.code.towns.managers.AutoClaimManager;
 import lee.code.towns.managers.BorderParticleManager;
-import net.md_5.bungee.api.chat.ClickEvent;
-import net.md_5.bungee.api.chat.HoverEvent;
-import net.md_5.bungee.api.chat.TextComponent;
-import net.md_5.bungee.api.chat.hover.content.Text;
+import lee.code.towns.utils.CoreUtil;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -69,40 +66,28 @@ public class AbandonCMD extends SubCommand {
         if (borderParticleManager.hasBorderActive(uuid)) borderParticleManager.stopBorder(uuid);
         if (autoClaimManager.isAutoClaiming(uuid)) autoClaimManager.removeAutoClaiming(uuid);
         final String town = cacheManager.getCacheTowns().getTownName(uuid);
-//        if (args.length > 1) {
-//            switch (args[1].toLowerCase()) {
-//                case "confirm" -> {
-//                    cacheManager.deleteTown(uuid);
-//                    player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_ABANDON_SUCCESS.getComponent(new String[] { town })));
-//                }
-//                case "deny"-> player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_ABANDON_DENY.getComponent(null)));
-//                default -> player.sendMessage(Lang.USAGE.getComponent(null).append(SubSyntax.COMMAND_ABANDON_OPTION_SYNTAX.getComponent()));
-//            }
-//        } else {
-//            final TextComponent accept = FileLang.CONFIRM.getTextComponent(null);
-//            accept.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/towns abandon confirm"));
-//            accept.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text(FileLang.CONFIRM_ABANDON_HOVER.getString(null))));
-//
-//            final TextComponent deny = FileLang.DENY.getTextComponent(null);
-//            deny.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/towns abandon deny"));
-//            deny.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text(FileLang.DENY_ABANDON_HOVER.getString(new String[] { player.getName() }))));
-//
-//            final TextComponent spacer = new TextComponent(" ");
-//
-//            player.spigot().sendMessage(
-//                    FileLang.PREFIX.getTextComponent(null),
-//                    FileLang.COMMAND_ABANDON_WARNING.getTextComponent(new String[] { cacheManager.getTown(player.getUniqueId()) }),
-//                    spacer,
-//                    accept,
-//                    spacer,
-//                    deny
-//            );
-//        }
+        if (args.length > 1) {
+            switch (args[1].toLowerCase()) {
+                case "confirm" -> {
+                    cacheManager.deleteTown(uuid);
+                    player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_ABANDON_SUCCESS.getComponent(new String[] { town })));
+                }
+                case "deny"-> player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_ABANDON_DENY.getComponent(null)));
+                default -> player.sendMessage(Lang.USAGE.getComponent(null).append(SubSyntax.COMMAND_ABANDON_OPTION_SYNTAX.getComponent()));
+            }
+        } else {
+            CoreUtil.sendConfirmMessage(player, Lang.PREFIX.getComponent(null).append(Lang.COMMAND_ABANDON_WARNING.getComponent(new String[] { cacheManager.getCacheTowns().getTownName(uuid) })),
+                    "/towns abandon",
+                    Lang.CONFIRM_ABANDON_HOVER.getComponent(null),
+                    Lang.DENY_ABANDON_HOVER.getComponent(null),
+                    true
+            );
+        }
     }
 
     @Override
     public void performConsole(CommandSender console, String[] args) {
-        //console.sendMessage(FileLang.PREFIX.getString(null) + FileLang.ERROR_NOT_CONSOLE_COMMAND.getString(null));
+        console.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_NOT_CONSOLE_COMMAND.getComponent(null)));
     }
 
     @Override

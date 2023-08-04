@@ -64,7 +64,7 @@ public class CreateCMD extends SubCommand {
                 return;
             }
             if (cacheManager.getCacheTowns().hasJoinedTown(uuid)) {
-                player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_CREATE_HAS_JOINED_TOWN.getComponent(new String[] { cacheManager.getCacheTowns().getJoinedTown(uuid) })));
+                player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_CREATE_HAS_JOINED_TOWN.getComponent(new String[] { cacheManager.getCacheTowns().getJoinedTownName(uuid) })));
                 return;
             }
             final String town = CoreUtil.removeSpecialCharacters(CoreUtil.buildStringFromArgs(args, 1));
