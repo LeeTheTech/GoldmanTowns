@@ -1,7 +1,7 @@
 package lee.code.towns.menus.menu;
 
 import lee.code.towns.Towns;
-import lee.code.towns.database.cache.CacheTowns;
+import lee.code.towns.database.cache.towns.CacheTowns;
 import lee.code.towns.lang.Lang;
 import lee.code.towns.menus.menu.menudata.FlagMenuItem;
 import lee.code.towns.menus.menu.menudata.MenuItem;
@@ -53,11 +53,11 @@ public class FlagManagerRole extends MenuGUI {
 
     private MenuButton createFlagButton(FlagMenuItem flagMenuItem, UUID uuid) {
         return new MenuButton()
-                .creator(p -> flagMenuItem.createItem(towns.getCacheManager().getCacheTowns().checkRolePermissionFlag(uuid, role, flagMenuItem.getFlag())))
+                .creator(p -> flagMenuItem.createItem(towns.getCacheManager().getCacheTowns().getRoleData().checkRolePermissionFlag(uuid, role, flagMenuItem.getFlag())))
                 .consumer(e -> {
                     final CacheTowns cacheTowns = towns.getCacheManager().getCacheTowns();
-                    final boolean newResult = !cacheTowns.checkRolePermissionFlag(uuid, role, flagMenuItem.getFlag());
-                    cacheTowns.setRolePermissionFlag(uuid, role, flagMenuItem.getFlag(), newResult);
+                    final boolean newResult = !cacheTowns.getRoleData().checkRolePermissionFlag(uuid, role, flagMenuItem.getFlag());
+                    cacheTowns.getRoleData().setRolePermissionFlag(uuid, role, flagMenuItem.getFlag(), newResult);
                     final ItemStack item = e.getCurrentItem();
                     if (item == null) return;
                     final ItemStack newItem = flagMenuItem.createItem(newResult);

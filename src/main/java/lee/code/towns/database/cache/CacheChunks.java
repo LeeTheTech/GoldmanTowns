@@ -66,6 +66,14 @@ public class CacheChunks {
         permissionCache.remove(chunk);
     }
 
+    public void deleteAllChunkData(UUID uuid) {
+        final Set<String> chunks = getChunkList(uuid);
+        chunks.forEach(chunksCache::remove);
+        chunks.forEach(permissionCache::remove);
+        playerChunkListCache.remove(uuid);
+        databaseManager.deleteAllChunkTables(uuid);
+    }
+
     public void setChunkTable(ChunkTable chunkTable) {
         chunksCache.put(chunkTable.getChunk(), chunkTable);
         addToPlayerChunkListCache(chunkTable.getOwner(), chunkTable.getChunk());

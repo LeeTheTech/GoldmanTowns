@@ -60,7 +60,7 @@ public class CreateCMD extends SubCommand {
         final CacheManager cacheManager = towns.getCacheManager();
         if (args.length > 1) {
             if (cacheManager.getCacheTowns().hasTown(uuid)) {
-                player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_CREATE_HAS_TOWN.getComponent(new String[] { cacheManager.getCacheTowns().getTown(uuid) })));
+                player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_CREATE_HAS_TOWN.getComponent(new String[] { cacheManager.getCacheTowns().getTownName(uuid) })));
                 return;
             }
             if (cacheManager.getCacheTowns().hasJoinedTown(uuid)) {
@@ -77,7 +77,7 @@ public class CreateCMD extends SubCommand {
                 return;
             }
             cacheManager.getCacheChunks().claim(chunk, uuid);
-            cacheManager.getCacheTowns().setTown(uuid, town, player.getLocation());
+            cacheManager.getCacheTowns().setTownName(uuid, town, player.getLocation());
             towns.getBorderParticleManager().spawnParticleChunkBorder(player.getLocation(), player.getLocation().getChunk(), ChunkRenderType.CLAIM);
             Bukkit.getServer().sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_CREATE_ANNOUNCEMENT_TOWN_CREATED.getComponent(new String[] { player.getName(), town })));
             player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_CREATE_SUCCESS.getComponent(new String[] { town })));

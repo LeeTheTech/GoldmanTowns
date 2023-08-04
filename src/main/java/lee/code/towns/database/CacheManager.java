@@ -1,7 +1,8 @@
 package lee.code.towns.database;
 
 import lee.code.towns.database.cache.CacheChunks;
-import lee.code.towns.database.cache.CacheTowns;
+import lee.code.towns.database.cache.towns.CacheTowns;
+import lee.code.towns.database.tables.TownsTable;
 import lee.code.towns.enums.Flag;
 import lee.code.towns.utils.ChunkUtil;
 import lombok.Getter;
@@ -24,13 +25,13 @@ public class CacheManager {
         final UUID owner = cacheChunks.getChunkOwner(chunk);
         if (ownerBypass && uuid.equals(owner)) return false;
         if (cacheTowns.isCitizen(owner, uuid)) {
-            final String role = cacheTowns.getPlayerRole(owner, uuid);
-            return !cacheTowns.checkRolePermissionFlag(owner, role, flag);
+            final String role = cacheTowns.getPlayerRoleData().getPlayerRole(owner, uuid);
+            return !cacheTowns.getRoleData().checkRolePermissionFlag(owner, role, flag);
         }
         if (cacheChunks.checkChunkPermissionFlag(chunk, Flag.CHUNK_FLAGS_ENABLED)) {
             return !cacheChunks.checkChunkPermissionFlag(chunk, flag);
         }
-        return !cacheTowns.checkGlobalPermissionFlag(owner, flag);
+        return !cacheTowns.getPermData().checkGlobalPermissionFlag(owner, flag);
     }
 
     public boolean checkLocationFlag(Location location, Flag flag) {
@@ -40,11 +41,26 @@ public class CacheManager {
         if (cacheChunks.checkChunkPermissionFlag(chunk, Flag.CHUNK_FLAGS_ENABLED)) {
             return !cacheChunks.checkChunkPermissionFlag(chunk, flag);
         }
-        return !cacheTowns.checkGlobalPermissionFlag(owner, flag);
+        return !cacheTowns.getPermData().checkGlobalPermissionFlag(owner, flag);
     }
 
     public String getChunkTownName(Location location) {
         final String chunk = ChunkUtil.serializeChunkLocation(location.getChunk());
-        return cacheTowns.getTown(cacheChunks.getChunkOwner(chunk));
+        return cacheTowns.getTownName(cacheChunks.getChunkOwner(chunk));
+    }
+
+    public void deleteTown(UUID uuid) {
+        final TownsTable townsTable = cacheTowns.getTownTable(uuid);
+        for (UUID citizen : cacheTowns.getCitizensList(uuid)) {
+            final TownsTable citizenTable = cacheTowns.getTownTable(citizen);
+            citizenTable.setJoinedTown(null);
+            cacheTowns.updateTownsDatabase(citizenTable);
+        }
+        townsTable.setTown(null);
+        townsTable.setTownCitizens(null);
+        townsTable.setPlayerRoles(null);
+        cacheTowns.getPlayerRoleData().deleteAllPlayerRoles(uuid);
+        cacheTowns.getRoleData().deleteAllRoles(uuid);
+        cacheChunks.deleteAllChunkData(uuid);
     }
 }

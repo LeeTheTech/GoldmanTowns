@@ -35,7 +35,7 @@ public class RoleSelectionManager extends MenuGUI {
     @Override
     public void decorate(Player player) {
         addFillerGlass();
-        final List<String> roles = towns.getCacheManager().getCacheTowns().getAllRoles(player.getUniqueId());
+        final List<String> roles = towns.getCacheManager().getCacheTowns().getRoleData().getAllRoles(player.getUniqueId());
         for (int roleSlot : roleSlots) {
             if (roles.size() > roleIndex) addButton(roleSlot, createRoleButton(player, roles.get(roleIndex)));
             else getInventory().setItem(roleSlot, new ItemStack(Material.AIR));

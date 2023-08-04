@@ -54,6 +54,8 @@ public enum Lang {
     COMMAND_INVITE_SUCCESS("&aYou successfully invited &6{0} &ato your town."),
     COMMAND_ACCEPT_INVITE_HOVER("&aClick to accept &6{0}'s &atown invite!"),
     COMMAND_DENY_INVITE_HOVER("&cClick to deny &6{0}'s &ctown invite."),
+    COMMAND_ABANDON_SUCCESS("&aYou successfully abandoned your town &3{0}&a."),
+    COMMAND_ABANDON_DENY("&aYou successfully denied abandoning your town."),
     TELEPORT_CHUNK_SUCCESS("&aYou successfully teleported the chunk &3{0}&a."),
     TELEPORT_CHUNK_FAILED("&cFailed to teleport to chunk &3{0}&c."),
     MENU_FLAG_MANAGER_TITLE("&2&lFlag Manager"),

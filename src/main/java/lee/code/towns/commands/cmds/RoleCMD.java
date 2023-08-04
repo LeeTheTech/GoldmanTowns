@@ -74,7 +74,7 @@ public class RoleCMD extends SubCommand {
                         player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_PLAYER_NOT_FOUND.getComponent(new String[] { playerName })));
                         return;
                     }
-                    if (!cacheManager.getCacheTowns().getAllRoles(owner).contains(role)) {
+                    if (!cacheManager.getCacheTowns().getRoleData().getAllRoles(owner).contains(role)) {
                         player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_ROLE_SET_ROLE_NOT_FOUND.getComponent(new String[] { role })));
                         return;
                     }
@@ -82,7 +82,7 @@ public class RoleCMD extends SubCommand {
                         player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_ROLE_SET_PLAYER_NOT_CITIZEN.getComponent(new String[] { playerName })));
                         return;
                     }
-                    cacheManager.getCacheTowns().setPlayerRole(owner, targetUniqueID, role);
+                    cacheManager.getCacheTowns().getPlayerRoleData().setPlayerRole(owner, targetUniqueID, role);
                     player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_ROLE_SET_SUCCESS.getComponent(new String[] { playerName, role })));
                 }
                 case "create" -> {
@@ -91,11 +91,11 @@ public class RoleCMD extends SubCommand {
                         return;
                     }
                     final String role = CoreUtil.removeSpecialCharacters(CoreUtil.buildStringFromArgs(args, 2));
-                    if (cacheManager.getCacheTowns().getAllRoles(owner).contains(role)) {
+                    if (cacheManager.getCacheTowns().getRoleData().getAllRoles(owner).contains(role)) {
                         player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_ROLE_CREATE_ROLE_EXISTS.getComponent(new String[] { role })));
                         return;
                     }
-                    cacheManager.getCacheTowns().createRole(owner, role);
+                    cacheManager.getCacheTowns().getRoleData().createRole(owner, role);
                     player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_ROLE_CREATE_SUCCESS.getComponent(new String[] { role })));
                 }
                 default -> player.sendMessage(Lang.USAGE.getComponent(null).append(CoreUtil.parseColorComponent(getSyntax())));
@@ -123,7 +123,7 @@ public class RoleCMD extends SubCommand {
             }
             case 4 -> {
                 if (sender instanceof Player player) {
-                    if (args[1].equalsIgnoreCase("set")) return StringUtil.copyPartialMatches(args[3], cacheManager.getCacheTowns().getAllRoles(player.getUniqueId()), new ArrayList<>());
+                    if (args[1].equalsIgnoreCase("set")) return StringUtil.copyPartialMatches(args[3], cacheManager.getCacheTowns().getRoleData().getAllRoles(player.getUniqueId()), new ArrayList<>());
                 }
             }
         }

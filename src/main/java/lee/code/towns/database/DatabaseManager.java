@@ -87,8 +87,8 @@ public class DatabaseManager {
 
         for (TownsTable townsTable : townsDao.queryForAll()) {
             cacheManager.getCacheTowns().setTownsTable(townsTable);
-            cacheManager.getCacheTowns().setPermissionTable(queryPermTownsTable(townsTable));
-            cacheManager.getCacheTowns().setRolePermissionTable(queryPermTownsRoleTable(townsTable));
+            cacheManager.getCacheTowns().getPermData().setPermissionTable(queryPermTownsTable(townsTable));
+            cacheManager.getCacheTowns().getRoleData().setRolePermissionTable(queryPermTownsRoleTable(townsTable));
         }
     }
 
@@ -128,6 +128,17 @@ public class DatabaseManager {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public synchronized void deleteAllChunkTables(UUID uuid) {
+        Bukkit.getScheduler().runTaskAsynchronously(towns, () -> {
+            try {
+                chunkDao.executeRaw("DELETE FROM chunks WHERE owner = '" + uuid + "';");
+                permissionDao.executeRaw("DELETE FROM permissions WHERE uuid = '" + uuid + "' AND permission_type = '" + PermissionType.CHUNK.name() + "';");
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        });
     }
 
     public synchronized void createTownsTable(TownsTable townsTable) {

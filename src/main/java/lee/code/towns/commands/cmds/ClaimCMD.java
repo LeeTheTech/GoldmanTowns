@@ -61,7 +61,7 @@ public class ClaimCMD extends SubCommand {
             return;
         }
         if (cacheManager.getCacheChunks().isClaimed(chunk)) {
-            final String chunkTown = cacheManager.getCacheTowns().getTown(cacheManager.getCacheChunks().getChunkOwner(chunk));
+            final String chunkTown = cacheManager.getCacheTowns().getTownName(cacheManager.getCacheChunks().getChunkOwner(chunk));
             player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_CLAIM_ALREADY_CLAIMED.getComponent(new String[] { chunk, chunkTown })));
             return;
         }

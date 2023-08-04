@@ -1,7 +1,7 @@
 package lee.code.towns.menus.menu;
 
 import lee.code.towns.Towns;
-import lee.code.towns.database.cache.CacheTowns;
+import lee.code.towns.database.cache.towns.CacheTowns;
 import lee.code.towns.lang.Lang;
 import lee.code.towns.menus.menu.menudata.FlagMenuItem;
 import lee.code.towns.menus.menu.menudata.MenuItem;
@@ -50,11 +50,11 @@ public class FlagManagerGlobal extends MenuGUI {
 
     private MenuButton createFlagButton(FlagMenuItem flagMenuItem, UUID uuid) {
         return new MenuButton()
-                .creator(p -> flagMenuItem.createItem(towns.getCacheManager().getCacheTowns().checkGlobalPermissionFlag(uuid, flagMenuItem.getFlag())))
+                .creator(p -> flagMenuItem.createItem(towns.getCacheManager().getCacheTowns().getPermData().checkGlobalPermissionFlag(uuid, flagMenuItem.getFlag())))
                 .consumer(e -> {
                     final CacheTowns cacheTowns = towns.getCacheManager().getCacheTowns();
-                    final boolean newResult = !cacheTowns.checkGlobalPermissionFlag(uuid, flagMenuItem.getFlag());
-                    cacheTowns.setGlobalPermissionFlag(uuid, flagMenuItem.getFlag(), newResult);
+                    final boolean newResult = !cacheTowns.getPermData().checkGlobalPermissionFlag(uuid, flagMenuItem.getFlag());
+                    cacheTowns.getPermData().setGlobalPermissionFlag(uuid, flagMenuItem.getFlag(), newResult);
                     final ItemStack item = e.getCurrentItem();
                     if (item == null) return;
                     final ItemStack newItem = flagMenuItem.createItem(newResult);
