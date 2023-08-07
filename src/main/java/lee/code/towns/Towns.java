@@ -1,15 +1,18 @@
 package lee.code.towns;
 
+import lee.code.towns.commands.ChatCommand;
 import lee.code.towns.commands.CommandManager;
 import lee.code.towns.commands.TabCompletion;
 import lee.code.towns.database.DatabaseManager;
 import lee.code.towns.database.CacheManager;
 import lee.code.towns.listeners.AutoClaimListener;
+import lee.code.towns.listeners.ChatListener;
 import lee.code.towns.listeners.JoinListener;
 import lee.code.towns.listeners.QuitListener;
 import lee.code.towns.listeners.chunks.*;
 import lee.code.towns.managers.AutoClaimManager;
 import lee.code.towns.managers.BorderParticleManager;
+import lee.code.towns.managers.ChatChannelManager;
 import lee.code.towns.managers.InviteManager;
 import lee.code.towns.menus.system.MenuListener;
 import lee.code.towns.menus.system.MenuManager;
@@ -20,6 +23,7 @@ public class Towns extends JavaPlugin {
 
     @Getter private CacheManager cacheManager;
     @Getter private CommandManager commandManager;
+    @Getter private ChatChannelManager chatChannelManager;
     @Getter private BorderParticleManager borderParticleManager;
     @Getter private AutoClaimManager autoClaimManager;
     @Getter private MenuManager menuManager;
@@ -34,6 +38,7 @@ public class Towns extends JavaPlugin {
         this.databaseManager = new DatabaseManager(this);
         this.cacheManager = new CacheManager(databaseManager);
         this.commandManager = new CommandManager(this);
+        this.chatChannelManager = new ChatChannelManager(this);
         this.menuManager = new MenuManager();
         this.inviteManager = new InviteManager(this);
         this.data = new Data();
@@ -65,11 +70,14 @@ public class Towns extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new PvPListener(this), this);
         getServer().getPluginManager().registerEvents(new RedstoneListener(this), this);
         getServer().getPluginManager().registerEvents(new TeleportListener(this), this);
+        getServer().getPluginManager().registerEvents(new ChatListener(this), this);
     }
 
     private void registerCommands() {
         getCommand("towns").setExecutor(commandManager);
         getCommand("towns").setTabCompleter(new TabCompletion(this));
+        getCommand("tc").setExecutor(new ChatCommand(this));
+        getCommand("tc").setTabCompleter(new ChatCommand(this));
 
     }
 }

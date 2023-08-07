@@ -4,6 +4,7 @@ import lee.code.towns.Towns;
 import lee.code.towns.commands.SubCommand;
 import lee.code.towns.commands.SubSyntax;
 import lee.code.towns.database.CacheManager;
+import lee.code.towns.enums.ChatChannel;
 import lee.code.towns.lang.Lang;
 import lee.code.towns.utils.CoreUtil;
 import org.bukkit.command.CommandSender;
@@ -70,6 +71,7 @@ public class LeaveCMD extends SubCommand {
             switch (args[1].toLowerCase()) {
                 case "confirm" -> {
                     cacheManager.getCacheTowns().sendTownMessage(uuid, Lang.PREFIX.getComponent(null).append(Lang.COMMAND_LEAVE_PLAYER_LEFT_TOWN.getComponent(new String[] { player.getName() } )));
+                    towns.getChatChannelManager().setChatChannel(uuid, ChatChannel.GLOBAL);
                     cacheManager.getCacheTowns().leaveTown(uuid);
                     player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_LEAVE_SUCCESS.getComponent(new String[] { town })));
                 }

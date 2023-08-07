@@ -35,6 +35,9 @@ public class TownsTable {
     @DatabaseField(columnName = "player_roles")
     private String playerRoles;
 
+    @DatabaseField(columnName = "role_colors")
+    private String roleColors;
+
     @DatabaseField(columnName = "town_public")
     private boolean townPublic;
 

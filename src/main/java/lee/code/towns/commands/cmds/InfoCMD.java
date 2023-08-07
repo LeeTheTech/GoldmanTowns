@@ -59,7 +59,7 @@ public class InfoCMD extends SubCommand {
         final UUID uuid = player.getUniqueId();
         if (cacheTowns.hasTown(uuid) || cacheTowns.hasJoinedTown(uuid)) {
             final List<Component> lines = new ArrayList<>();
-            final UUID owner = cacheTowns.getPlayerTownOwner(uuid);
+            final UUID owner = cacheTowns.getTargetTownOwner(uuid);
             final String status = cacheTowns.isTownPublic(owner) ? Lang.PUBLIC.getString() : Lang.PRIVATE.getString();
             lines.add(Lang.COMMAND_INFO_HEADER.getComponent(null));
             lines.add(Component.text(""));

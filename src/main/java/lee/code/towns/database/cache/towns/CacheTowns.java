@@ -4,6 +4,7 @@ import lee.code.towns.database.DatabaseManager;
 import lee.code.towns.database.cache.handlers.DatabaseHandler;
 import lee.code.towns.database.cache.towns.data.TownPermData;
 import lee.code.towns.database.cache.towns.data.TownPlayerRoleData;
+import lee.code.towns.database.cache.towns.data.TownRoleColorData;
 import lee.code.towns.database.cache.towns.data.TownRoleData;
 import lee.code.towns.database.tables.PermissionTable;
 import lee.code.towns.enums.PermissionType;
@@ -27,6 +28,7 @@ public class CacheTowns extends DatabaseHandler {
     @Getter private final TownPermData permData;
     @Getter private final TownRoleData roleData;
     @Getter private final TownPlayerRoleData playerRoleData;
+    @Getter private final TownRoleColorData roleColorData;
     private final ConcurrentHashMap<UUID, TownsTable> townsCache = new ConcurrentHashMap<>();
 
     public CacheTowns(DatabaseManager databaseManager) {
@@ -34,6 +36,7 @@ public class CacheTowns extends DatabaseHandler {
         this.permData = new TownPermData(databaseManager);
         this.roleData = new TownRoleData(databaseManager);
         this.playerRoleData = new TownPlayerRoleData(this);
+        this.roleColorData = new TownRoleColorData(this);
     }
 
     public void createPlayerData(UUID uuid) {
@@ -56,6 +59,7 @@ public class CacheTowns extends DatabaseHandler {
     public void setTownsTable(TownsTable townsTable) {
         townsCache.put(townsTable.getUniqueId(), townsTable);
         playerRoleData.cachePlayerRoles(townsTable);
+        roleColorData.cacheRoleColors(townsTable);
     }
 
     public boolean hasTown(UUID uuid) {
@@ -70,6 +74,7 @@ public class CacheTowns extends DatabaseHandler {
         final TownsTable townsTable = getTownTable(uuid);
         townsTable.setTown(town);
         townsTable.setSpawn(CoreUtil.serializeLocation(spawn));
+        roleColorData.setDefaultRoleColor(uuid, false);
         updateTownsDatabase(townsTable);
         roleData.createDefaultRolePermissionTable(uuid);
     }
@@ -104,9 +109,25 @@ public class CacheTowns extends DatabaseHandler {
         return getTownTable(uuid).getJoinedTown();
     }
 
-    public UUID getPlayerTownOwner(UUID target) {
+    public UUID getTargetTownOwner(UUID target) {
         if (hasTown(target)) return target;
         else return getJoinedTownOwner(target);
+    }
+
+    public String getTargetTownName(UUID target) {
+        if (!hasJoinedTown(target) && !hasTown(target)) return "none";
+        return getTownName(getTargetTownOwner(target));
+    }
+
+    public String getTargetTownRole(UUID target) {
+        if (!hasJoinedTown(target) && !hasTown(target)) return "none";
+        if (hasTown(target)) {
+            final String mayorRole = CoreUtil.capitalize(TownRole.MAYOR.name());
+            return roleColorData.getRoleColor(target, mayorRole) + mayorRole;
+        }
+        final UUID owner = getJoinedTownOwner(target);
+        final String role = getPlayerRoleData().getPlayerRole(owner, target);
+        return roleColorData.getRoleColor(owner, role) + role;
     }
 
     public boolean isTownNameTaken(String name) {
@@ -157,9 +178,10 @@ public class CacheTowns extends DatabaseHandler {
         final TownsTable townsTable = getTownTable(owner);
         if (townsTable.getTownCitizens() == null) townsTable.setTownCitizens(target.toString());
         else townsTable.setTownCitizens(townsTable.getTownCitizens() + "," + target);
+        final String role = CoreUtil.capitalize(TownRole.CITIZEN.name());
+        playerRoleData.addPlayerRole(owner, target, role, false);
         updateTownsDatabase(townsTable);
         setJoinedTown(target, owner);
-        playerRoleData.setPlayerRole(owner, target, TownRole.CITIZEN.name());
     }
 
     public void removeCitizen(UUID owner, UUID target) {
@@ -168,9 +190,9 @@ public class CacheTowns extends DatabaseHandler {
         citizens.remove(target.toString());
         if (citizens.isEmpty()) townsTable.setTownCitizens(null);
         else townsTable.setTownCitizens(StringUtils.join(citizens, ","));
+        playerRoleData.removePlayerRole(owner, target, false);
         updateTownsDatabase(townsTable);
         removeJoinedTown(target);
-        playerRoleData.removePlayerRole(owner, target);
     }
 
     public Location getTownSpawn(UUID uuid) {
@@ -202,7 +224,7 @@ public class CacheTowns extends DatabaseHandler {
     }
 
     public void sendTownMessage(UUID uuid, Component message) {
-        final UUID owner = getPlayerTownOwner(uuid);
+        final UUID owner = getTargetTownOwner(uuid);
         final Set<UUID> players = getCitizensList(owner);
         players.add(owner);
         players.forEach(citizen -> {
@@ -216,5 +238,10 @@ public class CacheTowns extends DatabaseHandler {
 
     public void leaveTown(UUID uuid) {
         removeCitizen(getJoinedTownOwner(uuid), uuid);
+    }
+
+    public void createRole(UUID uuid, String role) {
+        roleData.createRolePermissionData(uuid, role);
+        roleColorData.addRoleColor(uuid, role, "&e", true);
     }
 }

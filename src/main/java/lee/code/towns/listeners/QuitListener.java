@@ -18,11 +18,15 @@ public class QuitListener implements Listener {
     @EventHandler
     public void onQuit(PlayerQuitEvent e) {
         final UUID uuid = e.getPlayer().getUniqueId();
+        //Auto Claim Manager
         if (towns.getAutoClaimManager().isAutoClaiming(uuid)) {
             towns.getAutoClaimManager().removeAutoClaiming(uuid);
         }
+        //Border Particle Manager
         if (towns.getBorderParticleManager().hasBorderActive(uuid)) {
             towns.getBorderParticleManager().stopBorder(uuid);
         }
+        //Chat Channel Manager
+        towns.getChatChannelManager().removeChatChannel(uuid);
     }
 }

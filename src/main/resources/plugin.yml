@@ -9,3 +9,6 @@ commands:
     description: Main towns command.
     permission: towns.command.use
     aliases: [t]
+  tc:
+    description: Toggle through chat channels.
+    permission: towns.command.tc

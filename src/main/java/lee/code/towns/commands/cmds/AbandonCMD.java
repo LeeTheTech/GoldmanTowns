@@ -4,6 +4,7 @@ import lee.code.towns.Towns;
 import lee.code.towns.commands.SubCommand;
 import lee.code.towns.commands.SubSyntax;
 import lee.code.towns.database.CacheManager;
+import lee.code.towns.enums.ChatChannel;
 import lee.code.towns.lang.Lang;
 import lee.code.towns.managers.AutoClaimManager;
 import lee.code.towns.managers.BorderParticleManager;
@@ -69,6 +70,7 @@ public class AbandonCMD extends SubCommand {
         if (args.length > 1) {
             switch (args[1].toLowerCase()) {
                 case "confirm" -> {
+                    towns.getChatChannelManager().setChatChannel(uuid, ChatChannel.GLOBAL);
                     cacheManager.deleteTown(uuid);
                     player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_ABANDON_SUCCESS.getComponent(new String[] { town })));
                 }

@@ -7,6 +7,7 @@ import lee.code.towns.database.tables.PermissionTable;
 import lee.code.towns.enums.Flag;
 import lee.code.towns.enums.PermissionType;
 import lee.code.towns.enums.TownRole;
+import lee.code.towns.utils.CoreUtil;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -39,7 +40,7 @@ public class TownRoleData extends DatabaseHandler {
 
     public void createDefaultRolePermissionTable(UUID uuid) {
         final PermissionTable permissionTable = new PermissionTable(uuid, PermissionType.ROLE);
-        permissionTable.setRole(TownRole.CITIZEN.name());
+        permissionTable.setRole(CoreUtil.capitalize(TownRole.CITIZEN.name()));
         setRolePermissionTable(permissionTable);
         createPermissionDatabase(permissionTable);
     }
@@ -58,7 +59,7 @@ public class TownRoleData extends DatabaseHandler {
         permissionTables.forEach(this::setRolePermissionTable);
     }
 
-    public void createRole(UUID uuid, String role) {
+    public void createRolePermissionData(UUID uuid, String role) {
         final PermissionTable permissionTable = new PermissionTable(uuid, PermissionType.ROLE);
         permissionTable.setRole(role);
         setRolePermissionTable(permissionTable);
@@ -72,6 +73,12 @@ public class TownRoleData extends DatabaseHandler {
 
     public List<String> getAllRoles(UUID uuid) {
         return new ArrayList<>(Collections.list(rolePermissionCache.get(uuid).keys()));
+    }
+
+    public List<String> getAllRolesAndMayor(UUID uuid) {
+        final List<String> roles = new ArrayList<>(Collections.list(rolePermissionCache.get(uuid).keys()));
+        roles.add(CoreUtil.capitalize(TownRole.MAYOR.name()));
+        return roles;
     }
 
     public void deleteAllRoles(UUID uuid) {

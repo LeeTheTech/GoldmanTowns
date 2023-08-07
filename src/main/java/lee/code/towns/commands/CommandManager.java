@@ -34,6 +34,7 @@ public class CommandManager implements CommandExecutor {
     }
 
     private void registerSubCommands() {
+        subCommands.add(new ChatCMD(towns));
         subCommands.add(new CreateCMD(towns));
         subCommands.add(new HelpCMD(towns));
         subCommands.add(new BorderCMD(towns));
@@ -117,6 +118,7 @@ public class CommandManager implements CommandExecutor {
         lines.add(Lang.COMMAND_HELP_TITLE.getComponent(null));
         lines.add(Component.text(""));
 
+        //TODO fix <> issue
         for (SubCommand subCommand : subCommands) {
             if (sender.hasPermission(subCommand.getPermission())) {
                 final Component helpSubCommand = Lang.COMMAND_HELP_SUB_COMMAND.getComponent(new String[] { String.valueOf(number), subCommand.getSyntax() })
