@@ -106,7 +106,7 @@ public class RoleCMD extends SubCommand {
                 }
                 case "delete" -> {
                     if (args.length < 3) {
-                        player.sendMessage(Lang.USAGE.getComponent(null).append(SubSyntax.COMMAND_ROLE_CREATE_SYNTAX.getComponent()));
+                        player.sendMessage(Lang.USAGE.getComponent(null).append(SubSyntax.COMMAND_ROLE_DELETE_SYNTAX.getComponent()));
                         return;
                     }
                     final String role = args[2];
@@ -120,7 +120,7 @@ public class RoleCMD extends SubCommand {
                 case "color" -> {
                     final Data data = towns.getData();
                     if (args.length < 4) {
-                        player.sendMessage(Lang.USAGE.getComponent(null).append(SubSyntax.COMMAND_ROLE_SET_SYNTAX.getComponent()));
+                        player.sendMessage(Lang.USAGE.getComponent(null).append(SubSyntax.COMMAND_ROLE_COLOR_SYNTAX.getComponent()));
                         return;
                     }
                     final String role = args[2];
