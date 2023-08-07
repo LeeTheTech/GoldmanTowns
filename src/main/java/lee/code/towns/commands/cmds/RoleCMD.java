@@ -104,6 +104,19 @@ public class RoleCMD extends SubCommand {
                     cacheTowns.createRole(owner, role);
                     player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_ROLE_CREATE_SUCCESS.getComponent(new String[] { role })));
                 }
+                case "delete" -> {
+                    if (args.length < 3) {
+                        player.sendMessage(Lang.USAGE.getComponent(null).append(SubSyntax.COMMAND_ROLE_CREATE_SYNTAX.getComponent()));
+                        return;
+                    }
+                    final String role = args[2];
+                    if (!cacheTowns.getRoleData().getAllRoles(owner).contains(role)) {
+                        player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_ROLE_ROLE_NOT_FOUND.getComponent(new String[] { role })));
+                        return;
+                    }
+                    cacheTowns.deleteRole(owner, role);
+                    player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_ROLE_DELETE_SUCCESS.getComponent(new String[] { role })));
+                }
                 case "color" -> {
                     final Data data = towns.getData();
                     if (args.length < 4) {
@@ -143,11 +156,12 @@ public class RoleCMD extends SubCommand {
             final CacheManager cacheManager = towns.getCacheManager();
             switch (args.length) {
                 case 2 -> {
-                    return StringUtil.copyPartialMatches(args[1], Arrays.asList("set", "create", "color"), new ArrayList<>());
+                    return StringUtil.copyPartialMatches(args[1], Arrays.asList("set", "create", "delete", "color"), new ArrayList<>());
                 }
                 case 3 -> {
                     if (args[1].equalsIgnoreCase("set")) return StringUtil.copyPartialMatches(args[2], CoreUtil.getOnlinePlayers(), new ArrayList<>());
                     if (args[1].equalsIgnoreCase("color")) return StringUtil.copyPartialMatches(args[2], cacheManager.getCacheTowns().getRoleData().getAllRolesAndMayor(player.getUniqueId()), new ArrayList<>());
+                    if (args[1].equalsIgnoreCase("delete")) return StringUtil.copyPartialMatches(args[2], cacheManager.getCacheTowns().getRoleData().getAllRoles(player.getUniqueId()), new ArrayList<>());
                 }
                 case 4 -> {
                     if (args[1].equalsIgnoreCase("set")) return StringUtil.copyPartialMatches(args[3], cacheManager.getCacheTowns().getRoleData().getAllRoles(player.getUniqueId()), new ArrayList<>());

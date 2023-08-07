@@ -244,4 +244,15 @@ public class CacheTowns extends DatabaseHandler {
         roleData.createRolePermissionData(uuid, role);
         roleColorData.addRoleColor(uuid, role, "&e", true);
     }
+
+    public void deleteRole(UUID uuid, String role) {
+        for (UUID citizen : getCitizensList(uuid)) {
+            if (getPlayerRoleData().getPlayerRole(uuid, citizen).equals(role)) {
+                getPlayerRoleData().setPlayerRole(uuid, citizen, CoreUtil.capitalize(TownRole.CITIZEN.name()), false);
+            }
+        }
+        roleColorData.removeRoleColor(uuid, role, false);
+        roleData.deleteRole(uuid, role);
+        updateTownsDatabase(getTownTable(uuid));
+    }
 }

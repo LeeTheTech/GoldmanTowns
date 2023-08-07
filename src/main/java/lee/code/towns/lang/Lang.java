@@ -47,6 +47,7 @@ public enum Lang {
     COMMAND_AUTO_CLAIM_SUCCESS("&aYou successfully toggled auto claim {0}&a."),
     COMMAND_ROLE_SET_SUCCESS("&aYou successfully set player &6{0} &ato the town role &3{1}&a."),
     COMMAND_ROLE_CREATE_SUCCESS("&aYou successfully created the town role &3{0}&a."),
+    COMMAND_ROLE_DELETE_SUCCESS("&aYou successfully deleted the town role &3{0}&a."),
     COMMAND_ROLE_COLOR_SUCCESS("&aYou successfully set role &3{0} &acolor to {1}{2}&a."),
     COMMAND_INVITE_TARGET_SUCCESS("&aWould you like to join the town &6{0}&a?"),
     COMMAND_INVITE_ACCEPT_TARGET_SUCCESS("&aThe player &6{0} &aaccepted your town invite!"),
