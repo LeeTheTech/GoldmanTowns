@@ -111,6 +111,7 @@ public enum Lang {
     ERROR_ROLE_SET_PLAYER_NOT_CITIZEN("&cThe player &6{0} &cis not a town citizen, the player needs to be apart of the town before you can set a town role for the player."),
     ERROR_ROLE_SET_PLAYER_ALREADY_HAS_ROLE("&cThe player &6{0} &calready has the town role {1}&c."),
     ERROR_ROLE_CREATE_ROLE_EXISTS("&cThe role &3{0} &calready exists."),
+    ERROR_ROLE_CREATE_MAX_ROLES("&cYou have already reached the max roles you can create."),
     ERROR_INVITE_TIMEOUT_PLAYER("&7Your town invite to the player &6{0} &7has expired."),
     ERROR_INVITE_TIMEOUT_TARGET("&7The town invite from the player &6{0} &7has expired."),
     ERROR_INVITE_INVALID("&cYou currently do not have a town invite."),
