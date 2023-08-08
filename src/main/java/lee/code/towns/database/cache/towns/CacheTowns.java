@@ -115,12 +115,12 @@ public class CacheTowns extends DatabaseHandler {
     }
 
     public String getTargetTownName(UUID target) {
-        if (!hasJoinedTown(target) && !hasTown(target)) return "none";
+        if (!hasJoinedTown(target) && !hasTown(target)) return "None";
         return getTownName(getTargetTownOwner(target));
     }
 
     public String getTargetTownRole(UUID target) {
-        if (!hasJoinedTown(target) && !hasTown(target)) return "none";
+        if (!hasJoinedTown(target) && !hasTown(target)) return "None";
         if (hasTown(target)) {
             final String mayorRole = CoreUtil.capitalize(TownRole.MAYOR.name());
             return roleColorData.getRoleColor(target, mayorRole) + mayorRole;

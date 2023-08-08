@@ -19,6 +19,7 @@ public enum Lang {
     PUBLIC("&2&lPublic"),
     PRIVATE("&c&lPrivate"),
     CLICK("&3&lClick Option &b➔ "),
+    MESSAGE_HOVER("&e&lPlayer&7: {display-name}\n&e&lTown&7: {town}\n&e&lTown Role&7: {role}"),
     COMMAND_PUBLIC_SUCCESS("&aYour town status is now set to {0}&a."),
     COMMAND_HELP_DIVIDER("&a▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬"),
     COMMAND_HELP_TITLE("                      &2-== &6&l&nTowns Help&r &2==-"),

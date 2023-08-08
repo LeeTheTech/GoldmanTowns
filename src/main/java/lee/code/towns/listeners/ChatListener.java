@@ -30,8 +30,8 @@ public class ChatListener implements Listener {
         final Player player = e.getPlayer();
         final UUID uuid = player.getUniqueId();
         switch (chat.getChatChannel(uuid)) {
-            case NONE, GLOBAL -> Bukkit.getServer().sendMessage(chat.parseChatChannel(player, Lang.CHAT_GLOBAL.getComponent(null), e.message()));
-            case TOWN -> cacheManager.getCacheTowns().sendTownMessage(uuid, chat.parseChatChannel(player, Lang.CHAT_TOWN.getComponent(null), e.message()));
+            case NONE, GLOBAL -> Bukkit.getServer().sendMessage(chat.parseMessage(player, Lang.CHAT_GLOBAL.getComponent(null), e.message()));
+            case TOWN -> cacheManager.getCacheTowns().sendTownMessage(uuid, chat.parseMessage(player, Lang.CHAT_TOWN.getComponent(null), e.message()));
         }
     }
 }

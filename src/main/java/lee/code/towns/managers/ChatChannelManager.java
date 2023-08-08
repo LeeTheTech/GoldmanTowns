@@ -7,6 +7,7 @@ import lee.code.towns.lang.Lang;
 import lee.code.towns.utils.CoreUtil;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextReplacementConfig;
+import net.kyori.adventure.text.event.ClickEvent;
 import org.bukkit.entity.Player;
 
 import java.util.UUID;
@@ -39,7 +40,11 @@ public class ChatChannelManager {
         return playerChatChannels.getOrDefault(uuid, ChatChannel.NONE);
     }
 
-    public Component parseChatChannel(Player player, Component chatFormat, Component message) {
+    public Component parseMessage(Player player, Component chatFormat, Component message) {
+        return setClick(player, setHover(player, parseChatVariables(player, chatFormat, message)));
+    }
+
+    private Component parseChatVariables(Player player, Component chatFormat, Component message) {
         final CacheManager cacheManager = towns.getCacheManager();
         final UUID uuid = player.getUniqueId();
         Component targetMessage = chatFormat;
@@ -50,6 +55,14 @@ public class ChatChannelManager {
         targetMessage = targetMessage.replaceText(createTextReplacementConfig(channelPattern, getChatChannelPrefix(uuid)));
         targetMessage = targetMessage.replaceText(createTextReplacementConfig(rolePattern, CoreUtil.parseColorComponent(cacheManager.getCacheTowns().getTargetTownRole(uuid))));
         return targetMessage;
+    }
+
+    private Component setHover(Player player, Component message) {
+        return message.hoverEvent(parseChatVariables(player, Lang.MESSAGE_HOVER.getComponent(null), null));
+    }
+
+    private Component setClick(Player player, Component message) {
+        return message.clickEvent(ClickEvent.clickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/msg " + player.getName()));
     }
 
     private Component getChatChannelPrefix(UUID uuid) {
