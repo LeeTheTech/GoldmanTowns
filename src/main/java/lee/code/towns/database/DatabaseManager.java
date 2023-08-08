@@ -10,10 +10,8 @@ import com.j256.ormlite.stmt.QueryBuilder;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
 import lee.code.towns.Towns;
-import lee.code.towns.database.tables.ChunkTable;
-import lee.code.towns.database.tables.PermissionTable;
+import lee.code.towns.database.tables.*;
 import lee.code.towns.enums.PermissionType;
-import lee.code.towns.database.tables.TownsTable;
 import lombok.AccessLevel;
 import lombok.Getter;
 import org.bukkit.Bukkit;
@@ -29,6 +27,8 @@ public class DatabaseManager {
     private Dao<ChunkTable, String> chunkDao;
     private Dao<TownsTable, UUID> townsDao;
     private Dao<PermissionTable, Integer> permissionDao;
+    private Dao<RentTable, Integer> rentDao;
+    private Dao<ServerTable, Integer> serverDao;
 
     @Getter(AccessLevel.NONE)
     private ConnectionSource connectionSource;
@@ -53,6 +53,7 @@ public class DatabaseManager {
                     "test",
                     DatabaseTypeUtils.createDatabaseType(databaseURL));
             createOrCacheTables();
+            createDefaultServerData();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -81,6 +82,21 @@ public class DatabaseManager {
             cacheManager.getCacheChunks().getChunkPermData().setPermissionTable(queryPermChunkTable(chunkTable));
         }
 
+        //Renters data
+        TableUtils.createTableIfNotExists(connectionSource, RentTable.class);
+        rentDao = DaoManager.createDao(connectionSource, RentTable.class);
+
+        for (RentTable rentTable : rentDao.queryForAll()) {
+            cacheManager.getCacheRenters().setRentTable(rentTable);
+        }
+
+        //Server data
+        TableUtils.createTableIfNotExists(connectionSource, ServerTable.class);
+        serverDao = DaoManager.createDao(connectionSource, ServerTable.class);
+        for (ServerTable serverTable : serverDao.queryForAll()) {
+            cacheManager.getCacheServer().setServerTable(serverTable);
+        }
+
         //Player data
         TableUtils.createTableIfNotExists(connectionSource, TownsTable.class);
         townsDao = DaoManager.createDao(connectionSource, TownsTable.class);
@@ -90,6 +106,15 @@ public class DatabaseManager {
             cacheManager.getCacheTowns().getPermData().setPermissionTable(queryPermTownsTable(townsTable));
             cacheManager.getCacheTowns().getRoleData().setRolePermissionTable(queryPermTownsRoleTable(townsTable));
         }
+    }
+
+    private void createDefaultServerData() {
+        if (towns.getCacheManager().getCacheServer().getServerTable() == null) {
+            final ServerTable serverTable = new ServerTable();
+            towns.getCacheManager().getCacheServer().setServerTable(serverTable);
+            createServerTable(serverTable);
+        }
+        towns.getCacheManager().startRentCollectionTask();
     }
 
     private PermissionTable queryPermChunkTable(ChunkTable chunkTable) {
@@ -220,4 +245,55 @@ public class DatabaseManager {
             }
         });
     }
+
+    public synchronized void updateRentTable(RentTable rentTable) {
+        Bukkit.getAsyncScheduler().runNow(towns, scheduledTask -> {
+            try {
+                rentDao.update(rentTable);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        });
+    }
+
+    public synchronized void createRentTable(RentTable rentTable) {
+        Bukkit.getAsyncScheduler().runNow(towns, scheduledTask -> {
+            try {
+                rentDao.update(rentTable);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        });
+    }
+
+    public synchronized void deleteRentTable(RentTable rentTable) {
+        Bukkit.getAsyncScheduler().runNow(towns, scheduledTask -> {
+            try {
+                rentDao.delete(rentTable);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        });
+    }
+
+    private synchronized void createServerTable(ServerTable serverTable) {
+        Bukkit.getAsyncScheduler().runNow(towns, scheduledTask -> {
+            try {
+                serverDao.create(serverTable);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        });
+    }
+
+    public synchronized void updateServerTable(ServerTable serverTable) {
+        Bukkit.getAsyncScheduler().runNow(towns, scheduledTask -> {
+            try {
+                serverDao.update(serverTable);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        });
+    }
+
 }

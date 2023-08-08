@@ -3,8 +3,10 @@ package lee.code.towns.commands.cmds;
 import lee.code.towns.Towns;
 import lee.code.towns.commands.SubCommand;
 import lee.code.towns.database.cache.chunks.CacheChunks;
+import lee.code.towns.database.cache.server.CacheServer;
 import lee.code.towns.database.cache.towns.CacheTowns;
 import lee.code.towns.lang.Lang;
+import lee.code.towns.utils.CoreUtil;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
@@ -56,6 +58,7 @@ public class InfoCMD extends SubCommand {
     public void perform(Player player, String[] args) {
         final CacheTowns cacheTowns = towns.getCacheManager().getCacheTowns();
         final CacheChunks cacheChunks = towns.getCacheManager().getCacheChunks();
+        final CacheServer cacheServer  = towns.getCacheManager().getCacheServer();
         final UUID uuid = player.getUniqueId();
         if (cacheTowns.hasTown(uuid) || cacheTowns.hasJoinedTown(uuid)) {
             final List<Component> lines = new ArrayList<>();
@@ -68,6 +71,7 @@ public class InfoCMD extends SubCommand {
             lines.add(Lang.COMMAND_INFO_TOWN_OWNER.getComponent(new String[] { Bukkit.getOfflinePlayer(owner).getName() }));
             lines.add(Lang.COMMAND_INFO_TOWN_CITIZENS.getComponent(new String[] { cacheTowns.getCitizenNames(owner) }));
             lines.add(Lang.COMMAND_INFO_TOWN_CHUNKS.getComponent(new String[] { String.valueOf(cacheChunks.getChunkClaims(owner)), String.valueOf(cacheTowns.getMaxChunkClaims(owner)) }));
+            lines.add(Lang.COMMAND_INFO_TOWN_RENT.getComponent(new String[] { CoreUtil.parseTime(cacheServer.getNextRentCollectionTime()) }));
             lines.add(Component.text(""));
             lines.add(Lang.COMMAND_INFO_FOOTER.getComponent(null));
             for (Component line : lines) player.sendMessage(line);

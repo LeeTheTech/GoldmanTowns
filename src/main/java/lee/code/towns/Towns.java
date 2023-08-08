@@ -36,7 +36,7 @@ public class Towns extends JavaPlugin {
         this.borderParticleManager = new BorderParticleManager(this);
         this.autoClaimManager = new AutoClaimManager();
         this.databaseManager = new DatabaseManager(this);
-        this.cacheManager = new CacheManager(databaseManager);
+        this.cacheManager = new CacheManager(this, databaseManager);
         this.commandManager = new CommandManager(this);
         this.chatChannelManager = new ChatChannelManager(this);
         this.menuManager = new MenuManager();

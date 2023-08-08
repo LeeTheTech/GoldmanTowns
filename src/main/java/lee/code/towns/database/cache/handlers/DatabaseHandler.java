@@ -1,9 +1,7 @@
 package lee.code.towns.database.cache.handlers;
 
 import lee.code.towns.database.DatabaseManager;
-import lee.code.towns.database.tables.ChunkTable;
-import lee.code.towns.database.tables.PermissionTable;
-import lee.code.towns.database.tables.TownsTable;
+import lee.code.towns.database.tables.*;
 
 import java.util.UUID;
 
@@ -47,5 +45,21 @@ public class DatabaseHandler {
 
     public void deleteAllChunkDatabase(UUID uuid) {
         databaseManager.deleteAllChunkTables(uuid);
+    }
+
+    public void createRentDatabase(RentTable rentTable) {
+        databaseManager.createRentTable(rentTable);
+    }
+
+    public void updateRentDatabase(RentTable rentTable) {
+        databaseManager.updateRentTable(rentTable);
+    }
+
+    public void deleteRentDatabase(RentTable rentTable) {
+        databaseManager.deleteRentTable(rentTable);
+    }
+
+    public void updateServerDatabase(ServerTable serverTable) {
+        databaseManager.updateServerTable(serverTable);
     }
 }
