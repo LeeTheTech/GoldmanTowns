@@ -61,7 +61,7 @@ public class ChatCMD extends SubCommand {
         }
         final ChatChannelManager chatChannelManager = towns.getChatChannelManager();
         switch (chatChannelManager.getChatChannel(uuid)) {
-            case NONE, GLOBAL -> {
+            case GLOBAL -> {
                 chatChannelManager.setChatChannel(uuid, ChatChannel.TOWN);
                 player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_CHAT_TOGGLE_SUCCESS.getComponent(new String[] { Lang.CHAT_CHANNEL_TOWN.getString(null) })));
             }

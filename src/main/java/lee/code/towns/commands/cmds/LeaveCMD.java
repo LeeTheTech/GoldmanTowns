@@ -11,10 +11,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.util.StringUtil;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 public class LeaveCMD extends SubCommand {
 
@@ -71,7 +68,6 @@ public class LeaveCMD extends SubCommand {
             switch (args[1].toLowerCase()) {
                 case "confirm" -> {
                     cacheManager.getCacheTowns().sendTownMessage(uuid, Lang.PREFIX.getComponent(null).append(Lang.COMMAND_LEAVE_PLAYER_LEFT_TOWN.getComponent(new String[] { player.getName() } )));
-                    towns.getChatChannelManager().setChatChannel(uuid, ChatChannel.GLOBAL);
                     cacheManager.getCacheTowns().leaveTown(uuid);
                     player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_LEAVE_SUCCESS.getComponent(new String[] { town })));
                 }
@@ -98,7 +94,7 @@ public class LeaveCMD extends SubCommand {
 
     @Override
     public List<String> onTabComplete(CommandSender sender, String[] args) {
-        if (args.length == 2) return StringUtil.copyPartialMatches(args[1], Collections.singletonList("confirm"), new ArrayList<>());
+        if (args.length == 2) return StringUtil.copyPartialMatches(args[1], Arrays.asList("confirm", "deny"), new ArrayList<>());
         else return new ArrayList<>();
     }
 }

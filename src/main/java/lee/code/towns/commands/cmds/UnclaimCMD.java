@@ -67,7 +67,7 @@ public class UnclaimCMD extends SubCommand {
             return;
         }
         cacheManager.getCacheChunks().unclaimChunk(chunk);
-        borderParticleManager.spawnParticleChunkBorder(player.getLocation(), player.getLocation().getChunk(), ChunkRenderType.UNCLAIM);
+        borderParticleManager.spawnParticleChunkBorder(player, player.getLocation().getChunk(), ChunkRenderType.UNCLAIM, false);
         player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_UNCLAIM_SUCCESS.getComponent(new String[] { chunk })));
     }
 

@@ -14,12 +14,27 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class CoreUtil {
+
+    private final static DecimalFormat amountFormatter = new DecimalFormat("#,###");
+    private final static Pattern numberPattern = Pattern.compile("^(?=.*[1-9])(\\d*\\.?\\d*)$");
+
+    public static String parseValue(int value) {
+        if (value == 0) return "0";
+        return amountFormatter.format(value);
+    }
+
+    public static String parseValue(double value) {
+        if (value == 0) return "0";
+        return amountFormatter.format(value);
+    }
 
     public static Component parseColorComponent(String text) {
         final LegacyComponentSerializer serializer = LegacyComponentSerializer.legacyAmpersand();
@@ -129,5 +144,9 @@ public class CoreUtil {
         if (days != 0L) return "&e" + days + "&6d&e, " + hours + "&6h&e, " + minutes + "&6m&e, " + seconds + "&6s";
         else if (hours != 0L) return "&e" + hours + "&6h&e, " + minutes + "&6m&e, " + seconds + "&6s";
         else return minutes != 0L ? "&e" + minutes + "&6m&e, " + seconds + "&6s" : "&e" + seconds + "&6s";
+    }
+
+    public static boolean isPositiveNumber(String numbers) {
+        return numberPattern.matcher(numbers).matches();
     }
 }

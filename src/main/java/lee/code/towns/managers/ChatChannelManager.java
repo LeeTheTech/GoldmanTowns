@@ -36,8 +36,12 @@ public class ChatChannelManager {
         playerChatChannels.remove(uuid);
     }
 
+    public boolean hasChatChannelData(UUID uuid) {
+        return playerChatChannels.containsKey(uuid);
+    }
+
     public ChatChannel getChatChannel(UUID uuid) {
-        return playerChatChannels.getOrDefault(uuid, ChatChannel.NONE);
+        return playerChatChannels.getOrDefault(uuid, ChatChannel.GLOBAL);
     }
 
     public Component parseMessage(Player player, Component chatFormat, Component message) {

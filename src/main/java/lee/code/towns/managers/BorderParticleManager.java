@@ -94,12 +94,13 @@ public class BorderParticleManager {
         for (int p = 0; p < 4; p++) player.spawnParticle(particle, end.add(0, 1, 0), 1);
     }
 
-    public void spawnParticleChunkBorder(Location location, Chunk chunk, ChunkRenderType type) {
+    public void spawnParticleChunkBorder(Player player, Chunk chunk, ChunkRenderType type, boolean clientSide) {
         final Particle particle = switch (type) {
             case UNCLAIM -> Particle.FLAME;
             case INFO -> Particle.END_ROD;
             default -> Particle.VILLAGER_HAPPY;
         };
+        final Location location = player.getLocation();
 
         final int minX = chunk.getX() * 16;
         final int minZ = chunk.getZ() * 16;
@@ -112,10 +113,17 @@ public class BorderParticleManager {
         for (int y = minY; y < maxY; y++) {
             for (int x = minX; x <= maxX; x++) {
                 for (int z = minZ; z <= maxZ; z++) {
-                    location.getWorld().spawnParticle(particle, minX, y, z, 0);
-                    location.getWorld().spawnParticle(particle, x, y, minZ, 0);
-                    location.getWorld().spawnParticle(particle, maxX, y, z, 0);
-                    location.getWorld().spawnParticle(particle, x, y, maxZ, 0);
+                    if (clientSide) {
+                        player.spawnParticle(particle, minX, y, z, 0);
+                        player.spawnParticle(particle, x, y, minZ, 0);
+                        player.spawnParticle(particle, maxX, y, z, 0);
+                        player.spawnParticle(particle, x, y, maxZ, 0);
+                    } else {
+                        location.getWorld().spawnParticle(particle, minX, y, z, 0);
+                        location.getWorld().spawnParticle(particle, x, y, minZ, 0);
+                        location.getWorld().spawnParticle(particle, maxX, y, z, 0);
+                        location.getWorld().spawnParticle(particle, x, y, maxZ, 0);
+                    }
                 }
             }
         }

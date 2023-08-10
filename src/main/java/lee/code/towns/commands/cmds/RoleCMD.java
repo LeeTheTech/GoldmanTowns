@@ -18,6 +18,7 @@ import java.util.*;
 public class RoleCMD extends SubCommand {
 
     private final Towns towns;
+
     public RoleCMD(Towns towns) {
         this.towns = towns;
     }
@@ -29,12 +30,12 @@ public class RoleCMD extends SubCommand {
 
     @Override
     public String getDescription() {
-        return "Create a new town role or set a player's town role.";
+        return "Town role options.";
     }
 
     @Override
     public String getSyntax() {
-        return "&e/towns role &f<set/create> <options>";
+        return "&e/towns role &f<set/create/delete/color> <options>";
     }
 
     @Override

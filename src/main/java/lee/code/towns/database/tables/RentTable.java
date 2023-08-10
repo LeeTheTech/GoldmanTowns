@@ -17,15 +17,18 @@ public class RentTable {
     @DatabaseField(id = true, canBeNull = false)
     private String chunk;
 
-    @DatabaseField(columnName = "uuid", canBeNull = false)
+    @DatabaseField(columnName = "owner", canBeNull = false)
+    private UUID owner;
+
+    @DatabaseField(columnName = "renter")
     private UUID renter;
 
     @DatabaseField(columnName = "price", canBeNull = false)
     private double price;
 
-    public RentTable(String chunk, UUID renter, double price) {
+    public RentTable(String chunk, UUID owner, double price) {
         this.chunk = chunk;
-        this.renter = renter;
+        this.owner = owner;
         this.price = price;
     }
 }

@@ -66,6 +66,10 @@ public class CacheTowns extends DatabaseHandler {
         return getTownTable(uuid).getTown() != null;
     }
 
+    public boolean hasTownOrJoinedTown(UUID uuid) {
+        return getTownTable(uuid).getTown() != null || getTownTable(uuid).getJoinedTown() != null;
+    }
+
     public String getTownName(UUID uuid) {
         return getTownTable(uuid).getTown();
     }

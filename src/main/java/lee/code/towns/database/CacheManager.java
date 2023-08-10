@@ -7,6 +7,7 @@ import lee.code.towns.database.cache.renters.CacheRenters;
 import lee.code.towns.database.cache.server.CacheServer;
 import lee.code.towns.database.cache.towns.CacheTowns;
 import lee.code.towns.database.tables.TownsTable;
+import lee.code.towns.enums.ChatChannel;
 import lee.code.towns.enums.Flag;
 import lee.code.towns.lang.Lang;
 import lee.code.towns.utils.ChunkUtil;
@@ -61,6 +62,10 @@ public class CacheManager {
 
     public String getChunkTownName(Location location) {
         final String chunk = ChunkUtil.serializeChunkLocation(location.getChunk());
+        return cacheTowns.getTownName(cacheChunks.getChunkOwner(chunk));
+    }
+
+    public String getChunkTownName(String chunk) {
         return cacheTowns.getTownName(cacheChunks.getChunkOwner(chunk));
     }
 
