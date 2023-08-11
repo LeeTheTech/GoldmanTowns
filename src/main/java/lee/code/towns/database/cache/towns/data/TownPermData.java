@@ -2,7 +2,7 @@ package lee.code.towns.database.cache.towns.data;
 
 import lee.code.towns.database.DatabaseManager;
 import lee.code.towns.database.cache.handlers.DatabaseHandler;
-import lee.code.towns.database.cache.handlers.FlagHandler;
+import lee.code.towns.utils.FlagUtil;
 import lee.code.towns.database.tables.PermissionTable;
 import lee.code.towns.enums.Flag;
 
@@ -27,13 +27,13 @@ public class TownPermData extends DatabaseHandler {
 
     public void setGlobalPermissionFlag(UUID uuid, Flag flag, boolean result) {
         final PermissionTable permissionTable = getPermissionTable(uuid);
-        FlagHandler.setPermissionFlag(permissionTable, flag, result);
+        FlagUtil.setPermissionFlag(permissionTable, flag, result);
         updatePermissionDatabase(permissionTable);
     }
 
     public boolean checkGlobalPermissionFlag(UUID uuid, Flag flag) {
         final PermissionTable permissionTable = getPermissionTable(uuid);
-        return FlagHandler.checkPermissionFlag(permissionTable, flag);
+        return FlagUtil.checkPermissionFlag(permissionTable, flag);
     }
 
 }

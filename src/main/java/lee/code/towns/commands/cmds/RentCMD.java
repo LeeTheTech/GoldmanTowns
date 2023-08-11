@@ -7,8 +7,6 @@ import lee.code.towns.database.CacheManager;
 import lee.code.towns.enums.ChunkRenderType;
 import lee.code.towns.lang.Lang;
 import lee.code.towns.managers.BorderParticleManager;
-import lee.code.towns.menus.menu.FlagManager;
-import lee.code.towns.menus.system.MenuPlayerData;
 import lee.code.towns.utils.ChunkUtil;
 import lee.code.towns.utils.CoreUtil;
 import org.bukkit.Bukkit;

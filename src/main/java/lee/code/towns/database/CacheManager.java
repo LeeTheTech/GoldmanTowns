@@ -2,7 +2,7 @@ package lee.code.towns.database;
 
 import lee.code.towns.Towns;
 import lee.code.towns.database.cache.chunks.CacheChunks;
-import lee.code.towns.database.cache.handlers.FlagHandler;
+import lee.code.towns.utils.FlagUtil;
 import lee.code.towns.database.cache.renters.CacheRenters;
 import lee.code.towns.database.cache.server.CacheServer;
 import lee.code.towns.database.cache.towns.CacheTowns;
@@ -46,7 +46,7 @@ public class CacheManager {
         final UUID owner = cacheChunks.getChunkOwner(chunk);
         if (ownerBypass && uuid.equals(owner)) return false;
         if (cacheTowns.isCitizen(owner, uuid)) {
-            if (FlagHandler.isRoleFlag(flag)) {
+            if (FlagUtil.isRoleFlag(flag)) {
                 final String role = cacheTowns.getPlayerRoleData().getPlayerRole(owner, uuid);
                 return !cacheTowns.getRoleData().checkRolePermissionFlag(owner, role, flag);
             }

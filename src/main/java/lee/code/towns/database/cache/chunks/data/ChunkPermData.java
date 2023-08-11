@@ -2,7 +2,7 @@ package lee.code.towns.database.cache.chunks.data;
 
 import lee.code.towns.database.DatabaseManager;
 import lee.code.towns.database.cache.handlers.DatabaseHandler;
-import lee.code.towns.database.cache.handlers.FlagHandler;
+import lee.code.towns.utils.FlagUtil;
 import lee.code.towns.database.tables.PermissionTable;
 import lee.code.towns.enums.Flag;
 
@@ -30,12 +30,12 @@ public class ChunkPermData extends DatabaseHandler {
 
     public boolean checkChunkPermissionFlag(String chunk, Flag flag) {
         final PermissionTable permissionTable = permissionCache.get(chunk);
-        return FlagHandler.checkPermissionFlag(permissionTable, flag);
+        return FlagUtil.checkPermissionFlag(permissionTable, flag);
     }
 
     public void setChunkPermissionFlag(String chunk, Flag flag, boolean result) {
         final PermissionTable permissionTable = permissionCache.get(chunk);
-        FlagHandler.setPermissionFlag(permissionTable, flag, result);
+        FlagUtil.setPermissionFlag(permissionTable, flag, result);
         updatePermissionDatabase(permissionTable);
     }
 }

@@ -1,11 +1,11 @@
-package lee.code.towns.database.cache.handlers;
+package lee.code.towns.utils;
 
 import lee.code.towns.database.tables.PermissionTable;
 import lee.code.towns.enums.Flag;
 
 import java.util.*;
 
-public class FlagHandler {
+public class FlagUtil {
 
     private static final Set<Flag> roleFlag = Collections.synchronizedSet(new HashSet<>(List.of(
             Flag.CHANGE_CHUNK_FLAGS,
