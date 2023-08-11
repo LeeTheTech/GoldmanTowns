@@ -2,11 +2,15 @@ package lee.code.towns.managers;
 
 import io.papermc.paper.threadedregions.scheduler.ScheduledTask;
 import lee.code.towns.Towns;
+import lee.code.towns.enums.BorderType;
 import lee.code.towns.enums.ChunkRenderType;
+import lee.code.towns.utils.ChunkUtil;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
@@ -129,17 +133,30 @@ public class BorderParticleManager {
         }
     }
 
-    public void scheduleBorder(Player player) {
+    public void scheduleBorder(Player player, BorderType borderType) {
         if (borderTaskID.containsKey(player.getUniqueId())) return;
-        borderTaskID.put(player.getUniqueId(), Bukkit.getAsyncScheduler().runAtFixedRate(towns,
-                (scheduledTask) -> {
-                    final Set<String> chunks = towns.getCacheManager().getCacheChunks().getChunkList(player.getUniqueId());
+        borderTaskID.put(player.getUniqueId(), Bukkit.getAsyncScheduler().runAtFixedRate(towns, (scheduledTask) -> {
+            switch (borderType) {
+                case TOWN -> {
+                    final UUID owner = towns.getCacheManager().getCacheTowns().getTargetTownOwner(player.getUniqueId());
+                    final Set<String> chunks = towns.getCacheManager().getCacheChunks().getChunkList(owner);
                     renderBorderParticlesAroundChunks(player, chunks);
+                }
+                case CHUNK -> {
+                    final Set<String> chunks = Collections.synchronizedSet(new HashSet<>());
+                    chunks.add(ChunkUtil.serializeChunkLocation(player.getLocation().getChunk()));
+                    renderBorderParticlesAroundChunks(player, chunks);
+                }
+                case RENTED -> {
+                    final Set<String> chunks = towns.getCacheManager().getCacheRenters().getRenterPlayerListData().getChunkList(player.getUniqueId());
+                    renderBorderParticlesAroundChunks(player, chunks);
+                }
+            }
                 },
                 0,
                 1,
                 TimeUnit.SECONDS
-                ));
+        ));
     }
 
     public void stopBorder(UUID uuid) {

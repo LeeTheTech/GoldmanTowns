@@ -29,7 +29,8 @@ public enum Lang {
     COMMAND_HELP_SUB_COMMAND_HOVER("&6{0}"),
     COMMAND_CREATE_ANNOUNCEMENT_TOWN_CREATED("&aThe player &6{0} &ahas created the town &3{1}&a!"),
     COMMAND_CREATE_SUCCESS("&aYou successfully created the town &3{0}&a!"),
-    COMMAND_BORDER_SUCCESS("&aYou successfully toggled town border {0}&a."),
+    COMMAND_BORDER_SUCCESS("&aYou successfully toggled &3{0} &aborder on!"),
+    COMMAND_BORDER_OFF_SUCCESS("&aYou successfully toggled your border off!"),
     COMMAND_CLAIM_SUCCESS("&aYou successfully claimed the chunk &3{0}&a. &b(&3{1}&7/&3{2}&b)"),
     COMMAND_UNCLAIM_SUCCESS("&aYou successfully unclaimed the chunk &3{0}&a."),
     COMMAND_MAP_HEADER("&a----------- &7[ &2&lMap Key &7] &a-----------"),
@@ -163,6 +164,7 @@ public enum Lang {
     ERROR_RENT_PRICE_INVALID("&cThe input &6{0} &cis not an acceptable value."),
     ERROR_VALUE_INVALID("&cThe input &6{0} &cis not an acceptable value."),
     ERROR_TOWN_OWNER_LEAVE("&cYou are the owner of the town, if you want to leave you'll need to abandon the town."),
+    ERROR_BORDER_NONE_RENTED("&cYou currently don't have any rented chunks."),
     ;
     @Getter private final String string;
 
