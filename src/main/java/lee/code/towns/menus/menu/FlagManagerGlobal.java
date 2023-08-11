@@ -33,17 +33,17 @@ public class FlagManagerGlobal extends MenuGUI {
     @Override
     public void decorate(Player player) {
         addFillerGlass();
-        final UUID uuid = player.getUniqueId();
-        addButton(10, createFlagButton(FlagMenuItem.BREAK, uuid));
-        addButton(11, createFlagButton(FlagMenuItem.BUILD, uuid));
-        addButton(12, createFlagButton(FlagMenuItem.INTERACT, uuid));
-        addButton(13, createFlagButton(FlagMenuItem.DAMAGE, uuid));
-        addButton(14, createFlagButton(FlagMenuItem.PVP, uuid));
-        addButton(15, createFlagButton(FlagMenuItem.PVE, uuid));
-        addButton(16, createFlagButton(FlagMenuItem.MONSTER_SPAWNING, uuid));
-        addButton(21, createFlagButton(FlagMenuItem.REDSTONE, uuid));
-        addButton(22, createFlagButton(FlagMenuItem.EXPLOSION, uuid));
-        addButton(23, createFlagButton(FlagMenuItem.TELEPORT, uuid));
+        final UUID owner = towns.getCacheManager().getCacheTowns().getTargetTownOwner(player.getUniqueId());
+        addButton(10, createFlagButton(FlagMenuItem.BREAK, owner));
+        addButton(11, createFlagButton(FlagMenuItem.BUILD, owner));
+        addButton(12, createFlagButton(FlagMenuItem.INTERACT, owner));
+        addButton(13, createFlagButton(FlagMenuItem.DAMAGE, owner));
+        addButton(14, createFlagButton(FlagMenuItem.PVP, owner));
+        addButton(15, createFlagButton(FlagMenuItem.PVE, owner));
+        addButton(16, createFlagButton(FlagMenuItem.MONSTER_SPAWNING, owner));
+        addButton(21, createFlagButton(FlagMenuItem.REDSTONE, owner));
+        addButton(22, createFlagButton(FlagMenuItem.EXPLOSION, owner));
+        addButton(23, createFlagButton(FlagMenuItem.TELEPORT, owner));
         addButton(40, backButton(player));
         super.decorate(player);
     }

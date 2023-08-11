@@ -23,7 +23,8 @@ public enum FlagMenuItem {
     REDSTONE("&e&lRedstone", "&7Redstone usage.", Flag.REDSTONE),
     EXPLOSION("&e&lExplosions", "&7Explosions from mobs or players.", Flag.EXPLOSION),
     TELEPORT("&e&lTeleport", "&7Ender pearl or chorus fruit usage.", Flag.TELEPORT),
-
+    CHANGE_CHUNK_FLAGS("&e&lChange Chunk Flags", "&7Able to change town chunk flags.", Flag.CHANGE_CHUNK_FLAGS),
+    CHANGE_GLOBAL_FLAGS("&e&lChange Global Flags", "&7Able to change global town flags.", Flag.CHANGE_GLOBAL_FLAGS),
     ;
 
     private final String name;

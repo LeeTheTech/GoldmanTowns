@@ -36,8 +36,11 @@ public class PermissionTable {
     @DatabaseField(columnName = "invite", canBeNull = false)
     private boolean invite;
 
-    @DatabaseField(columnName = "change_flags", canBeNull = false)
-    private boolean changeFlags;
+    @DatabaseField(columnName = "change_chunk_flags", canBeNull = false)
+    private boolean changeChunkFlags;
+
+    @DatabaseField(columnName = "change_global_flags", canBeNull = false)
+    private boolean changeGlobalFlags;
 
     @DatabaseField(columnName = "interact", canBeNull = false)
     private boolean interact;
@@ -74,7 +77,8 @@ public class PermissionTable {
         this.permissionType = permissionType;
         this.chunkFlagsEnabled = false;
         this.invite = false;
-        this.changeFlags = false;
+        this.changeChunkFlags = false;
+        this.changeGlobalFlags = false;
         this.interact = false;
         this.build = false;
         this.breakBlock = false;

@@ -39,7 +39,10 @@ public class FlagManagerRole extends MenuGUI {
         addButton(10, createFlagButton(FlagMenuItem.BREAK, uuid));
         addButton(11, createFlagButton(FlagMenuItem.BUILD, uuid));
         addButton(12, createFlagButton(FlagMenuItem.INTERACT, uuid));
+        addButton(13, createFlagButton(FlagMenuItem.TELEPORT, uuid));
         addButton(14, createFlagButton(FlagMenuItem.INVITE, uuid));
+        addButton(15, createFlagButton(FlagMenuItem.CHANGE_CHUNK_FLAGS, uuid));
+        addButton(16, createFlagButton(FlagMenuItem.CHANGE_GLOBAL_FLAGS, uuid));
         addButton(40, backButton(player));
         super.decorate(player);
     }

@@ -7,7 +7,6 @@ import lee.code.towns.database.cache.renters.CacheRenters;
 import lee.code.towns.database.cache.server.CacheServer;
 import lee.code.towns.database.cache.towns.CacheTowns;
 import lee.code.towns.database.tables.TownsTable;
-import lee.code.towns.enums.ChatChannel;
 import lee.code.towns.enums.Flag;
 import lee.code.towns.lang.Lang;
 import lee.code.towns.utils.ChunkUtil;
@@ -36,6 +35,14 @@ public class CacheManager {
     public boolean checkPlayerLocationFlag(UUID uuid, Location location, Flag flag, boolean ownerBypass) {
         final String chunk = ChunkUtil.serializeChunkLocation(location.getChunk());
         if (!cacheChunks.isClaimed(chunk)) return false;
+        if (cacheRenters.isRented(chunk)) {
+            if (cacheRenters.isPlayerRenting(uuid, chunk)) return false;
+            if (cacheTowns.getTrustData().isTrusted(cacheRenters.getRenter(chunk), uuid)) return false;
+            if (cacheChunks.getChunkPermData().checkChunkPermissionFlag(chunk, Flag.CHUNK_FLAGS_ENABLED)) {
+                return !cacheChunks.getChunkPermData().checkChunkPermissionFlag(chunk, flag);
+            }
+            return true;
+        }
         final UUID owner = cacheChunks.getChunkOwner(chunk);
         if (ownerBypass && uuid.equals(owner)) return false;
         if (cacheTowns.isCitizen(owner, uuid)) {

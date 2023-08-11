@@ -2,10 +2,7 @@ package lee.code.towns.database.cache.towns;
 
 import lee.code.towns.database.DatabaseManager;
 import lee.code.towns.database.cache.handlers.DatabaseHandler;
-import lee.code.towns.database.cache.towns.data.TownPermData;
-import lee.code.towns.database.cache.towns.data.TownPlayerRoleData;
-import lee.code.towns.database.cache.towns.data.TownRoleColorData;
-import lee.code.towns.database.cache.towns.data.TownRoleData;
+import lee.code.towns.database.cache.towns.data.*;
 import lee.code.towns.database.tables.PermissionTable;
 import lee.code.towns.enums.PermissionType;
 import lee.code.towns.database.tables.TownsTable;
@@ -29,6 +26,7 @@ public class CacheTowns extends DatabaseHandler {
     @Getter private final TownRoleData roleData;
     @Getter private final TownPlayerRoleData playerRoleData;
     @Getter private final TownRoleColorData roleColorData;
+    @Getter private final TownTrustData trustData;
     private final ConcurrentHashMap<UUID, TownsTable> townsCache = new ConcurrentHashMap<>();
 
     public CacheTowns(DatabaseManager databaseManager) {
@@ -37,6 +35,7 @@ public class CacheTowns extends DatabaseHandler {
         this.roleData = new TownRoleData(databaseManager);
         this.playerRoleData = new TownPlayerRoleData(this);
         this.roleColorData = new TownRoleColorData(this);
+        this.trustData = new TownTrustData(this);
     }
 
     public void createPlayerData(UUID uuid) {
@@ -60,6 +59,7 @@ public class CacheTowns extends DatabaseHandler {
         townsCache.put(townsTable.getUniqueId(), townsTable);
         playerRoleData.cachePlayerRoles(townsTable);
         roleColorData.cacheRoleColors(townsTable);
+        trustData.cacheTrustedPlayers(townsTable);
     }
 
     public boolean hasTown(UUID uuid) {

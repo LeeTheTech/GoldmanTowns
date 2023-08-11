@@ -3,7 +3,19 @@ package lee.code.towns.database.cache.handlers;
 import lee.code.towns.database.tables.PermissionTable;
 import lee.code.towns.enums.Flag;
 
+import java.util.*;
+
 public class FlagHandler {
+
+    private static final Set<Flag> roleFlag = Collections.synchronizedSet(new HashSet<>(List.of(
+            Flag.CHANGE_CHUNK_FLAGS,
+            Flag.CHANGE_GLOBAL_FLAGS,
+            Flag.BUILD,
+            Flag.BREAK,
+            Flag.INTERACT,
+            Flag.INVITE,
+            Flag.TELEPORT
+            )));
 
     public static void setPermissionFlag(PermissionTable permissionTable, Flag flag, boolean result) {
         switch (flag) {
@@ -18,8 +30,9 @@ public class FlagHandler {
             case MONSTER_SPAWNING -> permissionTable.setMobSpawning(result);
             case CHUNK_FLAGS_ENABLED -> permissionTable.setChunkFlagsEnabled(result);
             case TELEPORT -> permissionTable.setTeleport(result);
-            case CHANGE_FLAGS -> permissionTable.setChangeFlags(result);
             case INVITE -> permissionTable.setInvite(result);
+            case CHANGE_CHUNK_FLAGS -> permissionTable.setChangeChunkFlags(result);
+            case CHANGE_GLOBAL_FLAGS -> permissionTable.setChangeGlobalFlags(result);
         }
     }
 
@@ -61,8 +74,11 @@ public class FlagHandler {
             case INVITE -> {
                 return permissionTable.isInvite();
             }
-            case CHANGE_FLAGS -> {
-                return permissionTable.isChangeFlags();
+            case CHANGE_CHUNK_FLAGS -> {
+                return permissionTable.isChangeChunkFlags();
+            }
+            case CHANGE_GLOBAL_FLAGS -> {
+                return permissionTable.isChangeGlobalFlags();
             }
             default -> {
                 return false;
@@ -71,6 +87,6 @@ public class FlagHandler {
     }
 
     public static boolean isRoleFlag(Flag flag) {
-        return !flag.equals(Flag.DAMAGE) && !flag.equals(Flag.PVP) && !flag.equals(Flag.PVE);
+        return roleFlag.contains(flag);
     }
 }

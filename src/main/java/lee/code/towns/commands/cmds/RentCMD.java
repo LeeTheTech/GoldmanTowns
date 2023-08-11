@@ -7,8 +7,12 @@ import lee.code.towns.database.CacheManager;
 import lee.code.towns.enums.ChunkRenderType;
 import lee.code.towns.lang.Lang;
 import lee.code.towns.managers.BorderParticleManager;
+import lee.code.towns.menus.menu.FlagManager;
+import lee.code.towns.menus.system.MenuPlayerData;
 import lee.code.towns.utils.ChunkUtil;
 import lee.code.towns.utils.CoreUtil;
+import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.util.StringUtil;
@@ -33,12 +37,12 @@ public class RentCMD extends SubCommand {
 
     @Override
     public String getDescription() {
-        return "Rent options with the chunk you're standing on.";
+        return "Chunk renting options.";
     }
 
     @Override
     public String getSyntax() {
-        return "&e/towns rent &f<price/remove/claim/unclaim> <options>";
+        return "&e/towns rent &f<options>";
     }
 
     @Override
@@ -173,6 +177,28 @@ public class RentCMD extends SubCommand {
                         );
                     }
                 }
+                case "trust" -> {
+                    if (args.length > 3) {
+                        final String action = args[2].toLowerCase();
+                        final String stringPlayer = args[3];
+                        final OfflinePlayer trustPlayer = Bukkit.getOfflinePlayerIfCached(stringPlayer);
+                        if (trustPlayer == null) {
+                            player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_PLAYER_NOT_FOUND.getComponent(new String[] { stringPlayer })));
+                            return;
+                        }
+                        switch (action) {
+                            case "add" -> {
+                                cacheManager.getCacheTowns().getTrustData().addTrusted(uuid, trustPlayer.getUniqueId(), true);
+                                player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_RENT_TRUST_ADD_SUCCESS.getComponent(new String[] { stringPlayer })));
+                            }
+                            case "remove" -> {
+                                cacheManager.getCacheTowns().getTrustData().removeTrusted(uuid, trustPlayer.getUniqueId(), true);
+                                player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_RENT_TRUST_REMOVE_SUCCESS.getComponent(new String[] { stringPlayer })));
+                            }
+                            default -> player.sendMessage(Lang.USAGE.getComponent(null).append(SubSyntax.COMMAND_RENT_TRUST.getComponent()));
+                        }
+                    } else player.sendMessage(Lang.USAGE.getComponent(null).append(SubSyntax.COMMAND_RENT_TRUST.getComponent()));
+                }
                 default -> player.sendMessage(Lang.USAGE.getComponent(null).append(CoreUtil.parseColorComponent(getSyntax())));
             }
         }  else player.sendMessage(Lang.USAGE.getComponent(null).append(CoreUtil.parseColorComponent(getSyntax())));
@@ -190,11 +216,15 @@ public class RentCMD extends SubCommand {
     public List<String> onTabComplete(CommandSender sender, String[] args) {
         switch (args.length) {
             case 2 -> {
-                return StringUtil.copyPartialMatches(args[1], Arrays.asList("price", "remove", "claim", "unclaim"), new ArrayList<>());
+                return StringUtil.copyPartialMatches(args[1], Arrays.asList("price", "remove", "claim", "unclaim", "trust"), new ArrayList<>());
             }
             case 3 -> {
                 if (args[1].equalsIgnoreCase("claim")) return StringUtil.copyPartialMatches(args[2], Arrays.asList("confirm", "deny"), new ArrayList<>());
                 if (args[1].equalsIgnoreCase("unclaim")) return StringUtil.copyPartialMatches(args[2], Arrays.asList("confirm", "deny"), new ArrayList<>());
+                if (args[1].equalsIgnoreCase("trust")) return StringUtil.copyPartialMatches(args[2], Arrays.asList("add", "remove"), new ArrayList<>());
+            }
+            case 4 -> {
+                if (args[1].equalsIgnoreCase("trust")) return StringUtil.copyPartialMatches(args[3], CoreUtil.getOnlinePlayers(), new ArrayList<>());
             }
         }
         return new ArrayList<>();

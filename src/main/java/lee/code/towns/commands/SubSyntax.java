@@ -11,6 +11,7 @@ public enum SubSyntax {
     COMMAND_RENT_PRICE("&e/town rent price &f<value>"),
     COMMAND_RENT_CLAIM("&e/town rent claim &f<confirm/deny>"),
     COMMAND_RENT_UNCLAIM("&e/town rent unclaim &f<confirm/deny>"),
+    COMMAND_RENT_TRUST("&e/town rent trust &f<add/remove> <player>"),
     COMMAND_ROLE_REMOVE_SYNTAX("&e/town role remove &f<player>"),
     COMMAND_ROLE_CREATE_SYNTAX("&e/town role create &f<name>"),
     COMMAND_ROLE_DELETE_SYNTAX("&e/town role delete &f<role>"),

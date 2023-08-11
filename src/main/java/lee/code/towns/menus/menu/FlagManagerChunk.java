@@ -17,17 +17,20 @@ public class FlagManagerChunk extends MenuGUI {
 
     private final Towns towns;
     private final String chunk;
+    private final boolean backSupport;
 
-    public FlagManagerChunk(MenuPlayerData menuPlayerData, Towns towns, String chunk) {
+    public FlagManagerChunk(MenuPlayerData menuPlayerData, Towns towns, String chunk, boolean backSupport) {
         super(menuPlayerData);
         this.towns = towns;
         this.chunk = chunk;
+        this.backSupport = backSupport;
         setInventory();
     }
 
     @Override
     protected Inventory createInventory() {
-        return Bukkit.createInventory(null,54, Lang.MENU_FLAG_MANAGER_CHUNK_TITLE.getComponent(null));
+        final int size = backSupport ? 54 : 45;
+        return Bukkit.createInventory(null, size, Lang.MENU_FLAG_MANAGER_CHUNK_TITLE.getComponent(null));
     }
 
     @Override
@@ -44,7 +47,7 @@ public class FlagManagerChunk extends MenuGUI {
         addButton(30, createFlagButton(FlagMenuItem.REDSTONE));
         addButton(31, createFlagButton(FlagMenuItem.EXPLOSION));
         addButton(32, createFlagButton(FlagMenuItem.TELEPORT));
-        addButton(49, backButton(player));
+        if (backSupport) addButton(49, backButton(player));
         super.decorate(player);
     }
 
