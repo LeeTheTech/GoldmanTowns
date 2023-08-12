@@ -7,7 +7,6 @@ public class ChunkGraphUtil {
 
     public static boolean areChunksConnected(Set<String> chunks, Set<String> outposts, String removedChunk) {
         final Map<String, Set<String>> chunkGraph = new ConcurrentHashMap<>();
-
         for (String chunk : chunks) {
             if (!chunk.equals(removedChunk)) {
                 final String[] chunkParts = chunk.split(",");
