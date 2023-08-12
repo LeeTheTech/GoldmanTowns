@@ -78,7 +78,7 @@ public class ChunkInfoCMD extends SubCommand {
             }
             lines.add(Component.text(""));
             lines.add(Lang.COMMAND_CHUNK_INFO_FOOTER.getComponent(null));
-            lines.forEach(player::sendMessage);
+            for (Component line : lines) player.sendMessage(line);
             towns.getBorderParticleManager().spawnParticleChunkBorder(player, player.getLocation().getChunk(), ChunkRenderType.INFO, true);
         } else player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_CHUNK_INFO_NOT_CLAIMED.getComponent(null)));
     }

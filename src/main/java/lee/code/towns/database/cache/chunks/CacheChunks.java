@@ -52,9 +52,10 @@ public class CacheChunks extends DatabaseHandler {
     }
 
     public void deleteAllChunkData(UUID uuid) {
-        final Set<String> chunks = chunkListData.getChunkList(uuid);
-        chunks.forEach(chunksCache::remove);
-        chunks.forEach(chunkPermData::removePermissionTable);
+        for (String chunk : chunkListData.getChunkList(uuid)) {
+            chunksCache.remove(chunk);
+            chunkPermData.removePermissionTable(chunk);
+        }
         chunkListData.removeAllChunkList(uuid);
         chunkOutpostData.removeAllChunkList(uuid);
         deleteAllChunkDatabase(uuid);

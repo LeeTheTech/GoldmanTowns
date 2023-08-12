@@ -133,7 +133,7 @@ public class CoreUtil {
         final Component click = Lang.CLICK.getComponent(null);
         lines.add(message);
         lines.add(click.append(yes.append(Component.text("  ")).append(no)));
-        lines.forEach(player::sendMessage);
+        for (Component line : lines) player.sendMessage(line);
     }
 
     public static String parseTime(long time) {

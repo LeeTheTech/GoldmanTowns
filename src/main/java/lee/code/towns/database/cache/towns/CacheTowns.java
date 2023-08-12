@@ -222,13 +222,13 @@ public class CacheTowns extends DatabaseHandler {
         final UUID owner = getTargetTownOwner(uuid);
         final Set<UUID> players = getCitizensList(owner);
         players.add(owner);
-        players.forEach(citizen -> {
+        for (UUID citizen : players) {
             final OfflinePlayer oPlayer = Bukkit.getOfflinePlayer(citizen);
             if (oPlayer.isOnline()) {
                 final Player player = oPlayer.getPlayer();
                 if (player != null) player.sendMessage(message);
             }
-        });
+        }
     }
 
     public void leaveTown(UUID uuid) {

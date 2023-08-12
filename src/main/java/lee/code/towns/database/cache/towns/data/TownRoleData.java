@@ -56,7 +56,7 @@ public class TownRoleData extends DatabaseHandler {
     }
 
     public void setRolePermissionTable(List<PermissionTable> permissionTables) {
-        permissionTables.forEach(this::setRolePermissionTable);
+        for (PermissionTable permissionTable : permissionTables) setRolePermissionTable(permissionTable);
     }
 
     public void createRolePermissionData(UUID uuid, String role) {
