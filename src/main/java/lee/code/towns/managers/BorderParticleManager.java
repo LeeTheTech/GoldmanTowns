@@ -9,8 +9,6 @@ import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
-import java.util.Collections;
-import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
@@ -143,7 +141,7 @@ public class BorderParticleManager {
                     renderBorderParticlesAroundChunks(player, chunks);
                 }
                 case CHUNK -> {
-                    final Set<String> chunks = Collections.synchronizedSet(new HashSet<>());
+                    final Set<String> chunks = ConcurrentHashMap.newKeySet();
                     chunks.add(ChunkUtil.serializeChunkLocation(player.getLocation().getChunk()));
                     renderBorderParticlesAroundChunks(player, chunks);
                 }

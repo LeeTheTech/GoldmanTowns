@@ -139,7 +139,7 @@ public class CacheTowns extends DatabaseHandler {
     }
 
     public Set<UUID> getCitizensList(UUID uuid) {
-        if (!hasCitizens(uuid)) return Collections.synchronizedSet(new HashSet<>());
+        if (!hasCitizens(uuid)) return ConcurrentHashMap.newKeySet();
         final Set<String> list = Collections.synchronizedSet(new HashSet<>(List.of(getTownTable(uuid).getTownCitizens().split(","))));
         return list.stream()
                 .map(str -> {
@@ -156,7 +156,7 @@ public class CacheTowns extends DatabaseHandler {
     public String getCitizenNames(UUID uuid) {
         if (getTownTable(uuid).getTownCitizens() == null) return "None";
         final String[] split = getTownTable(uuid).getTownCitizens().split(",");
-        final Set<String> playerNames = Collections.synchronizedSet(new HashSet<>());
+        final Set<String> playerNames = ConcurrentHashMap.newKeySet();
         for (String citizen : split) {
             final OfflinePlayer oPlayer = Bukkit.getOfflinePlayer(UUID.fromString(citizen));
             playerNames.add(oPlayer.getName());

@@ -33,7 +33,7 @@ public class ChunkGraphUtil {
         final Set<String> visitedChunks = ConcurrentHashMap.newKeySet();
         depthFirstSearch(chunkGraph, chunks.iterator().next(), visitedChunks);
 
-        return visitedChunks.size() == chunks.size() - 1;
+        return visitedChunks.size() == chunks.size() - (outposts.size() + 1);
     }
 
     private static void depthFirstSearch(Map<String, Set<String>> graph, String currentChunk, Set<String> visitedChunks) {

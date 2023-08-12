@@ -19,7 +19,7 @@ public class TownTrustData {
         if (trustedCache.containsKey(uuid)) {
             trustedCache.get(uuid).add(trusted);
         } else {
-            final Set<UUID> trustedPlayers = Collections.synchronizedSet(new HashSet<>());
+            final Set<UUID> trustedPlayers = ConcurrentHashMap.newKeySet();
             trustedPlayers.add(trusted);
             trustedCache.put(uuid, trustedPlayers);
         }

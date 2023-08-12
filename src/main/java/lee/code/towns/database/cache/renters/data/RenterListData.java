@@ -1,7 +1,5 @@
 package lee.code.towns.database.cache.renters.data;
 
-import java.util.Collections;
-import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
@@ -14,7 +12,7 @@ public class RenterListData {
         if (rentedChunkListCache.containsKey(uuid)) {
             rentedChunkListCache.get(uuid).add(chunk);
         } else {
-            final Set<String> chunks = Collections.synchronizedSet(new HashSet<>());
+            final Set<String> chunks = ConcurrentHashMap.newKeySet();
             chunks.add(chunk);
             rentedChunkListCache.put(uuid, chunks);
         }

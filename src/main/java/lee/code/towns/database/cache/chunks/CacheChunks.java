@@ -60,10 +60,6 @@ public class CacheChunks extends DatabaseHandler {
         deleteAllChunkDatabase(uuid);
     }
 
-    public boolean hasClaimedChunks(UUID uuid) {
-        return chunkListData.hasClaimedChunks(uuid);
-    }
-
     public int getChunkClaims(UUID uuid) {
         return chunkListData.getChunkList(uuid).size();
     }
