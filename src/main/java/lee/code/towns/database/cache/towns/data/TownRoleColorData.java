@@ -46,7 +46,7 @@ public class TownRoleColorData {
         }
     }
 
-    public void deleteAllRoleColors(UUID uuid) {
+    public void deleteRoleColorCache(UUID uuid) {
         roleColorCache.remove(uuid);
     }
 

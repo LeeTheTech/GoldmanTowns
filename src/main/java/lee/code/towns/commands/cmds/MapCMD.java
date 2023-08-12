@@ -82,7 +82,7 @@ public class MapCMD extends SubCommand {
                 final NamedTextColor color;
                 if (chunkString.equals(targetChunkString)) color = NamedTextColor.BLUE;
                 else if (isClaimed && cacheManager.getCacheChunks().isChunkOwner(targetChunkString, player.getUniqueId())) color = NamedTextColor.DARK_GREEN;
-                else if (isClaimed && cacheManager.getCacheTowns().isCitizen(cacheManager.getCacheChunks().getChunkOwner(targetChunkString), player.getUniqueId())) color = NamedTextColor.GREEN;
+                else if (isClaimed && cacheManager.getCacheTowns().getCitizenData().isCitizen(cacheManager.getCacheChunks().getChunkOwner(targetChunkString), player.getUniqueId())) color = NamedTextColor.GREEN;
                 else if (isClaimed) color = NamedTextColor.RED;
                 else color = NamedTextColor.GRAY;
 

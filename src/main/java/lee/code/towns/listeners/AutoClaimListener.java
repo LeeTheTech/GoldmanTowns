@@ -53,7 +53,7 @@ public class AutoClaimListener implements Listener {
                     player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_AUTO_CLAIM_RANGE.getComponent(new String[] { Lang.OFF.getString() })));
                     return;
                 }
-                final int currentChunks = cacheManager.getCacheChunks().getChunkClaims(uuid);
+                final int currentChunks = cacheManager.getCacheChunks().getChunkListData().getChunkClaims(uuid);
                 final int maxChunks = cacheManager.getCacheTowns().getMaxChunkClaims(uuid);
                 if (maxChunks < currentChunks + 1) {
                     autoClaimManager.removeAutoClaiming(uuid);

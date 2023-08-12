@@ -61,10 +61,6 @@ public class CacheChunks extends DatabaseHandler {
         deleteAllChunkDatabase(uuid);
     }
 
-    public int getChunkClaims(UUID uuid) {
-        return chunkListData.getChunkList(uuid).size();
-    }
-
     public void setChunkTable(ChunkTable chunkTable) {
         chunksCache.put(chunkTable.getChunk(), chunkTable);
         chunkListData.addChunkList(chunkTable.getOwner(), chunkTable.getChunk());

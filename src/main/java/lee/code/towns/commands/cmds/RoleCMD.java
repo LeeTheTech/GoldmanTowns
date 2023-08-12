@@ -81,7 +81,7 @@ public class RoleCMD extends SubCommand {
                         player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_ROLE_ROLE_NOT_FOUND.getComponent(new String[] { role })));
                         return;
                     }
-                    if (!cacheTowns.isCitizen(owner, targetUniqueID)) {
+                    if (!cacheTowns.getCitizenData().isCitizen(owner, targetUniqueID)) {
                         player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_ROLE_SET_PLAYER_NOT_CITIZEN.getComponent(new String[] { playerName })));
                         return;
                     }

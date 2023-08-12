@@ -66,7 +66,7 @@ public class ClaimCMD extends SubCommand {
             player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_CLAIM_ALREADY_CLAIMED.getComponent(new String[] { chunk, chunkTown })));
             return;
         }
-        final int currentChunks = cacheManager.getCacheChunks().getChunkClaims(uuid);
+        final int currentChunks = cacheManager.getCacheChunks().getChunkListData().getChunkClaims(uuid);
         final int maxChunks = cacheManager.getCacheTowns().getMaxChunkClaims(uuid);
         if (maxChunks < currentChunks + 1) {
             player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_CLAIM_MAX_CLAIMS.getComponent(new String[] { String.valueOf(maxChunks) })));

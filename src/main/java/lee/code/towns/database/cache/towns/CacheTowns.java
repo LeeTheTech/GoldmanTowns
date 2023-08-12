@@ -10,7 +10,6 @@ import lee.code.towns.enums.TownRole;
 import lee.code.towns.utils.CoreUtil;
 import lombok.Getter;
 import net.kyori.adventure.text.Component;
-import org.apache.commons.lang3.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
@@ -18,7 +17,6 @@ import org.bukkit.entity.Player;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.stream.Collectors;
 
 public class CacheTowns extends DatabaseHandler {
 
@@ -27,6 +25,7 @@ public class CacheTowns extends DatabaseHandler {
     @Getter private final TownPlayerRoleData playerRoleData;
     @Getter private final TownRoleColorData roleColorData;
     @Getter private final TownTrustData trustData;
+    @Getter private final TownCitizenData citizenData;
     private final ConcurrentHashMap<UUID, TownsTable> townsCache = new ConcurrentHashMap<>();
 
     public CacheTowns(DatabaseManager databaseManager) {
@@ -36,6 +35,7 @@ public class CacheTowns extends DatabaseHandler {
         this.playerRoleData = new TownPlayerRoleData(this);
         this.roleColorData = new TownRoleColorData(this);
         this.trustData = new TownTrustData(this);
+        this.citizenData = new TownCitizenData(this);
     }
 
     public void createPlayerData(UUID uuid) {
@@ -60,6 +60,7 @@ public class CacheTowns extends DatabaseHandler {
         playerRoleData.cachePlayerRoles(townsTable);
         roleColorData.cacheRoleColors(townsTable);
         trustData.cacheTrustedPlayers(townsTable);
+        citizenData.cacheCitizenPlayers(townsTable);
     }
 
     public boolean hasTown(UUID uuid) {
@@ -130,66 +131,6 @@ public class CacheTowns extends DatabaseHandler {
                 .anyMatch(playerData -> playerData.getTown() != null && playerData.getTown().equals(name));
     }
 
-    public boolean hasCitizens(UUID uuid) {
-        return getTownTable(uuid).getTownCitizens() != null;
-    }
-
-    public String getCitizens(UUID uuid) {
-        return getTownTable(uuid).getTownCitizens();
-    }
-
-    public Set<UUID> getCitizensList(UUID uuid) {
-        if (!hasCitizens(uuid)) return ConcurrentHashMap.newKeySet();
-        final Set<String> list = Collections.synchronizedSet(new HashSet<>(List.of(getTownTable(uuid).getTownCitizens().split(","))));
-        return list.stream()
-                .map(str -> {
-                    try {
-                        return UUID.fromString(str);
-                    } catch (IllegalArgumentException e) {
-                        return null;
-                    }
-                })
-                .filter(Objects::nonNull)
-                .collect(Collectors.toSet());
-    }
-
-    public String getCitizenNames(UUID uuid) {
-        if (getTownTable(uuid).getTownCitizens() == null) return "None";
-        final String[] split = getTownTable(uuid).getTownCitizens().split(",");
-        final Set<String> playerNames = ConcurrentHashMap.newKeySet();
-        for (String citizen : split) {
-            final OfflinePlayer oPlayer = Bukkit.getOfflinePlayer(UUID.fromString(citizen));
-            playerNames.add(oPlayer.getName());
-        }
-        return StringUtils.join(playerNames, ", ");
-    }
-
-    public boolean isCitizen(UUID owner, UUID target) {
-        if (getTownTable(owner).getTownCitizens() == null) return false;
-        return getTownTable(owner).getTownCitizens().contains(target.toString());
-    }
-
-    public void addCitizen(UUID owner, UUID target) {
-        final TownsTable townsTable = getTownTable(owner);
-        if (townsTable.getTownCitizens() == null) townsTable.setTownCitizens(target.toString());
-        else townsTable.setTownCitizens(townsTable.getTownCitizens() + "," + target);
-        final String role = CoreUtil.capitalize(TownRole.CITIZEN.name());
-        playerRoleData.addPlayerRole(owner, target, role, false);
-        updateTownsDatabase(townsTable);
-        setJoinedTown(target, owner);
-    }
-
-    public void removeCitizen(UUID owner, UUID target) {
-        final TownsTable townsTable = getTownTable(owner);
-        final Set<String> citizens = Collections.synchronizedSet(new HashSet<>(List.of(townsTable.getTownCitizens().split(","))));
-        citizens.remove(target.toString());
-        if (citizens.isEmpty()) townsTable.setTownCitizens(null);
-        else townsTable.setTownCitizens(StringUtils.join(citizens, ","));
-        playerRoleData.removePlayerRole(owner, target, false);
-        updateTownsDatabase(townsTable);
-        removeJoinedTown(target);
-    }
-
     public Location getTownSpawn(UUID uuid) {
         final TownsTable townsTable = getTownTable(uuid);
         if (townsTable.getSpawn() != null) return CoreUtil.parseLocation(townsTable.getSpawn());
@@ -204,7 +145,7 @@ public class CacheTowns extends DatabaseHandler {
 
     public int getMaxChunkClaims(UUID uuid) {
         final int defaultAmount = 10;
-        final int size = hasCitizens(uuid) ? getTownTable(uuid).getTownCitizens().split(",").length : 0;
+        final int size = citizenData.hasCitizens(uuid) ? citizenData.getCitizenAmount(uuid) : 0;
         return (size * 2 + defaultAmount);
     }
 
@@ -220,7 +161,8 @@ public class CacheTowns extends DatabaseHandler {
 
     public void sendTownMessage(UUID uuid, Component message) {
         final UUID owner = getTargetTownOwner(uuid);
-        final Set<UUID> players = getCitizensList(owner);
+        final Set<UUID> players = ConcurrentHashMap.newKeySet();
+        players.addAll(citizenData.getCitizensList(owner));
         players.add(owner);
         for (UUID citizen : players) {
             final OfflinePlayer oPlayer = Bukkit.getOfflinePlayer(citizen);
@@ -232,7 +174,7 @@ public class CacheTowns extends DatabaseHandler {
     }
 
     public void leaveTown(UUID uuid) {
-        removeCitizen(getJoinedTownOwner(uuid), uuid);
+        citizenData.removeCitizen(getJoinedTownOwner(uuid), uuid);
     }
 
     public void createRole(UUID uuid, String role) {
@@ -241,7 +183,7 @@ public class CacheTowns extends DatabaseHandler {
     }
 
     public void deleteRole(UUID uuid, String role) {
-        for (UUID citizen : getCitizensList(uuid)) {
+        for (UUID citizen : citizenData.getCitizensList(uuid)) {
             if (getPlayerRoleData().getPlayerRole(uuid, citizen).equals(role)) {
                 getPlayerRoleData().setPlayerRole(uuid, citizen, CoreUtil.capitalize(TownRole.CITIZEN.name()), false);
             }

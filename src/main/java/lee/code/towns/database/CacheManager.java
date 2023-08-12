@@ -46,7 +46,7 @@ public class CacheManager {
         }
         final UUID owner = cacheChunks.getChunkOwner(chunk);
         if (ownerBypass && uuid.equals(owner)) return false;
-        if (cacheTowns.isCitizen(owner, uuid)) {
+        if (cacheTowns.getCitizenData().isCitizen(owner, uuid)) {
             if (FlagUtil.isRoleFlag(flag)) {
                 final String role = cacheTowns.getPlayerRoleData().getPlayerRole(owner, uuid);
                 return !cacheTowns.getRoleData().checkRolePermissionFlag(owner, role, flag);
@@ -89,7 +89,7 @@ public class CacheManager {
 
     public void deleteTown(UUID uuid) {
         final TownsTable townsTable = cacheTowns.getTownTable(uuid);
-        for (UUID citizen : cacheTowns.getCitizensList(uuid)) {
+        for (UUID citizen : cacheTowns.getCitizenData().getCitizensList(uuid)) {
             final TownsTable citizenTable = cacheTowns.getTownTable(citizen);
             citizenTable.setJoinedTown(null);
             cacheTowns.updateTownsDatabase(citizenTable);
@@ -99,8 +99,9 @@ public class CacheManager {
         townsTable.setPlayerRoles(null);
         townsTable.setSpawn(null);
         townsTable.setRoleColors(null);
-        cacheTowns.getRoleColorData().deleteAllRoleColors(uuid);
-        cacheTowns.getPlayerRoleData().deleteAllPlayerRoles(uuid);
+        cacheTowns.getCitizenData().deleteCitizenCache(uuid);
+        cacheTowns.getRoleColorData().deleteRoleColorCache(uuid);
+        cacheTowns.getPlayerRoleData().deletePlayerRolesCache(uuid);
         cacheTowns.getRoleData().deleteAllRoles(uuid);
         cacheChunks.deleteAllChunkData(uuid);
         cacheTowns.updateTownsDatabase(townsTable);

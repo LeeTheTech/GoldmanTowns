@@ -49,7 +49,7 @@ public class InviteCMD extends SubCommand {
 
     @Override
     public boolean performAsyncSynchronized() {
-        return false;
+        return true;
     }
 
     @Override
@@ -72,7 +72,7 @@ public class InviteCMD extends SubCommand {
                             player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_INVITE_INVALID.getComponent(null)));
                             return;
                         }
-                        cacheManager.getCacheTowns().addCitizen(targetID, player.getUniqueId());
+                        cacheManager.getCacheTowns().getCitizenData().addCitizen(targetID, player.getUniqueId());
                         inviteManager.removeActiveInvite(targetID);
                         cacheManager.getCacheTowns().sendTownMessage(targetID, Lang.PREFIX.getComponent(null).append(Lang.COMMAND_INVITE_ACCEPT_JOINED_TOWN.getComponent(new String[] { player.getName() } )));
                         final Player target = Bukkit.getPlayer(targetID);

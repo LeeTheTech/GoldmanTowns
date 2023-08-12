@@ -27,6 +27,7 @@ public class TownTrustData {
 
     private void removePlayerTrustedCache(UUID uuid, UUID target) {
         trustedCache.get(uuid).remove(target);
+        if (trustedCache.get(uuid).isEmpty()) trustedCache.remove(uuid);
     }
 
     public void cacheTrustedPlayers(TownsTable townsTable) {

@@ -43,7 +43,7 @@ public class TownPlayerRoleData {
         }
     }
 
-    public void deleteAllPlayerRoles(UUID uuid) {
+    public void deletePlayerRolesCache(UUID uuid) {
         playerRoleCache.remove(uuid);
     }
 
