@@ -47,6 +47,10 @@ public class FlagManager extends MenuGUI {
                     final UUID uuid = player.getUniqueId();
                     switch (menuItem.getMenuRout()) {
                         case FLAG_MANAGER_GLOBAL -> {
+                            if (!cacheManager.getCacheTowns().hasTownOrJoinedTown(uuid)) {
+                                player.getInventory().close();
+                                return;
+                            }
                             final UUID owner = cacheManager.getCacheTowns().getTargetTownOwner(uuid);
                             if (!uuid.equals(owner)) {
                                 final String role = cacheManager.getCacheTowns().getPlayerRoleData().getPlayerRole(owner, uuid);
@@ -85,6 +89,10 @@ public class FlagManager extends MenuGUI {
                             towns.getMenuManager().openMenu(new FlagManagerChunk(menuPlayerData, towns, chunk, true), player);
                         }
                         case ROLE_SELECTION_MANAGER -> {
+                            if (!cacheManager.getCacheTowns().hasTownOrJoinedTown(uuid)) {
+                                player.getInventory().close();
+                                return;
+                            }
                             final UUID owner = cacheManager.getCacheTowns().getTargetTownOwner(uuid);
                             if (!uuid.equals(owner)) {
                                 player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_FLAG_MANAGER_ROLE_NOT_OWNER.getComponent(null)));

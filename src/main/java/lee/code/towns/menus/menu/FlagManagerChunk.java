@@ -56,6 +56,10 @@ public class FlagManagerChunk extends MenuGUI {
                 .creator(p -> flagMenuItem.createItem(towns.getCacheManager().getCacheChunks().getChunkPermData().checkChunkPermissionFlag(chunk, flagMenuItem.getFlag())))
                 .consumer(e -> {
                     final CacheChunks cacheChunks = towns.getCacheManager().getCacheChunks();
+                    if (!cacheChunks.isClaimed(chunk)) {
+                        e.getWhoClicked().getInventory().close();
+                        return;
+                    }
                     final boolean newResult = !cacheChunks.getChunkPermData().checkChunkPermissionFlag(chunk, flagMenuItem.getFlag());
                     cacheChunks.getChunkPermData().setChunkPermissionFlag(chunk, flagMenuItem.getFlag(), newResult);
                     final ItemStack item = e.getCurrentItem();

@@ -2,6 +2,7 @@ package lee.code.towns.managers;
 
 import io.papermc.paper.threadedregions.scheduler.ScheduledTask;
 import lee.code.towns.Towns;
+import lee.code.towns.database.CacheManager;
 import lee.code.towns.enums.BorderType;
 import lee.code.towns.enums.ChunkRenderType;
 import lee.code.towns.utils.ChunkUtil;
@@ -134,10 +135,16 @@ public class BorderParticleManager {
     public void scheduleBorder(Player player, BorderType borderType) {
         if (borderTaskID.containsKey(player.getUniqueId())) return;
         borderTaskID.put(player.getUniqueId(), Bukkit.getAsyncScheduler().runAtFixedRate(towns, (scheduledTask) -> {
+            final CacheManager cacheManager = towns.getCacheManager();
+            final UUID uuid = player.getUniqueId();
             switch (borderType) {
                 case TOWN -> {
-                    final UUID owner = towns.getCacheManager().getCacheTowns().getTargetTownOwner(player.getUniqueId());
-                    final Set<String> chunks = towns.getCacheManager().getCacheChunks().getChunkListData().getChunkList(owner);
+                    if (!cacheManager.getCacheTowns().hasTownOrJoinedTown(uuid)) {
+                        stopBorder(uuid);
+                        return;
+                    }
+                    final UUID owner = cacheManager.getCacheTowns().getTargetTownOwner(uuid);
+                    final Set<String> chunks = cacheManager.getCacheChunks().getChunkListData().getChunkList(owner);
                     renderBorderParticlesAroundChunks(player, chunks);
                 }
                 case CHUNK -> {
@@ -146,7 +153,11 @@ public class BorderParticleManager {
                     renderBorderParticlesAroundChunks(player, chunks);
                 }
                 case RENTED -> {
-                    final Set<String> chunks = towns.getCacheManager().getCacheRenters().getRenterListData().getChunkList(player.getUniqueId());
+                    if (!cacheManager.getCacheTowns().hasTownOrJoinedTown(uuid)) {
+                        stopBorder(uuid);
+                        return;
+                    }
+                    final Set<String> chunks = cacheManager.getCacheRenters().getRenterListData().getChunkList(uuid);
                     renderBorderParticlesAroundChunks(player, chunks);
                 }
             }

@@ -58,14 +58,12 @@ public class AbandonCMD extends SubCommand {
     @Override
     public void perform(Player player, String[] args) {
         final CacheManager cacheManager = towns.getCacheManager();
-        final BorderParticleManager borderParticleManager = towns.getBorderParticleManager();
         final AutoClaimManager autoClaimManager = towns.getAutoClaimManager();
         final UUID uuid = player.getUniqueId();
         if (!cacheManager.getCacheTowns().hasTown(uuid)) {
             player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_NOT_TOWN_OWNER.getComponent(null)));
             return;
         }
-        if (borderParticleManager.hasBorderActive(uuid)) borderParticleManager.stopBorder(uuid);
         if (autoClaimManager.isAutoClaiming(uuid)) autoClaimManager.removeAutoClaiming(uuid);
         final String town = cacheManager.getCacheTowns().getTownName(uuid);
         if (args.length > 1) {

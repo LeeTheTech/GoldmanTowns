@@ -1,6 +1,7 @@
 package lee.code.towns.menus.menu;
 
 import lee.code.towns.Towns;
+import lee.code.towns.database.cache.towns.CacheTowns;
 import lee.code.towns.lang.Lang;
 import lee.code.towns.menus.menu.menudata.MenuItem;
 import lee.code.towns.menus.system.MenuButton;
@@ -49,6 +50,11 @@ public class RoleSelectionManager extends MenuGUI {
         return new MenuButton()
                 .creator(p -> MenuItem.ROLE.createRoleItem(role))
                 .consumer(e -> {
+                    final CacheTowns cacheTowns = towns.getCacheManager().getCacheTowns();
+                    if (!cacheTowns.hasTown(player.getUniqueId())) {
+                        e.getWhoClicked().getInventory().close();
+                        return;
+                    }
                     towns.getMenuManager().openMenu(new FlagManagerRole(menuPlayerData, towns, role), player);
                 });
     }

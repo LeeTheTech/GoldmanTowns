@@ -53,6 +53,10 @@ public class FlagManagerGlobal extends MenuGUI {
                 .creator(p -> flagMenuItem.createItem(towns.getCacheManager().getCacheTowns().getPermData().checkGlobalPermissionFlag(uuid, flagMenuItem.getFlag())))
                 .consumer(e -> {
                     final CacheTowns cacheTowns = towns.getCacheManager().getCacheTowns();
+                    if (!cacheTowns.hasTownOrJoinedTown(uuid)) {
+                        e.getWhoClicked().getInventory().close();
+                        return;
+                    }
                     final boolean newResult = !cacheTowns.getPermData().checkGlobalPermissionFlag(uuid, flagMenuItem.getFlag());
                     cacheTowns.getPermData().setGlobalPermissionFlag(uuid, flagMenuItem.getFlag(), newResult);
                     final ItemStack item = e.getCurrentItem();

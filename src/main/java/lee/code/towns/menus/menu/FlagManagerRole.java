@@ -52,6 +52,10 @@ public class FlagManagerRole extends MenuGUI {
                 .creator(p -> flagMenuItem.createItem(towns.getCacheManager().getCacheTowns().getRoleData().checkRolePermissionFlag(uuid, role, flagMenuItem.getFlag())))
                 .consumer(e -> {
                     final CacheTowns cacheTowns = towns.getCacheManager().getCacheTowns();
+                    if (!cacheTowns.hasTown(uuid)) {
+                        e.getWhoClicked().getInventory().close();
+                        return;
+                    }
                     final boolean newResult = !cacheTowns.getRoleData().checkRolePermissionFlag(uuid, role, flagMenuItem.getFlag());
                     cacheTowns.getRoleData().setRolePermissionFlag(uuid, role, flagMenuItem.getFlag(), newResult);
                     final ItemStack item = e.getCurrentItem();
