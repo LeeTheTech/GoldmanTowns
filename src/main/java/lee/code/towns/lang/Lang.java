@@ -134,6 +134,7 @@ public enum Lang {
     ERROR_NOT_TOWN_OWNER("&cYou need to be the town owner to run this command."),
     ERROR_UNCLAIM_NOT_CLAIMED("&cThe chunk &3{0} &cis not claimed."),
     ERROR_UNCLAIM_NOT_OWNER("&cYou're not the owner of chunk &3{0} &cso you can't unclaim it."),
+    ERROR_UNCLAIM_AUTO_CLAIM_ON("&cYou can't run this command while auto claim is active."),
     ERROR_UNCLAIM_ESTABLISHED_CHUNK("&cYou can't unclaim your town's established chunk, this is the chunk your town was created on."),
     ERROR_UNCLAIM_UNSAFE("&cYou can't unclaim chunk &3{0} &cbecause is would disconnect other chunks from your town's established chunk."),
     ERROR_AUTO_CLAIM_RANGE("&cYou are now out of range from your last auto claim, auto claim has been toggled {0}&c."),

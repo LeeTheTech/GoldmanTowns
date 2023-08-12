@@ -49,7 +49,7 @@ public class UnclaimCMD extends SubCommand {
 
     @Override
     public boolean performAsyncSynchronized() {
-        return false;
+        return true;
     }
 
     @Override
@@ -63,6 +63,10 @@ public class UnclaimCMD extends SubCommand {
         }
         if (!cacheManager.getCacheChunks().isChunkOwner(chunk, uuid)) {
             player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_UNCLAIM_NOT_OWNER.getComponent(new String[] { chunk })));
+            return;
+        }
+        if (towns.getAutoClaimManager().isAutoClaiming(uuid)) {
+            player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_UNCLAIM_AUTO_CLAIM_ON.getComponent(null)));
             return;
         }
         if (cacheManager.getCacheChunks().isEstablishedChunk(chunk)) {

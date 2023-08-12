@@ -144,7 +144,7 @@ public class CacheTowns extends DatabaseHandler {
     }
 
     public int getMaxChunkClaims(UUID uuid) {
-        final int defaultAmount = 10;
+        final int defaultAmount = 1000000;
         final int size = citizenData.hasCitizens(uuid) ? citizenData.getCitizenAmount(uuid) : 0;
         return (size * 2 + defaultAmount);
     }

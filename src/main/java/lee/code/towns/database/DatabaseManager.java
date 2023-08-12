@@ -259,7 +259,7 @@ public class DatabaseManager {
     public synchronized void createRentTable(RentTable rentTable) {
         Bukkit.getAsyncScheduler().runNow(towns, scheduledTask -> {
             try {
-                rentDao.create(rentTable);
+                rentDao.createIfNotExists(rentTable);
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -279,7 +279,7 @@ public class DatabaseManager {
     private synchronized void createServerTable(ServerTable serverTable) {
         Bukkit.getAsyncScheduler().runNow(towns, scheduledTask -> {
             try {
-                serverDao.create(serverTable);
+                serverDao.createIfNotExists(serverTable);
             } catch (SQLException e) {
                 e.printStackTrace();
             }
