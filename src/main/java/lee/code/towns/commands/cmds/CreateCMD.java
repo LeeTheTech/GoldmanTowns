@@ -76,8 +76,7 @@ public class CreateCMD extends SubCommand {
                 player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_CREATE_CHUNK_CLAIMED.getComponent(new String[] { town })));
                 return;
             }
-            cacheManager.getCacheChunks().claimChunk(chunk, uuid);
-            cacheManager.getCacheTowns().createNewTown(uuid, town, player.getLocation());
+            cacheManager.createTown(uuid, town, player.getLocation());
             towns.getBorderParticleManager().spawnParticleChunkBorder(player, player.getLocation().getChunk(), ChunkRenderType.CLAIM, false);
             Bukkit.getServer().sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_CREATE_ANNOUNCEMENT_TOWN_CREATED.getComponent(new String[] { player.getName(), town })));
             player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_CREATE_SUCCESS.getComponent(new String[] { town })));

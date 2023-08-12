@@ -6,7 +6,7 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class RenterPlayerListData {
+public class RenterListData {
 
     private final ConcurrentHashMap<UUID, Set<String>> rentedChunkListCache = new ConcurrentHashMap<>();
 

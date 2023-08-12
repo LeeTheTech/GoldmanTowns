@@ -2,7 +2,7 @@ package lee.code.towns.database.cache.renters;
 
 import lee.code.towns.database.DatabaseManager;
 import lee.code.towns.database.cache.handlers.DatabaseHandler;
-import lee.code.towns.database.cache.renters.data.RenterPlayerListData;
+import lee.code.towns.database.cache.renters.data.RenterListData;
 import lee.code.towns.database.tables.RentTable;
 import lombok.Getter;
 import org.bukkit.Bukkit;
@@ -12,13 +12,13 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class CacheRenters extends DatabaseHandler {
 
-    @Getter private final RenterPlayerListData renterPlayerListData;
+    @Getter private final RenterListData renterListData;
 
     private final ConcurrentHashMap<String, RentTable> rentCache = new ConcurrentHashMap<>();
 
     public CacheRenters(DatabaseManager databaseManager) {
         super(databaseManager);
-        this.renterPlayerListData = new RenterPlayerListData();
+        this.renterListData = new RenterListData();
     }
 
     private RentTable getRentTable(String chunk) {
@@ -27,7 +27,7 @@ public class CacheRenters extends DatabaseHandler {
 
     public void setRentTable(RentTable rentTable) {
      rentCache.put(rentTable.getChunk(), rentTable);
-     if (rentTable.getRenter() != null) renterPlayerListData.addChunkList(rentTable.getRenter(), rentTable.getChunk());
+     if (rentTable.getRenter() != null) renterListData.addChunkList(rentTable.getRenter(), rentTable.getChunk());
     }
 
     private void createRentChunkTable(UUID uuid, String chunk, double price) {
@@ -49,13 +49,13 @@ public class CacheRenters extends DatabaseHandler {
     public void setRenter(UUID uuid, String chunk) {
         final RentTable rentTable = getRentTable(chunk);
         rentTable.setRenter(uuid);
-        renterPlayerListData.addChunkList(uuid, chunk);
+        renterListData.addChunkList(uuid, chunk);
         updateRentDatabase(rentTable);
     }
 
     public void removeRenter(String chunk) {
         final RentTable rentTable = getRentTable(chunk);
-        renterPlayerListData.removeChunkList(rentTable.getRenter(), chunk);
+        renterListData.removeChunkList(rentTable.getRenter(), chunk);
         rentTable.setRenter(null);
         updateRentDatabase(rentTable);
     }

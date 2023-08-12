@@ -77,7 +77,7 @@ public class BorderCMD extends SubCommand {
                     player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_BORDER_SUCCESS.getComponent(new String[] { option })));
                 }
                 case "rented" -> {
-                    if (!cacheManager.getCacheRenters().getRenterPlayerListData().hasRentedChunks(uuid)) {
+                    if (!cacheManager.getCacheRenters().getRenterListData().hasRentedChunks(uuid)) {
                         player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_BORDER_NONE_RENTED.getComponent(null)));
                         return;
                     }

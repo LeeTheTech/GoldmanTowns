@@ -71,6 +71,7 @@ public class InfoCMD extends SubCommand {
             lines.add(Lang.COMMAND_INFO_TOWN_OWNER.getComponent(new String[] { Bukkit.getOfflinePlayer(owner).getName() }));
             lines.add(Lang.COMMAND_INFO_TOWN_CITIZENS.getComponent(new String[] { cacheTowns.getCitizenNames(owner) }));
             lines.add(Lang.COMMAND_INFO_TOWN_CHUNKS.getComponent(new String[] { String.valueOf(cacheChunks.getChunkClaims(owner)), String.valueOf(cacheTowns.getMaxChunkClaims(owner)) }));
+            lines.add(Lang.COMMAND_INFO_TOWN_OUTPOSTS.getComponent(new String[] { String.valueOf(cacheChunks.getChunkOutpostData().getOutpostAmount(owner)), String.valueOf(cacheChunks.getChunkOutpostData().getMaxOutpostAmount()) }));
             lines.add(Lang.COMMAND_INFO_TOWN_RENT.getComponent(new String[] { CoreUtil.parseTime(cacheServer.getNextRentCollectionTime()) }));
             lines.add(Component.text(""));
             lines.add(Lang.COMMAND_INFO_FOOTER.getComponent(null));

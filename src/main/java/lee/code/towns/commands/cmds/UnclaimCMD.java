@@ -55,7 +55,6 @@ public class UnclaimCMD extends SubCommand {
     @Override
     public void perform(Player player, String[] args) {
         final CacheManager cacheManager = towns.getCacheManager();
-        final BorderParticleManager borderParticleManager = towns.getBorderParticleManager();
         final String chunk = ChunkUtil.serializeChunkLocation(player.getLocation().getChunk());
         final UUID uuid = player.getUniqueId();
         if (!cacheManager.getCacheChunks().isClaimed(chunk)) {
@@ -66,8 +65,16 @@ public class UnclaimCMD extends SubCommand {
             player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_UNCLAIM_NOT_OWNER.getComponent(new String[] { chunk })));
             return;
         }
+        if (cacheManager.getCacheChunks().isEstablishedChunk(chunk)) {
+            player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_UNCLAIM_ESTABLISHED_CHUNK.getComponent(new String[] { chunk })));
+            return;
+        }
+        if (!cacheManager.getCacheChunks().isUnclaimSafe(uuid, chunk)) {
+            player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_UNCLAIM_UNSAFE.getComponent(new String[] { chunk })));
+            return;
+        }
         cacheManager.getCacheChunks().unclaimChunk(chunk);
-        borderParticleManager.spawnParticleChunkBorder(player, player.getLocation().getChunk(), ChunkRenderType.UNCLAIM, false);
+        towns.getBorderParticleManager().spawnParticleChunkBorder(player, player.getLocation().getChunk(), ChunkRenderType.UNCLAIM, false);
         player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_UNCLAIM_SUCCESS.getComponent(new String[] { chunk })));
     }
 

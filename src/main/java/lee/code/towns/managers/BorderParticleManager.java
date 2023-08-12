@@ -139,7 +139,7 @@ public class BorderParticleManager {
             switch (borderType) {
                 case TOWN -> {
                     final UUID owner = towns.getCacheManager().getCacheTowns().getTargetTownOwner(player.getUniqueId());
-                    final Set<String> chunks = towns.getCacheManager().getCacheChunks().getChunkList(owner);
+                    final Set<String> chunks = towns.getCacheManager().getCacheChunks().getChunkListData().getChunkList(owner);
                     renderBorderParticlesAroundChunks(player, chunks);
                 }
                 case CHUNK -> {
@@ -148,7 +148,7 @@ public class BorderParticleManager {
                     renderBorderParticlesAroundChunks(player, chunks);
                 }
                 case RENTED -> {
-                    final Set<String> chunks = towns.getCacheManager().getCacheRenters().getRenterPlayerListData().getChunkList(player.getUniqueId());
+                    final Set<String> chunks = towns.getCacheManager().getCacheRenters().getRenterListData().getChunkList(player.getUniqueId());
                     renderBorderParticlesAroundChunks(player, chunks);
                 }
             }

@@ -74,15 +74,6 @@ public class CacheTowns extends DatabaseHandler {
         return getTownTable(uuid).getTown();
     }
 
-    public void createNewTown(UUID uuid, String town, Location spawn) {
-        final TownsTable townsTable = getTownTable(uuid);
-        townsTable.setTown(town);
-        townsTable.setSpawn(CoreUtil.serializeLocation(spawn));
-        roleColorData.setDefaultRoleColor(uuid, false);
-        updateTownsDatabase(townsTable);
-        roleData.createDefaultRolePermissionTable(uuid);
-    }
-
     public void setTownName(UUID uuid, String town) {
         final TownsTable townsTable = getTownTable(uuid);
         townsTable.setTown(town);

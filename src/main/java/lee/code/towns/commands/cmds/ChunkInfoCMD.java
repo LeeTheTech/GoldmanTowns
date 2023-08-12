@@ -73,6 +73,9 @@ public class ChunkInfoCMD extends SubCommand {
                         Lang.VALUE_FORMAT.getString(new String[] { CoreUtil.parseValue(cacheManager.getCacheRenters().getRentPrice(chunk)) })
                 }));
             }
+            if (cacheManager.getCacheChunks().isEstablishedChunk(chunk)) {
+                lines.add(Lang.COMMAND_CHUNK_INFO_TOWN_ESTABLISHED_CHUNK.getComponent(new String[] { Lang.TRUE.getString() }));
+            }
             lines.add(Component.text(""));
             lines.add(Lang.COMMAND_CHUNK_INFO_FOOTER.getComponent(null));
             lines.forEach(player::sendMessage);

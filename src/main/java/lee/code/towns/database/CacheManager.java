@@ -2,6 +2,7 @@ package lee.code.towns.database;
 
 import lee.code.towns.Towns;
 import lee.code.towns.database.cache.chunks.CacheChunks;
+import lee.code.towns.utils.CoreUtil;
 import lee.code.towns.utils.FlagUtil;
 import lee.code.towns.database.cache.renters.CacheRenters;
 import lee.code.towns.database.cache.server.CacheServer;
@@ -74,6 +75,16 @@ public class CacheManager {
 
     public String getChunkTownName(String chunk) {
         return cacheTowns.getTownName(cacheChunks.getChunkOwner(chunk));
+    }
+
+    public void createTown(UUID uuid, String town, Location spawn) {
+        cacheChunks.claimEstablishedChunk(ChunkUtil.serializeChunkLocation(spawn.getChunk()), uuid);
+        final TownsTable townsTable = cacheTowns.getTownTable(uuid);
+        townsTable.setTown(town);
+        townsTable.setSpawn(CoreUtil.serializeLocation(spawn));
+        cacheTowns.getRoleColorData().setDefaultRoleColor(uuid, false);
+        cacheTowns.updateTownsDatabase(townsTable);
+        cacheTowns.getRoleData().createDefaultRolePermissionTable(uuid);
     }
 
     public void deleteTown(UUID uuid) {
