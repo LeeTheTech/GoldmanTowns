@@ -44,11 +44,10 @@ public class CacheChunks extends DatabaseHandler {
         chunkTable.setOutpost(outpost);
         chunkTable.setEstablishedChunk(townChunk);
         setChunkTable(chunkTable);
-        createChunkDatabase(chunkTable);
         final PermissionTable permissionTable = new PermissionTable(uuid, PermissionType.CHUNK);
         permissionTable.setChunk(chunk);
         chunkPermData.setPermissionTable(permissionTable);
-        createPermissionDatabase(permissionTable);
+        createChunkAndPermissionDatabase(chunkTable, permissionTable);
     }
 
     public void deleteAllChunkData(UUID uuid) {

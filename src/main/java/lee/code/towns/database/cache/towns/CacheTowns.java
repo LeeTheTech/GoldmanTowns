@@ -43,8 +43,7 @@ public class CacheTowns extends DatabaseHandler {
         final PermissionTable permissionTable = new PermissionTable(uuid, PermissionType.TOWN);
         setTownsTable(townsTable);
         permData.setPermissionTable(permissionTable);
-        createPermissionDatabase(permissionTable);
-        createTownsDatabase(townsTable);
+        createTownAndPermissionDatabase(townsTable, permissionTable);
     }
 
     public TownsTable getTownTable(UUID uuid) {

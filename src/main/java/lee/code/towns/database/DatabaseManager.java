@@ -196,6 +196,17 @@ public class DatabaseManager {
         });
     }
 
+    public synchronized void createChunkAndPermissionTable(ChunkTable chunkTable, PermissionTable permissionTable) {
+        Bukkit.getAsyncScheduler().runNow(towns, scheduledTask -> {
+            try {
+                permissionDao.createIfNotExists(permissionTable);
+                chunkDao.createIfNotExists(chunkTable);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        });
+    }
+
     public synchronized void updateChunkTable(ChunkTable chunkTable) {
         Bukkit.getAsyncScheduler().runNow(towns, scheduledTask -> {
             try {
@@ -230,6 +241,17 @@ public class DatabaseManager {
         Bukkit.getAsyncScheduler().runNow(towns, scheduledTask -> {
             try {
                 permissionDao.createIfNotExists(permissionTable);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        });
+    }
+
+    public synchronized void createTownAndPermissionTable(TownsTable townsTable, PermissionTable permissionTable) {
+        Bukkit.getAsyncScheduler().runNow(towns, scheduledTask -> {
+            try {
+                permissionDao.createIfNotExists(permissionTable);
+                townsDao.createIfNotExists(townsTable);
             } catch (SQLException e) {
                 e.printStackTrace();
             }

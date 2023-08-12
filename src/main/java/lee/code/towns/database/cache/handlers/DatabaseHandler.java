@@ -20,6 +20,10 @@ public class DatabaseHandler {
         databaseManager.createPermissionTable(permissionTable);
     }
 
+    public void createTownAndPermissionDatabase(TownsTable townsTable, PermissionTable permissionTable) {
+        databaseManager.createTownAndPermissionTable(townsTable, permissionTable);
+    }
+
     public void updatePermissionDatabase(PermissionTable permissionTable) {
         databaseManager.updatePermissionTable(permissionTable);
     }
@@ -39,6 +43,11 @@ public class DatabaseHandler {
     public void createChunkDatabase(ChunkTable chunkTable) {
         databaseManager.createChunkTable(chunkTable);
     }
+
+    public void createChunkAndPermissionDatabase(ChunkTable chunkTable, PermissionTable permissionTable) {
+        databaseManager.createChunkAndPermissionTable(chunkTable, permissionTable);
+    }
+
     public void deleteChunkDatabase(ChunkTable chunkTable) {
         databaseManager.deleteChunkTable(chunkTable);
     }
