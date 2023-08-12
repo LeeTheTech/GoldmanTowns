@@ -82,9 +82,7 @@ public class TownRoleData extends DatabaseHandler {
     }
 
     public void deleteAllRoles(UUID uuid) {
-        for (String role : getAllRoles(uuid)) {
-            deletePermissionDatabase(rolePermissionCache.get(uuid).get(role));
-        }
+        deleteAllRolePermissionDatabase(uuid);
         rolePermissionCache.remove(uuid);
     }
 }

@@ -137,6 +137,8 @@ public enum Lang {
     ERROR_UNCLAIM_AUTO_CLAIM_ON("&cYou can't run this command while auto claim is active."),
     ERROR_UNCLAIM_ESTABLISHED_CHUNK("&cYou can't unclaim your town's established chunk, this is the chunk your town was created on."),
     ERROR_UNCLAIM_UNSAFE("&cYou can't unclaim chunk &3{0} &cbecause is would disconnect other chunks from your town's established chunk."),
+    ERROR_UNCLAIM_RENTABLE("&cThe chunk &3{0} &cis rentable, remove it from being rentable to unclaim this chunk."),
+    ERROR_UNCLAIM_RENTED("&cThe chunk &3{0} &cis currently being rented by &6{0} &cso it can't be unclaimed."),
     ERROR_AUTO_CLAIM_RANGE("&cYou are now out of range from your last auto claim, auto claim has been toggled {0}&c."),
     ERROR_FLAG_MANAGER_CHUNK_NOT_TOWN("&cThe chunk you're standing is not apart of your town."),
     ERROR_FLAG_MANAGER_CHUNK_NOT_CLAIMED("&cThe chunk you're standing on is not claimed."),

@@ -166,6 +166,26 @@ public class DatabaseManager {
         });
     }
 
+    public synchronized void deleteAllRentTables(UUID uuid) {
+        Bukkit.getScheduler().runTaskAsynchronously(towns, () -> {
+            try {
+                rentDao.executeRaw("DELETE FROM renters WHERE owner = '" + uuid + "';");
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        });
+    }
+
+    public synchronized void deleteAllRolePermissionTables(UUID uuid) {
+        Bukkit.getScheduler().runTaskAsynchronously(towns, () -> {
+            try {
+                permissionDao.executeRaw("DELETE FROM permissions WHERE uuid = '" + uuid + "' AND permission_type = '" + PermissionType.ROLE.name() + "';");
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        });
+    }
+
     public synchronized void createTownsTable(TownsTable townsTable) {
         Bukkit.getAsyncScheduler().runNow(towns, scheduledTask -> {
             try {

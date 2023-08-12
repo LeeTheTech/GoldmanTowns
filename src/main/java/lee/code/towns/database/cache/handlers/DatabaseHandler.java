@@ -16,6 +16,10 @@ public class DatabaseHandler {
         databaseManager.deletePermissionTable(permissionTable);
     }
 
+    public void deleteAllRolePermissionDatabase(UUID uuid) {
+        databaseManager.deleteAllRolePermissionTables(uuid);
+    }
+
     public void createPermissionDatabase(PermissionTable permissionTable) {
         databaseManager.createPermissionTable(permissionTable);
     }
@@ -54,6 +58,10 @@ public class DatabaseHandler {
 
     public void deleteAllChunkDatabase(UUID uuid) {
         databaseManager.deleteAllChunkTables(uuid);
+    }
+
+    public void deleteAllRentDatabase(UUID uuid) {
+        databaseManager.deleteAllRentTables(uuid);
     }
 
     public void createRentDatabase(RentTable rentTable) {

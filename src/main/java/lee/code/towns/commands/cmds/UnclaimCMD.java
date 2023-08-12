@@ -77,6 +77,14 @@ public class UnclaimCMD extends SubCommand {
             player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_UNCLAIM_UNSAFE.getComponent(new String[] { chunk })));
             return;
         }
+        if (cacheManager.getCacheRenters().isRentable(chunk)) {
+            player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_UNCLAIM_RENTABLE.getComponent(new String[] { chunk })));
+            return;
+        }
+        if (cacheManager.getCacheRenters().isRented(chunk)) {
+            player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_UNCLAIM_RENTED.getComponent(new String[] { chunk, cacheManager.getCacheRenters().getRenterName(chunk) })));
+            return;
+        }
         cacheManager.getCacheChunks().unclaimChunk(chunk);
         towns.getBorderParticleManager().spawnParticleChunkBorder(player, player.getLocation().getChunk(), ChunkRenderType.UNCLAIM, false);
         player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_UNCLAIM_SUCCESS.getComponent(new String[] { chunk })));

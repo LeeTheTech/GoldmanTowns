@@ -103,6 +103,7 @@ public class CacheManager {
         cacheTowns.getRoleColorData().deleteRoleColorCache(uuid);
         cacheTowns.getPlayerRoleData().deletePlayerRolesCache(uuid);
         cacheTowns.getRoleData().deleteAllRoles(uuid);
+        cacheRenters.deleteAllRentData(uuid);
         cacheChunks.deleteAllChunkData(uuid);
         cacheTowns.updateTownsDatabase(townsTable);
     }
