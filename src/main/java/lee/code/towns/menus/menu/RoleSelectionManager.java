@@ -14,6 +14,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class RoleSelectionManager extends MenuGUI {
@@ -37,6 +38,7 @@ public class RoleSelectionManager extends MenuGUI {
     public void decorate(Player player) {
         addFillerGlass();
         final List<String> roles = towns.getCacheManager().getCacheTowns().getRoleData().getAllRoles(player.getUniqueId());
+        Collections.sort(roles);
         for (int roleSlot : roleSlots) {
             if (roles.size() > roleIndex) addButton(roleSlot, createRoleButton(player, roles.get(roleIndex)));
             else getInventory().setItem(roleSlot, new ItemStack(Material.AIR));
