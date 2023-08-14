@@ -28,5 +28,7 @@ public class QuitListener implements Listener {
         }
         //Chat Channel Manager
         towns.getChatChannelManager().removeChatChannel(uuid);
+        //Auto message manager
+        towns.getAutoMessageManager().removeAutoMessageData(uuid);
     }
 }

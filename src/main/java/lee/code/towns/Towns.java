@@ -5,15 +5,9 @@ import lee.code.towns.commands.CommandManager;
 import lee.code.towns.commands.TabCompletion;
 import lee.code.towns.database.DatabaseManager;
 import lee.code.towns.database.CacheManager;
-import lee.code.towns.listeners.AutoClaimListener;
-import lee.code.towns.listeners.ChatListener;
-import lee.code.towns.listeners.JoinListener;
-import lee.code.towns.listeners.QuitListener;
+import lee.code.towns.listeners.*;
 import lee.code.towns.listeners.chunks.*;
-import lee.code.towns.managers.AutoClaimManager;
-import lee.code.towns.managers.BorderParticleManager;
-import lee.code.towns.managers.ChatChannelManager;
-import lee.code.towns.managers.InviteManager;
+import lee.code.towns.managers.*;
 import lee.code.towns.menus.system.MenuListener;
 import lee.code.towns.menus.system.MenuManager;
 import lombok.Getter;
@@ -25,6 +19,7 @@ public class Towns extends JavaPlugin {
     @Getter private CommandManager commandManager;
     @Getter private ChatChannelManager chatChannelManager;
     @Getter private BorderParticleManager borderParticleManager;
+    @Getter private AutoMessageManager autoMessageManager;
     @Getter private AutoClaimManager autoClaimManager;
     @Getter private MenuManager menuManager;
     @Getter private InviteManager inviteManager;
@@ -35,6 +30,7 @@ public class Towns extends JavaPlugin {
     public void onEnable() {
         this.borderParticleManager = new BorderParticleManager(this);
         this.autoClaimManager = new AutoClaimManager();
+        this.autoMessageManager = new AutoMessageManager();
         this.databaseManager = new DatabaseManager(this);
         this.cacheManager = new CacheManager(this, databaseManager);
         this.commandManager = new CommandManager(this);
@@ -71,6 +67,7 @@ public class Towns extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new RedstoneListener(this), this);
         getServer().getPluginManager().registerEvents(new TeleportListener(this), this);
         getServer().getPluginManager().registerEvents(new ChatListener(this), this);
+        getServer().getPluginManager().registerEvents(new AutoMessageListener(this), this);
     }
 
     private void registerCommands() {
