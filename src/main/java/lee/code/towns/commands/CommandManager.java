@@ -53,6 +53,7 @@ public class CommandManager implements CommandExecutor {
         subCommands.add(new LeaveCMD(towns));
         subCommands.add(new ChunkInfoCMD(towns));
         subCommands.add(new RentCMD(towns));
+        subCommands.add(new BonusClaimsCMD(towns));
         subCommands.add(new TeleportCMD());
     }
 

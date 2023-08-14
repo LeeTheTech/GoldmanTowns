@@ -44,6 +44,9 @@ public class TownsTable {
     @DatabaseField(columnName = "trusted_players")
     private String trustedPlayers;
 
+    @DatabaseField(columnName = "bonus_claims")
+    private int bonusClaims;
+
     public TownsTable(UUID uniqueId) {
         this.uniqueId = uniqueId;
     }

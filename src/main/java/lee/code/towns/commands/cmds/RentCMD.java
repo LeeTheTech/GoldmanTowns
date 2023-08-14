@@ -80,7 +80,7 @@ public class RentCMD extends SubCommand {
                     }
                     if (args.length > 2) {
                         final String priceString = args[2];
-                        if (!CoreUtil.isPositiveNumber(priceString)) {
+                        if (!CoreUtil.isPositiveDoubleNumber(priceString)) {
                             player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_VALUE_INVALID.getComponent(new String[] { priceString })));
                             return;
                         }

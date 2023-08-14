@@ -24,7 +24,8 @@ import java.util.stream.Collectors;
 public class CoreUtil {
 
     private final static DecimalFormat amountFormatter = new DecimalFormat("#,###");
-    private final static Pattern numberPattern = Pattern.compile("^(?=.*[1-9])(\\d*\\.?\\d*)$");
+    private final static Pattern numberDoublePattern = Pattern.compile("^(?=.*[1-9])(\\d*\\.?\\d*)$");
+    private final static Pattern numberIntPattern = Pattern.compile("^[1-9]\\d*$");
 
     public static String parseValue(int value) {
         if (value == 0) return "0";
@@ -146,7 +147,11 @@ public class CoreUtil {
         else return minutes != 0L ? "&e" + minutes + "&6m&e, " + seconds + "&6s" : "&e" + seconds + "&6s";
     }
 
-    public static boolean isPositiveNumber(String numbers) {
-        return numberPattern.matcher(numbers).matches();
+    public static boolean isPositiveDoubleNumber(String numbers) {
+        return numberDoublePattern.matcher(numbers).matches();
+    }
+
+    public static boolean isPositiveIntNumber(String numbers) {
+        return numberIntPattern.matcher(numbers).matches();
     }
 }

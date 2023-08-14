@@ -145,7 +145,7 @@ public class CacheTowns extends DatabaseHandler {
     public int getMaxChunkClaims(UUID uuid) {
         final int defaultAmount = 1000000;
         final int size = citizenData.hasCitizens(uuid) ? citizenData.getCitizenAmount(uuid) : 0;
-        return (size * 2 + defaultAmount);
+        return (size * 2 + defaultAmount + getBonusClaims(uuid));
     }
 
     public boolean isTownPublic(UUID uuid) {
@@ -190,5 +190,27 @@ public class CacheTowns extends DatabaseHandler {
         roleColorData.removeRoleColor(uuid, role, false);
         roleData.deleteRole(uuid, role);
         updateTownsDatabase(getTownTable(uuid));
+    }
+
+    public int getBonusClaims(UUID uuid) {
+        return getTownTable(uuid).getBonusClaims();
+    }
+
+    public void setBonusClaims(UUID uuid, int amount) {
+        final TownsTable townsTable = getTownTable(uuid);
+        townsTable.setBonusClaims(amount);
+        updateTownsDatabase(townsTable);
+    }
+
+    public void addBonusClaims(UUID uuid, int amount) {
+        final TownsTable townsTable = getTownTable(uuid);
+        townsTable.setBonusClaims(townsTable.getBonusClaims() + amount);
+        updateTownsDatabase(townsTable);
+    }
+
+    public void removeBonusClaims(UUID uuid, int amount) {
+        final TownsTable townsTable = getTownTable(uuid);
+        townsTable.setBonusClaims(Math.max(townsTable.getBonusClaims() + amount, 0));
+        updateTownsDatabase(townsTable);
     }
 }
