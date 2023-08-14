@@ -210,7 +210,7 @@ public class CacheTowns extends DatabaseHandler {
 
     public void removeBonusClaims(UUID uuid, int amount) {
         final TownsTable townsTable = getTownTable(uuid);
-        townsTable.setBonusClaims(Math.max(townsTable.getBonusClaims() + amount, 0));
+        townsTable.setBonusClaims(Math.max(townsTable.getBonusClaims() - amount, 0));
         updateTownsDatabase(townsTable);
     }
 }
