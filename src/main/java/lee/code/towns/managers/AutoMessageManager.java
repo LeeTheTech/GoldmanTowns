@@ -48,8 +48,4 @@ public class AutoMessageManager {
                 CoreUtil.parseValue(value)
         })}));
     }
-
-    public void sendChunkRentedMessage(Player player, String name) {
-        player.sendActionBar(Lang.AUTO_MESSAGE_RENTED.getComponent(new String[] { name }));
-    }
 }

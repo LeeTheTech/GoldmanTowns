@@ -51,9 +51,6 @@ public class AutoMessageListener implements Listener {
                 }
             }
         }
-        if (cacheManager.getCacheRenters().isRented(e.getChunk())) {
-            autoMessageManager.sendChunkRentedMessage(player, cacheManager.getCacheRenters().getRenterName(e.getChunk()));
-        }
         if (autoMessageManager.isLastTownChecked(uuid, town)) return;
         autoMessageManager.setLastTownChecked(uuid, town);
         autoMessageManager.sendTownMessage(player, town);
