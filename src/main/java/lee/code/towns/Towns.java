@@ -10,7 +10,6 @@ import lee.code.towns.managers.*;
 import lee.code.towns.menus.system.MenuListener;
 import lee.code.towns.menus.system.MenuManager;
 import lombok.Getter;
-import me.lucko.commodore.Commodore;
 import me.lucko.commodore.CommodoreProvider;
 import me.lucko.commodore.file.CommodoreFileReader;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -28,7 +27,6 @@ public class Towns extends JavaPlugin {
     @Getter private MenuManager menuManager;
     @Getter private InviteManager inviteManager;
     @Getter private Data data;
-    @Getter private Commodore commodore;
     private DatabaseManager databaseManager;
 
     @Override
@@ -43,7 +41,6 @@ public class Towns extends JavaPlugin {
         this.menuManager = new MenuManager();
         this.inviteManager = new InviteManager(this);
         this.data = new Data();
-        this.commodore = CommodoreProvider.getCommodore(this);
 
         registerCommands();
         registerListeners();
@@ -87,7 +84,7 @@ public class Towns extends JavaPlugin {
     private void loadCommodoreData() {
         try {
             final LiteralCommandNode<?> towns = CommodoreFileReader.INSTANCE.parse(getResource("towns.commodore"));
-            commodore.register(getCommand("towns"), towns);
+            CommodoreProvider.getCommodore(this).register(getCommand("towns"), towns);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
