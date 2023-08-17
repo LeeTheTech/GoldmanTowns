@@ -144,14 +144,7 @@ public class InviteCMD extends SubCommand {
 
     @Override
     public List<String> onTabComplete(CommandSender sender, String[] args) {
-        switch (args.length) {
-            case 2 -> {
-                return StringUtil.copyPartialMatches(args[1], CoreUtil.getOnlinePlayers(), new ArrayList<>());
-            }
-            case 3 -> {
-                return StringUtil.copyPartialMatches(args[2], Arrays.asList("accept", "deny"), new ArrayList<>());
-            }
-        }
+        if (args.length == 2) return StringUtil.copyPartialMatches(args[1], CoreUtil.getOnlinePlayers(), new ArrayList<>());
         return new ArrayList<>();
     }
 }

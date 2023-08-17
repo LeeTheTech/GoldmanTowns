@@ -9,10 +9,8 @@ import lee.code.towns.managers.AutoClaimManager;
 import lee.code.towns.utils.CoreUtil;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.util.StringUtil;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
@@ -95,7 +93,6 @@ public class AbandonCMD extends SubCommand {
 
     @Override
     public List<String> onTabComplete(CommandSender sender, String[] args) {
-        if (args.length == 2) return StringUtil.copyPartialMatches(args[1], Arrays.asList("confirm", "deny"), new ArrayList<>());
-        return  new ArrayList<>();
+        return new ArrayList<>();
     }
 }

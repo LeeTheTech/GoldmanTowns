@@ -36,6 +36,10 @@ dependencies {
     //ormlite
     implementation 'com.j256.ormlite:ormlite-core:6.1'
     implementation 'com.j256.ormlite:ormlite-jdbc:6.1'
+
+    //commodore
+    implementation 'me.lucko:commodore:2.2'
+    implementation 'me.lucko:commodore-file:1.0'
 }
 
 shadowJar {
@@ -46,9 +50,14 @@ shadowJar {
     dependencies {
         include(dependency('com.j256.ormlite:ormlite-core:6.1'))
         include(dependency('com.j256.ormlite:ormlite-jdbc:6.1'))
+        include(dependency('me.lucko:commodore:2.2'))
+        include(dependency('me.lucko:commodore-file:1.0'))
+        exclude(dependency('com.mojang:brigadier'))
     }
 
     relocate 'com.j256.ormlite', 'lee.code.towns.ormlite'
+    relocate 'me.lucko.commodore', 'lee.code.towns.commodore'
+    relocate 'me.lucko.commodore-file', 'lee.code.towns.commodore-file'
 }
 
 

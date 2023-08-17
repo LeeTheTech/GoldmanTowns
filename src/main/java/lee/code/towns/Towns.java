@@ -1,8 +1,7 @@
 package lee.code.towns;
 
-import lee.code.towns.commands.ChatCommand;
-import lee.code.towns.commands.CommandManager;
-import lee.code.towns.commands.TabCompletion;
+import com.mojang.brigadier.tree.LiteralCommandNode;
+import lee.code.towns.commands.*;
 import lee.code.towns.database.DatabaseManager;
 import lee.code.towns.database.CacheManager;
 import lee.code.towns.listeners.*;
@@ -11,7 +10,12 @@ import lee.code.towns.managers.*;
 import lee.code.towns.menus.system.MenuListener;
 import lee.code.towns.menus.system.MenuManager;
 import lombok.Getter;
+import me.lucko.commodore.Commodore;
+import me.lucko.commodore.CommodoreProvider;
+import me.lucko.commodore.file.CommodoreFileReader;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import java.io.IOException;
 
 public class Towns extends JavaPlugin {
 
@@ -24,6 +28,7 @@ public class Towns extends JavaPlugin {
     @Getter private MenuManager menuManager;
     @Getter private InviteManager inviteManager;
     @Getter private Data data;
+    @Getter private Commodore commodore;
     private DatabaseManager databaseManager;
 
     @Override
@@ -38,6 +43,7 @@ public class Towns extends JavaPlugin {
         this.menuManager = new MenuManager();
         this.inviteManager = new InviteManager(this);
         this.data = new Data();
+        this.commodore = CommodoreProvider.getCommodore(this);
 
         registerCommands();
         registerListeners();
@@ -75,6 +81,15 @@ public class Towns extends JavaPlugin {
         getCommand("towns").setTabCompleter(new TabCompletion(this));
         getCommand("tc").setExecutor(new ChatCommand(this));
         getCommand("tc").setTabCompleter(new ChatCommand(this));
+        loadCommodoreData();
+    }
 
+    private void loadCommodoreData() {
+        try {
+            final LiteralCommandNode<?> towns = CommodoreFileReader.INSTANCE.parse(getResource("towns.commodore"));
+            commodore.register(getCommand("towns"), towns);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

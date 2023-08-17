@@ -161,9 +161,6 @@ public class RoleCMD extends SubCommand {
         if (sender instanceof Player player) {
             final CacheManager cacheManager = towns.getCacheManager();
             switch (args.length) {
-                case 2 -> {
-                    return StringUtil.copyPartialMatches(args[1], Arrays.asList("set", "create", "delete", "color"), new ArrayList<>());
-                }
                 case 3 -> {
                     if (args[1].equalsIgnoreCase("set")) return StringUtil.copyPartialMatches(args[2], CoreUtil.getOnlinePlayers(), new ArrayList<>());
                     if (args[1].equalsIgnoreCase("color")) return StringUtil.copyPartialMatches(args[2], cacheManager.getCacheTowns().getRoleData().getAllRolesAndMayor(player.getUniqueId()), new ArrayList<>());

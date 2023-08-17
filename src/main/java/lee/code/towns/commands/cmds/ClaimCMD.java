@@ -107,7 +107,6 @@ public class ClaimCMD extends SubCommand {
 
     @Override
     public List<String> onTabComplete(CommandSender sender, String[] args) {
-        if (args.length == 2) return StringUtil.copyPartialMatches(args[1], Collections.singletonList("outpost"), new ArrayList<>());
         return new ArrayList<>();
     }
 }

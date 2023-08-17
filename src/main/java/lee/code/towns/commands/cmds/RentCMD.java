@@ -212,19 +212,7 @@ public class RentCMD extends SubCommand {
 
     @Override
     public List<String> onTabComplete(CommandSender sender, String[] args) {
-        switch (args.length) {
-            case 2 -> {
-                return StringUtil.copyPartialMatches(args[1], Arrays.asList("price", "remove", "claim", "unclaim", "trust"), new ArrayList<>());
-            }
-            case 3 -> {
-                if (args[1].equalsIgnoreCase("claim")) return StringUtil.copyPartialMatches(args[2], Arrays.asList("confirm", "deny"), new ArrayList<>());
-                if (args[1].equalsIgnoreCase("unclaim")) return StringUtil.copyPartialMatches(args[2], Arrays.asList("confirm", "deny"), new ArrayList<>());
-                if (args[1].equalsIgnoreCase("trust")) return StringUtil.copyPartialMatches(args[2], Arrays.asList("add", "remove"), new ArrayList<>());
-            }
-            case 4 -> {
-                if (args[1].equalsIgnoreCase("trust")) return StringUtil.copyPartialMatches(args[3], CoreUtil.getOnlinePlayers(), new ArrayList<>());
-            }
-        }
-        return new ArrayList<>();
+        if (args.length == 4 && args[1].equalsIgnoreCase("trust")) return StringUtil.copyPartialMatches(args[3], CoreUtil.getOnlinePlayers(), new ArrayList<>());
+        else return new ArrayList<>();
     }
 }

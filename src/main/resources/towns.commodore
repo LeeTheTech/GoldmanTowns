@@ -1,0 +1,99 @@
+towns {
+  abandon {
+    confirm;
+    deny;
+  }
+  bonusclaims {
+    add {
+        player brigadier:string single_word {
+            value brigadier:integer;
+        }
+    }
+    remove {
+        player brigadier:string single_word {
+            value brigadier:integer;
+        }
+    }
+    set {
+        player brigadier:string single_word {
+            value brigadier:integer;
+        }
+    }
+  }
+  autoclaim;
+  border {
+    town;
+    chunk;
+    rented;
+    off;
+  }
+  chat;
+  chunkinfo;
+  claim {
+    outpost;
+  }
+  create {
+    name brigadier:string greedy_phrase;
+  }
+  flagmanager;
+  help;
+  info;
+  invite {
+    player brigadier:string single_word {
+        confirm;
+        deny;
+    }
+  }
+  leave {
+    confirm;
+    deny;
+  }
+  map;
+  public;
+  rent {
+    price {
+        value brigadier:integer;
+    }
+    remove;
+    claim {
+        confirm;
+        deny;
+    }
+    unclaim {
+        confirm;
+        deny;
+    }
+    trust {
+        add {
+             player brigadier:string single_word;
+        }
+        remove {
+            player brigadier:string single_word;
+        }
+    }
+  }
+  role {
+    set {
+        player brigadier:string single_word {
+            role brigadier:string single_word;
+        }
+    }
+    create {
+        role brigadier:string single_word;
+    }
+    delete {
+        role brigadier:string single_word;
+    }
+    color {
+        role brigadier:string single_word {
+            color brigadier:string single_word;
+        }
+    }
+  }
+  setspawn;
+  spawn;
+  teleport {
+    chunk brigadier:string single_word;
+  }
+  unclaim;
+}

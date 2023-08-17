@@ -12,7 +12,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.util.StringUtil;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
@@ -103,14 +102,7 @@ public class BonusClaimsCMD extends SubCommand {
 
     @Override
     public List<String> onTabComplete(CommandSender sender, String[] args) {
-        switch (args.length) {
-            case 2 -> {
-                return StringUtil.copyPartialMatches(args[1],  Arrays.asList("add", "set", "remove"), new ArrayList<>());
-            }
-            case 3 -> {
-                return StringUtil.copyPartialMatches(args[2], CoreUtil.getOnlinePlayers(), new ArrayList<>());
-            }
-        }
-        return new ArrayList<>();
+        if (args.length == 3) return StringUtil.copyPartialMatches(args[2], CoreUtil.getOnlinePlayers(), new ArrayList<>());
+        else return new ArrayList<>();
     }
 }

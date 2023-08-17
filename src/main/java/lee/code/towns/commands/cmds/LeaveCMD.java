@@ -4,7 +4,6 @@ import lee.code.towns.Towns;
 import lee.code.towns.commands.SubCommand;
 import lee.code.towns.commands.SubSyntax;
 import lee.code.towns.database.CacheManager;
-import lee.code.towns.enums.ChatChannel;
 import lee.code.towns.lang.Lang;
 import lee.code.towns.utils.CoreUtil;
 import org.bukkit.command.CommandSender;
@@ -94,7 +93,6 @@ public class LeaveCMD extends SubCommand {
 
     @Override
     public List<String> onTabComplete(CommandSender sender, String[] args) {
-        if (args.length == 2) return StringUtil.copyPartialMatches(args[1], Arrays.asList("confirm", "deny"), new ArrayList<>());
-        else return new ArrayList<>();
+        return new ArrayList<>();
     }
 }
