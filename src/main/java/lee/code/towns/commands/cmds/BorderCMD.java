@@ -54,43 +54,44 @@ public class BorderCMD extends SubCommand {
 
     @Override
     public void perform(Player player, String[] args) {
-        if (args.length > 1) {
-            final String option = args[1].toLowerCase();
-            final CacheManager cacheManager = towns.getCacheManager();
-            final UUID uuid = player.getUniqueId();
-            final BorderParticleManager borderParticleManager = towns.getBorderParticleManager();
-            switch (option) {
-                case "town" -> {
-                    if (!cacheManager.getCacheTowns().hasTownOrJoinedTown(uuid)) {
-                        player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_NO_TOWN.getComponent(null)));
-                        return;
-                    }
-                    if (borderParticleManager.hasBorderActive(uuid)) borderParticleManager.stopBorder(uuid);
-                    borderParticleManager.scheduleBorder(player, BorderType.valueOf(option.toUpperCase()));
-                    player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_BORDER_SUCCESS.getComponent(new String[] { option })));
+        if (args.length <= 1) {
+            player.sendMessage(Lang.USAGE.getComponent(null).append(CoreUtil.parseColorComponent(getSyntax())));
+            return;
+        }
+        final String option = args[1].toLowerCase();
+        final CacheManager cacheManager = towns.getCacheManager();
+        final UUID uuid = player.getUniqueId();
+        final BorderParticleManager borderParticleManager = towns.getBorderParticleManager();
+        switch (option) {
+            case "town" -> {
+                if (!cacheManager.getCacheTowns().hasTownOrJoinedTown(uuid)) {
+                    player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_NO_TOWN.getComponent(null)));
+                    return;
                 }
-                case "chunk" -> {
-                    if (borderParticleManager.hasBorderActive(uuid)) borderParticleManager.stopBorder(uuid);
-                    borderParticleManager.scheduleBorder(player, BorderType.valueOf(option.toUpperCase()));
-                    player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_BORDER_SUCCESS.getComponent(new String[] { option })));
-                }
-                case "rented" -> {
-                    if (!cacheManager.getCacheRenters().getRenterListData().hasRentedChunks(uuid)) {
-                        player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_BORDER_NONE_RENTED.getComponent(null)));
-                        return;
-                    }
-                    if (borderParticleManager.hasBorderActive(uuid)) borderParticleManager.stopBorder(uuid);
-                    borderParticleManager.scheduleBorder(player, BorderType.valueOf(option.toUpperCase()));
-                    player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_BORDER_SUCCESS.getComponent(new String[] { option })));
-                }
-                case "off" -> {
-                    if (borderParticleManager.hasBorderActive(uuid)) borderParticleManager.stopBorder(uuid);
-                    player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_BORDER_OFF_SUCCESS.getComponent(null)));
-                }
-                default -> player.sendMessage(Lang.USAGE.getComponent(null).append(CoreUtil.parseColorComponent(getSyntax())));
+                if (borderParticleManager.hasBorderActive(uuid)) borderParticleManager.stopBorder(uuid);
+                borderParticleManager.scheduleBorder(player, BorderType.valueOf(option.toUpperCase()));
+                player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_BORDER_SUCCESS.getComponent(new String[] { option })));
             }
-
-        } else player.sendMessage(Lang.USAGE.getComponent(null).append(CoreUtil.parseColorComponent(getSyntax())));
+            case "chunk" -> {
+                if (borderParticleManager.hasBorderActive(uuid)) borderParticleManager.stopBorder(uuid);
+                borderParticleManager.scheduleBorder(player, BorderType.valueOf(option.toUpperCase()));
+                player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_BORDER_SUCCESS.getComponent(new String[] { option })));
+            }
+            case "rented" -> {
+                if (!cacheManager.getCacheRenters().getRenterListData().hasRentedChunks(uuid)) {
+                    player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_BORDER_NONE_RENTED.getComponent(null)));
+                    return;
+                }
+                if (borderParticleManager.hasBorderActive(uuid)) borderParticleManager.stopBorder(uuid);
+                borderParticleManager.scheduleBorder(player, BorderType.valueOf(option.toUpperCase()));
+                player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_BORDER_SUCCESS.getComponent(new String[] { option })));
+            }
+            case "off" -> {
+                if (borderParticleManager.hasBorderActive(uuid)) borderParticleManager.stopBorder(uuid);
+                player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_BORDER_OFF_SUCCESS.getComponent(null)));
+            }
+            default -> player.sendMessage(Lang.USAGE.getComponent(null).append(CoreUtil.parseColorComponent(getSyntax())));
+        }
     }
 
     @Override

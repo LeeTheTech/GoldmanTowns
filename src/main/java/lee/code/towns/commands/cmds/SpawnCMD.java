@@ -54,14 +54,16 @@ public class SpawnCMD extends SubCommand {
     public void perform(Player player, String[] args) {
         final CacheManager cacheManager = towns.getCacheManager();
         final UUID uuid = player.getUniqueId();
-        if (cacheManager.getCacheTowns().hasTown(uuid) || cacheManager.getCacheTowns().hasJoinedTown(uuid)) {
-            final UUID owner = cacheManager.getCacheTowns().getTargetTownOwner(uuid);
-            final Location townSpawn = cacheManager.getCacheTowns().getTownSpawn(owner);
-            player.teleportAsync(townSpawn).thenAccept(result -> {
-                if (result) player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_SPAWN_SUCCESS.getComponent(null)));
-                else player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_SPAWN_FAILED.getComponent(null)));
-            });
-        } else player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_NO_TOWN.getComponent(null)));
+        if (!cacheManager.getCacheTowns().hasTownOrJoinedTown(uuid)) {
+            player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_NO_TOWN.getComponent(null)));
+            return;
+        }
+        final UUID owner = cacheManager.getCacheTowns().getTargetTownOwner(uuid);
+        final Location townSpawn = cacheManager.getCacheTowns().getTownSpawn(owner);
+        player.teleportAsync(townSpawn).thenAccept(result -> {
+            if (result) player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_SPAWN_SUCCESS.getComponent(null)));
+            else player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_SPAWN_FAILED.getComponent(null)));
+        });
     }
 
     @Override

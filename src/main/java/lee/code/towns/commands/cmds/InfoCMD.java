@@ -60,24 +60,27 @@ public class InfoCMD extends SubCommand {
         final CacheChunks cacheChunks = towns.getCacheManager().getCacheChunks();
         final CacheServer cacheServer  = towns.getCacheManager().getCacheServer();
         final UUID uuid = player.getUniqueId();
-        if (cacheTowns.hasTown(uuid) || cacheTowns.hasJoinedTown(uuid)) {
-            final List<Component> lines = new ArrayList<>();
-            final UUID owner = cacheTowns.getTargetTownOwner(uuid);
-            final String status = cacheTowns.isTownPublic(owner) ? Lang.PUBLIC.getString() : Lang.PRIVATE.getString();
-            lines.add(Lang.COMMAND_INFO_HEADER.getComponent(null));
-            lines.add(Component.text(""));
-            lines.add(Lang.COMMAND_INFO_TOWN_PUBLIC.getComponent(new String[] { status }));
-            lines.add(Lang.COMMAND_INFO_TOWN_NAME.getComponent(new String[] { cacheTowns.getTownName(owner) }));
-            lines.add(Lang.COMMAND_INFO_TOWN_OWNER.getComponent(new String[] { Bukkit.getOfflinePlayer(owner).getName() }));
-            lines.add(Lang.COMMAND_INFO_TOWN_CITIZENS.getComponent(new String[] { String.valueOf(cacheTowns.getCitizenData().getCitizenAmount(owner)) }));
-            lines.add(Lang.COMMAND_INFO_TOWN_CHUNKS.getComponent(new String[] { String.valueOf(cacheChunks.getChunkListData().getChunkClaims(owner)), String.valueOf(cacheTowns.getMaxChunkClaims(owner)) }));
-            lines.add(Lang.COMMAND_INFO_TOWN_BONUS_CLAIMS.getComponent(new String[] { CoreUtil.parseValue(cacheTowns.getBonusClaims(owner)) }));
-            lines.add(Lang.COMMAND_INFO_TOWN_OUTPOSTS.getComponent(new String[] { String.valueOf(cacheChunks.getChunkOutpostData().getOutpostAmount(owner)), String.valueOf(cacheChunks.getChunkOutpostData().getMaxOutpostAmount()) }));
-            lines.add(Lang.COMMAND_INFO_TOWN_RENT.getComponent(new String[] { CoreUtil.parseTime(cacheServer.getNextRentCollectionTime()) }));
-            lines.add(Component.text(""));
-            lines.add(Lang.COMMAND_INFO_FOOTER.getComponent(null));
-            for (Component line : lines) player.sendMessage(line);
-        } else player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_NO_TOWN.getComponent(null)));
+        if (!cacheTowns.hasTownOrJoinedTown(uuid)) {
+            player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_NO_TOWN.getComponent(null)));
+            return;
+        }
+
+        final List<Component> lines = new ArrayList<>();
+        final UUID owner = cacheTowns.getTargetTownOwner(uuid);
+        final String status = cacheTowns.isTownPublic(owner) ? Lang.PUBLIC.getString() : Lang.PRIVATE.getString();
+        lines.add(Lang.COMMAND_INFO_HEADER.getComponent(null));
+        lines.add(Component.text(""));
+        lines.add(Lang.COMMAND_INFO_TOWN_PUBLIC.getComponent(new String[] { status }));
+        lines.add(Lang.COMMAND_INFO_TOWN_NAME.getComponent(new String[] { cacheTowns.getTownName(owner) }));
+        lines.add(Lang.COMMAND_INFO_TOWN_OWNER.getComponent(new String[] { Bukkit.getOfflinePlayer(owner).getName() }));
+        lines.add(Lang.COMMAND_INFO_TOWN_CITIZENS.getComponent(new String[] { String.valueOf(cacheTowns.getCitizenData().getCitizenAmount(owner)) }));
+        lines.add(Lang.COMMAND_INFO_TOWN_CHUNKS.getComponent(new String[] { String.valueOf(cacheChunks.getChunkListData().getChunkClaims(owner)), String.valueOf(cacheTowns.getMaxChunkClaims(owner)) }));
+        lines.add(Lang.COMMAND_INFO_TOWN_BONUS_CLAIMS.getComponent(new String[] { CoreUtil.parseValue(cacheTowns.getBonusClaims(owner)) }));
+        lines.add(Lang.COMMAND_INFO_TOWN_OUTPOSTS.getComponent(new String[] { String.valueOf(cacheChunks.getChunkOutpostData().getOutpostAmount(owner)), String.valueOf(cacheChunks.getChunkOutpostData().getMaxOutpostAmount()) }));
+        lines.add(Lang.COMMAND_INFO_TOWN_RENT.getComponent(new String[] { CoreUtil.parseTime(cacheServer.getNextRentCollectionTime()) }));
+        lines.add(Component.text(""));
+        lines.add(Lang.COMMAND_INFO_FOOTER.getComponent(null));
+        for (Component line : lines) player.sendMessage(line);
     }
 
     @Override

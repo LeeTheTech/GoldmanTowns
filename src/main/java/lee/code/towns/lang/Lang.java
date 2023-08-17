@@ -174,7 +174,7 @@ public enum Lang {
     ERROR_RENT_REMOVE_NOT_OWNER("&cOnly the mayor of the town can remove the ability to rent a chunk."),
     ERROR_RENT_REMOVE_NOT_RENTABLE("&cThe chunk &3{0} &cis not rentable already."),
     ERROR_RENT_REMOVE_BEING_RENTED("&cThe chunk &3{0} &cis currently being rented by &6{1} &cso you can't remove it from being rentable until they unclaim it."),
-    ERROR_RENT_CLAIM_NOT_CITIZEN("&cYou are not apart of the town &3{0} &cso you can't rent this chunk."),
+    ERROR_RENT_CLAIM_NOT_CITIZEN("&cYou're not a citizen in the town &3{0} &cso you can't rent this chunk."),
     ERROR_RENT_CLAIM_NOT_RENTABLE("&cThe chunk &3{0} &cis currently not rentable."),
     ERROR_RENT_UNCLAIM_NOT_RENTED("&cThe chunk &3{0} &cis currently not being rented."),
     ERROR_RENT_UNCLAIM_NOT_RENTED_BY_PLAYER("&cThe chunk &3{0} &cis currently not being rented by you so you can't unclaim it."),

@@ -65,39 +65,41 @@ public class BonusClaimsCMD extends SubCommand {
 
     @Override
     public void performSender(CommandSender sender, String[] args) {
-        if (args.length > 3) {
-            final CacheTowns cacheTowns = towns.getCacheManager().getCacheTowns();
-            final String option = args[1].toLowerCase();
-            final String playerName = args[2];
-            final String amountString = args[3];
-            if (!CoreUtil.isPositiveIntNumber(amountString)) {
-                sender.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_VALUE_INVALID.getComponent(new String[] { amountString })));
-                return;
-            }
-            final int amount = Integer.parseInt(amountString);
-            final OfflinePlayer oPlayer = Bukkit.getOfflinePlayerIfCached(playerName);
-            if (oPlayer == null) {
-                sender.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_PLAYER_NOT_FOUND.getComponent(new String[] { playerName })));
-                return;
-            }
-            final UUID targetID = oPlayer.getUniqueId();
+        if (args.length <= 3) {
+            sender.sendMessage(Lang.USAGE.getComponent(null).append(CoreUtil.parseColorComponent(getSyntax())));
+            return;
+        }
+        final CacheTowns cacheTowns = towns.getCacheManager().getCacheTowns();
+        final String option = args[1].toLowerCase();
+        final String playerName = args[2];
+        final String amountString = args[3];
+        if (!CoreUtil.isPositiveIntNumber(amountString)) {
+            sender.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_VALUE_INVALID.getComponent(new String[] { amountString })));
+            return;
+        }
+        final int amount = Integer.parseInt(amountString);
+        final OfflinePlayer oPlayer = Bukkit.getOfflinePlayerIfCached(playerName);
+        if (oPlayer == null) {
+            sender.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_PLAYER_NOT_FOUND.getComponent(new String[] { playerName })));
+            return;
+        }
+        final UUID targetID = oPlayer.getUniqueId();
 
-            switch (option) {
-                case "set" -> {
-                    cacheTowns.setBonusClaims(targetID, amount);
-                    sender.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_BONUS_CLAIMS_SET_SUCCESS.getComponent(new String[] { playerName, CoreUtil.parseValue(amount) })));
-                }
-                case "add" -> {
-                    cacheTowns.addBonusClaims(targetID, amount);
-                    sender.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_BONUS_CLAIMS_ADD_SUCCESS.getComponent(new String[] { CoreUtil.parseValue(amount), playerName })));
-                }
-                case "remove" -> {
-                    cacheTowns.removeBonusClaims(targetID, amount);
-                    sender.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_BONUS_CLAIMS_REMOVE_SUCCESS.getComponent(new String[] { CoreUtil.parseValue(amount), playerName })));
-                }
-                default -> sender.sendMessage(Lang.USAGE.getComponent(null).append(CoreUtil.parseColorComponent(getSyntax())));
+        switch (option) {
+            case "set" -> {
+                cacheTowns.setBonusClaims(targetID, amount);
+                sender.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_BONUS_CLAIMS_SET_SUCCESS.getComponent(new String[] { playerName, CoreUtil.parseValue(amount) })));
             }
-        } else sender.sendMessage(Lang.USAGE.getComponent(null).append(CoreUtil.parseColorComponent(getSyntax())));
+            case "add" -> {
+                cacheTowns.addBonusClaims(targetID, amount);
+                sender.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_BONUS_CLAIMS_ADD_SUCCESS.getComponent(new String[] { CoreUtil.parseValue(amount), playerName })));
+            }
+            case "remove" -> {
+                cacheTowns.removeBonusClaims(targetID, amount);
+                sender.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_BONUS_CLAIMS_REMOVE_SUCCESS.getComponent(new String[] { CoreUtil.parseValue(amount), playerName })));
+            }
+            default -> sender.sendMessage(Lang.USAGE.getComponent(null).append(CoreUtil.parseColorComponent(getSyntax())));
+        }
     }
 
     @Override

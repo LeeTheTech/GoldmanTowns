@@ -45,15 +45,17 @@ public class TeleportCMD extends SubCommand {
 
     @Override
     public void perform(Player player, String[] args) {
-        if (args.length > 1) {
-            //TODO check if valid chunk to teleport to
-            //TODO check if owner or renting chunk
-            final String option = args[1].toLowerCase();
-            final String target = args[2].toLowerCase();
-            switch (option) {
-                case "chunk" -> ChunkUtil.teleportToMiddleOfChunk(player, target);
-            }
-        } else player.sendMessage(Lang.USAGE.getComponent(null).append(CoreUtil.parseColorComponent(getSyntax())));
+        if (args.length <= 1) {
+            player.sendMessage(Lang.USAGE.getComponent(null).append(CoreUtil.parseColorComponent(getSyntax())));
+            return;
+        }
+        //TODO check if valid chunk to teleport to
+        //TODO check if owner or renting chunk
+        final String option = args[1].toLowerCase();
+        final String target = args[2].toLowerCase();
+        switch (option) {
+            case "chunk" -> ChunkUtil.teleportToMiddleOfChunk(player, target);
+        }
     }
 
     @Override
@@ -66,7 +68,6 @@ public class TeleportCMD extends SubCommand {
 
     @Override
     public List<String> onTabComplete(CommandSender sender, String[] args) {
-        if (args.length == 2) return Arrays.asList("chunk", "town");
-        else return new ArrayList<>();
+        return new ArrayList<>();
     }
 }
