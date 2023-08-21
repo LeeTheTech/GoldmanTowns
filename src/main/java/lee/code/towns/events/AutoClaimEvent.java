@@ -14,13 +14,11 @@ public class AutoClaimEvent extends Event implements Cancellable {
 
     @Getter Player player;
     @Getter Location location;
-    @Getter String chunk;
     @Setter @Getter boolean cancelled;
 
-    public AutoClaimEvent(Player player, Location location, String chunk) {
+    public AutoClaimEvent(Player player, Location location) {
         this.player = player;
         this.location = location;
-        this.chunk = chunk;
     }
 
     @Override

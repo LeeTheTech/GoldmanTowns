@@ -23,45 +23,59 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class CommandManager implements CommandExecutor {
 
-    @Getter private final ArrayList<SubCommand> subCommands = new ArrayList<>();
+    //@Getter private final ArrayList<SubCommand> subCommands = new ArrayList<>();
+    private final ConcurrentHashMap<String, SubCommand> subCommands = new ConcurrentHashMap<>();
     private final ConcurrentHashMap<UUID, ScheduledTask> asyncTasks = new ConcurrentHashMap<>();
     private final Object synchronizedThreadLock = new Object();
     private final Towns towns;
 
     public CommandManager(Towns towns) {
         this.towns = towns;
-        registerSubCommands();
+        storeSubCommands();
     }
 
-    private void registerSubCommands() {
-        subCommands.add(new ChatCMD(towns));
-        subCommands.add(new CreateCMD(towns));
-        subCommands.add(new HelpCMD(towns));
-        subCommands.add(new BorderCMD(towns));
-        subCommands.add(new ClaimCMD(towns));
-        subCommands.add(new AutoClaimCMD(towns));
-        subCommands.add(new UnclaimCMD(towns));
-        subCommands.add(new MapCMD(towns));
-        subCommands.add(new SpawnCMD(towns));
-        subCommands.add(new SetSpawnCMD(towns));
-        subCommands.add(new FlagManagerCMD(towns));
-        subCommands.add(new RoleCMD(towns));
-        subCommands.add(new InviteCMD(towns));
-        subCommands.add(new InfoCMD(towns));
-        subCommands.add(new PublicCMD(towns));
-        subCommands.add(new AbandonCMD(towns));
-        subCommands.add(new LeaveCMD(towns));
-        subCommands.add(new ChunkInfoCMD(towns));
-        subCommands.add(new RentCMD(towns));
-        subCommands.add(new BonusClaimsCMD(towns));
-        subCommands.add(new TeleportCMD());
+    private void storeSubCommands() {
+        storeSubCommand(new ChatCMD(towns));
+        storeSubCommand(new ChatCMD(towns));
+        storeSubCommand(new CreateCMD(towns));
+        storeSubCommand(new HelpCMD(towns));
+        storeSubCommand(new BorderCMD(towns));
+        storeSubCommand(new ClaimCMD(towns));
+        storeSubCommand(new AutoClaimCMD(towns));
+        storeSubCommand(new UnclaimCMD(towns));
+        storeSubCommand(new MapCMD(towns));
+        storeSubCommand(new SpawnCMD(towns));
+        storeSubCommand(new SetSpawnCMD(towns));
+        storeSubCommand(new FlagManagerCMD(towns));
+        storeSubCommand(new RoleCMD(towns));
+        storeSubCommand(new InviteCMD(towns));
+        storeSubCommand(new InfoCMD(towns));
+        storeSubCommand(new PublicCMD(towns));
+        storeSubCommand(new AbandonCMD(towns));
+        storeSubCommand(new LeaveCMD(towns));
+        storeSubCommand(new ChunkInfoCMD(towns));
+        storeSubCommand(new RentCMD(towns));
+        storeSubCommand(new BonusClaimsCMD(towns));
+        storeSubCommand(new TeleportCMD());
     }
 
+    private void storeSubCommand(SubCommand subCommand) {
+        subCommands.put(subCommand.getName(), subCommand);
+    }
+    
+    public SubCommand getSubCommand(String command) {
+        return subCommands.get(command);
+    }
+    
+    public List<SubCommand> getSubCommands() {
+        return new ArrayList<>(subCommands.values());
+    }
+    
     @Override
     public boolean onCommand(@NonNull CommandSender sender, @NonNull Command command, @NonNull String label, String[] args) {
         if (sender instanceof Player player) {
             if (args.length > 0) {
-                for (SubCommand subCommand : subCommands) {
+                for (SubCommand subCommand : getSubCommands()) {
                     if (args[0].equalsIgnoreCase(subCommand.getName())) {
                         if (!player.hasPermission(subCommand.getPermission())) player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_NO_PERMISSION.getComponent(null)));
                         if (subCommand.performAsync()) performAsync(player, subCommand, args);
@@ -72,7 +86,7 @@ public class CommandManager implements CommandExecutor {
             }
             sendHelpMessage(player);
         } else if (args.length > 0) {
-            for (SubCommand subCommand : subCommands) {
+            for (SubCommand subCommand : getSubCommands()) {
                 if (args[0].equalsIgnoreCase(subCommand.getName())) {
                     if (subCommand.performAsync()) performAsync(sender, subCommand, args);
                     else subCommand.performConsole(sender, args);
@@ -122,7 +136,7 @@ public class CommandManager implements CommandExecutor {
         lines.add(Component.text(""));
 
         //TODO fix <> issue
-        for (SubCommand subCommand : subCommands) {
+        for (SubCommand subCommand : getSubCommands()) {
             if (sender.hasPermission(subCommand.getPermission())) {
                 final Component helpSubCommand = Lang.COMMAND_HELP_SUB_COMMAND.getComponent(new String[] { String.valueOf(number), subCommand.getSyntax() })
                         .clickEvent(ClickEvent.clickEvent(ClickEvent.Action.SUGGEST_COMMAND, CoreUtil.stripColorCodes(subCommand.getSyntax())))

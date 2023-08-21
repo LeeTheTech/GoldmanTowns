@@ -179,7 +179,7 @@ public enum Lang {
     ERROR_RENT_UNCLAIM_NOT_RENTED("&cThe chunk &3{0} &cis currently not being rented."),
     ERROR_RENT_UNCLAIM_NOT_RENTED_BY_PLAYER("&cThe chunk &3{0} &cis currently not being rented by you so you can't unclaim it."),
     ERROR_RENT_PRICE_INVALID("&cThe input &6{0} &cis not an acceptable value."),
-    ERROR_VALUE_INVALID("&cThe input &6{0} &cis not an acceptable value."),
+    ERROR_VALUE_INVALID("&cThe input &3{0} &cis not an acceptable value."),
     ERROR_TOWN_OWNER_LEAVE("&cYou are the owner of the town, if you want to leave you'll need to abandon the town."),
     ERROR_BORDER_NONE_RENTED("&cYou currently don't have any rented chunks."),
     ;

@@ -8,6 +8,7 @@ version '1.0.0'
 
 repositories {
     mavenCentral()
+    mavenLocal()
     maven {
         name = "paper-repo"
         url = "https://repo.papermc.io/repository/maven-public/"
@@ -40,6 +41,10 @@ dependencies {
     //commodore
     implementation 'me.lucko:commodore:2.2'
     implementation 'me.lucko:commodore-file:1.0'
+
+    //Goldman Central API
+    compileOnly 'lee.code.central:central:1.0.0'
+
 }
 
 shadowJar {

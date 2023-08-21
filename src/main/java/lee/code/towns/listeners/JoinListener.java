@@ -3,7 +3,7 @@ package lee.code.towns.listeners;
 import lee.code.towns.Towns;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 
 public class JoinListener implements Listener {
 
@@ -14,9 +14,9 @@ public class JoinListener implements Listener {
     }
 
     @EventHandler
-    public void onJoin(AsyncPlayerPreLoginEvent e) {
-        if (!towns.getCacheManager().getCacheTowns().hasTownsData(e.getUniqueId())) {
-            towns.getCacheManager().getCacheTowns().createPlayerData(e.getUniqueId());
+    public void onJoin(PlayerJoinEvent e) {
+        if (!towns.getCacheManager().getCacheTowns().hasTownsData(e.getPlayer().getUniqueId())) {
+            towns.getCacheManager().getCacheTowns().createPlayerData(e.getPlayer().getUniqueId());
         }
     }
 }

@@ -5,6 +5,7 @@ import lee.code.towns.commands.SubCommand;
 import lee.code.towns.database.CacheManager;
 import lee.code.towns.enums.ChunkRenderType;
 import lee.code.towns.lang.Lang;
+import lee.code.towns.managers.AutoClaimManager;
 import lee.code.towns.managers.BorderParticleManager;
 import lee.code.towns.utils.ChunkUtil;
 import org.bukkit.command.CommandSender;
@@ -54,6 +55,7 @@ public class ClaimCMD extends SubCommand {
     public void perform(Player player, String[] args) {
         final CacheManager cacheManager = towns.getCacheManager();
         final BorderParticleManager borderParticleManager = towns.getBorderParticleManager();
+        final AutoClaimManager autoClaimManager = towns.getAutoClaimManager();
         final String chunk = ChunkUtil.serializeChunkLocation(player.getLocation().getChunk());
         final UUID uuid = player.getUniqueId();
         if (!cacheManager.getCacheTowns().hasTown(uuid)) {
@@ -89,6 +91,10 @@ public class ClaimCMD extends SubCommand {
         }
         if (!cacheManager.getCacheChunks().isConnectedChunk(uuid, chunk)) {
             player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_CLAIM_NOT_CONNECTED_CHUNK.getComponent(new String[] { chunk })));
+            if (autoClaimManager.isAutoClaiming(uuid)) {
+                autoClaimManager.removeAutoClaiming(uuid);
+                player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_AUTO_CLAIM_RANGE.getComponent(new String[] { Lang.OFF.getString() })));
+            }
             return;
         }
         cacheManager.getCacheChunks().claimChunk(chunk, uuid);

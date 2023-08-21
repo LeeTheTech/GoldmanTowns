@@ -14,6 +14,9 @@ public class Data {
     @Getter private final Set<EntityType> monsterTypes = ConcurrentHashMap.newKeySet();
     @Getter private final ConcurrentHashMap<String, String> colors = new ConcurrentHashMap<>();
 
+    public Data() {
+        loadData();
+    }
 
     public void loadData() {
         monsterTypes.addAll(EnumSet.allOf(MonsterType.class).stream().map(MonsterType::getEntityType).toList());

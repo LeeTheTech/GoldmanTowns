@@ -46,7 +46,6 @@ public class Towns extends JavaPlugin {
         registerListeners();
 
         databaseManager.initialize(true);
-        data.loadData();
     }
 
     @Override
