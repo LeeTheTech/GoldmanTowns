@@ -1,4 +1,4 @@
-name: Towns
+name: GoldmanTowns
 version: ${version}
 main: lee.code.towns.Towns
 api-version: 1.19
