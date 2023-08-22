@@ -74,7 +74,7 @@ public class Towns extends JavaPlugin {
 
     private void registerCommands() {
         getCommand("towns").setExecutor(commandManager);
-        getCommand("towns").setTabCompleter(new TabCompletion(this));
+        getCommand("towns").setTabCompleter(new TabCompletion(commandManager));
         getCommand("tc").setExecutor(new ChatCommand(this));
         getCommand("tc").setTabCompleter(new ChatCommand(this));
         loadCommodoreData();

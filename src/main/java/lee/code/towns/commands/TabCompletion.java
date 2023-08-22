@@ -1,6 +1,5 @@
 package lee.code.towns.commands;
 
-import lee.code.towns.Towns;
 import lombok.NonNull;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -12,17 +11,12 @@ public class TabCompletion implements TabCompleter {
 
     private final CommandManager commandManager;
 
-    public TabCompletion(Towns towns) {
-        this.commandManager = towns.getCommandManager();
+    public TabCompletion(CommandManager commandManager) {
+        this.commandManager = commandManager;
     }
 
     @Override
     public List<String> onTabComplete(@NonNull CommandSender sender, @NonNull Command command, @NonNull String alias, String[] args) {
-        for (SubCommand subCommand : commandManager.getSubCommands()) {
-            if (args[0].equalsIgnoreCase(subCommand.getName())) {
-                return subCommand.onTabComplete(sender, args);
-            }
-        }
-        return null;
+        return commandManager.getSubCommand(args[0].toLowerCase()).onTabComplete(sender, args);
     }
 }
