@@ -5,7 +5,6 @@ import lee.code.towns.Towns;
 import lee.code.towns.commands.cmds.*;
 import lee.code.towns.lang.Lang;
 import lee.code.towns.utils.CoreUtil;
-import lombok.Getter;
 import lombok.NonNull;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
@@ -22,8 +21,6 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class CommandManager implements CommandExecutor {
-
-    //@Getter private final ArrayList<SubCommand> subCommands = new ArrayList<>();
     private final ConcurrentHashMap<String, SubCommand> subCommands = new ConcurrentHashMap<>();
     private final ConcurrentHashMap<UUID, ScheduledTask> asyncTasks = new ConcurrentHashMap<>();
     private final Object synchronizedThreadLock = new Object();
