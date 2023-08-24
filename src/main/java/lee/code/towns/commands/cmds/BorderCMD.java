@@ -88,7 +88,7 @@ public class BorderCMD extends SubCommand {
             }
             case "off" -> {
                 if (borderParticleManager.hasBorderActive(uuid)) borderParticleManager.stopBorder(uuid);
-                player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_BORDER_OFF_SUCCESS.getComponent(null)));
+                player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_BORDER_OFF_SUCCESS.getComponent(new String[] { Lang.OFF.getString(null) } )));
             }
             default -> player.sendMessage(Lang.USAGE.getComponent(null).append(CoreUtil.parseColorComponent(getSyntax())));
         }

@@ -33,7 +33,7 @@ public enum Lang {
     COMMAND_CREATE_ANNOUNCEMENT_TOWN_CREATED("&aThe player &6{0} &ahas created the town &3{1}&a!"),
     COMMAND_CREATE_SUCCESS("&aYou successfully created the town &3{0}&a!"),
     COMMAND_BORDER_SUCCESS("&aYou successfully toggled &3{0} &aborder on!"),
-    COMMAND_BORDER_OFF_SUCCESS("&aYou successfully toggled your border off!"),
+    COMMAND_BORDER_OFF_SUCCESS("&aYou successfully toggled your border {0}&a!"),
     COMMAND_BONUS_CLAIMS_SET_SUCCESS("&aSuccessfully set player &6{0} &abonus claims to &3{1}&a!"),
     COMMAND_BONUS_CLAIMS_ADD_SUCCESS("&aSuccessfully added &3{0} &abonus claims to player &6{1}&a!"),
     COMMAND_BONUS_CLAIMS_REMOVE_SUCCESS("&aSuccessfully removed &3{0} &abonus claims from player &6{1}&a!"),
