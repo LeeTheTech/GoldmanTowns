@@ -12,7 +12,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
 public class InviteManager {
-    //TODO fix so players can send many invites...
+
     private final Towns towns;
     public InviteManager(Towns towns) {
         this.towns = towns;
