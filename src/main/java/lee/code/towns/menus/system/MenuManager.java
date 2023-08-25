@@ -35,9 +35,7 @@ public class MenuManager {
 
     public void handleClick(InventoryClickEvent event) {
         final InventoryHandler handler = activeInventories.get(event.getInventory());
-        if (handler != null) {
-            handler.onClick(event);
-        }
+        if (handler != null) handler.onClick(event);
     }
 
     public void handleOpen(InventoryOpenEvent event) {

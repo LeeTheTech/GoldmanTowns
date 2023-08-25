@@ -76,7 +76,7 @@ public class InviteCMD extends SubCommand {
                         return;
                     }
                     cacheManager.getCacheTowns().getCitizenData().addCitizen(targetID, player.getUniqueId());
-                    inviteManager.removeActiveInvite(targetID);
+                    inviteManager.removeActiveInvite(targetID, player.getUniqueId());
                     cacheManager.getCacheTowns().sendTownMessage(targetID, Lang.PREFIX.getComponent(null).append(Lang.COMMAND_INVITE_ACCEPT_JOINED_TOWN.getComponent(new String[] { player.getName() } )));
                     final Player target = Bukkit.getPlayer(targetID);
                     if (target != null && target.isOnline()) target.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_INVITE_ACCEPT_TARGET_SUCCESS.getComponent(new String[] { player.getName() })));
@@ -87,7 +87,7 @@ public class InviteCMD extends SubCommand {
                         player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_INVITE_INVALID.getComponent(null)));
                         return;
                     }
-                    inviteManager.removeActiveInvite(targetID);
+                    inviteManager.removeActiveInvite(targetID, player.getUniqueId());
                     final Player target = Bukkit.getPlayer(targetID);
                     if (target != null && target.isOnline()) target.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_INVITE_DENY_TARGET_SUCCESS.getComponent(new String[] { player.getName() })));
                     player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_INVITE_DENY_SUCCESS.getComponent(new String[] { targetName })));

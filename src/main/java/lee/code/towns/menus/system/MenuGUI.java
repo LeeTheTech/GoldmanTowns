@@ -2,6 +2,7 @@ package lee.code.towns.menus.system;
 
 import lee.code.towns.menus.menu.menudata.MenuItem;
 import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
@@ -52,8 +53,16 @@ public abstract class MenuGUI implements InventoryHandler {
 
     @Override
     public void onClick(InventoryClickEvent event) {
+        final Player player = (Player) event.getWhoClicked();
+        if (player.getInventory().equals(event.getClickedInventory())) {
+            if (event.getAction().equals(InventoryAction.MOVE_TO_OTHER_INVENTORY)) {
+                event.setCancelled(true);
+                return;
+            }
+            return;
+        }
         event.setCancelled(true);
-        if (delayManager.hasDelayOrSchedule(event.getWhoClicked().getUniqueId())) return;
+        if (delayManager.hasDelayOrSchedule(player.getUniqueId())) return;
         final int slot = event.getSlot();
         final MenuButton button = buttonMap.get(slot);
         if (button != null) {
