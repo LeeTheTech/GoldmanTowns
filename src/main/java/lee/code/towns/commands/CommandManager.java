@@ -98,10 +98,8 @@ public class CommandManager implements CommandExecutor {
         if (sender instanceof Player player) {
             final UUID uuid = player.getUniqueId();
             if (asyncTasks.containsKey(uuid)) {
-                if (!asyncTasks.get(uuid).getExecutionState().equals(ScheduledTask.ExecutionState.FINISHED)) {
-                    player.sendMessage(Lang.ERROR_ONE_COMMAND_AT_A_TIME.getComponent(null));
-                    return;
-                }
+                player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_ONE_COMMAND_AT_A_TIME.getComponent(null)));
+                return;
             }
             if (subCommand.performAsyncSynchronized()) {
                 synchronized (synchronizedThreadLock) {
