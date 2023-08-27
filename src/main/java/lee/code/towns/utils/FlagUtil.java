@@ -6,6 +6,7 @@ import lee.code.towns.enums.Flag;
 import java.util.*;
 
 public class FlagUtil {
+
   private static final Set<Flag> roleFlag = Collections.synchronizedSet(new HashSet<>(List.of(
     Flag.CHANGE_CHUNK_FLAGS,
     Flag.CHANGE_GLOBAL_FLAGS,

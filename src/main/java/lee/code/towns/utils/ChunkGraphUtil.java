@@ -4,6 +4,7 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class ChunkGraphUtil {
+
   public static boolean areChunksConnected(Set<String> chunks, Set<String> outposts, String removedChunk) {
     final Map<String, Set<String>> chunkGraph = new ConcurrentHashMap<>();
     final Set<String> targetChunks = ConcurrentHashMap.newKeySet();

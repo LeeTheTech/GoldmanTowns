@@ -8,6 +8,7 @@ import org.bukkit.World;
 import org.bukkit.entity.Player;
 
 public class ChunkUtil {
+
   public static String serializeChunkLocation(Chunk chunk) {
     return chunk.getWorld().getName() + "," + chunk.getX() + "," + chunk.getZ();
   }
