@@ -9,14 +9,13 @@ import lombok.Setter;
 @Getter
 @DatabaseTable(tableName = "server")
 public class ServerTable {
+  @DatabaseField(generatedId = true)
+  private int id;
 
-    @DatabaseField(generatedId = true)
-    private int id;
+  @DatabaseField(columnName = "rent_collection_time", canBeNull = false)
+  private Long rentCollectionTime;
 
-    @DatabaseField(columnName = "rent_collection_time", canBeNull = false)
-    private Long rentCollectionTime;
-
-    public ServerTable() {
-        this.rentCollectionTime = 0L;
-    }
+  public ServerTable() {
+    this.rentCollectionTime = 0L;
+  }
 }

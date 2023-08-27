@@ -18,54 +18,53 @@ import java.util.Collections;
 import java.util.List;
 
 public class RoleSelectionManager extends MenuGUI {
+  private final Towns towns;
+  private final ArrayList<Integer> roleSlots = new ArrayList<>(List.of(10, 11, 12, 13, 14, 15, 16));
+  private int roleIndex = 0;
 
-    private final Towns towns;
-    private final ArrayList<Integer> roleSlots = new ArrayList<>(List.of(10, 11, 12, 13, 14, 15, 16));
-    private int roleIndex = 0;
+  public RoleSelectionManager(MenuPlayerData menuPlayerData, Towns towns) {
+    super(menuPlayerData);
+    this.towns = towns;
+    setInventory();
+  }
 
-    public RoleSelectionManager(MenuPlayerData menuPlayerData, Towns towns) {
-        super(menuPlayerData);
-        this.towns = towns;
-        setInventory();
+  @Override
+  protected Inventory createInventory() {
+    return Bukkit.createInventory(null, 36, Lang.MENU_ROLE_SELECTION_MANAGER_TITLE.getComponent(null));
+  }
+
+  @Override
+  public void decorate(Player player) {
+    addFillerGlass();
+    final List<String> roles = towns.getCacheManager().getCacheTowns().getRoleData().getAllRoles(player.getUniqueId());
+    Collections.sort(roles);
+    for (int roleSlot : roleSlots) {
+      if (roles.size() > roleIndex) addButton(roleSlot, createRoleButton(player, roles.get(roleIndex)));
+      else getInventory().setItem(roleSlot, new ItemStack(Material.AIR));
+      roleIndex++;
     }
+    addButton(31, backButton(player));
+    super.decorate(player);
+  }
 
-    @Override
-    protected Inventory createInventory() {
-        return Bukkit.createInventory(null,36, Lang.MENU_ROLE_SELECTION_MANAGER_TITLE.getComponent(null));
-    }
-
-    @Override
-    public void decorate(Player player) {
-        addFillerGlass();
-        final List<String> roles = towns.getCacheManager().getCacheTowns().getRoleData().getAllRoles(player.getUniqueId());
-        Collections.sort(roles);
-        for (int roleSlot : roleSlots) {
-            if (roles.size() > roleIndex) addButton(roleSlot, createRoleButton(player, roles.get(roleIndex)));
-            else getInventory().setItem(roleSlot, new ItemStack(Material.AIR));
-            roleIndex++;
+  private MenuButton createRoleButton(Player player, String role) {
+    return new MenuButton()
+      .creator(p -> MenuItem.ROLE.createRoleItem(role))
+      .consumer(e -> {
+        final CacheTowns cacheTowns = towns.getCacheManager().getCacheTowns();
+        if (!cacheTowns.hasTown(player.getUniqueId())) {
+          e.getWhoClicked().getInventory().close();
+          return;
         }
-        addButton(31, backButton(player));
-        super.decorate(player);
-    }
+        towns.getMenuManager().openMenu(new FlagManagerRole(menuPlayerData, towns, role), player);
+      });
+  }
 
-    private MenuButton createRoleButton(Player player, String role) {
-        return new MenuButton()
-                .creator(p -> MenuItem.ROLE.createRoleItem(role))
-                .consumer(e -> {
-                    final CacheTowns cacheTowns = towns.getCacheManager().getCacheTowns();
-                    if (!cacheTowns.hasTown(player.getUniqueId())) {
-                        e.getWhoClicked().getInventory().close();
-                        return;
-                    }
-                    towns.getMenuManager().openMenu(new FlagManagerRole(menuPlayerData, towns, role), player);
-                });
-    }
-
-    private MenuButton backButton(Player player) {
-        return new MenuButton()
-                .creator(p -> MenuItem.BACK.createItem())
-                .consumer(e -> {
-                    towns.getMenuManager().openMenu(new FlagManager(menuPlayerData, towns), player);
-                });
-    }
+  private MenuButton backButton(Player player) {
+    return new MenuButton()
+      .creator(p -> MenuItem.BACK.createItem())
+      .consumer(e -> {
+        towns.getMenuManager().openMenu(new FlagManager(menuPlayerData, towns), player);
+      });
+  }
 }

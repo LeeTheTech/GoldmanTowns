@@ -14,91 +14,91 @@ import java.util.List;
 import java.util.UUID;
 
 public class UnclaimCMD extends SubCommand {
+  private final Towns towns;
 
-    private final Towns towns;
+  public UnclaimCMD(Towns towns) {
+    this.towns = towns;
+  }
 
-    public UnclaimCMD(Towns towns) {
-        this.towns = towns;
+  @Override
+  public String getName() {
+    return "unclaim";
+  }
+
+  @Override
+  public String getDescription() {
+    return "Unclaim the chunk you're standing on.";
+  }
+
+  @Override
+  public String getSyntax() {
+    return "&e/towns unclaim";
+  }
+
+  @Override
+  public String getPermission() {
+    return "towns.command.unclaim";
+  }
+
+  @Override
+  public boolean performAsync() {
+    return true;
+  }
+
+  @Override
+  public boolean performAsyncSynchronized() {
+    return true;
+  }
+
+  @Override
+  public void perform(Player player, String[] args) {
+    final CacheManager cacheManager = towns.getCacheManager();
+    final String chunk = ChunkUtil.serializeChunkLocation(player.getLocation().getChunk());
+    final UUID uuid = player.getUniqueId();
+    if (!cacheManager.getCacheChunks().isClaimed(chunk)) {
+      player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_UNCLAIM_NOT_CLAIMED.getComponent(new String[]{chunk})));
+      return;
     }
-
-    @Override
-    public String getName() {
-        return "unclaim";
+    if (!cacheManager.getCacheChunks().isChunkOwner(chunk, uuid)) {
+      player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_UNCLAIM_NOT_OWNER.getComponent(new String[]{chunk})));
+      return;
     }
-
-    @Override
-    public String getDescription() {
-        return "Unclaim the chunk you're standing on.";
+    if (towns.getAutoClaimManager().isAutoClaiming(uuid)) {
+      player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_UNCLAIM_AUTO_CLAIM_ON.getComponent(null)));
+      return;
     }
-
-    @Override
-    public String getSyntax() {
-        return "&e/towns unclaim";
+    if (cacheManager.getCacheChunks().isEstablishedChunk(chunk)) {
+      player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_UNCLAIM_ESTABLISHED_CHUNK.getComponent(new String[]{chunk})));
+      return;
     }
-
-    @Override
-    public String getPermission() {
-        return "towns.command.unclaim";
+    if (!cacheManager.getCacheChunks().isUnclaimSafe(uuid, chunk)) {
+      player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_UNCLAIM_UNSAFE.getComponent(new String[]{chunk})));
+      return;
     }
-
-    @Override
-    public boolean performAsync() {
-        return true;
+    if (cacheManager.getCacheRenters().isRentable(chunk)) {
+      player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_UNCLAIM_RENTABLE.getComponent(new String[]{chunk})));
+      return;
     }
-
-    @Override
-    public boolean performAsyncSynchronized() {
-        return true;
+    if (cacheManager.getCacheRenters().isRented(chunk)) {
+      player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_UNCLAIM_RENTED.getComponent(new String[]{chunk, cacheManager.getCacheRenters().getRenterName(chunk)})));
+      return;
     }
+    cacheManager.getCacheChunks().unclaimChunk(chunk);
+    towns.getBorderParticleManager().spawnParticleChunkBorder(player, player.getLocation().getChunk(), ChunkRenderType.UNCLAIM, false);
+    player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_UNCLAIM_SUCCESS.getComponent(new String[]{chunk})));
+  }
 
-    @Override
-    public void perform(Player player, String[] args) {
-        final CacheManager cacheManager = towns.getCacheManager();
-        final String chunk = ChunkUtil.serializeChunkLocation(player.getLocation().getChunk());
-        final UUID uuid = player.getUniqueId();
-        if (!cacheManager.getCacheChunks().isClaimed(chunk)) {
-            player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_UNCLAIM_NOT_CLAIMED.getComponent(new String[] { chunk })));
-            return;
-        }
-        if (!cacheManager.getCacheChunks().isChunkOwner(chunk, uuid)) {
-            player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_UNCLAIM_NOT_OWNER.getComponent(new String[] { chunk })));
-            return;
-        }
-        if (towns.getAutoClaimManager().isAutoClaiming(uuid)) {
-            player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_UNCLAIM_AUTO_CLAIM_ON.getComponent(null)));
-            return;
-        }
-        if (cacheManager.getCacheChunks().isEstablishedChunk(chunk)) {
-            player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_UNCLAIM_ESTABLISHED_CHUNK.getComponent(new String[] { chunk })));
-            return;
-        }
-        if (!cacheManager.getCacheChunks().isUnclaimSafe(uuid, chunk)) {
-            player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_UNCLAIM_UNSAFE.getComponent(new String[] { chunk })));
-            return;
-        }
-        if (cacheManager.getCacheRenters().isRentable(chunk)) {
-            player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_UNCLAIM_RENTABLE.getComponent(new String[] { chunk })));
-            return;
-        }
-        if (cacheManager.getCacheRenters().isRented(chunk)) {
-            player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_UNCLAIM_RENTED.getComponent(new String[] { chunk, cacheManager.getCacheRenters().getRenterName(chunk) })));
-            return;
-        }
-        cacheManager.getCacheChunks().unclaimChunk(chunk);
-        towns.getBorderParticleManager().spawnParticleChunkBorder(player, player.getLocation().getChunk(), ChunkRenderType.UNCLAIM, false);
-        player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_UNCLAIM_SUCCESS.getComponent(new String[] { chunk })));
-    }
+  @Override
+  public void performConsole(CommandSender console, String[] args) {
+    console.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_NOT_CONSOLE_COMMAND.getComponent(null)));
+  }
 
-    @Override
-    public void performConsole(CommandSender console, String[] args) {
-        console.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_NOT_CONSOLE_COMMAND.getComponent(null)));
-    }
+  @Override
+  public void performSender(CommandSender sender, String[] args) {
+  }
 
-    @Override
-    public void performSender(CommandSender sender, String[] args) { }
-
-    @Override
-    public List<String> onTabComplete(CommandSender sender, String[] args) {
-        return new ArrayList<>();
-    }
+  @Override
+  public List<String> onTabComplete(CommandSender sender, String[] args) {
+    return new ArrayList<>();
+  }
 }

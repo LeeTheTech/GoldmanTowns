@@ -13,41 +13,40 @@ import java.util.UUID;
 @NoArgsConstructor
 @DatabaseTable(tableName = "towns")
 public class TownsTable {
+  @DatabaseField(id = true, canBeNull = false)
+  private UUID uniqueId;
 
-    @DatabaseField(id = true, canBeNull = false)
-    private UUID uniqueId;
+  @DatabaseField(columnName = "town")
+  private String town;
 
-    @DatabaseField(columnName = "town")
-    private String town;
+  @DatabaseField(columnName = "joined_town")
+  private UUID joinedTown;
 
-    @DatabaseField(columnName = "joined_town")
-    private UUID joinedTown;
+  @DatabaseField(columnName = "town_citizens")
+  private String townCitizens;
 
-    @DatabaseField(columnName = "town_citizens")
-    private String townCitizens;
+  @DatabaseField(columnName = "spawn")
+  private String spawn;
 
-    @DatabaseField(columnName = "spawn")
-    private String spawn;
+  @DatabaseField(columnName = "last_joined")
+  private String lastJoined;
 
-    @DatabaseField(columnName = "last_joined")
-    private String lastJoined;
+  @DatabaseField(columnName = "player_roles")
+  private String playerRoles;
 
-    @DatabaseField(columnName = "player_roles")
-    private String playerRoles;
+  @DatabaseField(columnName = "role_colors")
+  private String roleColors;
 
-    @DatabaseField(columnName = "role_colors")
-    private String roleColors;
+  @DatabaseField(columnName = "town_public")
+  private boolean townPublic;
 
-    @DatabaseField(columnName = "town_public")
-    private boolean townPublic;
+  @DatabaseField(columnName = "trusted_players")
+  private String trustedPlayers;
 
-    @DatabaseField(columnName = "trusted_players")
-    private String trustedPlayers;
+  @DatabaseField(columnName = "bonus_claims")
+  private int bonusClaims;
 
-    @DatabaseField(columnName = "bonus_claims")
-    private int bonusClaims;
-
-    public TownsTable(UUID uniqueId) {
-        this.uniqueId = uniqueId;
-    }
+  public TownsTable(UUID uniqueId) {
+    this.uniqueId = uniqueId;
+  }
 }

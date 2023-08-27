@@ -15,37 +15,37 @@ import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 
 public class TeleportListener implements Listener {
+  private final Towns towns;
 
-    private final Towns towns;
+  public TeleportListener(Towns towns) {
+    this.towns = towns;
+  }
 
-    public TeleportListener(Towns towns) {
-        this.towns = towns;
-    }
+  @EventHandler
+  public void onPlayerTeleportListener(PlayerTeleportEvent e) {
+    if (!e.getCause().equals(PlayerTeleportEvent.TeleportCause.CHORUS_FRUIT)) return;
+    final TeleportEvent teleportEvent = new TeleportEvent(e.getPlayer(), e.getTo());
+    Bukkit.getServer().getPluginManager().callEvent(teleportEvent);
+    if (teleportEvent.isCancelled()) e.setCancelled(true);
+  }
 
-    @EventHandler
-    public void onPlayerTeleportListener(PlayerTeleportEvent e) {
-        if (!e.getCause().equals(PlayerTeleportEvent.TeleportCause.CHORUS_FRUIT)) return;
-        final TeleportEvent teleportEvent = new TeleportEvent(e.getPlayer(), e.getTo());
+  @EventHandler
+  public void onPlayerTeleportEnderPearlListener(ProjectileHitEvent e) {
+    if (e.getEntity() instanceof EnderPearl enderPearl) {
+      if (e.getEntity().getShooter() instanceof Player player) {
+        final TeleportEvent teleportEvent = new TeleportEvent(player, enderPearl.getLocation());
         Bukkit.getServer().getPluginManager().callEvent(teleportEvent);
-        if (teleportEvent.isCancelled()) e.setCancelled(true);
+        if (teleportEvent.isCancelled()) enderPearl.remove();
+      }
     }
+  }
 
-    @EventHandler
-    public void onPlayerTeleportEnderPearlListener(ProjectileHitEvent e) {
-        if (e.getEntity() instanceof EnderPearl enderPearl) {
-            if (e.getEntity().getShooter() instanceof Player player) {
-                final TeleportEvent teleportEvent = new TeleportEvent(player, enderPearl.getLocation());
-                Bukkit.getServer().getPluginManager().callEvent(teleportEvent);
-                if (teleportEvent.isCancelled()) enderPearl.remove();
-            }
-        }
-    }
-
-    @EventHandler
-    public void onTeleport(TeleportEvent e) {
-        final CacheManager cacheManager = towns.getCacheManager();
-        final boolean result = cacheManager.checkPlayerLocationFlag(e.getPlayer().getUniqueId(), e.getLocation(), Flag.TELEPORT, true);
-        e.setCancelled(result);
-        if (result) e.getPlayer().sendActionBar(Lang.ERROR_LOCATION_PERMISSION.getComponent(new String[] { cacheManager.getChunkTownName(e.getLocation()), CoreUtil.capitalize(Flag.TELEPORT.name()), Lang.FALSE.getString() }));
-    }
+  @EventHandler
+  public void onTeleport(TeleportEvent e) {
+    final CacheManager cacheManager = towns.getCacheManager();
+    final boolean result = cacheManager.checkPlayerLocationFlag(e.getPlayer().getUniqueId(), e.getLocation(), Flag.TELEPORT, true);
+    e.setCancelled(result);
+    if (result)
+      e.getPlayer().sendActionBar(Lang.ERROR_LOCATION_PERMISSION.getComponent(new String[]{cacheManager.getChunkTownName(e.getLocation()), CoreUtil.capitalize(Flag.TELEPORT.name()), Lang.FALSE.getString()}));
+  }
 }

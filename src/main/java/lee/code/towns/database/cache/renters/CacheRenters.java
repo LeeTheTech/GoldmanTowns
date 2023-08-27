@@ -12,99 +12,96 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class CacheRenters extends DatabaseHandler {
+  @Getter private final RenterListData renterListData;
+  @Getter private final OwnerListData ownerListData;
+  private final ConcurrentHashMap<String, RentTable> rentCache = new ConcurrentHashMap<>();
 
-    @Getter private final RenterListData renterListData;
-    @Getter private final OwnerListData ownerListData;
+  public CacheRenters(DatabaseManager databaseManager) {
+    super(databaseManager);
+    this.renterListData = new RenterListData();
+    this.ownerListData = new OwnerListData();
+  }
 
-    private final ConcurrentHashMap<String, RentTable> rentCache = new ConcurrentHashMap<>();
+  private RentTable getRentTable(String chunk) {
+    return rentCache.get(chunk);
+  }
 
-    public CacheRenters(DatabaseManager databaseManager) {
-        super(databaseManager);
-        this.renterListData = new RenterListData();
-        this.ownerListData = new OwnerListData();
+  public void setRentTable(RentTable rentTable) {
+    rentCache.put(rentTable.getChunk(), rentTable);
+    ownerListData.addChunkList(rentTable.getOwner(), rentTable.getChunk());
+    if (rentTable.getRenter() != null) renterListData.addChunkList(rentTable.getRenter(), rentTable.getChunk());
+  }
+
+  public void deleteAllRentData(UUID uuid) {
+    if (!ownerListData.hasRentChunks(uuid)) return;
+    for (String chunk : ownerListData.getChunkList(uuid)) {
+      if (isRented(chunk)) renterListData.removeAllChunkList(getRenter(chunk));
+      rentCache.remove(chunk);
     }
+    ownerListData.removeAllChunkList(uuid);
+    deleteAllRentDatabase(uuid);
+  }
 
-    private RentTable getRentTable(String chunk) {
-        return rentCache.get(chunk);
+  private void createRentChunkTable(UUID uuid, String chunk, double price) {
+    final RentTable rentTable = new RentTable(chunk, uuid, price);
+    setRentTable(rentTable);
+    createRentDatabase(rentTable);
+  }
+
+  public void setRentChunkPrice(UUID uuid, String chunk, double price) {
+    if (!rentCache.containsKey(chunk)) {
+      createRentChunkTable(uuid, chunk, price);
+    } else {
+      final RentTable rentTable = getRentTable(chunk);
+      rentTable.setPrice(price);
+      updateRentDatabase(rentTable);
     }
+  }
 
-    public void setRentTable(RentTable rentTable) {
-     rentCache.put(rentTable.getChunk(), rentTable);
-     ownerListData.addChunkList(rentTable.getOwner(), rentTable.getChunk());
-     if (rentTable.getRenter() != null) renterListData.addChunkList(rentTable.getRenter(), rentTable.getChunk());
-    }
+  public void setRenter(UUID uuid, String chunk) {
+    final RentTable rentTable = getRentTable(chunk);
+    rentTable.setRenter(uuid);
+    renterListData.addChunkList(uuid, chunk);
+    updateRentDatabase(rentTable);
+  }
 
-    public void deleteAllRentData(UUID uuid) {
-        if (!ownerListData.hasRentChunks(uuid)) return;
-        for (String chunk : ownerListData.getChunkList(uuid)) {
-            if (isRented(chunk)) renterListData.removeAllChunkList(getRenter(chunk));
-            rentCache.remove(chunk);
-        }
-        ownerListData.removeAllChunkList(uuid);
-        deleteAllRentDatabase(uuid);
-    }
+  public void removeRenter(String chunk) {
+    final RentTable rentTable = getRentTable(chunk);
+    renterListData.removeChunkList(rentTable.getRenter(), chunk);
+    rentTable.setRenter(null);
+    updateRentDatabase(rentTable);
+  }
 
-    private void createRentChunkTable(UUID uuid, String chunk, double price) {
-        final RentTable rentTable = new RentTable(chunk, uuid, price);
-        setRentTable(rentTable);
-        createRentDatabase(rentTable);
-    }
+  public void deleteRentableChunk(String chunk) {
+    deleteRentDatabase(getRentTable(chunk));
+    rentCache.remove(chunk);
+  }
 
-    public void setRentChunkPrice(UUID uuid, String chunk, double price) {
-        if (!rentCache.containsKey(chunk)) {
-            createRentChunkTable(uuid, chunk, price);
-        } else {
-            final RentTable rentTable = getRentTable(chunk);
-            rentTable.setPrice(price);
-            updateRentDatabase(rentTable);
-        }
-    }
+  public boolean isRented(String chunk) {
+    return rentCache.containsKey(chunk) && getRentTable(chunk).getRenter() != null;
+  }
 
-    public void setRenter(UUID uuid, String chunk) {
-        final RentTable rentTable = getRentTable(chunk);
-        rentTable.setRenter(uuid);
-        renterListData.addChunkList(uuid, chunk);
-        updateRentDatabase(rentTable);
-    }
+  public UUID getRenter(String chunk) {
+    return rentCache.get(chunk).getRenter();
+  }
 
-    public void removeRenter(String chunk) {
-        final RentTable rentTable = getRentTable(chunk);
-        renterListData.removeChunkList(rentTable.getRenter(), chunk);
-        rentTable.setRenter(null);
-        updateRentDatabase(rentTable);
-    }
+  public boolean isRentable(String chunk) {
+    return rentCache.containsKey(chunk) && getRentTable(chunk).getRenter() == null;
+  }
 
-    public void deleteRentableChunk(String chunk) {
-        deleteRentDatabase(getRentTable(chunk));
-        rentCache.remove(chunk);
-    }
+  public boolean hasRentData(String chunk) {
+    return rentCache.containsKey(chunk);
+  }
 
-    public boolean isRented(String chunk) {
-        return rentCache.containsKey(chunk) && getRentTable(chunk).getRenter() != null;
-    }
+  public double getRentPrice(String chunk) {
+    return getRentTable(chunk).getPrice();
+  }
 
-    public UUID getRenter(String chunk) {
-        return rentCache.get(chunk).getRenter();
-    }
+  public String getRenterName(String chunk) {
+    return Bukkit.getOfflinePlayer(getRentTable(chunk).getRenter()).getName();
+  }
 
-    public boolean isRentable(String chunk) {
-        return rentCache.containsKey(chunk) && getRentTable(chunk).getRenter() == null;
-    }
-
-    public boolean hasRentData(String chunk) {
-        return rentCache.containsKey(chunk);
-    }
-
-    public double getRentPrice(String chunk) {
-        return getRentTable(chunk).getPrice();
-    }
-
-    public String getRenterName(String chunk) {
-        return Bukkit.getOfflinePlayer(getRentTable(chunk).getRenter()).getName();
-    }
-
-    public boolean isPlayerRenting(UUID uuid, String chunk) {
-        return getRentTable(chunk).getRenter().equals(uuid);
-    }
-
+  public boolean isPlayerRenting(UUID uuid, String chunk) {
+    return getRentTable(chunk).getRenter().equals(uuid);
+  }
 }

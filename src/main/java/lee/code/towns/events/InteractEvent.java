@@ -9,24 +9,23 @@ import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
 public class InteractEvent extends Event implements Cancellable {
+  private static final HandlerList handlers = new HandlerList();
 
-    private static final HandlerList handlers = new HandlerList();
+  @Getter Player player;
+  @Getter Location location;
+  @Setter @Getter boolean cancelled;
 
-    @Getter Player player;
-    @Getter Location location;
-    @Setter @Getter boolean cancelled;
+  public InteractEvent(Player player, Location location) {
+    this.player = player;
+    this.location = location;
+  }
 
-    public InteractEvent(Player player, Location location) {
-        this.player = player;
-        this.location = location;
-    }
+  @Override
+  public HandlerList getHandlers() {
+    return handlers;
+  }
 
-    @Override
-    public HandlerList getHandlers() {
-        return handlers;
-    }
-
-    public static HandlerList getHandlerList() {
-        return handlers;
-    }
+  public static HandlerList getHandlerList() {
+    return handlers;
+  }
 }

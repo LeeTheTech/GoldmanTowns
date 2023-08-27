@@ -13,22 +13,21 @@ import java.util.UUID;
 @NoArgsConstructor
 @DatabaseTable(tableName = "renters")
 public class RentTable {
+  @DatabaseField(id = true, canBeNull = false)
+  private String chunk;
 
-    @DatabaseField(id = true, canBeNull = false)
-    private String chunk;
+  @DatabaseField(columnName = "owner", canBeNull = false)
+  private UUID owner;
 
-    @DatabaseField(columnName = "owner", canBeNull = false)
-    private UUID owner;
+  @DatabaseField(columnName = "renter")
+  private UUID renter;
 
-    @DatabaseField(columnName = "renter")
-    private UUID renter;
+  @DatabaseField(columnName = "price", canBeNull = false)
+  private double price;
 
-    @DatabaseField(columnName = "price", canBeNull = false)
-    private double price;
-
-    public RentTable(String chunk, UUID owner, double price) {
-        this.chunk = chunk;
-        this.owner = owner;
-        this.price = price;
-    }
+  public RentTable(String chunk, UUID owner, double price) {
+    this.chunk = chunk;
+    this.owner = owner;
+    this.price = price;
+  }
 }

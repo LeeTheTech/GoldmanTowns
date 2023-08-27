@@ -15,27 +15,28 @@ import org.bukkit.event.Listener;
 import java.util.UUID;
 
 public class ChatListener implements Listener {
+  private final Towns towns;
 
-    private final Towns towns;
+  public ChatListener(Towns towns) {
+    this.towns = towns;
+  }
 
-    public ChatListener(Towns towns) {
-        this.towns = towns;
+  @EventHandler(priority = EventPriority.MONITOR)
+  public void onAsyncPlayerChatListener(AsyncChatEvent e) {
+    if (e.isCancelled()) return;
+    e.setCancelled(true);
+    final CacheManager cacheManager = towns.getCacheManager();
+    final ChatChannelManager chat = towns.getChatChannelManager();
+    final Player player = e.getPlayer();
+    final UUID uuid = player.getUniqueId();
+    if (chat.hasChatChannelData(uuid) && !cacheManager.getCacheTowns().hasTownOrJoinedTown(uuid)) {
+      chat.setChatChannel(uuid, ChatChannel.GLOBAL);
     }
-
-    @EventHandler(priority = EventPriority.MONITOR)
-    public void onAsyncPlayerChatListener(AsyncChatEvent e) {
-        if (e.isCancelled()) return;
-        e.setCancelled(true);
-        final CacheManager cacheManager = towns.getCacheManager();
-        final ChatChannelManager chat = towns.getChatChannelManager();
-        final Player player = e.getPlayer();
-        final UUID uuid = player.getUniqueId();
-        if (chat.hasChatChannelData(uuid) && !cacheManager.getCacheTowns().hasTownOrJoinedTown(uuid)) {
-            chat.setChatChannel(uuid, ChatChannel.GLOBAL);
-        }
-        switch (chat.getChatChannel(uuid)) {
-            case GLOBAL -> Bukkit.getServer().sendMessage(chat.parseMessage(player, Lang.CHAT_GLOBAL.getComponent(null), e.message()));
-            case TOWN -> cacheManager.getCacheTowns().sendTownMessage(uuid, chat.parseMessage(player, Lang.CHAT_TOWN.getComponent(null), e.message()));
-        }
+    switch (chat.getChatChannel(uuid)) {
+      case GLOBAL ->
+        Bukkit.getServer().sendMessage(chat.parseMessage(player, Lang.CHAT_GLOBAL.getComponent(null), e.message()));
+      case TOWN ->
+        cacheManager.getCacheTowns().sendTownMessage(uuid, chat.parseMessage(player, Lang.CHAT_TOWN.getComponent(null), e.message()));
     }
+  }
 }

@@ -6,10 +6,9 @@ import org.bukkit.event.inventory.InventoryOpenEvent;
 
 public interface InventoryHandler {
 
-    void onClick(InventoryClickEvent e);
+  void onClick(InventoryClickEvent e);
 
-    void onOpen(InventoryOpenEvent e);
+  void onOpen(InventoryOpenEvent e);
 
-    void onClose(InventoryCloseEvent e);
-
+  void onClose(InventoryCloseEvent e);
 }

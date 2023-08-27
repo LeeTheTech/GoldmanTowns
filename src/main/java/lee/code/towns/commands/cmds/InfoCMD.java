@@ -17,82 +17,82 @@ import java.util.List;
 import java.util.UUID;
 
 public class InfoCMD extends SubCommand {
+  private final Towns towns;
 
-    private final Towns towns;
+  public InfoCMD(Towns towns) {
+    this.towns = towns;
+  }
 
-    public InfoCMD(Towns towns) {
-        this.towns = towns;
+  @Override
+  public String getName() {
+    return "info";
+  }
+
+  @Override
+  public String getDescription() {
+    return "Info about your town.";
+  }
+
+  @Override
+  public String getSyntax() {
+    return "/towns info";
+  }
+
+  @Override
+  public String getPermission() {
+    return "towns.command.info";
+  }
+
+  @Override
+  public boolean performAsync() {
+    return true;
+  }
+
+  @Override
+  public boolean performAsyncSynchronized() {
+    return false;
+  }
+
+  @Override
+  public void perform(Player player, String[] args) {
+    final CacheTowns cacheTowns = towns.getCacheManager().getCacheTowns();
+    final CacheChunks cacheChunks = towns.getCacheManager().getCacheChunks();
+    final CacheServer cacheServer = towns.getCacheManager().getCacheServer();
+    final UUID uuid = player.getUniqueId();
+    if (!cacheTowns.hasTownOrJoinedTown(uuid)) {
+      player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_NO_TOWN.getComponent(null)));
+      return;
     }
 
-    @Override
-    public String getName() {
-        return "info";
-    }
+    final List<Component> lines = new ArrayList<>();
+    final UUID owner = cacheTowns.getTargetTownOwner(uuid);
+    final String status = cacheTowns.isTownPublic(owner) ? Lang.PUBLIC.getString() : Lang.PRIVATE.getString();
+    lines.add(Lang.COMMAND_INFO_HEADER.getComponent(null));
+    lines.add(Component.text(""));
+    lines.add(Lang.COMMAND_INFO_TOWN_PUBLIC.getComponent(new String[]{status}));
+    lines.add(Lang.COMMAND_INFO_TOWN_NAME.getComponent(new String[]{cacheTowns.getTownName(owner)}));
+    lines.add(Lang.COMMAND_INFO_TOWN_OWNER.getComponent(new String[]{Bukkit.getOfflinePlayer(owner).getName()}));
+    lines.add(Lang.COMMAND_INFO_TOWN_CITIZENS.getComponent(new String[]{String.valueOf(cacheTowns.getCitizenData().getCitizenAmount(owner))}));
+    lines.add(Lang.COMMAND_INFO_TOWN_CHUNKS.getComponent(new String[]{String.valueOf(cacheChunks.getChunkListData().getChunkClaims(owner)), String.valueOf(cacheTowns.getMaxChunkClaims(owner))}));
+    lines.add(Lang.COMMAND_INFO_TOWN_BONUS_CLAIMS.getComponent(new String[]{CoreUtil.parseValue(cacheTowns.getBonusClaims(owner))}));
+    lines.add(Lang.COMMAND_INFO_TOWN_OUTPOSTS.getComponent(new String[]{String.valueOf(cacheChunks.getChunkOutpostData().getOutpostAmount(owner)), String.valueOf(cacheChunks.getChunkOutpostData().getMaxOutpostAmount())}));
+    lines.add(Lang.COMMAND_INFO_TOWN_RENT.getComponent(new String[]{CoreUtil.parseTime(cacheServer.getNextRentCollectionTime())}));
+    lines.add(Component.text(""));
+    lines.add(Lang.COMMAND_INFO_FOOTER.getComponent(null));
+    for (Component line : lines) player.sendMessage(line);
+  }
 
-    @Override
-    public String getDescription() {
-        return "Info about your town.";
-    }
+  @Override
+  public void performConsole(CommandSender console, String[] args) {
+    console.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_NOT_CONSOLE_COMMAND.getComponent(null)));
+  }
 
-    @Override
-    public String getSyntax() {
-        return "/towns info";
-    }
+  @Override
+  public void performSender(CommandSender sender, String[] args) {
+  }
 
-    @Override
-    public String getPermission() {
-        return "towns.command.info";
-    }
-
-    @Override
-    public boolean performAsync() {
-        return true;
-    }
-
-    @Override
-    public boolean performAsyncSynchronized() {
-        return false;
-    }
-
-    @Override
-    public void perform(Player player, String[] args) {
-        final CacheTowns cacheTowns = towns.getCacheManager().getCacheTowns();
-        final CacheChunks cacheChunks = towns.getCacheManager().getCacheChunks();
-        final CacheServer cacheServer  = towns.getCacheManager().getCacheServer();
-        final UUID uuid = player.getUniqueId();
-        if (!cacheTowns.hasTownOrJoinedTown(uuid)) {
-            player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_NO_TOWN.getComponent(null)));
-            return;
-        }
-
-        final List<Component> lines = new ArrayList<>();
-        final UUID owner = cacheTowns.getTargetTownOwner(uuid);
-        final String status = cacheTowns.isTownPublic(owner) ? Lang.PUBLIC.getString() : Lang.PRIVATE.getString();
-        lines.add(Lang.COMMAND_INFO_HEADER.getComponent(null));
-        lines.add(Component.text(""));
-        lines.add(Lang.COMMAND_INFO_TOWN_PUBLIC.getComponent(new String[] { status }));
-        lines.add(Lang.COMMAND_INFO_TOWN_NAME.getComponent(new String[] { cacheTowns.getTownName(owner) }));
-        lines.add(Lang.COMMAND_INFO_TOWN_OWNER.getComponent(new String[] { Bukkit.getOfflinePlayer(owner).getName() }));
-        lines.add(Lang.COMMAND_INFO_TOWN_CITIZENS.getComponent(new String[] { String.valueOf(cacheTowns.getCitizenData().getCitizenAmount(owner)) }));
-        lines.add(Lang.COMMAND_INFO_TOWN_CHUNKS.getComponent(new String[] { String.valueOf(cacheChunks.getChunkListData().getChunkClaims(owner)), String.valueOf(cacheTowns.getMaxChunkClaims(owner)) }));
-        lines.add(Lang.COMMAND_INFO_TOWN_BONUS_CLAIMS.getComponent(new String[] { CoreUtil.parseValue(cacheTowns.getBonusClaims(owner)) }));
-        lines.add(Lang.COMMAND_INFO_TOWN_OUTPOSTS.getComponent(new String[] { String.valueOf(cacheChunks.getChunkOutpostData().getOutpostAmount(owner)), String.valueOf(cacheChunks.getChunkOutpostData().getMaxOutpostAmount()) }));
-        lines.add(Lang.COMMAND_INFO_TOWN_RENT.getComponent(new String[] { CoreUtil.parseTime(cacheServer.getNextRentCollectionTime()) }));
-        lines.add(Component.text(""));
-        lines.add(Lang.COMMAND_INFO_FOOTER.getComponent(null));
-        for (Component line : lines) player.sendMessage(line);
-    }
-
-    @Override
-    public void performConsole(CommandSender console, String[] args) {
-        console.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_NOT_CONSOLE_COMMAND.getComponent(null)));
-    }
-
-    @Override
-    public void performSender(CommandSender sender, String[] args) { }
-
-    @Override
-    public List<String> onTabComplete(CommandSender sender, String[] args) {
-        return new ArrayList<>();
-    }
+  @Override
+  public List<String> onTabComplete(CommandSender sender, String[] args) {
+    return new ArrayList<>();
+  }
 }

@@ -12,25 +12,25 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 
 public class BreakListener implements Listener {
+  private final Towns towns;
 
-    private final Towns towns;
+  public BreakListener(Towns towns) {
+    this.towns = towns;
+  }
 
-    public BreakListener(Towns towns) {
-        this.towns = towns;
-    }
+  @EventHandler
+  public void onBlockBreakListener(BlockBreakEvent e) {
+    final BreakEvent breakEvent = new BreakEvent(e.getPlayer(), e.getBlock().getLocation());
+    Bukkit.getServer().getPluginManager().callEvent(breakEvent);
+    if (breakEvent.isCancelled()) e.setCancelled(true);
+  }
 
-    @EventHandler
-    public void onBlockBreakListener(BlockBreakEvent e) {
-        final BreakEvent breakEvent = new BreakEvent(e.getPlayer(), e.getBlock().getLocation());
-        Bukkit.getServer().getPluginManager().callEvent(breakEvent);
-        if (breakEvent.isCancelled()) e.setCancelled(true);
-    }
-
-    @EventHandler
-    public void onBreak(BreakEvent e) {
-        final CacheManager cacheManager = towns.getCacheManager();
-        final boolean result = cacheManager.checkPlayerLocationFlag(e.getPlayer().getUniqueId(), e.getLocation(), Flag.BREAK, true);
-        e.setCancelled(result);
-        if (result) e.getPlayer().sendActionBar(Lang.ERROR_LOCATION_PERMISSION.getComponent(new String[] { cacheManager.getChunkTownName(e.getLocation()), CoreUtil.capitalize(Flag.BREAK.name()), Lang.FALSE.getString() }));
-    }
+  @EventHandler
+  public void onBreak(BreakEvent e) {
+    final CacheManager cacheManager = towns.getCacheManager();
+    final boolean result = cacheManager.checkPlayerLocationFlag(e.getPlayer().getUniqueId(), e.getLocation(), Flag.BREAK, true);
+    e.setCancelled(result);
+    if (result)
+      e.getPlayer().sendActionBar(Lang.ERROR_LOCATION_PERMISSION.getComponent(new String[]{cacheManager.getChunkTownName(e.getLocation()), CoreUtil.capitalize(Flag.BREAK.name()), Lang.FALSE.getString()}));
+  }
 }

@@ -15,58 +15,57 @@ import org.bukkit.event.hanging.HangingBreakEvent;
 import org.bukkit.event.vehicle.VehicleDestroyEvent;
 
 public class DamageListener implements Listener {
+  private final Towns towns;
 
-    private final Towns towns;
+  public DamageListener(Towns towns) {
+    this.towns = towns;
+  }
 
-    public DamageListener(Towns towns) {
-        this.towns = towns;
+  @EventHandler
+  public void onEntityDamage(EntityDamageEvent e) {
+    if (towns.getData().getMonsterTypes().contains(e.getEntity().getType())) return;
+    if (e.getCause().equals(EntityDamageEvent.DamageCause.ENTITY_ATTACK)) return;
+    final DamageEvent damageEvent = new DamageEvent(e.getEntity().getLocation());
+    Bukkit.getServer().getPluginManager().callEvent(damageEvent);
+    if (damageEvent.isCancelled()) e.setCancelled(true);
+  }
+
+  @EventHandler
+  public void onEntityDamageByEntityListener(EntityDamageByEntityEvent e) {
+    if (e.getDamager() instanceof Player) return;
+    if (e.getDamager() instanceof Projectile projectile) {
+      if (projectile.getShooter() instanceof Player) return;
     }
+    final DamageEvent damageEvent = new DamageEvent(e.getEntity().getLocation());
+    Bukkit.getServer().getPluginManager().callEvent(damageEvent);
+    if (damageEvent.isCancelled()) e.setCancelled(true);
+  }
 
-    @EventHandler
-    public void onEntityDamage(EntityDamageEvent e) {
-        if (towns.getData().getMonsterTypes().contains(e.getEntity().getType())) return;
-        if (e.getCause().equals(EntityDamageEvent.DamageCause.ENTITY_ATTACK)) return;
-        final DamageEvent damageEvent = new DamageEvent(e.getEntity().getLocation());
-        Bukkit.getServer().getPluginManager().callEvent(damageEvent);
-        if (damageEvent.isCancelled()) e.setCancelled(true);
-    }
+  @EventHandler
+  public void onHangingBreakListener(HangingBreakEvent e) {
+    final DamageEvent damageEvent = new DamageEvent(e.getEntity().getLocation());
+    Bukkit.getServer().getPluginManager().callEvent(damageEvent);
+    if (damageEvent.isCancelled()) e.setCancelled(true);
+  }
 
-    @EventHandler
-    public void onEntityDamageByEntityListener(EntityDamageByEntityEvent e) {
-        if (e.getDamager() instanceof Player) return;
-        if (e.getDamager() instanceof Projectile projectile) {
-            if (projectile.getShooter() instanceof Player) return;
-        }
-        final DamageEvent damageEvent = new DamageEvent(e.getEntity().getLocation());
-        Bukkit.getServer().getPluginManager().callEvent(damageEvent);
-        if (damageEvent.isCancelled()) e.setCancelled(true);
-    }
+  @EventHandler
+  public void onHangingBreakByEntityListener(HangingBreakByEntityEvent e) {
+    if (e.getRemover() instanceof Player) return;
+    final DamageEvent damageEvent = new DamageEvent(e.getEntity().getLocation());
+    Bukkit.getServer().getPluginManager().callEvent(damageEvent);
+    if (damageEvent.isCancelled()) e.setCancelled(true);
+  }
 
-    @EventHandler
-    public void onHangingBreakListener(HangingBreakEvent e) {
-        final DamageEvent damageEvent = new DamageEvent(e.getEntity().getLocation());
-        Bukkit.getServer().getPluginManager().callEvent(damageEvent);
-        if (damageEvent.isCancelled()) e.setCancelled(true);
-    }
+  @EventHandler
+  public void onVehicleDestroyListener(VehicleDestroyEvent e) {
+    if (e.getAttacker() instanceof Player) return;
+    final DamageEvent damageEvent = new DamageEvent(e.getVehicle().getLocation());
+    Bukkit.getServer().getPluginManager().callEvent(damageEvent);
+    if (damageEvent.isCancelled()) e.setCancelled(true);
+  }
 
-    @EventHandler
-    public void onHangingBreakByEntityListener(HangingBreakByEntityEvent e) {
-        if (e.getRemover() instanceof Player) return;
-        final DamageEvent damageEvent = new DamageEvent(e.getEntity().getLocation());
-        Bukkit.getServer().getPluginManager().callEvent(damageEvent);
-        if (damageEvent.isCancelled()) e.setCancelled(true);
-    }
-
-    @EventHandler
-    public void onVehicleDestroyListener(VehicleDestroyEvent e) {
-        if (e.getAttacker() instanceof Player) return;
-        final DamageEvent damageEvent = new DamageEvent(e.getVehicle().getLocation());
-        Bukkit.getServer().getPluginManager().callEvent(damageEvent);
-        if (damageEvent.isCancelled()) e.setCancelled(true);
-    }
-
-    @EventHandler
-    public void onDamage(DamageEvent e) {
-        e.setCancelled(towns.getCacheManager().checkLocationFlag(e.getLocation(), Flag.DAMAGE));
-    }
+  @EventHandler
+  public void onDamage(DamageEvent e) {
+    e.setCancelled(towns.getCacheManager().checkLocationFlag(e.getLocation(), Flag.DAMAGE));
+  }
 }

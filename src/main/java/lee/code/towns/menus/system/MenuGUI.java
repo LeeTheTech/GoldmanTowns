@@ -13,71 +13,71 @@ import java.util.HashMap;
 import java.util.Map;
 
 public abstract class MenuGUI implements InventoryHandler {
-    protected MenuPlayerData menuPlayerData;
-    protected int page = 0;
-    protected int index = 0;
-    protected int maxItemsPerPage = 45;
-    private Inventory inventory;
-    public final ItemStack fillerGlass = MenuItem.FILLER_GLASS.createItem();
-    private final DelayManager delayManager = new DelayManager();
-    private final Map<Integer, MenuButton> buttonMap = new HashMap<>();
+  protected MenuPlayerData menuPlayerData;
+  protected int page = 0;
+  protected int index = 0;
+  protected int maxItemsPerPage = 45;
+  private Inventory inventory;
+  public final ItemStack fillerGlass = MenuItem.FILLER_GLASS.createItem();
+  private final DelayManager delayManager = new DelayManager();
+  private final Map<Integer, MenuButton> buttonMap = new HashMap<>();
 
-    public MenuGUI(MenuPlayerData menuPlayerData) {
-        this.menuPlayerData = menuPlayerData;
+  public MenuGUI(MenuPlayerData menuPlayerData) {
+    this.menuPlayerData = menuPlayerData;
+  }
+
+  public void setInventory() {
+    this.inventory = createInventory();
+  }
+
+  public Inventory getInventory() {
+    return inventory;
+  }
+
+  public void addButton(int slot, MenuButton button) {
+    buttonMap.put(slot, button);
+  }
+
+  public void decorate(Player player) {
+    buttonMap.forEach((slot, button) -> {
+      final ItemStack icon = button.getIconCreator().apply(player);
+      inventory.setItem(slot, icon);
+    });
+  }
+
+  public void addFillerGlass() {
+    for (int i = 0; i < getInventory().getSize(); i++) {
+      inventory.setItem(i, fillerGlass);
     }
+  }
 
-    public void setInventory() {
-        this.inventory = createInventory();
-    }
-
-    public Inventory getInventory() {
-        return inventory;
-    }
-
-    public void addButton(int slot, MenuButton button) {
-        buttonMap.put(slot, button);
-    }
-
-    public void decorate(Player player) {
-        buttonMap.forEach((slot, button) -> {
-            final ItemStack icon = button.getIconCreator().apply(player);
-            inventory.setItem(slot, icon);
-        });
-    }
-
-    public void addFillerGlass() {
-        for (int i = 0; i < getInventory().getSize(); i++) {
-            inventory.setItem(i, fillerGlass);
-        }
-    }
-
-    @Override
-    public void onClick(InventoryClickEvent event) {
-        final Player player = (Player) event.getWhoClicked();
-        if (player.getInventory().equals(event.getClickedInventory())) {
-            if (event.getAction().equals(InventoryAction.MOVE_TO_OTHER_INVENTORY)) {
-                event.setCancelled(true);
-                return;
-            }
-            return;
-        }
+  @Override
+  public void onClick(InventoryClickEvent event) {
+    final Player player = (Player) event.getWhoClicked();
+    if (player.getInventory().equals(event.getClickedInventory())) {
+      if (event.getAction().equals(InventoryAction.MOVE_TO_OTHER_INVENTORY)) {
         event.setCancelled(true);
-        if (delayManager.hasDelayOrSchedule(player.getUniqueId())) return;
-        final int slot = event.getSlot();
-        final MenuButton button = buttonMap.get(slot);
-        if (button != null) {
-            button.getEventConsumer().accept(event);
-        }
+        return;
+      }
+      return;
     }
-
-    @Override
-    public void onOpen(InventoryOpenEvent event) {
-        decorate((Player) event.getPlayer());
+    event.setCancelled(true);
+    if (delayManager.hasDelayOrSchedule(player.getUniqueId())) return;
+    final int slot = event.getSlot();
+    final MenuButton button = buttonMap.get(slot);
+    if (button != null) {
+      button.getEventConsumer().accept(event);
     }
+  }
 
-    @Override
-    public void onClose(InventoryCloseEvent event) {
-    }
+  @Override
+  public void onOpen(InventoryOpenEvent event) {
+    decorate((Player) event.getPlayer());
+  }
 
-    protected abstract Inventory createInventory();
+  @Override
+  public void onClose(InventoryCloseEvent event) {
+  }
+
+  protected abstract Inventory createInventory();
 }

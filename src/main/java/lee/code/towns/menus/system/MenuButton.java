@@ -8,24 +8,24 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 
 public class MenuButton {
-    private Function<Player, ItemStack> iconCreator;
-    private Consumer<InventoryClickEvent> eventConsumer;
+  private Function<Player, ItemStack> iconCreator;
+  private Consumer<InventoryClickEvent> eventConsumer;
 
-    public MenuButton creator(Function<Player, ItemStack> iconCreator) {
-        this.iconCreator = iconCreator;
-        return this;
-    }
+  public MenuButton creator(Function<Player, ItemStack> iconCreator) {
+    this.iconCreator = iconCreator;
+    return this;
+  }
 
-    public MenuButton consumer(Consumer<InventoryClickEvent> eventConsumer) {
-        this.eventConsumer = eventConsumer;
-        return this;
-    }
+  public MenuButton consumer(Consumer<InventoryClickEvent> eventConsumer) {
+    this.eventConsumer = eventConsumer;
+    return this;
+  }
 
-    public Consumer<InventoryClickEvent> getEventConsumer() {
-        return this.eventConsumer;
-    }
+  public Consumer<InventoryClickEvent> getEventConsumer() {
+    return this.eventConsumer;
+  }
 
-    public Function<Player, ItemStack> getIconCreator() {
-        return this.iconCreator;
-    }
+  public Function<Player, ItemStack> getIconCreator() {
+    return this.iconCreator;
+  }
 }

@@ -6,17 +6,16 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 
 public class JoinListener implements Listener {
+  private final Towns towns;
 
-    private final Towns towns;
+  public JoinListener(Towns towns) {
+    this.towns = towns;
+  }
 
-    public JoinListener(Towns towns) {
-        this.towns = towns;
+  @EventHandler
+  public void onJoin(PlayerJoinEvent e) {
+    if (!towns.getCacheManager().getCacheTowns().hasTownsData(e.getPlayer().getUniqueId())) {
+      towns.getCacheManager().getCacheTowns().createPlayerData(e.getPlayer().getUniqueId());
     }
-
-    @EventHandler
-    public void onJoin(PlayerJoinEvent e) {
-        if (!towns.getCacheManager().getCacheTowns().hasTownsData(e.getPlayer().getUniqueId())) {
-            towns.getCacheManager().getCacheTowns().createPlayerData(e.getPlayer().getUniqueId());
-        }
-    }
+  }
 }

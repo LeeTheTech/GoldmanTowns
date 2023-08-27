@@ -15,86 +15,86 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ChunkInfoCMD extends SubCommand {
+  private final Towns towns;
 
-    private final Towns towns;
+  public ChunkInfoCMD(Towns towns) {
+    this.towns = towns;
+  }
 
-    public ChunkInfoCMD(Towns towns) {
-        this.towns = towns;
+  @Override
+  public String getName() {
+    return "chunkinfo";
+  }
+
+  @Override
+  public String getDescription() {
+    return "Info about the chunk you're standing on.";
+  }
+
+  @Override
+  public String getSyntax() {
+    return "&e/towns chunkinfo";
+  }
+
+  @Override
+  public String getPermission() {
+    return "towns.command.chunkinfo";
+  }
+
+  @Override
+  public boolean performAsync() {
+    return true;
+  }
+
+  @Override
+  public boolean performAsyncSynchronized() {
+    return false;
+  }
+
+  @Override
+  public void perform(Player player, String[] args) {
+    final CacheManager cacheManager = towns.getCacheManager();
+    final String chunk = ChunkUtil.serializeChunkLocation(player.getLocation().getChunk());
+    if (!cacheManager.getCacheChunks().isClaimed(chunk)) {
+      player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_CHUNK_INFO_NOT_CLAIMED.getComponent(null)));
+      return;
     }
-
-    @Override
-    public String getName() {
-        return "chunkinfo";
+    final ArrayList<Component> lines = new ArrayList<>();
+    lines.add(Lang.COMMAND_CHUNK_INFO_HEADER.getComponent(null));
+    lines.add(Component.text(""));
+    lines.add(Lang.COMMAND_CHUNK_INFO_CHUNK.getComponent(new String[]{chunk}));
+    lines.add(Lang.COMMAND_CHUNK_INFO_TOWN_OWNER.getComponent(new String[]{cacheManager.getChunkTownName(chunk)}));
+    if (cacheManager.getCacheRenters().isRented(chunk)) {
+      lines.add(Lang.COMMAND_CHUNK_INFO_RENTER.getComponent(new String[]{cacheManager.getCacheRenters().getRenterName(chunk)}));
+      lines.add(Lang.COMMAND_CHUNK_INFO_RENT_COST.getComponent(new String[]{
+        Lang.VALUE_FORMAT.getString(new String[]{CoreUtil.parseValue(cacheManager.getCacheRenters().getRentPrice(chunk))})
+      }));
     }
-
-    @Override
-    public String getDescription() {
-        return "Info about the chunk you're standing on.";
+    if (cacheManager.getCacheRenters().isRentable(chunk)) {
+      lines.add(Lang.COMMAND_CHUNK_INFO_RENT_COST.getComponent(new String[]{
+        Lang.VALUE_FORMAT.getString(new String[]{CoreUtil.parseValue(cacheManager.getCacheRenters().getRentPrice(chunk))})
+      }));
     }
-
-    @Override
-    public String getSyntax() {
-        return "&e/towns chunkinfo";
+    if (cacheManager.getCacheChunks().isEstablishedChunk(chunk)) {
+      lines.add(Lang.COMMAND_CHUNK_INFO_TOWN_ESTABLISHED_CHUNK.getComponent(new String[]{Lang.TRUE.getString()}));
     }
+    lines.add(Component.text(""));
+    lines.add(Lang.COMMAND_CHUNK_INFO_FOOTER.getComponent(null));
+    for (Component line : lines) player.sendMessage(line);
+    towns.getBorderParticleManager().spawnParticleChunkBorder(player, player.getLocation().getChunk(), ChunkRenderType.INFO, true);
+  }
 
-    @Override
-    public String getPermission() {
-        return "towns.command.chunkinfo";
-    }
+  @Override
+  public void performConsole(CommandSender console, String[] args) {
+    console.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_NOT_CONSOLE_COMMAND.getComponent(null)));
+  }
 
-    @Override
-    public boolean performAsync() {
-        return true;
-    }
+  @Override
+  public void performSender(CommandSender sender, String[] args) {
+  }
 
-    @Override
-    public boolean performAsyncSynchronized() {
-        return false;
-    }
-
-    @Override
-    public void perform(Player player, String[] args) {
-        final CacheManager cacheManager = towns.getCacheManager();
-        final String chunk = ChunkUtil.serializeChunkLocation(player.getLocation().getChunk());
-        if (!cacheManager.getCacheChunks().isClaimed(chunk)) {
-            player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_CHUNK_INFO_NOT_CLAIMED.getComponent(null)));
-            return;
-        }
-        final ArrayList<Component> lines = new ArrayList<>();
-        lines.add(Lang.COMMAND_CHUNK_INFO_HEADER.getComponent(null));
-        lines.add(Component.text(""));
-        lines.add(Lang.COMMAND_CHUNK_INFO_CHUNK.getComponent(new String[] { chunk }));
-        lines.add(Lang.COMMAND_CHUNK_INFO_TOWN_OWNER.getComponent(new String[] { cacheManager.getChunkTownName(chunk) }));
-        if (cacheManager.getCacheRenters().isRented(chunk)) {
-            lines.add(Lang.COMMAND_CHUNK_INFO_RENTER.getComponent(new String[] { cacheManager.getCacheRenters().getRenterName(chunk) }));
-            lines.add(Lang.COMMAND_CHUNK_INFO_RENT_COST.getComponent(new String[] {
-                    Lang.VALUE_FORMAT.getString(new String[] { CoreUtil.parseValue(cacheManager.getCacheRenters().getRentPrice(chunk)) })
-            }));
-        }
-        if (cacheManager.getCacheRenters().isRentable(chunk)) {
-            lines.add(Lang.COMMAND_CHUNK_INFO_RENT_COST.getComponent(new String[] {
-                    Lang.VALUE_FORMAT.getString(new String[] { CoreUtil.parseValue(cacheManager.getCacheRenters().getRentPrice(chunk)) })
-            }));
-        }
-        if (cacheManager.getCacheChunks().isEstablishedChunk(chunk)) {
-            lines.add(Lang.COMMAND_CHUNK_INFO_TOWN_ESTABLISHED_CHUNK.getComponent(new String[] { Lang.TRUE.getString() }));
-        }
-        lines.add(Component.text(""));
-        lines.add(Lang.COMMAND_CHUNK_INFO_FOOTER.getComponent(null));
-        for (Component line : lines) player.sendMessage(line);
-        towns.getBorderParticleManager().spawnParticleChunkBorder(player, player.getLocation().getChunk(), ChunkRenderType.INFO, true);
-    }
-
-    @Override
-    public void performConsole(CommandSender console, String[] args) {
-        console.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_NOT_CONSOLE_COMMAND.getComponent(null)));
-    }
-
-    @Override
-    public void performSender(CommandSender sender, String[] args) { }
-
-    @Override
-    public List<String> onTabComplete(CommandSender sender, String[] args) {
-        return new ArrayList<>();
-    }
+  @Override
+  public List<String> onTabComplete(CommandSender sender, String[] args) {
+    return new ArrayList<>();
+  }
 }

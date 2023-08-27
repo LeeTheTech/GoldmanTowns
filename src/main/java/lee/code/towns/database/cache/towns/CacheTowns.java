@@ -19,198 +19,197 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class CacheTowns extends DatabaseHandler {
+  @Getter private final TownPermData permData;
+  @Getter private final TownRoleData roleData;
+  @Getter private final TownPlayerRoleData playerRoleData;
+  @Getter private final TownRoleColorData roleColorData;
+  @Getter private final TownTrustData trustData;
+  @Getter private final TownCitizenData citizenData;
+  private final ConcurrentHashMap<UUID, TownsTable> townsCache = new ConcurrentHashMap<>();
 
-    @Getter private final TownPermData permData;
-    @Getter private final TownRoleData roleData;
-    @Getter private final TownPlayerRoleData playerRoleData;
-    @Getter private final TownRoleColorData roleColorData;
-    @Getter private final TownTrustData trustData;
-    @Getter private final TownCitizenData citizenData;
-    private final ConcurrentHashMap<UUID, TownsTable> townsCache = new ConcurrentHashMap<>();
+  public CacheTowns(DatabaseManager databaseManager) {
+    super(databaseManager);
+    this.permData = new TownPermData(databaseManager);
+    this.roleData = new TownRoleData(databaseManager);
+    this.playerRoleData = new TownPlayerRoleData(this);
+    this.roleColorData = new TownRoleColorData(this);
+    this.trustData = new TownTrustData(this);
+    this.citizenData = new TownCitizenData(this);
+  }
 
-    public CacheTowns(DatabaseManager databaseManager) {
-        super(databaseManager);
-        this.permData = new TownPermData(databaseManager);
-        this.roleData = new TownRoleData(databaseManager);
-        this.playerRoleData = new TownPlayerRoleData(this);
-        this.roleColorData = new TownRoleColorData(this);
-        this.trustData = new TownTrustData(this);
-        this.citizenData = new TownCitizenData(this);
+  public void createPlayerData(UUID uuid) {
+    final TownsTable townsTable = new TownsTable(uuid);
+    final PermissionTable permissionTable = new PermissionTable(uuid, PermissionType.TOWN);
+    setTownsTable(townsTable);
+    permData.setPermissionTable(permissionTable);
+    createTownAndPermissionDatabase(townsTable, permissionTable);
+  }
+
+  public TownsTable getTownTable(UUID uuid) {
+    return townsCache.get(uuid);
+  }
+
+  public boolean hasTownsData(UUID uuid) {
+    return townsCache.containsKey(uuid);
+  }
+
+  public void setTownsTable(TownsTable townsTable) {
+    townsCache.put(townsTable.getUniqueId(), townsTable);
+    playerRoleData.cachePlayerRoles(townsTable);
+    roleColorData.cacheRoleColors(townsTable);
+    trustData.cacheTrustedPlayers(townsTable);
+    citizenData.cacheCitizenPlayers(townsTable);
+  }
+
+  public boolean hasTown(UUID uuid) {
+    return getTownTable(uuid).getTown() != null;
+  }
+
+  public boolean hasTownOrJoinedTown(UUID uuid) {
+    return getTownTable(uuid).getTown() != null || getTownTable(uuid).getJoinedTown() != null;
+  }
+
+  public String getTownName(UUID uuid) {
+    return getTownTable(uuid).getTown();
+  }
+
+  public void setTownName(UUID uuid, String town) {
+    final TownsTable townsTable = getTownTable(uuid);
+    townsTable.setTown(town);
+    updateTownsDatabase(townsTable);
+  }
+
+  public void setJoinedTown(UUID uuid, UUID townOwner) {
+    final TownsTable townsTable = getTownTable(uuid);
+    townsTable.setJoinedTown(townOwner);
+    updateTownsDatabase(townsTable);
+  }
+
+  public void removeJoinedTown(UUID uuid) {
+    final TownsTable townsTable = getTownTable(uuid);
+    townsTable.setJoinedTown(null);
+    updateTownsDatabase(townsTable);
+  }
+
+  public boolean hasJoinedTown(UUID uuid) {
+    return getTownTable(uuid).getJoinedTown() != null;
+  }
+
+  public String getJoinedTownName(UUID uuid) {
+    return getTownTable(getTownTable(uuid).getJoinedTown()).getTown();
+  }
+
+  public UUID getJoinedTownOwner(UUID uuid) {
+    return getTownTable(uuid).getJoinedTown();
+  }
+
+  public UUID getTargetTownOwner(UUID target) {
+    if (hasTown(target)) return target;
+    else return getJoinedTownOwner(target);
+  }
+
+  public String getTargetTownName(UUID target) {
+    if (!hasJoinedTown(target) && !hasTown(target)) return "None";
+    return getTownName(getTargetTownOwner(target));
+  }
+
+  public String getTargetTownRole(UUID target) {
+    if (!hasJoinedTown(target) && !hasTown(target)) return "None";
+    if (hasTown(target)) {
+      final String mayorRole = CoreUtil.capitalize(TownRole.MAYOR.name());
+      return roleColorData.getRoleColor(target, mayorRole) + mayorRole;
     }
+    final UUID owner = getJoinedTownOwner(target);
+    final String role = getPlayerRoleData().getPlayerRole(owner, target);
+    return roleColorData.getRoleColor(owner, role) + role;
+  }
 
-    public void createPlayerData(UUID uuid) {
-        final TownsTable townsTable = new TownsTable(uuid);
-        final PermissionTable permissionTable = new PermissionTable(uuid, PermissionType.TOWN);
-        setTownsTable(townsTable);
-        permData.setPermissionTable(permissionTable);
-        createTownAndPermissionDatabase(townsTable, permissionTable);
-    }
+  public boolean isTownNameTaken(String name) {
+    return townsCache.values().stream()
+      .anyMatch(playerData -> playerData.getTown() != null && playerData.getTown().equals(name));
+  }
 
-    public TownsTable getTownTable(UUID uuid) {
-        return townsCache.get(uuid);
-    }
+  public Location getTownSpawn(UUID uuid) {
+    final TownsTable townsTable = getTownTable(uuid);
+    if (townsTable.getSpawn() != null) return CoreUtil.parseLocation(townsTable.getSpawn());
+    else return CoreUtil.parseLocation(getTownTable(townsTable.getJoinedTown()).getSpawn());
+  }
 
-    public boolean hasTownsData(UUID uuid) {
-        return townsCache.containsKey(uuid);
-    }
+  public void setTownSpawn(UUID uuid, Location location) {
+    final TownsTable townsTable = getTownTable(uuid);
+    townsTable.setSpawn(CoreUtil.serializeLocation(location));
+    updateTownsDatabase(townsTable);
+  }
 
-    public void setTownsTable(TownsTable townsTable) {
-        townsCache.put(townsTable.getUniqueId(), townsTable);
-        playerRoleData.cachePlayerRoles(townsTable);
-        roleColorData.cacheRoleColors(townsTable);
-        trustData.cacheTrustedPlayers(townsTable);
-        citizenData.cacheCitizenPlayers(townsTable);
-    }
+  public int getMaxChunkClaims(UUID uuid) {
+    final int defaultAmount = 1000000;
+    final int size = citizenData.hasCitizens(uuid) ? citizenData.getCitizenAmount(uuid) : 0;
+    return (size * 2 + defaultAmount + getBonusClaims(uuid));
+  }
 
-    public boolean hasTown(UUID uuid) {
-        return getTownTable(uuid).getTown() != null;
-    }
+  public boolean isTownPublic(UUID uuid) {
+    return getTownTable(uuid).isTownPublic();
+  }
 
-    public boolean hasTownOrJoinedTown(UUID uuid) {
-        return getTownTable(uuid).getTown() != null || getTownTable(uuid).getJoinedTown() != null;
-    }
+  public void setTownPublic(UUID uuid, boolean result) {
+    final TownsTable townsTable = getTownTable(uuid);
+    townsTable.setTownPublic(result);
+    updateTownsDatabase(townsTable);
+  }
 
-    public String getTownName(UUID uuid) {
-        return getTownTable(uuid).getTown();
+  public void sendTownMessage(UUID uuid, Component message) {
+    final UUID owner = getTargetTownOwner(uuid);
+    final Set<UUID> players = ConcurrentHashMap.newKeySet();
+    players.addAll(citizenData.getCitizensList(owner));
+    players.add(owner);
+    for (UUID citizen : players) {
+      final OfflinePlayer oPlayer = Bukkit.getOfflinePlayer(citizen);
+      if (oPlayer.isOnline()) {
+        final Player player = oPlayer.getPlayer();
+        if (player != null) player.sendMessage(message);
+      }
     }
+  }
 
-    public void setTownName(UUID uuid, String town) {
-        final TownsTable townsTable = getTownTable(uuid);
-        townsTable.setTown(town);
-        updateTownsDatabase(townsTable);
-    }
+  public void leaveTown(UUID uuid) {
+    citizenData.removeCitizen(getJoinedTownOwner(uuid), uuid);
+  }
 
-    public void setJoinedTown(UUID uuid, UUID townOwner) {
-        final TownsTable townsTable = getTownTable(uuid);
-        townsTable.setJoinedTown(townOwner);
-        updateTownsDatabase(townsTable);
-    }
+  public void createRole(UUID uuid, String role) {
+    roleData.createRolePermissionData(uuid, role);
+    roleColorData.addRoleColor(uuid, role, "&e", true);
+  }
 
-    public void removeJoinedTown(UUID uuid) {
-        final TownsTable townsTable = getTownTable(uuid);
-        townsTable.setJoinedTown(null);
-        updateTownsDatabase(townsTable);
+  public void deleteRole(UUID uuid, String role) {
+    for (UUID citizen : citizenData.getCitizensList(uuid)) {
+      if (getPlayerRoleData().getPlayerRole(uuid, citizen).equals(role)) {
+        getPlayerRoleData().setPlayerRole(uuid, citizen, CoreUtil.capitalize(TownRole.CITIZEN.name()), false);
+      }
     }
+    roleColorData.removeRoleColor(uuid, role, false);
+    roleData.deleteRole(uuid, role);
+    updateTownsDatabase(getTownTable(uuid));
+  }
 
-    public boolean hasJoinedTown(UUID uuid) {
-        return getTownTable(uuid).getJoinedTown() != null;
-    }
+  public int getBonusClaims(UUID uuid) {
+    return getTownTable(uuid).getBonusClaims();
+  }
 
-    public String getJoinedTownName(UUID uuid) {
-        return getTownTable(getTownTable(uuid).getJoinedTown()).getTown();
-    }
+  public void setBonusClaims(UUID uuid, int amount) {
+    final TownsTable townsTable = getTownTable(uuid);
+    townsTable.setBonusClaims(amount);
+    updateTownsDatabase(townsTable);
+  }
 
-    public UUID getJoinedTownOwner(UUID uuid) {
-        return getTownTable(uuid).getJoinedTown();
-    }
+  public void addBonusClaims(UUID uuid, int amount) {
+    final TownsTable townsTable = getTownTable(uuid);
+    townsTable.setBonusClaims(townsTable.getBonusClaims() + amount);
+    updateTownsDatabase(townsTable);
+  }
 
-    public UUID getTargetTownOwner(UUID target) {
-        if (hasTown(target)) return target;
-        else return getJoinedTownOwner(target);
-    }
-
-    public String getTargetTownName(UUID target) {
-        if (!hasJoinedTown(target) && !hasTown(target)) return "None";
-        return getTownName(getTargetTownOwner(target));
-    }
-
-    public String getTargetTownRole(UUID target) {
-        if (!hasJoinedTown(target) && !hasTown(target)) return "None";
-        if (hasTown(target)) {
-            final String mayorRole = CoreUtil.capitalize(TownRole.MAYOR.name());
-            return roleColorData.getRoleColor(target, mayorRole) + mayorRole;
-        }
-        final UUID owner = getJoinedTownOwner(target);
-        final String role = getPlayerRoleData().getPlayerRole(owner, target);
-        return roleColorData.getRoleColor(owner, role) + role;
-    }
-
-    public boolean isTownNameTaken(String name) {
-        return townsCache.values().stream()
-                .anyMatch(playerData -> playerData.getTown() != null && playerData.getTown().equals(name));
-    }
-
-    public Location getTownSpawn(UUID uuid) {
-        final TownsTable townsTable = getTownTable(uuid);
-        if (townsTable.getSpawn() != null) return CoreUtil.parseLocation(townsTable.getSpawn());
-        else return CoreUtil.parseLocation(getTownTable(townsTable.getJoinedTown()).getSpawn());
-    }
-
-    public void setTownSpawn(UUID uuid, Location location) {
-        final TownsTable townsTable = getTownTable(uuid);
-        townsTable.setSpawn(CoreUtil.serializeLocation(location));
-        updateTownsDatabase(townsTable);
-    }
-
-    public int getMaxChunkClaims(UUID uuid) {
-        final int defaultAmount = 1000000;
-        final int size = citizenData.hasCitizens(uuid) ? citizenData.getCitizenAmount(uuid) : 0;
-        return (size * 2 + defaultAmount + getBonusClaims(uuid));
-    }
-
-    public boolean isTownPublic(UUID uuid) {
-        return getTownTable(uuid).isTownPublic();
-    }
-
-    public void setTownPublic(UUID uuid, boolean result) {
-        final TownsTable townsTable = getTownTable(uuid);
-        townsTable.setTownPublic(result);
-        updateTownsDatabase(townsTable);
-    }
-
-    public void sendTownMessage(UUID uuid, Component message) {
-        final UUID owner = getTargetTownOwner(uuid);
-        final Set<UUID> players = ConcurrentHashMap.newKeySet();
-        players.addAll(citizenData.getCitizensList(owner));
-        players.add(owner);
-        for (UUID citizen : players) {
-            final OfflinePlayer oPlayer = Bukkit.getOfflinePlayer(citizen);
-            if (oPlayer.isOnline()) {
-                final Player player = oPlayer.getPlayer();
-                if (player != null) player.sendMessage(message);
-            }
-        }
-    }
-
-    public void leaveTown(UUID uuid) {
-        citizenData.removeCitizen(getJoinedTownOwner(uuid), uuid);
-    }
-
-    public void createRole(UUID uuid, String role) {
-        roleData.createRolePermissionData(uuid, role);
-        roleColorData.addRoleColor(uuid, role, "&e", true);
-    }
-
-    public void deleteRole(UUID uuid, String role) {
-        for (UUID citizen : citizenData.getCitizensList(uuid)) {
-            if (getPlayerRoleData().getPlayerRole(uuid, citizen).equals(role)) {
-                getPlayerRoleData().setPlayerRole(uuid, citizen, CoreUtil.capitalize(TownRole.CITIZEN.name()), false);
-            }
-        }
-        roleColorData.removeRoleColor(uuid, role, false);
-        roleData.deleteRole(uuid, role);
-        updateTownsDatabase(getTownTable(uuid));
-    }
-
-    public int getBonusClaims(UUID uuid) {
-        return getTownTable(uuid).getBonusClaims();
-    }
-
-    public void setBonusClaims(UUID uuid, int amount) {
-        final TownsTable townsTable = getTownTable(uuid);
-        townsTable.setBonusClaims(amount);
-        updateTownsDatabase(townsTable);
-    }
-
-    public void addBonusClaims(UUID uuid, int amount) {
-        final TownsTable townsTable = getTownTable(uuid);
-        townsTable.setBonusClaims(townsTable.getBonusClaims() + amount);
-        updateTownsDatabase(townsTable);
-    }
-
-    public void removeBonusClaims(UUID uuid, int amount) {
-        final TownsTable townsTable = getTownTable(uuid);
-        townsTable.setBonusClaims(Math.max(townsTable.getBonusClaims() - amount, 0));
-        updateTownsDatabase(townsTable);
-    }
+  public void removeBonusClaims(UUID uuid, int amount) {
+    final TownsTable townsTable = getTownTable(uuid);
+    townsTable.setBonusClaims(Math.max(townsTable.getBonusClaims() - amount, 0));
+    updateTownsDatabase(townsTable);
+  }
 }

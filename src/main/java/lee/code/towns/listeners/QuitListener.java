@@ -8,27 +8,26 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import java.util.UUID;
 
 public class QuitListener implements Listener {
+  private final Towns towns;
 
-    private final Towns towns;
+  public QuitListener(Towns towns) {
+    this.towns = towns;
+  }
 
-    public QuitListener(Towns towns) {
-        this.towns = towns;
+  @EventHandler
+  public void onQuit(PlayerQuitEvent e) {
+    final UUID uuid = e.getPlayer().getUniqueId();
+    //Auto Claim Manager
+    if (towns.getAutoClaimManager().isAutoClaiming(uuid)) {
+      towns.getAutoClaimManager().removeAutoClaiming(uuid);
     }
-
-    @EventHandler
-    public void onQuit(PlayerQuitEvent e) {
-        final UUID uuid = e.getPlayer().getUniqueId();
-        //Auto Claim Manager
-        if (towns.getAutoClaimManager().isAutoClaiming(uuid)) {
-            towns.getAutoClaimManager().removeAutoClaiming(uuid);
-        }
-        //Border Particle Manager
-        if (towns.getBorderParticleManager().hasBorderActive(uuid)) {
-            towns.getBorderParticleManager().stopBorder(uuid);
-        }
-        //Chat Channel Manager
-        towns.getChatChannelManager().removeChatChannel(uuid);
-        //Auto message manager
-        towns.getAutoMessageManager().removeAutoMessageData(uuid);
+    //Border Particle Manager
+    if (towns.getBorderParticleManager().hasBorderActive(uuid)) {
+      towns.getBorderParticleManager().stopBorder(uuid);
     }
+    //Chat Channel Manager
+    towns.getChatChannelManager().removeChatChannel(uuid);
+    //Auto message manager
+    towns.getAutoMessageManager().removeAutoMessageData(uuid);
+  }
 }
