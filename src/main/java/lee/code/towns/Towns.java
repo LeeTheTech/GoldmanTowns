@@ -17,7 +17,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.io.IOException;
 
 public class Towns extends JavaPlugin {
-
   @Getter private CacheManager cacheManager;
   @Getter private CommandManager commandManager;
   @Getter private ChatChannelManager chatChannelManager;
