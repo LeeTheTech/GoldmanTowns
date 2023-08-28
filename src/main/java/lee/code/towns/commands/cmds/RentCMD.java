@@ -39,7 +39,7 @@ public class RentCMD extends SubCommand {
 
   @Override
   public String getSyntax() {
-    return "&e/towns rent &f<options>";
+    return "/towns rent &f<options>";
   }
 
   @Override
@@ -59,8 +59,8 @@ public class RentCMD extends SubCommand {
 
   @Override
   public void perform(Player player, String[] args) {
-    if (args.length <= 1) {
-      player.sendMessage(Lang.USAGE.getComponent(null).append(CoreUtil.parseColorComponent(getSyntax())));
+    if (args.length < 2) {
+      player.sendMessage(Lang.USAGE.getComponent(new String[]{getSyntax()}));
       return;
     }
     final CacheManager cacheManager = towns.getCacheManager();
@@ -77,24 +77,26 @@ public class RentCMD extends SubCommand {
     switch (option) {
       case "price" -> {
         //TODO limit price
+        if (args.length < 3) {
+          player.sendMessage(Lang.USAGE.getComponent(new String[] {SubSyntax.COMMAND_RENT_PRICE.getString()}));
+          return;
+        }
         if (!cacheManager.getCacheChunks().isChunkOwner(chunk, uuid)) {
           player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_RENT_PRICE_NOT_OWNER.getComponent(null)));
           return;
         }
-        if (args.length > 2) {
-          final String priceString = args[2];
-          if (!CoreUtil.isPositiveDoubleNumber(priceString)) {
-            player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_VALUE_INVALID.getComponent(new String[]{priceString})));
-            return;
-          }
-          final double price = Double.parseDouble(priceString);
-          borderParticleManager.spawnParticleChunkBorder(player, player.getLocation().getChunk(), ChunkRenderType.INFO, true);
-          cacheManager.getCacheRenters().setRentChunkPrice(uuid, chunk, price);
-          player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_RENT_PRICE_SUCCESS.getComponent(new String[]{
-            chunk,
-            Lang.VALUE_FORMAT.getString(new String[]{CoreUtil.parseValue(price)})
-          })));
-        } else player.sendMessage(Lang.USAGE.getComponent(null).append(SubSyntax.COMMAND_RENT_PRICE.getComponent()));
+        final String priceString = args[2];
+        if (!CoreUtil.isPositiveDoubleNumber(priceString)) {
+          player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_VALUE_INVALID.getComponent(new String[]{priceString})));
+          return;
+        }
+        final double price = Double.parseDouble(priceString);
+        borderParticleManager.spawnParticleChunkBorder(player, player.getLocation().getChunk(), ChunkRenderType.INFO, true);
+        cacheManager.getCacheRenters().setRentChunkPrice(uuid, chunk, price);
+        player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_RENT_PRICE_SUCCESS.getComponent(new String[]{
+          chunk,
+          Lang.VALUE_FORMAT.getString(new String[]{CoreUtil.parseValue(price)})
+        })));
       }
 
       case "remove" -> {
@@ -106,7 +108,7 @@ public class RentCMD extends SubCommand {
           player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_RENT_REMOVE_NOT_RENTABLE.getComponent(new String[]{chunk})));
           return;
         }
-        if (!cacheManager.getCacheRenters().isRented(chunk)) {
+        if (cacheManager.getCacheRenters().isRented(chunk)) {
           player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_RENT_REMOVE_BEING_RENTED.getComponent(new String[]{cacheManager.getCacheRenters().getRenterName(chunk)})));
           return;
         }
@@ -114,6 +116,7 @@ public class RentCMD extends SubCommand {
         cacheManager.getCacheRenters().deleteRentableChunk(chunk);
         player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_RENT_REMOVE_SUCCESS.getComponent(new String[]{chunk})));
       }
+
       case "claim" -> {
         if (!cacheManager.getCacheTowns().getCitizenData().isCitizen(cacheManager.getCacheChunks().getChunkOwner(chunk), uuid)) {
           player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_RENT_CLAIM_NOT_CITIZEN.getComponent(new String[]{cacheManager.getChunkTownName(chunk)})));
@@ -132,10 +135,8 @@ public class RentCMD extends SubCommand {
               borderParticleManager.spawnParticleChunkBorder(player, player.getLocation().getChunk(), ChunkRenderType.CLAIM, false);
               player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_RENT_CLAIM_SUCCESS.getComponent(new String[]{chunk})));
             }
-            case "deny" ->
-              player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_RENT_CLAIM_DENY_SUCCESS.getComponent(new String[]{chunk})));
-            default ->
-              player.sendMessage(Lang.USAGE.getComponent(null).append(SubSyntax.COMMAND_RENT_CLAIM.getComponent()));
+            case "deny" -> player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_RENT_CLAIM_DENY_SUCCESS.getComponent(new String[]{chunk})));
+            default -> player.sendMessage(Lang.USAGE.getComponent(new String[]{SubSyntax.COMMAND_RENT_CLAIM.getString()}));
           }
         } else {
           CoreUtil.sendConfirmMessage(player, Lang.PREFIX.getComponent(null).append(Lang.COMMAND_RENT_CLAIM_WARNING.getComponent(new String[]{chunk,
@@ -147,6 +148,7 @@ public class RentCMD extends SubCommand {
           );
         }
       }
+
       case "unclaim" -> {
         if (!cacheManager.getCacheTowns().getCitizenData().isCitizen(cacheManager.getCacheChunks().getChunkOwner(chunk), uuid)) {
           player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_RENT_CLAIM_NOT_CITIZEN.getComponent(new String[]{cacheManager.getChunkTownName(chunk)})));
@@ -168,10 +170,8 @@ public class RentCMD extends SubCommand {
               borderParticleManager.spawnParticleChunkBorder(player, player.getLocation().getChunk(), ChunkRenderType.UNCLAIM, false);
               player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_RENT_UNCLAIM_SUCCESS.getComponent(new String[]{chunk})));
             }
-            case "deny" ->
-              player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_RENT_UNCLAIM_DENY_SUCCESS.getComponent(new String[]{chunk})));
-            default ->
-              player.sendMessage(Lang.USAGE.getComponent(null).append(SubSyntax.COMMAND_RENT_UNCLAIM.getComponent()));
+            case "deny" -> player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_RENT_UNCLAIM_DENY_SUCCESS.getComponent(new String[]{chunk})));
+            default -> player.sendMessage(Lang.USAGE.getComponent(new String[]{SubSyntax.COMMAND_RENT_UNCLAIM.getString()}));
           }
         } else {
           CoreUtil.sendConfirmMessage(player, Lang.PREFIX.getComponent(null).append(Lang.COMMAND_RENT_UNCLAIM_WARNING.getComponent(new String[]{chunk})),
@@ -182,30 +182,33 @@ public class RentCMD extends SubCommand {
           );
         }
       }
+
       case "trust" -> {
-        if (args.length > 3) {
-          final String action = args[2].toLowerCase();
-          final String stringPlayer = args[3];
-          final OfflinePlayer trustPlayer = Bukkit.getOfflinePlayerIfCached(stringPlayer);
-          if (trustPlayer == null) {
-            player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_PLAYER_NOT_FOUND.getComponent(new String[]{stringPlayer})));
-            return;
+        if (args.length < 3) {
+          player.sendMessage(Lang.USAGE.getComponent(new String[]{SubSyntax.COMMAND_RENT_TRUST.getString()}));
+          return;
+        }
+        final String action = args[2].toLowerCase();
+        final String stringPlayer = args[3];
+        final OfflinePlayer trustPlayer = Bukkit.getOfflinePlayerIfCached(stringPlayer);
+        if (trustPlayer == null) {
+          player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_PLAYER_NOT_FOUND.getComponent(new String[]{stringPlayer})));
+          return;
+        }
+        switch (action) {
+          case "add" -> {
+            cacheManager.getCacheTowns().getTrustData().addTrusted(uuid, trustPlayer.getUniqueId(), true);
+            player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_RENT_TRUST_ADD_SUCCESS.getComponent(new String[]{stringPlayer})));
           }
-          switch (action) {
-            case "add" -> {
-              cacheManager.getCacheTowns().getTrustData().addTrusted(uuid, trustPlayer.getUniqueId(), true);
-              player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_RENT_TRUST_ADD_SUCCESS.getComponent(new String[]{stringPlayer})));
-            }
-            case "remove" -> {
-              cacheManager.getCacheTowns().getTrustData().removeTrusted(uuid, trustPlayer.getUniqueId(), true);
-              player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_RENT_TRUST_REMOVE_SUCCESS.getComponent(new String[]{stringPlayer})));
-            }
-            default ->
-              player.sendMessage(Lang.USAGE.getComponent(null).append(SubSyntax.COMMAND_RENT_TRUST.getComponent()));
+          case "remove" -> {
+            cacheManager.getCacheTowns().getTrustData().removeTrusted(uuid, trustPlayer.getUniqueId(), true);
+            player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_RENT_TRUST_REMOVE_SUCCESS.getComponent(new String[]{stringPlayer})));
           }
-        } else player.sendMessage(Lang.USAGE.getComponent(null).append(SubSyntax.COMMAND_RENT_TRUST.getComponent()));
+          default -> player.sendMessage(Lang.USAGE.getComponent(new String[]{SubSyntax.COMMAND_RENT_TRUST.getString()}));
+        }
       }
-      default -> player.sendMessage(Lang.USAGE.getComponent(null).append(CoreUtil.parseColorComponent(getSyntax())));
+
+      default -> player.sendMessage(Lang.USAGE.getComponent(new String[]{getSyntax()}));
     }
   }
 

@@ -32,7 +32,7 @@ public class UnclaimCMD extends SubCommand {
 
   @Override
   public String getSyntax() {
-    return "&e/towns unclaim";
+    return "/towns unclaim";
   }
 
   @Override

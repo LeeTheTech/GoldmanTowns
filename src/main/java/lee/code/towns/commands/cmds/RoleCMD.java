@@ -6,6 +6,7 @@ import lee.code.towns.commands.SubCommand;
 import lee.code.towns.commands.SubSyntax;
 import lee.code.towns.database.CacheManager;
 import lee.code.towns.database.cache.towns.CacheTowns;
+import lee.code.towns.enums.TownRole;
 import lee.code.towns.lang.Lang;
 import lee.code.towns.utils.CoreUtil;
 import org.bukkit.Bukkit;
@@ -34,7 +35,7 @@ public class RoleCMD extends SubCommand {
 
   @Override
   public String getSyntax() {
-    return "&e/towns role &f<set/create/delete/color> <options>";
+    return "/towns role &f<set/create/delete/color> <options>";
   }
 
   @Override
@@ -54,8 +55,8 @@ public class RoleCMD extends SubCommand {
 
   @Override
   public void perform(Player player, String[] args) {
-    if (args.length <= 1) {
-      player.sendMessage(Lang.USAGE.getComponent(null).append(CoreUtil.parseColorComponent(getSyntax())));
+    if (args.length < 2) {
+      player.sendMessage(Lang.USAGE.getComponent(new String[]{getSyntax()}));
       return;
     }
     final CacheTowns cacheTowns = towns.getCacheManager().getCacheTowns();
@@ -68,7 +69,7 @@ public class RoleCMD extends SubCommand {
     switch (option) {
       case "set" -> {
         if (args.length < 4) {
-          player.sendMessage(Lang.USAGE.getComponent(null).append(SubSyntax.COMMAND_ROLE_SET_SYNTAX.getComponent()));
+          player.sendMessage(Lang.USAGE.getComponent(new String[]{SubSyntax.COMMAND_ROLE_SET_SYNTAX.getString()}));
           return;
         }
         final String playerName = args[2];
@@ -96,7 +97,7 @@ public class RoleCMD extends SubCommand {
       }
       case "create" -> {
         if (args.length < 3) {
-          player.sendMessage(Lang.USAGE.getComponent(null).append(SubSyntax.COMMAND_ROLE_CREATE_SYNTAX.getComponent()));
+          player.sendMessage(Lang.USAGE.getComponent(new String[]{SubSyntax.COMMAND_ROLE_CREATE_SYNTAX.getString()}));
           return;
         }
         final String role = CoreUtil.removeSpecialCharacters(CoreUtil.buildStringFromArgs(args, 2));
@@ -114,7 +115,7 @@ public class RoleCMD extends SubCommand {
       }
       case "delete" -> {
         if (args.length < 3) {
-          player.sendMessage(Lang.USAGE.getComponent(null).append(SubSyntax.COMMAND_ROLE_DELETE_SYNTAX.getComponent()));
+          player.sendMessage(Lang.USAGE.getComponent(new String[]{SubSyntax.COMMAND_ROLE_DELETE_SYNTAX.getString()}));
           return;
         }
         final String role = args[2];
@@ -122,22 +123,25 @@ public class RoleCMD extends SubCommand {
           player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_ROLE_ROLE_NOT_FOUND.getComponent(new String[]{role})));
           return;
         }
+        if (role.equals(CoreUtil.capitalize(TownRole.CITIZEN.name()))) {
+          player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_ROLE_DELETE_DEFAULT_ROLE.getComponent(null)));
+          return;
+        }
         cacheTowns.deleteRole(owner, role);
         player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_ROLE_DELETE_SUCCESS.getComponent(new String[]{role})));
       }
       case "color" -> {
-        final Data data = towns.getData();
         if (args.length < 4) {
-          player.sendMessage(Lang.USAGE.getComponent(null).append(SubSyntax.COMMAND_ROLE_COLOR_SYNTAX.getComponent()));
+          player.sendMessage(Lang.USAGE.getComponent(new String[]{SubSyntax.COMMAND_ROLE_COLOR_SYNTAX.getString()}));
           return;
         }
         final String role = args[2];
         final String color = args[3];
-
         if (!cacheTowns.getRoleData().getAllRolesAndMayor(owner).contains(role)) {
           player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_ROLE_ROLE_NOT_FOUND.getComponent(new String[]{role})));
           return;
         }
+        final Data data = towns.getData();
         if (!data.getColors().containsKey(color)) {
           player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_ROLE_COLOR_NOT_FOUND.getComponent(new String[]{role})));
           return;
@@ -145,7 +149,7 @@ public class RoleCMD extends SubCommand {
         cacheTowns.getRoleColorData().setRoleColor(owner, role, data.getColors().get(color), true);
         player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_ROLE_COLOR_SUCCESS.getComponent(new String[]{role, data.getColors().get(color), CoreUtil.capitalize(color)})));
       }
-      default -> player.sendMessage(Lang.USAGE.getComponent(null).append(CoreUtil.parseColorComponent(getSyntax())));
+      default -> player.sendMessage(Lang.USAGE.getComponent(new String[]{getSyntax()}));
     }
   }
 

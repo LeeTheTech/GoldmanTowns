@@ -34,7 +34,7 @@ public class CreateCMD extends SubCommand {
 
   @Override
   public String getSyntax() {
-    return "&e/towns create &f<name>";
+    return "/towns create &f<name>";
   }
 
   @Override
@@ -58,7 +58,7 @@ public class CreateCMD extends SubCommand {
     final String chunk = ChunkUtil.serializeChunkLocation(player.getLocation().getChunk());
     final CacheManager cacheManager = towns.getCacheManager();
     if (args.length <= 1) {
-      player.sendMessage(Lang.USAGE.getComponent(null).append(CoreUtil.parseColorComponent(getSyntax())));
+      player.sendMessage(Lang.USAGE.getComponent(new String[]{getSyntax()}));
       return;
     }
     if (cacheManager.getCacheTowns().hasTown(uuid)) {

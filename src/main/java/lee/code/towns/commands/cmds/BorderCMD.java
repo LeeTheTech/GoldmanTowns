@@ -33,7 +33,7 @@ public class BorderCMD extends SubCommand {
 
   @Override
   public String getSyntax() {
-    return "&e/towns border &f<town, rented, chunk, off>";
+    return "/towns border &f<town, rented, chunk, off>";
   }
 
   @Override
@@ -53,8 +53,8 @@ public class BorderCMD extends SubCommand {
 
   @Override
   public void perform(Player player, String[] args) {
-    if (args.length <= 1) {
-      player.sendMessage(Lang.USAGE.getComponent(null).append(CoreUtil.parseColorComponent(getSyntax())));
+    if (args.length < 2) {
+      player.sendMessage(Lang.USAGE.getComponent(new String[]{getSyntax()}));
       return;
     }
     final String option = args[1].toLowerCase();
@@ -89,7 +89,7 @@ public class BorderCMD extends SubCommand {
         if (borderParticleManager.hasBorderActive(uuid)) borderParticleManager.stopBorder(uuid);
         player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_BORDER_OFF_SUCCESS.getComponent(new String[]{Lang.OFF.getString(null)})));
       }
-      default -> player.sendMessage(Lang.USAGE.getComponent(null).append(CoreUtil.parseColorComponent(getSyntax())));
+      default -> player.sendMessage(Lang.USAGE.getComponent(new String[]{getSyntax()}));
     }
   }
 

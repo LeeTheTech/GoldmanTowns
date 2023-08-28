@@ -32,7 +32,7 @@ public class ChatCMD extends SubCommand {
 
   @Override
   public String getSyntax() {
-    return "&e/towns chat";
+    return "/towns chat";
   }
 
   @Override

@@ -30,7 +30,7 @@ public class LeaveCMD extends SubCommand {
 
   @Override
   public String getSyntax() {
-    return "&e/towns leave &f<confirm/deny>";
+    return "/towns leave &f<confirm/deny>";
   }
 
   @Override
@@ -68,10 +68,8 @@ public class LeaveCMD extends SubCommand {
           cacheManager.getCacheTowns().leaveTown(uuid);
           player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_LEAVE_SUCCESS.getComponent(new String[]{town})));
         }
-        case "deny" ->
-          player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_LEAVE_DENY.getComponent(new String[]{town})));
-        default ->
-          player.sendMessage(Lang.USAGE.getComponent(null).append(SubSyntax.COMMAND_LEAVE_OPTION_SYNTAX.getComponent()));
+        case "deny" -> player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_LEAVE_DENY.getComponent(new String[]{town})));
+        default -> player.sendMessage(Lang.USAGE.getComponent(new String[]{SubSyntax.COMMAND_LEAVE_OPTION_SYNTAX.getString()}));
       }
     } else {
       CoreUtil.sendConfirmMessage(player, Lang.PREFIX.getComponent(null).append(Lang.COMMAND_LEAVE_WARNING.getComponent(new String[]{town})),

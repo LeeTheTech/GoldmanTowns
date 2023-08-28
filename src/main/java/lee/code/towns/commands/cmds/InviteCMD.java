@@ -33,7 +33,7 @@ public class InviteCMD extends SubCommand {
 
   @Override
   public String getSyntax() {
-    return "&e/towns invite &f<player> <accept/deny>";
+    return "/towns invite &f<player> <accept/deny>";
   }
 
   @Override
@@ -53,8 +53,8 @@ public class InviteCMD extends SubCommand {
 
   @Override
   public void perform(Player player, String[] args) {
-    if (args.length <= 1) {
-      player.sendMessage(Lang.USAGE.getComponent(null).append(CoreUtil.parseColorComponent(getSyntax())));
+    if (args.length < 2) {
+      player.sendMessage(Lang.USAGE.getComponent(new String[]{getSyntax()}));
       return;
     }
     final CacheManager cacheManager = towns.getCacheManager();
@@ -78,8 +78,7 @@ public class InviteCMD extends SubCommand {
           inviteManager.removeActiveInvite(targetID, player.getUniqueId());
           cacheManager.getCacheTowns().sendTownMessage(targetID, Lang.PREFIX.getComponent(null).append(Lang.COMMAND_INVITE_ACCEPT_JOINED_TOWN.getComponent(new String[]{player.getName()})));
           final Player target = Bukkit.getPlayer(targetID);
-          if (target != null && target.isOnline())
-            target.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_INVITE_ACCEPT_TARGET_SUCCESS.getComponent(new String[]{player.getName()})));
+          if (target != null && target.isOnline()) target.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_INVITE_ACCEPT_TARGET_SUCCESS.getComponent(new String[]{player.getName()})));
           player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_INVITE_ACCEPT_SUCCESS.getComponent(new String[]{targetName})));
         }
         case "deny" -> {
@@ -89,12 +88,10 @@ public class InviteCMD extends SubCommand {
           }
           inviteManager.removeActiveInvite(targetID, player.getUniqueId());
           final Player target = Bukkit.getPlayer(targetID);
-          if (target != null && target.isOnline())
-            target.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_INVITE_DENY_TARGET_SUCCESS.getComponent(new String[]{player.getName()})));
+          if (target != null && target.isOnline()) target.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_INVITE_DENY_TARGET_SUCCESS.getComponent(new String[]{player.getName()})));
           player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_INVITE_DENY_SUCCESS.getComponent(new String[]{targetName})));
         }
-        default ->
-          player.sendMessage(Lang.USAGE.getComponent(null).append(SubSyntax.COMMAND_INVITE_OPTION_SYNTAX.getComponent()));
+        default -> player.sendMessage(Lang.USAGE.getComponent(new String[]{SubSyntax.COMMAND_INVITE_OPTION_SYNTAX.getString()}));
       }
       return;
     }

@@ -31,7 +31,7 @@ public class SpawnCMD extends SubCommand {
 
   @Override
   public String getSyntax() {
-    return "&e/towns spawn";
+    return "/towns spawn";
   }
 
   @Override
@@ -60,8 +60,7 @@ public class SpawnCMD extends SubCommand {
     final UUID owner = cacheManager.getCacheTowns().getTargetTownOwner(uuid);
     final Location townSpawn = cacheManager.getCacheTowns().getTownSpawn(owner);
     player.teleportAsync(townSpawn).thenAccept(result -> {
-      if (result)
-        player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_SPAWN_SUCCESS.getComponent(null)));
+      if (result) player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_SPAWN_SUCCESS.getComponent(null)));
       else player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_SPAWN_FAILED.getComponent(null)));
     });
   }

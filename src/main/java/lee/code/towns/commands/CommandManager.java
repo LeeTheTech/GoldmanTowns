@@ -15,9 +15,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class CommandManager implements CommandExecutor {
@@ -72,26 +70,26 @@ public class CommandManager implements CommandExecutor {
   public boolean onCommand(@NonNull CommandSender sender, @NonNull Command command, @NonNull String label, String[] args) {
     if (sender instanceof Player player) {
       if (args.length > 0) {
-        for (SubCommand subCommand : getSubCommands()) {
-          if (args[0].equalsIgnoreCase(subCommand.getName())) {
-            if (!player.hasPermission(subCommand.getPermission()))
-              player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_NO_PERMISSION.getComponent(null)));
-            if (subCommand.performAsync()) performAsync(player, subCommand, args);
-            else subCommand.perform(player, args);
+        if (subCommands.containsKey(args[0].toLowerCase())) {
+          final SubCommand subCommand = getSubCommand(args[0].toLowerCase());
+          if (!player.hasPermission(subCommand.getPermission())) {
+            player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_NO_PERMISSION.getComponent(null)));
             return true;
           }
-        }
-      }
-      sendHelpMessage(player);
-    } else if (args.length > 0) {
-      for (SubCommand subCommand : getSubCommands()) {
-        if (args[0].equalsIgnoreCase(subCommand.getName())) {
-          if (subCommand.performAsync()) performAsync(sender, subCommand, args);
-          else subCommand.performConsole(sender, args);
+          if (subCommand.performAsync()) performAsync(player, subCommand, args);
+          else subCommand.perform(player, args);
           return true;
         }
       }
+    } else if (args.length > 0) {
+      if (subCommands.containsKey(args[0].toLowerCase())) {
+        final SubCommand subCommand = getSubCommand(args[0].toLowerCase());
+        if (subCommand.performAsync()) performAsync(sender, subCommand, args);
+        else subCommand.performConsole(sender, args);
+        return true;
+      }
     }
+    sendHelpMessage(sender);
     return true;
   }
 
@@ -126,21 +124,24 @@ public class CommandManager implements CommandExecutor {
 
   public void sendHelpMessage(CommandSender sender) {
     int number = 1;
+    final Map<SubCommand, String> commands = new HashMap<>();
+    for (SubCommand subCommand : getSubCommands()) commands.put(subCommand, subCommand.getName());
+    final Map<SubCommand, String> sortedCommands = CoreUtil.sortByValue(commands, Comparator.naturalOrder());
     final List<Component> lines = new ArrayList<>();
     lines.add(Lang.COMMAND_HELP_DIVIDER.getComponent(null));
     lines.add(Lang.COMMAND_HELP_TITLE.getComponent(null));
     lines.add(Component.text(""));
 
-    //TODO fix <> issue
-    for (SubCommand subCommand : getSubCommands()) {
+    for (SubCommand subCommand : sortedCommands.keySet()) {
       if (sender.hasPermission(subCommand.getPermission())) {
         final Component helpSubCommand = Lang.COMMAND_HELP_SUB_COMMAND.getComponent(new String[]{String.valueOf(number), subCommand.getSyntax()})
-          .clickEvent(ClickEvent.clickEvent(ClickEvent.Action.SUGGEST_COMMAND, CoreUtil.stripColorCodes(subCommand.getSyntax())))
+          .clickEvent(ClickEvent.clickEvent(ClickEvent.Action.SUGGEST_COMMAND, CoreUtil.getTextBeforeCharacter(subCommand.getSyntax(), '&')))
           .hoverEvent(Lang.COMMAND_HELP_SUB_COMMAND_HOVER.getComponent(new String[]{subCommand.getDescription()}));
         lines.add(helpSubCommand);
         number++;
       }
     }
+
     lines.add(Component.text(""));
     lines.add(Lang.COMMAND_HELP_DIVIDER.getComponent(null));
     for (Component line : lines) sender.sendMessage(line);

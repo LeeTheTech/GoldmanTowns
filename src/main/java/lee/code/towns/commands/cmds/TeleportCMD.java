@@ -25,7 +25,7 @@ public class TeleportCMD extends SubCommand {
 
   @Override
   public String getSyntax() {
-    return "&e/towns teleport &f<chunk/town> <chunk/town>";
+    return "/towns teleport &f<chunk/town> <chunk/town>";
   }
 
   @Override
@@ -45,8 +45,8 @@ public class TeleportCMD extends SubCommand {
 
   @Override
   public void perform(Player player, String[] args) {
-    if (args.length <= 1) {
-      player.sendMessage(Lang.USAGE.getComponent(null).append(CoreUtil.parseColorComponent(getSyntax())));
+    if (args.length < 2) {
+      player.sendMessage(Lang.USAGE.getComponent(new String[]{getSyntax()}));
       return;
     }
     //TODO check if valid chunk to teleport to

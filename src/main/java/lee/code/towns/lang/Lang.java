@@ -8,7 +8,7 @@ import net.kyori.adventure.text.Component;
 @AllArgsConstructor
 public enum Lang {
   PREFIX("&e&lTowns &6➔ "),
-  USAGE("&6&lUsage&7: "),
+  USAGE("&6&lUsage&7: &e{0}"),
   VALUE_FORMAT("&6${0}"),
   ON("&2&lON"),
   OFF("&c&lOFF"),
@@ -20,7 +20,7 @@ public enum Lang {
   PUBLIC("&2&lPublic"),
   PRIVATE("&c&lPrivate"),
   CLICK("&6[&6&l!&6] &ePlease confirm by clicking&7: "),
-  AUTO_MESSAGE_TOWN("&eWelcome to town &6&l{0}&e!"),
+  AUTO_MESSAGE_TOWN("&eWelcome to &6&l{0}&e!"),
   AUTO_MESSAGE_RENTABLE("&eChunk is rentable for {0} &ea day!"),
   AUTO_MESSAGE_RENTED("&eChunk is being rented by &6{0}&e!"),
   MESSAGE_HOVER("&2&lPlayer&7: &e{display-name}\n&2&lTown&7: &e{town}\n&2&lTown Role&7: {role}"),
@@ -155,6 +155,7 @@ public enum Lang {
   ERROR_FLAG_MANAGER_ROLE_NOT_OWNER("&cOnly the mayor can change role flags."),
   ERROR_PLAYER_NOT_FOUND("&cThe player &6{0} &ccould not be found."),
   ERROR_ROLE_ROLE_NOT_FOUND("&cYou do not have a town role called &3{0}&c."),
+  ERROR_ROLE_DELETE_DEFAULT_ROLE("&cYou can't delete the default town role."),
   ERROR_ROLE_COLOR_NOT_FOUND("&cThe color &3{0} &cis not a valid option."),
   ERROR_ROLE_SET_PLAYER_NOT_CITIZEN("&cThe player &6{0} &cis not a town citizen, the player needs to be apart of the town before you can set a town role for the player."),
   ERROR_ROLE_SET_PLAYER_ALREADY_HAS_ROLE("&cThe player &6{0} &calready has the town role {1}&c."),

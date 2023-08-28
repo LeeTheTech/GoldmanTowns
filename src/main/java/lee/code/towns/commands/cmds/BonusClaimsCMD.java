@@ -34,7 +34,7 @@ public class BonusClaimsCMD extends SubCommand {
 
   @Override
   public String getSyntax() {
-    return "&e/towns bonusclaims &f<set/remove/add> <player> <amount>";
+    return "/towns bonusclaims &f<set/remove/add> <player> <amount>";
   }
 
   @Override
@@ -64,8 +64,8 @@ public class BonusClaimsCMD extends SubCommand {
 
   @Override
   public void performSender(CommandSender sender, String[] args) {
-    if (args.length <= 3) {
-      sender.sendMessage(Lang.USAGE.getComponent(null).append(CoreUtil.parseColorComponent(getSyntax())));
+    if (args.length < 4) {
+      sender.sendMessage(Lang.USAGE.getComponent(new String[]{getSyntax()}));
       return;
     }
     final CacheTowns cacheTowns = towns.getCacheManager().getCacheTowns();
@@ -97,7 +97,7 @@ public class BonusClaimsCMD extends SubCommand {
         cacheTowns.removeBonusClaims(targetID, amount);
         sender.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_BONUS_CLAIMS_REMOVE_SUCCESS.getComponent(new String[]{CoreUtil.parseValue(amount), playerName})));
       }
-      default -> sender.sendMessage(Lang.USAGE.getComponent(null).append(CoreUtil.parseColorComponent(getSyntax())));
+      default -> sender.sendMessage(Lang.USAGE.getComponent(new String[]{getSyntax()}));
     }
   }
 

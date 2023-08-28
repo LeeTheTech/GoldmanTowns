@@ -36,7 +36,7 @@ public class MapCMD extends SubCommand {
 
   @Override
   public String getSyntax() {
-    return "&e/towns map";
+    return "/towns map";
   }
 
   @Override

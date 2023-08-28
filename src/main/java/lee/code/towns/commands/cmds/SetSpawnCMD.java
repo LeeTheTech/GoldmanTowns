@@ -31,7 +31,7 @@ public class SetSpawnCMD extends SubCommand {
 
   @Override
   public String getSyntax() {
-    return "&e/towns setspawn";
+    return "/towns setspawn";
   }
 
   @Override
