@@ -44,8 +44,20 @@ public class PvPListener implements Listener {
     final boolean result = cacheManager.checkPlayerLocationFlag(e.getVictim().getUniqueId(), chunk, Flag.PVP, false);
     e.setCancelled(result);
     if (result) {
-      FlagUtil.sendFlagErrorMessage(e.getAttacker(), Flag.PVP, cacheManager.getChunkTownName(chunk), cacheManager.getCacheRenters().getRenterName(chunk));
-      FlagUtil.sendFlagErrorMessage(e.getVictim(), Flag.PVP, cacheManager.getChunkTownName(chunk), cacheManager.getCacheRenters().getRenterName(chunk));
+      FlagUtil.sendFlagErrorMessage(
+        e.getAttacker(),
+        Flag.PVP,
+        cacheManager.getChunkTownName(chunk),
+        cacheManager.getCacheRenters().getRenter(chunk),
+        cacheManager.getCacheRenters().getRenterName(chunk)
+      );
+      FlagUtil.sendFlagErrorMessage(
+        e.getVictim(),
+        Flag.PVP,
+        cacheManager.getChunkTownName(chunk),
+        cacheManager.getCacheRenters().getRenter(chunk),
+        cacheManager.getCacheRenters().getRenterName(chunk)
+      );
     }
   }
 }

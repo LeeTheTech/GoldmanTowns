@@ -1,5 +1,6 @@
 package lee.code.towns.utils;
 
+import lee.code.colors.ColorAPI;
 import lee.code.towns.database.tables.PermissionTable;
 import lee.code.towns.enums.Flag;
 import lee.code.towns.lang.Lang;
@@ -91,9 +92,9 @@ public class FlagUtil {
     return roleFlag.contains(flag);
   }
 
-  public static void sendFlagErrorMessage(Player player, Flag flag, String townName, String renterName) {
-    if (renterName != null) {
-      player.sendActionBar(Lang.ERROR_LOCATION_RENTER_PERMISSION.getComponent(new String[]{townName, renterName, CoreUtil.capitalize(flag.name()), Lang.FALSE.getString()}));
+  public static void sendFlagErrorMessage(Player player, Flag flag, String townName, UUID renterID, String renterName) {
+    if (renterID != null) {
+      player.sendActionBar(Lang.ERROR_LOCATION_RENTER_PERMISSION.getComponent(new String[]{townName, ColorAPI.getNameColor(renterID, renterName), CoreUtil.capitalize(flag.name()), Lang.FALSE.getString()}));
     } else {
       player.sendActionBar(Lang.ERROR_LOCATION_PERMISSION.getComponent(new String[]{townName, CoreUtil.capitalize(flag.name()), Lang.FALSE.getString()}));
     }

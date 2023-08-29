@@ -31,6 +31,12 @@ public class BreakListener implements Listener {
     final String chunk = ChunkUtil.serializeChunkLocation(e.getLocation().getChunk());
     final boolean result = cacheManager.checkPlayerLocationFlag(e.getPlayer().getUniqueId(), chunk, Flag.BREAK, true);
     e.setCancelled(result);
-    if (result) FlagUtil.sendFlagErrorMessage(e.getPlayer(), Flag.BREAK, cacheManager.getChunkTownName(chunk), cacheManager.getCacheRenters().getRenterName(chunk));
+    if (result) FlagUtil.sendFlagErrorMessage(
+      e.getPlayer(),
+      Flag.BREAK,
+      cacheManager.getChunkTownName(chunk),
+      cacheManager.getCacheRenters().getRenter(chunk),
+      cacheManager.getCacheRenters().getRenterName(chunk)
+    );
   }
 }

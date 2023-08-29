@@ -82,6 +82,7 @@ public class CacheRenters extends DatabaseHandler {
   }
 
   public UUID getRenter(String chunk) {
+    if (!isRented(chunk)) return null;
     return rentCache.get(chunk).getRenter();
   }
 

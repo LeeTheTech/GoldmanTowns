@@ -64,6 +64,12 @@ public class PvEListener implements Listener {
     final String chunk = ChunkUtil.serializeChunkLocation(e.getLocation().getChunk());
     final boolean result = cacheManager.checkPlayerLocationFlag(e.getAttacker().getUniqueId(), chunk, Flag.PVE, true);
     e.setCancelled(result);
-    if (result) FlagUtil.sendFlagErrorMessage(e.getAttacker(), Flag.PVE, cacheManager.getChunkTownName(chunk), cacheManager.getCacheRenters().getRenterName(chunk));
+    if (result) FlagUtil.sendFlagErrorMessage(
+      e.getAttacker(),
+      Flag.PVE,
+      cacheManager.getChunkTownName(chunk),
+      cacheManager.getCacheRenters().getRenter(chunk),
+      cacheManager.getCacheRenters().getRenterName(chunk)
+    );
   }
 }

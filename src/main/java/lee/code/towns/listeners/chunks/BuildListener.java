@@ -48,6 +48,12 @@ public class BuildListener implements Listener {
     final String chunk = ChunkUtil.serializeChunkLocation(e.getLocation().getChunk());
     final boolean result = cacheManager.checkPlayerLocationFlag(e.getPlayer().getUniqueId(), chunk, Flag.BUILD, true);
     e.setCancelled(result);
-    if (result) FlagUtil.sendFlagErrorMessage(e.getPlayer(), Flag.BUILD, cacheManager.getChunkTownName(chunk), cacheManager.getCacheRenters().getRenterName(chunk));
+    if (result) FlagUtil.sendFlagErrorMessage(
+      e.getPlayer(),
+      Flag.BUILD,
+      cacheManager.getChunkTownName(chunk),
+      cacheManager.getCacheRenters().getRenter(chunk),
+      cacheManager.getCacheRenters().getRenterName(chunk)
+    );
   }
 }
