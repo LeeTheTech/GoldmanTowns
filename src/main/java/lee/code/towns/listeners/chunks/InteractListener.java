@@ -4,8 +4,8 @@ import lee.code.towns.Towns;
 import lee.code.towns.database.CacheManager;
 import lee.code.towns.enums.Flag;
 import lee.code.towns.events.InteractEvent;
-import lee.code.towns.lang.Lang;
-import lee.code.towns.utils.CoreUtil;
+import lee.code.towns.utils.ChunkUtil;
+import lee.code.towns.utils.FlagUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -26,7 +26,7 @@ public class InteractListener implements Listener {
   public void onInteractListener(PlayerInteractEvent e) {
     if (e.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
       if (e.getClickedBlock() == null) return;
-      final InteractEvent interactEvent = new InteractEvent(e.getPlayer(), e.getClickedBlock().getLocation());
+      final InteractEvent interactEvent = new InteractEvent(e.getPlayer(), ChunkUtil.serializeChunkLocation(e.getClickedBlock().getLocation().getChunk()));
       Bukkit.getServer().getPluginManager().callEvent(interactEvent);
       if (interactEvent.isCancelled()) e.setCancelled(true);
     }
@@ -34,21 +34,21 @@ public class InteractListener implements Listener {
 
   @EventHandler
   public void onInteractEntityListener(PlayerInteractEntityEvent e) {
-    final InteractEvent interactEvent = new InteractEvent(e.getPlayer(), e.getRightClicked().getLocation());
+    final InteractEvent interactEvent = new InteractEvent(e.getPlayer(), ChunkUtil.serializeChunkLocation(e.getRightClicked().getLocation().getChunk()));
     Bukkit.getServer().getPluginManager().callEvent(interactEvent);
     if (interactEvent.isCancelled()) e.setCancelled(true);
   }
 
   @EventHandler
   public void onInteractAtEntityListener(PlayerInteractAtEntityEvent e) {
-    final InteractEvent interactEvent = new InteractEvent(e.getPlayer(), e.getRightClicked().getLocation());
+    final InteractEvent interactEvent = new InteractEvent(e.getPlayer(), ChunkUtil.serializeChunkLocation(e.getRightClicked().getLocation().getChunk()));
     Bukkit.getServer().getPluginManager().callEvent(interactEvent);
     if (interactEvent.isCancelled()) e.setCancelled(true);
   }
 
   @EventHandler
   public void onPlayerBucketEmptyListener(PlayerBucketEmptyEvent e) {
-    final InteractEvent interactEvent = new InteractEvent(e.getPlayer(), e.getBlock().getLocation());
+    final InteractEvent interactEvent = new InteractEvent(e.getPlayer(), ChunkUtil.serializeChunkLocation(e.getBlock().getLocation().getChunk()));
     Bukkit.getServer().getPluginManager().callEvent(interactEvent);
     if (interactEvent.isCancelled()) e.setCancelled(true);
   }
@@ -56,9 +56,8 @@ public class InteractListener implements Listener {
   @EventHandler
   public void onInteract(InteractEvent e) {
     final CacheManager cacheManager = towns.getCacheManager();
-    final boolean result = cacheManager.checkPlayerLocationFlag(e.getPlayer().getUniqueId(), e.getLocation(), Flag.INTERACT, true);
+    final boolean result = cacheManager.checkPlayerLocationFlag(e.getPlayer().getUniqueId(), e.getChunk(), Flag.INTERACT, true);
     e.setCancelled(result);
-    if (result)
-      e.getPlayer().sendActionBar(Lang.ERROR_LOCATION_PERMISSION.getComponent(new String[]{cacheManager.getChunkTownName(e.getLocation()), CoreUtil.capitalize(Flag.INTERACT.name()), Lang.FALSE.getString()}));
+    if (result) FlagUtil.sendFlagErrorMessage(e.getPlayer(), Flag.INTERACT, cacheManager.getChunkTownName(e.getChunk()), cacheManager.getCacheRenters().getRenterName(e.getChunk()));
   }
 }

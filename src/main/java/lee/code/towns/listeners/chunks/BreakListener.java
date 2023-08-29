@@ -4,8 +4,8 @@ import lee.code.towns.Towns;
 import lee.code.towns.database.CacheManager;
 import lee.code.towns.enums.Flag;
 import lee.code.towns.events.BreakEvent;
-import lee.code.towns.lang.Lang;
-import lee.code.towns.utils.CoreUtil;
+import lee.code.towns.utils.ChunkUtil;
+import lee.code.towns.utils.FlagUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -20,7 +20,7 @@ public class BreakListener implements Listener {
 
   @EventHandler
   public void onBlockBreakListener(BlockBreakEvent e) {
-    final BreakEvent breakEvent = new BreakEvent(e.getPlayer(), e.getBlock().getLocation());
+    final BreakEvent breakEvent = new BreakEvent(e.getPlayer(), ChunkUtil.serializeChunkLocation(e.getBlock().getLocation().getChunk()));
     Bukkit.getServer().getPluginManager().callEvent(breakEvent);
     if (breakEvent.isCancelled()) e.setCancelled(true);
   }
@@ -28,9 +28,8 @@ public class BreakListener implements Listener {
   @EventHandler
   public void onBreak(BreakEvent e) {
     final CacheManager cacheManager = towns.getCacheManager();
-    final boolean result = cacheManager.checkPlayerLocationFlag(e.getPlayer().getUniqueId(), e.getLocation(), Flag.BREAK, true);
+    final boolean result = cacheManager.checkPlayerLocationFlag(e.getPlayer().getUniqueId(), e.getChunk(), Flag.BREAK, true);
     e.setCancelled(result);
-    if (result)
-      e.getPlayer().sendActionBar(Lang.ERROR_LOCATION_PERMISSION.getComponent(new String[]{cacheManager.getChunkTownName(e.getLocation()), CoreUtil.capitalize(Flag.BREAK.name()), Lang.FALSE.getString()}));
+    if (result) FlagUtil.sendFlagErrorMessage(e.getPlayer(), Flag.BREAK, cacheManager.getChunkTownName(e.getChunk()), cacheManager.getCacheRenters().getRenterName(e.getChunk()));
   }
 }

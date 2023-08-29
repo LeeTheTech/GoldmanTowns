@@ -3,6 +3,7 @@ package lee.code.towns.listeners.chunks;
 import lee.code.towns.Towns;
 import lee.code.towns.enums.Flag;
 import lee.code.towns.events.RedstoneEvent;
+import lee.code.towns.utils.ChunkUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -32,6 +33,6 @@ public class RedstoneListener implements Listener {
 
   @EventHandler
   public void onRedstone(RedstoneEvent e) {
-    e.setCancelled(towns.getCacheManager().checkLocationFlag(e.getLocation(), Flag.REDSTONE));
+    e.setCancelled(towns.getCacheManager().checkLocationFlag(ChunkUtil.serializeChunkLocation(e.getLocation().getChunk()), Flag.REDSTONE));
   }
 }

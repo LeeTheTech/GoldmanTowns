@@ -10,14 +10,13 @@ import org.bukkit.event.HandlerList;
 
 public class BuildEvent extends Event implements Cancellable {
   private static final HandlerList handlers = new HandlerList();
-
   @Getter Player player;
-  @Getter Location location;
+  @Getter String chunk;
   @Setter @Getter boolean cancelled;
 
-  public BuildEvent(Player player, Location location) {
+  public BuildEvent(Player player, String chunk) {
     this.player = player;
-    this.location = location;
+    this.chunk = chunk;
   }
 
   @Override

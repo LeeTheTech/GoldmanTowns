@@ -33,8 +33,7 @@ public class CacheManager {
     this.cacheServer = new CacheServer(databaseManager);
   }
 
-  public boolean checkPlayerLocationFlag(UUID uuid, Location location, Flag flag, boolean ownerBypass) {
-    final String chunk = ChunkUtil.serializeChunkLocation(location.getChunk());
+  public boolean checkPlayerLocationFlag(UUID uuid, String chunk, Flag flag, boolean ownerBypass) {
     if (!cacheChunks.isClaimed(chunk)) return false;
     if (cacheRenters.isRented(chunk)) {
       if (cacheRenters.isPlayerRenting(uuid, chunk)) return false;
@@ -58,8 +57,7 @@ public class CacheManager {
     return !cacheTowns.getPermData().checkGlobalPermissionFlag(owner, flag);
   }
 
-  public boolean checkLocationFlag(Location location, Flag flag) {
-    final String chunk = ChunkUtil.serializeChunkLocation(location.getChunk());
+  public boolean checkLocationFlag(String chunk, Flag flag) {
     if (!cacheChunks.isClaimed(chunk)) return false;
     final UUID owner = cacheChunks.getChunkOwner(chunk);
     if (cacheChunks.getChunkPermData().checkChunkPermissionFlag(chunk, Flag.CHUNK_FLAGS_ENABLED)) {

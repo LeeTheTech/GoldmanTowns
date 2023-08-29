@@ -3,6 +3,7 @@ package lee.code.towns.listeners.chunks;
 import lee.code.towns.Towns;
 import lee.code.towns.enums.Flag;
 import lee.code.towns.events.ExplosionEvent;
+import lee.code.towns.utils.ChunkUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
 import org.bukkit.entity.EnderDragon;
@@ -41,6 +42,6 @@ public class ExplosionListener implements Listener {
 
   @EventHandler
   public void onExplosion(ExplosionEvent e) {
-    e.setCancelled(towns.getCacheManager().checkLocationFlag(e.getLocation(), Flag.EXPLOSION));
+    e.setCancelled(towns.getCacheManager().checkLocationFlag(ChunkUtil.serializeChunkLocation(e.getLocation().getChunk()), Flag.EXPLOSION));
   }
 }

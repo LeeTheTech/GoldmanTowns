@@ -98,6 +98,7 @@ public class CacheRenters extends DatabaseHandler {
   }
 
   public String getRenterName(String chunk) {
+    if (!isRented(chunk)) return null;
     return Bukkit.getOfflinePlayer(getRentTable(chunk).getRenter()).getName();
   }
 

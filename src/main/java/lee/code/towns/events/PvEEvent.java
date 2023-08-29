@@ -10,14 +10,13 @@ import org.bukkit.event.HandlerList;
 
 public class PvEEvent extends Event implements Cancellable {
   private static final HandlerList handlers = new HandlerList();
-
   @Getter Player attacker;
-  @Getter Location location;
+  @Getter String chunk;
   @Setter @Getter boolean cancelled;
 
-  public PvEEvent(Player attacker, Location location) {
+  public PvEEvent(Player attacker, String chunk) {
     this.attacker = attacker;
-    this.location = location;
+    this.chunk = chunk;
   }
 
   @Override

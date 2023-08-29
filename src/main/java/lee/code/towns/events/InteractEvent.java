@@ -12,12 +12,12 @@ public class InteractEvent extends Event implements Cancellable {
   private static final HandlerList handlers = new HandlerList();
 
   @Getter Player player;
-  @Getter Location location;
+  @Getter String chunk;
   @Setter @Getter boolean cancelled;
 
-  public InteractEvent(Player player, Location location) {
+  public InteractEvent(Player player, String chunk) {
     this.player = player;
-    this.location = location;
+    this.chunk = chunk;
   }
 
   @Override
