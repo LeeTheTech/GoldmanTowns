@@ -3,12 +3,10 @@ package lee.code.towns.commands.cmds;
 import lee.code.towns.commands.SubCommand;
 import lee.code.towns.lang.Lang;
 import lee.code.towns.utils.ChunkUtil;
-import lee.code.towns.utils.CoreUtil;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class TeleportCMD extends SubCommand {

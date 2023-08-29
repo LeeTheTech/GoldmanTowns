@@ -1,5 +1,6 @@
 package lee.code.towns.commands.cmds;
 
+import lee.code.colors.ColorAPI;
 import lee.code.towns.Towns;
 import lee.code.towns.commands.SubCommand;
 import lee.code.towns.database.CacheManager;
@@ -65,7 +66,9 @@ public class ChunkInfoCMD extends SubCommand {
     lines.add(Lang.COMMAND_CHUNK_INFO_CHUNK.getComponent(new String[]{chunk}));
     lines.add(Lang.COMMAND_CHUNK_INFO_TOWN_OWNER.getComponent(new String[]{cacheManager.getChunkTownName(chunk)}));
     if (cacheManager.getCacheRenters().isRented(chunk)) {
-      lines.add(Lang.COMMAND_CHUNK_INFO_RENTER.getComponent(new String[]{cacheManager.getCacheRenters().getRenterName(chunk)}));
+      lines.add(Lang.COMMAND_CHUNK_INFO_RENTER.getComponent(new String[]{
+        ColorAPI.getNameColor(cacheManager.getCacheRenters().getRenter(chunk), cacheManager.getCacheRenters().getRenterName(chunk))
+      }));
       lines.add(Lang.COMMAND_CHUNK_INFO_RENT_COST.getComponent(new String[]{
         Lang.VALUE_FORMAT.getString(new String[]{CoreUtil.parseValue(cacheManager.getCacheRenters().getRentPrice(chunk))})
       }));

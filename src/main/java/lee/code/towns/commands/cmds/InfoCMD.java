@@ -1,5 +1,6 @@
 package lee.code.towns.commands.cmds;
 
+import lee.code.colors.ColorAPI;
 import lee.code.towns.Towns;
 import lee.code.towns.commands.SubCommand;
 import lee.code.towns.database.cache.chunks.CacheChunks;
@@ -71,7 +72,7 @@ public class InfoCMD extends SubCommand {
     lines.add(Component.text(""));
     lines.add(Lang.COMMAND_INFO_TOWN_PUBLIC.getComponent(new String[]{status}));
     lines.add(Lang.COMMAND_INFO_TOWN_NAME.getComponent(new String[]{cacheTowns.getTownName(owner)}));
-    lines.add(Lang.COMMAND_INFO_TOWN_OWNER.getComponent(new String[]{Bukkit.getOfflinePlayer(owner).getName()}));
+    lines.add(Lang.COMMAND_INFO_TOWN_OWNER.getComponent(new String[]{ColorAPI.getNameColor(owner, Bukkit.getOfflinePlayer(owner).getName())}));
     lines.add(Lang.COMMAND_INFO_TOWN_CITIZENS.getComponent(new String[]{String.valueOf(cacheTowns.getCitizenData().getCitizenAmount(owner))}));
     lines.add(Lang.COMMAND_INFO_TOWN_CHUNKS.getComponent(new String[]{String.valueOf(cacheChunks.getChunkListData().getChunkClaims(owner)), String.valueOf(cacheTowns.getMaxChunkClaims(owner))}));
     lines.add(Lang.COMMAND_INFO_TOWN_BONUS_CLAIMS.getComponent(new String[]{CoreUtil.parseValue(cacheTowns.getBonusClaims(owner))}));

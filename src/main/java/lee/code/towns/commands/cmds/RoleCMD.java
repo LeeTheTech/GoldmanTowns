@@ -1,5 +1,6 @@
 package lee.code.towns.commands.cmds;
 
+import lee.code.colors.ColorAPI;
 import lee.code.towns.Data;
 import lee.code.towns.Towns;
 import lee.code.towns.commands.SubCommand;
@@ -72,28 +73,28 @@ public class RoleCMD extends SubCommand {
           player.sendMessage(Lang.USAGE.getComponent(new String[]{SubSyntax.COMMAND_ROLE_SET_SYNTAX.getString()}));
           return;
         }
-        final String playerName = args[2];
+        final String targetString = args[2];
         final String role = args[3];
 
-        final UUID targetUniqueID = Bukkit.getPlayerUniqueId(playerName);
-        if (targetUniqueID == null) {
-          player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_PLAYER_NOT_FOUND.getComponent(new String[]{playerName})));
+        final UUID targetID = Bukkit.getPlayerUniqueId(targetString);
+        if (targetID == null) {
+          player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_PLAYER_NOT_FOUND.getComponent(new String[]{targetString})));
           return;
         }
         if (!cacheTowns.getRoleData().getAllRoles(owner).contains(role)) {
           player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_ROLE_ROLE_NOT_FOUND.getComponent(new String[]{role})));
           return;
         }
-        if (!cacheTowns.getCitizenData().isCitizen(owner, targetUniqueID)) {
-          player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_ROLE_SET_PLAYER_NOT_CITIZEN.getComponent(new String[]{playerName})));
+        if (!cacheTowns.getCitizenData().isCitizen(owner, targetID)) {
+          player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_ROLE_SET_PLAYER_NOT_CITIZEN.getComponent(new String[]{ColorAPI.getNameColor(targetID, targetString)})));
           return;
         }
-        if (cacheTowns.getPlayerRoleData().getPlayerRole(owner, targetUniqueID).equals(role)) {
-          player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_ROLE_SET_PLAYER_ALREADY_HAS_ROLE.getComponent(new String[]{playerName, cacheTowns.getRoleColorData().getRoleWithColor(owner, role)})));
+        if (cacheTowns.getPlayerRoleData().getPlayerRole(owner, targetID).equals(role)) {
+          player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_ROLE_SET_PLAYER_ALREADY_HAS_ROLE.getComponent(new String[]{ColorAPI.getNameColor(targetID, targetString), cacheTowns.getRoleColorData().getRoleWithColor(owner, role)})));
           return;
         }
-        cacheTowns.getPlayerRoleData().setPlayerRole(owner, targetUniqueID, role, true);
-        player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_ROLE_SET_SUCCESS.getComponent(new String[]{playerName, role})));
+        cacheTowns.getPlayerRoleData().setPlayerRole(owner, targetID, role, true);
+        player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_ROLE_SET_SUCCESS.getComponent(new String[]{ColorAPI.getNameColor(targetID, targetString), cacheTowns.getRoleColorData().getRoleWithColor(owner, role)})));
       }
       case "create" -> {
         if (args.length < 3) {
@@ -103,7 +104,7 @@ public class RoleCMD extends SubCommand {
         final String role = CoreUtil.removeSpecialCharacters(CoreUtil.buildStringFromArgs(args, 2));
         final List<String> roles = cacheTowns.getRoleData().getAllRoles(owner);
         if (roles.contains(role)) {
-          player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_ROLE_CREATE_ROLE_EXISTS.getComponent(new String[]{role})));
+          player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_ROLE_CREATE_ROLE_EXISTS.getComponent(new String[]{cacheTowns.getRoleColorData().getRoleWithColor(owner, role)})));
           return;
         }
         if (roles.size() >= 7) {
@@ -127,8 +128,9 @@ public class RoleCMD extends SubCommand {
           player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_ROLE_DELETE_DEFAULT_ROLE.getComponent(null)));
           return;
         }
+        final String roleWithColor = cacheTowns.getRoleColorData().getRoleWithColor(owner, role);
         cacheTowns.deleteRole(owner, role);
-        player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_ROLE_DELETE_SUCCESS.getComponent(new String[]{role})));
+        player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_ROLE_DELETE_SUCCESS.getComponent(new String[]{roleWithColor})));
       }
       case "color" -> {
         if (args.length < 4) {
@@ -166,6 +168,7 @@ public class RoleCMD extends SubCommand {
   public List<String> onTabComplete(CommandSender sender, String[] args) {
     if (sender instanceof Player player) {
       final CacheManager cacheManager = towns.getCacheManager();
+      if (!cacheManager.getCacheTowns().hasTown(player.getUniqueId())) return new ArrayList<>();
       switch (args.length) {
         case 3 -> {
           if (args[1].equalsIgnoreCase("set"))

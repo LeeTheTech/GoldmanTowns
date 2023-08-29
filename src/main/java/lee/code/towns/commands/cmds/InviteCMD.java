@@ -1,5 +1,6 @@
 package lee.code.towns.commands.cmds;
 
+import lee.code.colors.ColorAPI;
 import lee.code.towns.Towns;
 import lee.code.towns.commands.SubCommand;
 import lee.code.towns.commands.SubSyntax;
@@ -8,6 +9,7 @@ import lee.code.towns.lang.Lang;
 import lee.code.towns.managers.InviteManager;
 import lee.code.towns.utils.CoreUtil;
 import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.util.StringUtil;
@@ -76,10 +78,10 @@ public class InviteCMD extends SubCommand {
           }
           cacheManager.getCacheTowns().getCitizenData().addCitizen(targetID, player.getUniqueId());
           inviteManager.removeActiveInvite(targetID, player.getUniqueId());
-          cacheManager.getCacheTowns().sendTownMessage(targetID, Lang.PREFIX.getComponent(null).append(Lang.COMMAND_INVITE_ACCEPT_JOINED_TOWN.getComponent(new String[]{player.getName()})));
+          cacheManager.getCacheTowns().sendTownMessage(targetID, Lang.PREFIX.getComponent(null).append(Lang.COMMAND_INVITE_ACCEPT_JOINED_TOWN.getComponent(new String[]{ColorAPI.getNameColor(player.getUniqueId(), player.getName())})));
           final Player target = Bukkit.getPlayer(targetID);
-          if (target != null && target.isOnline()) target.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_INVITE_ACCEPT_TARGET_SUCCESS.getComponent(new String[]{player.getName()})));
-          player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_INVITE_ACCEPT_SUCCESS.getComponent(new String[]{targetName})));
+          if (target != null && target.isOnline()) target.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_INVITE_ACCEPT_TARGET_SUCCESS.getComponent(new String[]{ColorAPI.getNameColor(player.getUniqueId(), player.getName())})));
+          player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_INVITE_ACCEPT_SUCCESS.getComponent(new String[]{ColorAPI.getNameColor(targetID, targetName)})));
         }
         case "deny" -> {
           if (!inviteManager.hasActiveInvite(targetID, player.getUniqueId())) {
@@ -88,8 +90,8 @@ public class InviteCMD extends SubCommand {
           }
           inviteManager.removeActiveInvite(targetID, player.getUniqueId());
           final Player target = Bukkit.getPlayer(targetID);
-          if (target != null && target.isOnline()) target.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_INVITE_DENY_TARGET_SUCCESS.getComponent(new String[]{player.getName()})));
-          player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_INVITE_DENY_SUCCESS.getComponent(new String[]{targetName})));
+          if (target != null && target.isOnline()) target.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_INVITE_DENY_TARGET_SUCCESS.getComponent(new String[]{ColorAPI.getNameColor(player.getUniqueId(), player.getName())})));
+          player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_INVITE_DENY_SUCCESS.getComponent(new String[]{ColorAPI.getNameColor(targetID, targetName)})));
         }
         default -> player.sendMessage(Lang.USAGE.getComponent(new String[]{SubSyntax.COMMAND_INVITE_OPTION_SYNTAX.getString()}));
       }
@@ -115,22 +117,22 @@ public class InviteCMD extends SubCommand {
       player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_INVITE_SELF.getComponent(null)));
       return;
     }
-    if (cacheManager.getCacheTowns().hasTown(target.getUniqueId()) || cacheManager.getCacheTowns().hasJoinedTown(target.getUniqueId())) {
-      player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_INVITE_APART_OF_TOWN.getComponent(new String[]{targetName})));
+    if (cacheManager.getCacheTowns().hasTownOrJoinedTown(target.getUniqueId())) {
+      player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_INVITE_APART_OF_TOWN.getComponent(new String[]{ColorAPI.getNameColor(target.getUniqueId(), targetName)})));
       return;
     }
     if (inviteManager.hasActiveInvite(player.getUniqueId(), target.getUniqueId())) {
-      player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_INVITE_PENDING.getComponent(new String[]{targetName})));
+      player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_INVITE_PENDING.getComponent(new String[]{ColorAPI.getNameColor(target.getUniqueId(), targetName)})));
       return;
     }
 
     inviteManager.setActiveInvite(player.getUniqueId(), target.getUniqueId());
-    player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_INVITE_SUCCESS.getComponent(new String[]{target.getName()})));
+    player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_INVITE_SUCCESS.getComponent(new String[]{ColorAPI.getNameColor(target.getUniqueId(), target.getName())})));
 
     CoreUtil.sendConfirmMessage(target, Lang.PREFIX.getComponent(null).append(Lang.COMMAND_INVITE_TARGET_SUCCESS.getComponent(new String[]{cacheManager.getCacheTowns().getTownName(player.getUniqueId())})),
       "/towns invite " + player.getName(),
-      Lang.COMMAND_ACCEPT_INVITE_HOVER.getComponent(new String[]{player.getName()}),
-      Lang.COMMAND_DENY_INVITE_HOVER.getComponent(new String[]{player.getName()}),
+      Lang.COMMAND_ACCEPT_INVITE_HOVER.getComponent(new String[]{ColorAPI.getNameColor(player.getUniqueId(), player.getName())}),
+      Lang.COMMAND_DENY_INVITE_HOVER.getComponent(new String[]{ColorAPI.getNameColor(player.getUniqueId(), player.getName())}),
       false
     );
   }

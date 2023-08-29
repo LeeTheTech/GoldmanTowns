@@ -1,5 +1,6 @@
 package lee.code.towns.commands.cmds;
 
+import lee.code.colors.ColorAPI;
 import lee.code.towns.Towns;
 import lee.code.towns.commands.SubCommand;
 import lee.code.towns.commands.SubSyntax;
@@ -69,16 +70,15 @@ public class RentCMD extends SubCommand {
     final String chunk = ChunkUtil.serializeChunkLocation(player.getLocation().getChunk());
     final String option = args[1].toLowerCase();
 
-    if (!cacheManager.getCacheChunks().isClaimed(chunk)) {
-      player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_RENT_NOT_CLAIMED.getComponent(null)));
-      return;
-    }
-
     switch (option) {
       case "price" -> {
         //TODO limit price
         if (args.length < 3) {
           player.sendMessage(Lang.USAGE.getComponent(new String[] {SubSyntax.COMMAND_RENT_PRICE.getString()}));
+          return;
+        }
+        if (!cacheManager.getCacheChunks().isClaimed(chunk)) {
+          player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_RENT_NOT_CLAIMED.getComponent(null)));
           return;
         }
         if (!cacheManager.getCacheChunks().isChunkOwner(chunk, uuid)) {
@@ -100,6 +100,10 @@ public class RentCMD extends SubCommand {
       }
 
       case "remove" -> {
+        if (!cacheManager.getCacheChunks().isClaimed(chunk)) {
+          player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_RENT_NOT_CLAIMED.getComponent(null)));
+          return;
+        }
         if (!cacheManager.getCacheChunks().isChunkOwner(chunk, uuid)) {
           player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_RENT_REMOVE_NOT_OWNER.getComponent(null)));
           return;
@@ -189,20 +193,24 @@ public class RentCMD extends SubCommand {
           return;
         }
         final String action = args[2].toLowerCase();
-        final String stringPlayer = args[3];
-        final OfflinePlayer trustPlayer = Bukkit.getOfflinePlayerIfCached(stringPlayer);
-        if (trustPlayer == null) {
-          player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_PLAYER_NOT_FOUND.getComponent(new String[]{stringPlayer})));
+        final String targetString = args[3];
+        final OfflinePlayer offlineTarget = Bukkit.getOfflinePlayerIfCached(targetString);
+        if (offlineTarget == null) {
+          player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_PLAYER_NOT_FOUND.getComponent(new String[]{targetString})));
+          return;
+        }
+        if (!cacheManager.getCacheTowns().hasTownsData(offlineTarget.getUniqueId())) {
+          player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_NO_PLAYER_DATA.getComponent(new String[]{targetString})));
           return;
         }
         switch (action) {
           case "add" -> {
-            cacheManager.getCacheTowns().getTrustData().addTrusted(uuid, trustPlayer.getUniqueId(), true);
-            player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_RENT_TRUST_ADD_SUCCESS.getComponent(new String[]{stringPlayer})));
+            cacheManager.getCacheTowns().getTrustData().addTrusted(uuid, offlineTarget.getUniqueId(), true);
+            player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_RENT_TRUST_ADD_SUCCESS.getComponent(new String[]{ColorAPI.getNameColor(offlineTarget.getUniqueId(), targetString)})));
           }
           case "remove" -> {
-            cacheManager.getCacheTowns().getTrustData().removeTrusted(uuid, trustPlayer.getUniqueId(), true);
-            player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_RENT_TRUST_REMOVE_SUCCESS.getComponent(new String[]{stringPlayer})));
+            cacheManager.getCacheTowns().getTrustData().removeTrusted(uuid, offlineTarget.getUniqueId(), true);
+            player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_RENT_TRUST_REMOVE_SUCCESS.getComponent(new String[]{ColorAPI.getNameColor(offlineTarget.getUniqueId(), targetString)})));
           }
           default -> player.sendMessage(Lang.USAGE.getComponent(new String[]{SubSyntax.COMMAND_RENT_TRUST.getString()}));
         }

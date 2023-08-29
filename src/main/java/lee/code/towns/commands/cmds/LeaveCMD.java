@@ -1,5 +1,6 @@
 package lee.code.towns.commands.cmds;
 
+import lee.code.colors.ColorAPI;
 import lee.code.towns.Towns;
 import lee.code.towns.commands.SubCommand;
 import lee.code.towns.commands.SubSyntax;
@@ -64,7 +65,7 @@ public class LeaveCMD extends SubCommand {
     if (args.length > 1) {
       switch (args[1].toLowerCase()) {
         case "confirm" -> {
-          cacheManager.getCacheTowns().sendTownMessage(uuid, Lang.PREFIX.getComponent(null).append(Lang.COMMAND_LEAVE_PLAYER_LEFT_TOWN.getComponent(new String[]{player.getName()})));
+          cacheManager.getCacheTowns().sendTownMessage(uuid, Lang.PREFIX.getComponent(null).append(Lang.COMMAND_LEAVE_PLAYER_LEFT_TOWN.getComponent(new String[]{ColorAPI.getNameColor(player.getUniqueId(), player.getName())})));
           cacheManager.getCacheTowns().leaveTown(uuid);
           player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_LEAVE_SUCCESS.getComponent(new String[]{town})));
         }

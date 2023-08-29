@@ -1,5 +1,6 @@
 package lee.code.towns.commands.cmds;
 
+import lee.code.colors.ColorAPI;
 import lee.code.towns.Towns;
 import lee.code.towns.commands.SubCommand;
 import lee.code.towns.database.cache.towns.CacheTowns;
@@ -70,32 +71,32 @@ public class BonusClaimsCMD extends SubCommand {
     }
     final CacheTowns cacheTowns = towns.getCacheManager().getCacheTowns();
     final String option = args[1].toLowerCase();
-    final String playerName = args[2];
+    final String targetString = args[2];
     final String amountString = args[3];
     if (!CoreUtil.isPositiveIntNumber(amountString)) {
       sender.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_VALUE_INVALID.getComponent(new String[]{amountString})));
       return;
     }
     final int amount = Integer.parseInt(amountString);
-    final OfflinePlayer oPlayer = Bukkit.getOfflinePlayerIfCached(playerName);
-    if (oPlayer == null) {
-      sender.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_PLAYER_NOT_FOUND.getComponent(new String[]{playerName})));
+    final OfflinePlayer offlineTarget = Bukkit.getOfflinePlayerIfCached(targetString);
+    if (offlineTarget == null) {
+      sender.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_PLAYER_NOT_FOUND.getComponent(new String[]{targetString})));
       return;
     }
-    final UUID targetID = oPlayer.getUniqueId();
+    final UUID targetID = offlineTarget.getUniqueId();
 
     switch (option) {
       case "set" -> {
         cacheTowns.setBonusClaims(targetID, amount);
-        sender.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_BONUS_CLAIMS_SET_SUCCESS.getComponent(new String[]{playerName, CoreUtil.parseValue(amount)})));
+        sender.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_BONUS_CLAIMS_SET_SUCCESS.getComponent(new String[]{ColorAPI.getNameColor(targetID, targetString), CoreUtil.parseValue(amount)})));
       }
       case "add" -> {
         cacheTowns.addBonusClaims(targetID, amount);
-        sender.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_BONUS_CLAIMS_ADD_SUCCESS.getComponent(new String[]{CoreUtil.parseValue(amount), playerName})));
+        sender.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_BONUS_CLAIMS_ADD_SUCCESS.getComponent(new String[]{CoreUtil.parseValue(amount), ColorAPI.getNameColor(targetID, targetString)})));
       }
       case "remove" -> {
         cacheTowns.removeBonusClaims(targetID, amount);
-        sender.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_BONUS_CLAIMS_REMOVE_SUCCESS.getComponent(new String[]{CoreUtil.parseValue(amount), playerName})));
+        sender.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_BONUS_CLAIMS_REMOVE_SUCCESS.getComponent(new String[]{CoreUtil.parseValue(amount), ColorAPI.getNameColor(targetID, targetString)})));
       }
       default -> sender.sendMessage(Lang.USAGE.getComponent(new String[]{getSyntax()}));
     }

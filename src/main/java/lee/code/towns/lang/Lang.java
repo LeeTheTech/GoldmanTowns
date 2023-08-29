@@ -80,13 +80,13 @@ public enum Lang {
   COMMAND_SET_SPAWN_SUCCESS("&aYou successfully set your town spawn!"),
   COMMAND_SPAWN_FAILED("&cFailed to teleport to town spawn."),
   COMMAND_AUTO_CLAIM_SUCCESS("&aYou successfully toggled auto claim {0}&a."),
-  COMMAND_ROLE_SET_SUCCESS("&aYou successfully set player &6{0} &ato the town role &3{1}&a."),
-  COMMAND_ROLE_CREATE_SUCCESS("&aYou successfully created the town role &3{0}&a."),
-  COMMAND_ROLE_DELETE_SUCCESS("&aYou successfully deleted the town role &3{0}&a."),
+  COMMAND_ROLE_SET_SUCCESS("&aYou successfully set player &6{0} &ato the town role &b{1}&a."),
+  COMMAND_ROLE_CREATE_SUCCESS("&aYou successfully created the town role &b{0}&a."),
+  COMMAND_ROLE_DELETE_SUCCESS("&aYou successfully deleted the town role &b{0}&a."),
   COMMAND_ROLE_COLOR_SUCCESS("&aYou successfully set role &3{0} &acolor to {1}{2}&a."),
   COMMAND_INVITE_TARGET_SUCCESS("&aWould you like to join the town &6{0}&a?"),
   COMMAND_INVITE_ACCEPT_TARGET_SUCCESS("&aThe player &6{0} &aaccepted your town invite!"),
-  COMMAND_INVITE_ACCEPT_SUCCESS("&aYou accepted &6{0} &atown invite!"),
+  COMMAND_INVITE_ACCEPT_SUCCESS("&aYou accepted &6{0}'s &atown invite!"),
   COMMAND_INVITE_ACCEPT_JOINED_TOWN("&aThe player &6{0} &ahas joined the town!"),
   CONFIRM_ABANDON_HOVER("&aClick to abandon your town!"),
   DENY_ABANDON_HOVER("&cClick to deny abandoning your town!"),
@@ -183,6 +183,7 @@ public enum Lang {
   ERROR_VALUE_INVALID("&cThe input &3{0} &cis not an acceptable value."),
   ERROR_TOWN_OWNER_LEAVE("&cYou are the owner of the town, if you want to leave you'll need to abandon the town."),
   ERROR_BORDER_NONE_RENTED("&cYou currently don't have any rented chunks."),
+  ERROR_NO_PLAYER_DATA("&cCould not find any player data for &6{0}&c."),
 
   ;
   @Getter private final String string;
