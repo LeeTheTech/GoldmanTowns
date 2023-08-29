@@ -1,5 +1,6 @@
 package lee.code.towns.managers;
 
+import lee.code.colors.ColorAPI;
 import lee.code.towns.Towns;
 import lee.code.towns.database.CacheManager;
 import lee.code.towns.enums.ChatChannel;
@@ -16,6 +17,7 @@ import java.util.regex.Pattern;
 
 public class ChatChannelManager {
   private final Towns towns;
+  private final Pattern nameColorPattern = Pattern.compile("\\{color-name\\}");
   private final Pattern namePattern = Pattern.compile("\\{name\\}");
   private final Pattern displayNamePattern = Pattern.compile("\\{display-name\\}");
   private final Pattern messagePattern = Pattern.compile("\\{message\\}");
@@ -52,6 +54,7 @@ public class ChatChannelManager {
     final CacheManager cacheManager = towns.getCacheManager();
     final UUID uuid = player.getUniqueId();
     Component targetMessage = chatFormat;
+    targetMessage = targetMessage.replaceText(createTextReplacementConfig(nameColorPattern, CoreUtil.parseColorComponent(ColorAPI.getNameColor(player.getUniqueId(), player.getName()))));
     targetMessage = targetMessage.replaceText(createTextReplacementConfig(namePattern, player.getName()));
     targetMessage = targetMessage.replaceText(createTextReplacementConfig(displayNamePattern, player.displayName()));
     targetMessage = targetMessage.replaceText(createTextReplacementConfig(messagePattern, message));
@@ -66,7 +69,7 @@ public class ChatChannelManager {
   }
 
   private Component setClick(Player player, Component message) {
-    return message.clickEvent(ClickEvent.clickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/msg " + player.getName()));
+    return message.clickEvent(ClickEvent.clickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/msg " + player.getName() + " "));
   }
 
   private Component getChatChannelPrefix(UUID uuid) {

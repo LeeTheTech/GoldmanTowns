@@ -120,7 +120,7 @@ public enum Lang {
   MENU_FLAG("&aEnabled&8: {0}"),
   MENU_ROLE_NAME("&e&l{0}"),
   CHAT_GLOBAL("{display-name}&7: &f{message}"),
-  CHAT_TOWN("{channel} &7[&e{role}&7] {display-name}&7: &3{message}"),
+  CHAT_TOWN("{channel} &7[&e{role}&7] {color-name}&7: &3{message}"),
   ERROR_LOCATION_PERMISSION("&2&lTown&7: &6{0} &8| &2&l{1}&7: &6{2}"),
   ERROR_NO_PERMISSION("&cYou sadly do not have permission for this."),
   ERROR_NOT_CONSOLE_COMMAND("&cThis command does not work in console."),

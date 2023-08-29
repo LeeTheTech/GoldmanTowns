@@ -4,6 +4,7 @@ main: lee.code.towns.Towns
 api-version: 1.19
 author: Lee
 folia-supported: true
+depend: [GoldmanColors]
 commands:
   towns:
     description: Main towns command.
