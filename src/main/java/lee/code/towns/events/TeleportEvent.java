@@ -11,12 +11,12 @@ import org.bukkit.event.HandlerList;
 public class TeleportEvent extends Event implements Cancellable {
   private static final HandlerList handlers = new HandlerList();
   @Getter Player player;
-  @Getter String chunk;
+  @Getter Location location;
   @Setter @Getter boolean cancelled;
 
-  public TeleportEvent(Player player, String chunk) {
+  public TeleportEvent(Player player, Location location) {
     this.player = player;
-    this.chunk = chunk;
+    this.location = location;
   }
 
   @Override

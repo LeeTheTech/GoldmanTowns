@@ -24,7 +24,7 @@ public class TeleportListener implements Listener {
   @EventHandler
   public void onPlayerTeleportListener(PlayerTeleportEvent e) {
     if (!e.getCause().equals(PlayerTeleportEvent.TeleportCause.CHORUS_FRUIT)) return;
-    final TeleportEvent teleportEvent = new TeleportEvent(e.getPlayer(), ChunkUtil.serializeChunkLocation(e.getTo().getChunk()));
+    final TeleportEvent teleportEvent = new TeleportEvent(e.getPlayer(), e.getTo());
     Bukkit.getServer().getPluginManager().callEvent(teleportEvent);
     if (teleportEvent.isCancelled()) e.setCancelled(true);
   }
@@ -33,7 +33,7 @@ public class TeleportListener implements Listener {
   public void onPlayerTeleportEnderPearlListener(ProjectileHitEvent e) {
     if (e.getEntity() instanceof EnderPearl enderPearl) {
       if (e.getEntity().getShooter() instanceof Player player) {
-        final TeleportEvent teleportEvent = new TeleportEvent(player, ChunkUtil.serializeChunkLocation(enderPearl.getLocation().getChunk()));
+        final TeleportEvent teleportEvent = new TeleportEvent(player, enderPearl.getLocation());
         Bukkit.getServer().getPluginManager().callEvent(teleportEvent);
         if (teleportEvent.isCancelled()) enderPearl.remove();
       }
@@ -43,8 +43,9 @@ public class TeleportListener implements Listener {
   @EventHandler
   public void onTeleport(TeleportEvent e) {
     final CacheManager cacheManager = towns.getCacheManager();
-    final boolean result = cacheManager.checkPlayerLocationFlag(e.getPlayer().getUniqueId(), e.getChunk(), Flag.TELEPORT, true);
+    final String chunk = ChunkUtil.serializeChunkLocation(e.getLocation().getChunk());
+    final boolean result = cacheManager.checkPlayerLocationFlag(e.getPlayer().getUniqueId(), chunk, Flag.TELEPORT, true);
     e.setCancelled(result);
-    if (result) FlagUtil.sendFlagErrorMessage(e.getPlayer(), Flag.TELEPORT, cacheManager.getChunkTownName(e.getChunk()), cacheManager.getCacheRenters().getRenterName(e.getChunk()));
+    if (result) FlagUtil.sendFlagErrorMessage(e.getPlayer(), Flag.TELEPORT, cacheManager.getChunkTownName(chunk), cacheManager.getCacheRenters().getRenterName(chunk));
   }
 }

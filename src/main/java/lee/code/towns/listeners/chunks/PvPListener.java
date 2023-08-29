@@ -24,12 +24,12 @@ public class PvPListener implements Listener {
   public void onEntityDamageByEntityListener(EntityDamageByEntityEvent e) {
     if (e.getEntity() instanceof Player victim) {
       if (e.getDamager() instanceof Player attacker) {
-        final PvPEvent pvpEvent = new PvPEvent(attacker, victim, ChunkUtil.serializeChunkLocation(victim.getLocation().getChunk()));
+        final PvPEvent pvpEvent = new PvPEvent(attacker, victim, victim.getLocation());
         Bukkit.getServer().getPluginManager().callEvent(pvpEvent);
         if (pvpEvent.isCancelled()) e.setCancelled(true);
       } else if (e.getDamager() instanceof Projectile projectile) {
         if (projectile.getShooter() instanceof Player projectileAttacker) {
-          final PvPEvent pvpEvent = new PvPEvent(victim, projectileAttacker, ChunkUtil.serializeChunkLocation(victim.getLocation().getChunk()));
+          final PvPEvent pvpEvent = new PvPEvent(victim, projectileAttacker, victim.getLocation());
           Bukkit.getServer().getPluginManager().callEvent(pvpEvent);
           if (pvpEvent.isCancelled()) e.setCancelled(true);
         }
@@ -40,11 +40,12 @@ public class PvPListener implements Listener {
   @EventHandler
   public void onPvP(PvPEvent e) {
     final CacheManager cacheManager = towns.getCacheManager();
-    final boolean result = cacheManager.checkPlayerLocationFlag(e.getVictim().getUniqueId(), e.getChunk(), Flag.PVP, false);
+    final String chunk = ChunkUtil.serializeChunkLocation(e.getLocation().getChunk());
+    final boolean result = cacheManager.checkPlayerLocationFlag(e.getVictim().getUniqueId(), chunk, Flag.PVP, false);
     e.setCancelled(result);
     if (result) {
-      FlagUtil.sendFlagErrorMessage(e.getAttacker(), Flag.PVP, cacheManager.getChunkTownName(e.getChunk()), cacheManager.getCacheRenters().getRenterName(e.getChunk()));
-      FlagUtil.sendFlagErrorMessage(e.getVictim(), Flag.PVP, cacheManager.getChunkTownName(e.getChunk()), cacheManager.getCacheRenters().getRenterName(e.getChunk()));
+      FlagUtil.sendFlagErrorMessage(e.getAttacker(), Flag.PVP, cacheManager.getChunkTownName(chunk), cacheManager.getCacheRenters().getRenterName(chunk));
+      FlagUtil.sendFlagErrorMessage(e.getVictim(), Flag.PVP, cacheManager.getChunkTownName(chunk), cacheManager.getCacheRenters().getRenterName(chunk));
     }
   }
 }

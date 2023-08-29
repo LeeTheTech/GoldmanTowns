@@ -26,7 +26,7 @@ public class InteractListener implements Listener {
   public void onInteractListener(PlayerInteractEvent e) {
     if (e.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
       if (e.getClickedBlock() == null) return;
-      final InteractEvent interactEvent = new InteractEvent(e.getPlayer(), ChunkUtil.serializeChunkLocation(e.getClickedBlock().getLocation().getChunk()));
+      final InteractEvent interactEvent = new InteractEvent(e.getPlayer(), e.getClickedBlock().getLocation());
       Bukkit.getServer().getPluginManager().callEvent(interactEvent);
       if (interactEvent.isCancelled()) e.setCancelled(true);
     }
@@ -34,21 +34,21 @@ public class InteractListener implements Listener {
 
   @EventHandler
   public void onInteractEntityListener(PlayerInteractEntityEvent e) {
-    final InteractEvent interactEvent = new InteractEvent(e.getPlayer(), ChunkUtil.serializeChunkLocation(e.getRightClicked().getLocation().getChunk()));
+    final InteractEvent interactEvent = new InteractEvent(e.getPlayer(), e.getRightClicked().getLocation());
     Bukkit.getServer().getPluginManager().callEvent(interactEvent);
     if (interactEvent.isCancelled()) e.setCancelled(true);
   }
 
   @EventHandler
   public void onInteractAtEntityListener(PlayerInteractAtEntityEvent e) {
-    final InteractEvent interactEvent = new InteractEvent(e.getPlayer(), ChunkUtil.serializeChunkLocation(e.getRightClicked().getLocation().getChunk()));
+    final InteractEvent interactEvent = new InteractEvent(e.getPlayer(), e.getRightClicked().getLocation());
     Bukkit.getServer().getPluginManager().callEvent(interactEvent);
     if (interactEvent.isCancelled()) e.setCancelled(true);
   }
 
   @EventHandler
   public void onPlayerBucketEmptyListener(PlayerBucketEmptyEvent e) {
-    final InteractEvent interactEvent = new InteractEvent(e.getPlayer(), ChunkUtil.serializeChunkLocation(e.getBlock().getLocation().getChunk()));
+    final InteractEvent interactEvent = new InteractEvent(e.getPlayer(), e.getBlock().getLocation());
     Bukkit.getServer().getPluginManager().callEvent(interactEvent);
     if (interactEvent.isCancelled()) e.setCancelled(true);
   }
@@ -56,8 +56,9 @@ public class InteractListener implements Listener {
   @EventHandler
   public void onInteract(InteractEvent e) {
     final CacheManager cacheManager = towns.getCacheManager();
-    final boolean result = cacheManager.checkPlayerLocationFlag(e.getPlayer().getUniqueId(), e.getChunk(), Flag.INTERACT, true);
+    final String chunk = ChunkUtil.serializeChunkLocation(e.getLocation().getChunk());
+    final boolean result = cacheManager.checkPlayerLocationFlag(e.getPlayer().getUniqueId(), chunk, Flag.INTERACT, true);
     e.setCancelled(result);
-    if (result) FlagUtil.sendFlagErrorMessage(e.getPlayer(), Flag.INTERACT, cacheManager.getChunkTownName(e.getChunk()), cacheManager.getCacheRenters().getRenterName(e.getChunk()));
+    if (result) FlagUtil.sendFlagErrorMessage(e.getPlayer(), Flag.INTERACT, cacheManager.getChunkTownName(chunk), cacheManager.getCacheRenters().getRenterName(chunk));
   }
 }

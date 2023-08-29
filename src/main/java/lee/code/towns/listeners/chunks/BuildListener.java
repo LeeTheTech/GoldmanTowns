@@ -22,14 +22,14 @@ public class BuildListener implements Listener {
 
   @EventHandler
   public void onBlockPlaceListener(BlockPlaceEvent e) {
-    final BuildEvent buildEvent = new BuildEvent(e.getPlayer(), ChunkUtil.serializeChunkLocation(e.getBlockPlaced().getLocation().getChunk()));
+    final BuildEvent buildEvent = new BuildEvent(e.getPlayer(), e.getBlockPlaced().getLocation());
     Bukkit.getServer().getPluginManager().callEvent(buildEvent);
     if (buildEvent.isCancelled()) e.setCancelled(true);
   }
 
   @EventHandler
   public void onEntityPlaceEventListener(EntityPlaceEvent e) {
-    final BuildEvent buildEvent = new BuildEvent(e.getPlayer(), ChunkUtil.serializeChunkLocation(e.getBlock().getLocation().getChunk()));
+    final BuildEvent buildEvent = new BuildEvent(e.getPlayer(), e.getBlock().getLocation());
     Bukkit.getServer().getPluginManager().callEvent(buildEvent);
     if (buildEvent.isCancelled()) e.setCancelled(true);
   }
@@ -37,7 +37,7 @@ public class BuildListener implements Listener {
   @EventHandler
   public void onPlayerPortalListener(PlayerPortalEvent e) {
     if (!e.getCanCreatePortal()) return;
-    final BuildEvent buildEvent = new BuildEvent(e.getPlayer(), ChunkUtil.serializeChunkLocation(e.getTo().getChunk()));
+    final BuildEvent buildEvent = new BuildEvent(e.getPlayer(), e.getTo());
     Bukkit.getServer().getPluginManager().callEvent(buildEvent);
     if (buildEvent.isCancelled()) e.setCancelled(true);
   }
@@ -45,8 +45,9 @@ public class BuildListener implements Listener {
   @EventHandler
   public void onBuild(BuildEvent e) {
     final CacheManager cacheManager = towns.getCacheManager();
-    final boolean result = cacheManager.checkPlayerLocationFlag(e.getPlayer().getUniqueId(), e.getChunk(), Flag.BUILD, true);
+    final String chunk = ChunkUtil.serializeChunkLocation(e.getLocation().getChunk());
+    final boolean result = cacheManager.checkPlayerLocationFlag(e.getPlayer().getUniqueId(), chunk, Flag.BUILD, true);
     e.setCancelled(result);
-    if (result) FlagUtil.sendFlagErrorMessage(e.getPlayer(), Flag.BUILD, cacheManager.getChunkTownName(e.getChunk()), cacheManager.getCacheRenters().getRenterName(e.getChunk()));
+    if (result) FlagUtil.sendFlagErrorMessage(e.getPlayer(), Flag.BUILD, cacheManager.getChunkTownName(chunk), cacheManager.getCacheRenters().getRenterName(chunk));
   }
 }

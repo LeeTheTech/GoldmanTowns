@@ -12,13 +12,13 @@ public class PvPEvent extends Event implements Cancellable {
   private static final HandlerList handlers = new HandlerList();
   @Getter Player attacker;
   @Getter Player victim;
-  @Getter String chunk;
+  @Getter Location location;
   @Setter @Getter boolean cancelled;
 
-  public PvPEvent(Player attacker, Player victim, String chunk) {
+  public PvPEvent(Player attacker, Player victim, Location location) {
     this.attacker = attacker;
     this.victim = victim;
-    this.chunk = chunk;
+    this.location = location;
   }
 
   @Override

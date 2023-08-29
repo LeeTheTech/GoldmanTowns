@@ -10,14 +10,13 @@ import org.bukkit.event.HandlerList;
 
 public class InteractEvent extends Event implements Cancellable {
   private static final HandlerList handlers = new HandlerList();
-
   @Getter Player player;
-  @Getter String chunk;
+  @Getter Location location;
   @Setter @Getter boolean cancelled;
 
-  public InteractEvent(Player player, String chunk) {
+  public InteractEvent(Player player, Location location) {
     this.player = player;
-    this.chunk = chunk;
+    this.location = location;
   }
 
   @Override
