@@ -153,6 +153,8 @@ public enum Lang {
   ERROR_FLAG_MANAGER_GLOBAL_NO_PERMS("&cYou do not have permission to change global town flags."),
   ERROR_FLAG_MANAGER_CHUNK_NO_PERMS("&cYou do not have permission to change town chunk flags."),
   ERROR_FLAG_MANAGER_CHUNK_RENTED("&cThe chunk &3{0} &cis being rented by &6{1} &cso you can't change the chunk flags, only the renter can."),
+  ERROR_FLAG_MANAGER_CHUNK_LOCKED("&cThe flags for chunk &3{0} &cis currently being edited by the player &6{1}&c."),
+  ERROR_FLAG_MANAGER_TOWN_LOCKED("&cThe flags for town &3{0} &cis currently being edited by the player &6{1}&c."),
   ERROR_FLAG_MANAGER_ROLE_NOT_OWNER("&cOnly the mayor can change role flags."),
   ERROR_PLAYER_NOT_FOUND("&cThe player &6{0} &ccould not be found."),
   ERROR_ROLE_ROLE_NOT_FOUND("&cYou do not have a town role called &3{0}&c."),

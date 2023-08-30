@@ -6,7 +6,7 @@ import lee.code.towns.database.CacheManager;
 import lee.code.towns.lang.Lang;
 import lee.code.towns.menus.menu.FlagManager;
 import lee.code.towns.menus.menu.FlagManagerChunk;
-import lee.code.towns.menus.system.MenuPlayerData;
+import lee.code.towns.menus.system.MenuManager;
 import lee.code.towns.utils.ChunkUtil;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -55,12 +55,12 @@ public class FlagManagerCMD extends SubCommand {
   @Override
   public void perform(Player player, String[] args) {
     final UUID uuid = player.getUniqueId();
-    final MenuPlayerData menuPlayerData = towns.getMenuManager().getMenuPlayerData(uuid);
-    final String chunk = ChunkUtil.serializeChunkLocation(player.getLocation().getChunk());
+    final MenuManager menuManager = towns.getMenuManager();
     final CacheManager cacheManager = towns.getCacheManager();
+    final String chunk = ChunkUtil.serializeChunkLocation(player.getLocation().getChunk());
     if (cacheManager.getCacheRenters().isRented(chunk)) {
       if (cacheManager.getCacheRenters().isPlayerRenting(uuid, chunk)) {
-        towns.getMenuManager().openMenu(new FlagManagerChunk(menuPlayerData, towns, chunk, false), player);
+        menuManager.openMenu(new FlagManagerChunk(menuManager.getMenuPlayerData(uuid), towns, chunk, false), player);
         return;
       }
     }
@@ -68,7 +68,7 @@ public class FlagManagerCMD extends SubCommand {
       player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_NO_TOWN.getComponent(null)));
       return;
     }
-    towns.getMenuManager().openMenu(new FlagManager(menuPlayerData, towns), player);
+    menuManager.openMenu(new FlagManager(menuManager.getMenuPlayerData(uuid), towns), player);
   }
 
   @Override

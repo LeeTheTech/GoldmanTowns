@@ -10,6 +10,7 @@ import lee.code.towns.menus.system.MenuGUI;
 import lee.code.towns.menus.system.MenuPlayerData;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
@@ -27,6 +28,11 @@ public class FlagManagerGlobal extends MenuGUI {
   @Override
   protected Inventory createInventory() {
     return Bukkit.createInventory(null, 45, Lang.MENU_FLAG_MANAGER_GLOBAL_TITLE.getComponent(null));
+  }
+
+  @Override
+  public void onClose(InventoryCloseEvent e) {
+    towns.getMenuManager().getMenuLockManager().removeData(e.getPlayer().getUniqueId());
   }
 
   @Override
