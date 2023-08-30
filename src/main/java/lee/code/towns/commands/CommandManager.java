@@ -100,10 +100,10 @@ public class CommandManager implements CommandExecutor {
       }
       if (subCommand.performAsyncSynchronized()) {
         synchronized (synchronizedThreadLock) {
-          performSubCommandAsync(player, uuid, subCommand, args);
+          performPlayerSubCommandAsync(player, uuid, subCommand, args);
         }
       } else {
-        performSubCommandAsync(player, uuid, subCommand, args);
+        performPlayerSubCommandAsync(player, uuid, subCommand, args);
       }
     } else if (sender instanceof ConsoleCommandSender console) {
       if (subCommand.performAsync()) {
@@ -120,7 +120,7 @@ public class CommandManager implements CommandExecutor {
     }
   }
 
-  private void performSubCommandAsync(Player player, UUID uuid, SubCommand subCommand, String[] args) {
+  private void performPlayerSubCommandAsync(Player player, UUID uuid, SubCommand subCommand, String[] args) {
     asyncTasks.put(uuid, Bukkit.getAsyncScheduler().runNow(towns, scheduledTask -> {
       try {
         subCommand.perform(player, args);
