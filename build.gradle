@@ -44,6 +44,9 @@ dependencies {
 
   //goldman colors
   compileOnly 'lee.code.colors:colors:1.0.0'
+
+  //goldman economy
+  compileOnly 'lee.code.economy:economy:1.0.0'
 }
 
 shadowJar {

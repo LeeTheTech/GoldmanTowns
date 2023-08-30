@@ -1,6 +1,7 @@
 package lee.code.towns.commands.cmds;
 
 import lee.code.colors.ColorAPI;
+import lee.code.economy.EcoAPI;
 import lee.code.towns.Towns;
 import lee.code.towns.commands.SubCommand;
 import lee.code.towns.commands.SubSyntax;
@@ -77,7 +78,6 @@ public class RentCMD extends SubCommand {
 
     switch (option) {
       case "price" -> {
-        //TODO limit price
         if (args.length < 3) {
           player.sendMessage(Lang.USAGE.getComponent(new String[] {SubSyntax.COMMAND_RENT_PRICE.getString()}));
           return;
@@ -96,6 +96,11 @@ public class RentCMD extends SubCommand {
           return;
         }
         final double price = Double.parseDouble(priceString);
+        final double max = 1000000;
+        if (price > max) {
+          player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_RENT_PRICE_MAX.getComponent(new String[]{Lang.VALUE_FORMAT.getString(new String[]{CoreUtil.parseValue(max)})})));
+          return;
+        }
         borderParticleManager.spawnParticleChunkBorder(player, player.getLocation().getChunk(), ChunkRenderType.INFO, true);
         cacheManager.getCacheRenters().setRentChunkPrice(uuid, chunk, price);
         player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_RENT_PRICE_SUCCESS.getComponent(new String[]{
@@ -133,16 +138,22 @@ public class RentCMD extends SubCommand {
         }
         if (!cacheManager.getCacheRenters().isRentable(chunk)) {
           player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_RENT_CLAIM_NOT_RENTABLE.getComponent(new String[]{chunk})));
+          return;
         }
 
         if (args.length > 2) {
           final String result = args[2].toLowerCase();
           switch (result) {
             case "confirm" -> {
-              //TODO remove money cost
+              final double cost = cacheManager.getCacheRenters().getRentPrice(chunk);
+              if (EcoAPI.getBalance(uuid) < cost) {
+                player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_RENT_INSUFFICIENT_FUNDS.getComponent(null)));
+                return;
+              }
+              EcoAPI.removeBalance(uuid, cost);
               cacheManager.getCacheRenters().setRenter(uuid, chunk);
               borderParticleManager.spawnParticleChunkBorder(player, player.getLocation().getChunk(), ChunkRenderType.CLAIM, false);
-              player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_RENT_CLAIM_SUCCESS.getComponent(new String[]{chunk})));
+              player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_RENT_CLAIM_SUCCESS.getComponent(new String[]{chunk, Lang.VALUE_FORMAT.getString(new String[]{CoreUtil.parseValue(cost)})})));
             }
             case "deny" -> player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_RENT_CLAIM_DENY_SUCCESS.getComponent(new String[]{chunk})));
             default -> player.sendMessage(Lang.USAGE.getComponent(new String[]{SubSyntax.COMMAND_RENT_CLAIM.getString()}));
