@@ -4,7 +4,6 @@ import lee.code.towns.database.DatabaseManager;
 import lee.code.towns.database.cache.handlers.DatabaseHandler;
 import lee.code.towns.database.cache.renters.data.OwnerListData;
 import lee.code.towns.database.cache.renters.data.RenterListData;
-import lee.code.towns.database.tables.ChunkTable;
 import lee.code.towns.database.tables.RentTable;
 import lombok.Getter;
 import org.bukkit.Bukkit;

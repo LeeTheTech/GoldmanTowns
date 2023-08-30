@@ -169,6 +169,7 @@ public enum Lang {
   ERROR_INVITE_SELF("&cYou can't invite yourself."),
   ERROR_INVITE_APART_OF_TOWN("&cThe player &6{0} &cis already in a town."),
   ERROR_INVITE_NO_TOWN("&cYou need to be apart of a town to invite players to it."),
+  ERROR_INVITE_INVALID_PERMISSION("&cYour town role does not have flag &3{0} &cso can't invite players to your town."),
   ERROR_PLAYER_NOT_ONLINE("&cThe player &6{0} &cis currently not online."),
   ERROR_CHUNK_INFO_NOT_CLAIMED("&cThe chunk you're standing on is not claimed."),
   ERROR_RENT_NOT_CLAIMED("&cYou can only perform this command on a claimed chunk."),

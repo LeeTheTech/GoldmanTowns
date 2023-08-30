@@ -225,6 +225,7 @@ public class RentCMD extends SubCommand {
           player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_RENT_TRUST_NOT_CITIZEN.getComponent(new String[]{ColorAPI.getNameColor(targetID, targetString)})));
           return;
         }
+        //TODO NEEDS TESTING 3 PLAYERS
         switch (action) {
           case "add" -> {
             cacheManager.getCacheTowns().getTrustData().addTrusted(uuid, targetID);
