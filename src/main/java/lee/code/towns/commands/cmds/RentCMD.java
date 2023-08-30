@@ -70,6 +70,11 @@ public class RentCMD extends SubCommand {
     final String chunk = ChunkUtil.serializeChunkLocation(player.getLocation().getChunk());
     final String option = args[1].toLowerCase();
 
+    if (!cacheManager.getCacheTowns().hasTownOrJoinedTown(uuid)) {
+      player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_NO_TOWN.getComponent(null)));
+      return;
+    }
+
     switch (option) {
       case "price" -> {
         //TODO limit price
@@ -203,14 +208,20 @@ public class RentCMD extends SubCommand {
           player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_NO_PLAYER_DATA.getComponent(new String[]{targetString})));
           return;
         }
+        final UUID targetID = offlineTarget.getUniqueId();
+        final UUID ownerID = cacheManager.getCacheTowns().getTargetTownOwner(offlineTarget.getUniqueId());
+        if (!cacheManager.getCacheTowns().getCitizenData().isCitizen(ownerID, targetID)) {
+          player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_RENT_TRUST_NOT_CITIZEN.getComponent(new String[]{ColorAPI.getNameColor(targetID, targetString)})));
+          return;
+        }
         switch (action) {
           case "add" -> {
-            cacheManager.getCacheTowns().getTrustData().addTrusted(uuid, offlineTarget.getUniqueId(), true);
-            player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_RENT_TRUST_ADD_SUCCESS.getComponent(new String[]{ColorAPI.getNameColor(offlineTarget.getUniqueId(), targetString)})));
+            cacheManager.getCacheTowns().getTrustData().addTrusted(uuid, targetID);
+            player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_RENT_TRUST_ADD_SUCCESS.getComponent(new String[]{ColorAPI.getNameColor(targetID, targetString)})));
           }
           case "remove" -> {
-            cacheManager.getCacheTowns().getTrustData().removeTrusted(uuid, offlineTarget.getUniqueId(), true);
-            player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_RENT_TRUST_REMOVE_SUCCESS.getComponent(new String[]{ColorAPI.getNameColor(offlineTarget.getUniqueId(), targetString)})));
+            cacheManager.getCacheTowns().getTrustData().removeTrusted(uuid, targetID);
+            player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_RENT_TRUST_REMOVE_SUCCESS.getComponent(new String[]{ColorAPI.getNameColor(targetID, targetString)})));
           }
           default -> player.sendMessage(Lang.USAGE.getComponent(new String[]{SubSyntax.COMMAND_RENT_TRUST.getString()}));
         }

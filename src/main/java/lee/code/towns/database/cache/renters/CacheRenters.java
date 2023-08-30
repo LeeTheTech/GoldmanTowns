@@ -4,6 +4,7 @@ import lee.code.towns.database.DatabaseManager;
 import lee.code.towns.database.cache.handlers.DatabaseHandler;
 import lee.code.towns.database.cache.renters.data.OwnerListData;
 import lee.code.towns.database.cache.renters.data.RenterListData;
+import lee.code.towns.database.tables.ChunkTable;
 import lee.code.towns.database.tables.RentTable;
 import lombok.Getter;
 import org.bukkit.Bukkit;
@@ -40,6 +41,16 @@ public class CacheRenters extends DatabaseHandler {
     }
     ownerListData.removeAllChunkList(uuid);
     deleteAllRentDatabase(uuid);
+  }
+
+  public void deleteAllRenterData(UUID uuid) {
+    if (!renterListData.hasRentedChunks(uuid)) return;
+    for (String chunk : renterListData.getChunkList(uuid)) {
+      final RentTable rentTable = getRentTable(chunk);
+      rentTable.setRenter(null);
+      updateRentDatabase(rentTable);
+    }
+    renterListData.removeAllChunkList(uuid);
   }
 
   private void createRentChunkTable(UUID uuid, String chunk, double price) {
@@ -79,6 +90,11 @@ public class CacheRenters extends DatabaseHandler {
 
   public boolean isRented(String chunk) {
     return rentCache.containsKey(chunk) && getRentTable(chunk).getRenter() != null;
+  }
+
+  public boolean isRenter(String chunk, UUID uuid) {
+    if (!isRented(chunk)) return false;
+    return rentCache.get(chunk).getRenter().equals(uuid);
   }
 
   public UUID getRenter(String chunk) {

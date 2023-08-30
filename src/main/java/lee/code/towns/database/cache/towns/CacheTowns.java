@@ -171,10 +171,6 @@ public class CacheTowns extends DatabaseHandler {
     }
   }
 
-  public void leaveTown(UUID uuid) {
-    citizenData.removeCitizen(getJoinedTownOwner(uuid), uuid);
-  }
-
   public void createRole(UUID uuid, String role) {
     roleData.createRolePermissionData(uuid, role);
     roleColorData.addRoleColor(uuid, role, "&e", true);

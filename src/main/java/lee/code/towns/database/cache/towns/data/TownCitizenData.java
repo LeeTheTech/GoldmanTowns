@@ -58,6 +58,8 @@ public class TownCitizenData {
     return citizenCache.get(uuid);
   }
 
+
+
   public String getCitizenNames(UUID uuid) {
     if (cacheTowns.getTownTable(uuid).getTownCitizens() == null) return "None";
     final Set<String> playerNames = ConcurrentHashMap.newKeySet();

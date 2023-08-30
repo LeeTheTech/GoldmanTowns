@@ -38,22 +38,28 @@ public class TownTrustData {
     }
   }
 
-  public void addTrusted(UUID uuid, UUID trust, boolean updateDatabase) {
+  public void addTrusted(UUID uuid, UUID trust) {
     final TownsTable townsTable = cacheTowns.getTownTable(uuid);
     if (townsTable.getTrustedPlayers() == null) townsTable.setTrustedPlayers(String.valueOf(trust));
     else townsTable.setTrustedPlayers(townsTable.getTrustedPlayers() + "," + trust);
     setPlayerTrustedCache(uuid, trust);
-    if (updateDatabase) cacheTowns.updateTownsDatabase(townsTable);
+    cacheTowns.updateTownsDatabase(townsTable);
   }
 
-  public void removeTrusted(UUID uuid, UUID target, boolean updateDatabase) {
+  public void removeAllTrustedData(UUID uuid) {
+    final TownsTable townsTable = cacheTowns.getTownTable(uuid);
+    townsTable.setTrustedPlayers(null);
+    trustedCache.remove(uuid);
+  }
+
+  public void removeTrusted(UUID uuid, UUID target) {
     final TownsTable townsTable = cacheTowns.getTownTable(uuid);
     final Set<String> trustedPlayers = Collections.synchronizedSet(new HashSet<>(List.of(townsTable.getTrustedPlayers().split(","))));
     trustedPlayers.remove(String.valueOf(target));
     if (trustedPlayers.isEmpty()) townsTable.setTrustedPlayers(null);
     else townsTable.setTrustedPlayers(StringUtils.join(trustedPlayers, ","));
     removePlayerTrustedCache(uuid, target);
-    if (updateDatabase) cacheTowns.updateTownsDatabase(townsTable);
+    cacheTowns.updateTownsDatabase(townsTable);
   }
 
   public boolean isTrusted(UUID uuid, UUID target) {

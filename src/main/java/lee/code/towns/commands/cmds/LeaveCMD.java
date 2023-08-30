@@ -65,9 +65,8 @@ public class LeaveCMD extends SubCommand {
     if (args.length > 1) {
       switch (args[1].toLowerCase()) {
         case "confirm" -> {
-          //TODO Remove rented chunks
           cacheManager.getCacheTowns().sendTownMessage(uuid, Lang.PREFIX.getComponent(null).append(Lang.COMMAND_LEAVE_PLAYER_LEFT_TOWN.getComponent(new String[]{ColorAPI.getNameColor(player.getUniqueId(), player.getName())})));
-          cacheManager.getCacheTowns().leaveTown(uuid);
+          cacheManager.leaveTown(uuid);
           player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_LEAVE_SUCCESS.getComponent(new String[]{town})));
         }
         case "deny" -> player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_LEAVE_DENY.getComponent(new String[]{town})));

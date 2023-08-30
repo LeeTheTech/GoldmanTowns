@@ -87,11 +87,14 @@ public class CacheManager {
 
   public void deleteTown(UUID uuid) {
     final TownsTable townsTable = cacheTowns.getTownTable(uuid);
+
     for (UUID citizen : cacheTowns.getCitizenData().getCitizensList(uuid)) {
       final TownsTable citizenTable = cacheTowns.getTownTable(citizen);
       citizenTable.setJoinedTown(null);
+      cacheTowns.getTrustData().removeAllTrustedData(citizen);
       cacheTowns.updateTownsDatabase(citizenTable);
     }
+
     townsTable.setTown(null);
     townsTable.setTownCitizens(null);
     townsTable.setPlayerRoles(null);
@@ -100,10 +103,16 @@ public class CacheManager {
     cacheTowns.getCitizenData().deleteCitizenCache(uuid);
     cacheTowns.getRoleColorData().deleteRoleColorCache(uuid);
     cacheTowns.getPlayerRoleData().deletePlayerRolesCache(uuid);
-    cacheTowns.getRoleData().deleteAllRoles(uuid);
+    cacheTowns.getRoleData().deleteAllRoleData(uuid);
     cacheRenters.deleteAllRentData(uuid);
     cacheChunks.deleteAllChunkData(uuid);
     cacheTowns.updateTownsDatabase(townsTable);
+  }
+
+  public void leaveTown(UUID uuid) {
+    cacheRenters.deleteAllRenterData(uuid);
+    cacheTowns.getTrustData().removeAllTrustedData(uuid);
+    cacheTowns.getCitizenData().removeCitizen(cacheTowns.getJoinedTownOwner(uuid), uuid);
   }
 
   public void startRentCollectionTask() {

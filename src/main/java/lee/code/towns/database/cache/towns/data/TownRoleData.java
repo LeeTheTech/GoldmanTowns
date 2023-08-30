@@ -80,7 +80,7 @@ public class TownRoleData extends DatabaseHandler {
     return roles;
   }
 
-  public void deleteAllRoles(UUID uuid) {
+  public void deleteAllRoleData(UUID uuid) {
     deleteAllRolePermissionDatabase(uuid);
     rolePermissionCache.remove(uuid);
   }
