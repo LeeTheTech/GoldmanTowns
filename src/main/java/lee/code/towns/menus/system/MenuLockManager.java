@@ -22,20 +22,20 @@ public class MenuLockManager {
 
   public UUID getTownMenuEditor(String town) {
     final Optional<Map.Entry<UUID, String>> entryOptional = townMenus.entrySet().stream()
-      .filter(entry -> entry.getValue().contains(town))
+      .filter(entry -> entry.getValue().equals(town))
       .findFirst();
     return entryOptional.map(Map.Entry::getKey).orElse(null);
   }
 
   public UUID getChunkMenuEditor(String chunk) {
     final Optional<Map.Entry<UUID, String>> entryOptional = chunkMenus.entrySet().stream()
-      .filter(entry -> entry.getValue().contains(chunk))
+      .filter(entry -> entry.getValue().equals(chunk))
       .findFirst();
     return entryOptional.map(Map.Entry::getKey).orElse(null);
   }
 
   public boolean checkTownMenuLocked(Player player, String town) {
-    final boolean result = townMenus.values().stream().anyMatch(value -> value.contains(town));
+    final boolean result = townMenus.values().stream().anyMatch(value -> value.equals(town));
     if (result) {
       final OfflinePlayer offlineEditor = Bukkit.getOfflinePlayer(getTownMenuEditor(town));
       player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_FLAG_MANAGER_TOWN_LOCKED.getComponent(new String[]{town, ColorAPI.getNameColor(offlineEditor.getUniqueId(), offlineEditor.getName())})));
@@ -46,7 +46,7 @@ public class MenuLockManager {
   }
 
   public boolean checkChunkMenuLocked(Player player, String chunk) {
-    final boolean result = chunkMenus.values().stream().anyMatch(value -> value.contains(chunk));
+    final boolean result = chunkMenus.values().stream().anyMatch(value -> value.equals(chunk));
     if (result) {
       final OfflinePlayer offlineEditor = Bukkit.getOfflinePlayer(getChunkMenuEditor(chunk));
       player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_FLAG_MANAGER_CHUNK_LOCKED.getComponent(new String[]{chunk, ColorAPI.getNameColor(offlineEditor.getUniqueId(), offlineEditor.getName())})));
