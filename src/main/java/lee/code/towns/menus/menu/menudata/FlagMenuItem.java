@@ -28,7 +28,7 @@ public enum FlagMenuItem {
   CLAIM("&e&lClaim", "&7Able to claim chunks for the town.", Flag.CLAIM),
   UNCLAIM("&e&lUnclaim", "&7Able to unclaim chunks from the town.", Flag.UNCLAIM),
   FIRE_SPREAD("&e&lFire Spread", "&7If fire should spread to other blocks.", Flag.FIRE_SPREAD),
-  ICE_MELT("&e&lIce Melt", "&7If ice/snow should be possible to melt.", Flag.ICE_MELT),
+  ICE_MELT("&e&lIce Melt", "&7If ice or snow should be possible\n&7to melt.", Flag.ICE_MELT),
 
   ;
   private final String name;
