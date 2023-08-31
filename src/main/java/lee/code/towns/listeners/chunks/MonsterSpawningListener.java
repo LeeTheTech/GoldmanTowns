@@ -4,7 +4,7 @@ import com.destroystokyo.paper.event.entity.PreCreatureSpawnEvent;
 import lee.code.towns.Towns;
 import lee.code.towns.enums.Flag;
 import lee.code.towns.events.MobSpawningEvent;
-import lee.code.towns.utils.CoreUtil;
+import lee.code.towns.utils.ChunkUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -27,6 +27,6 @@ public class MonsterSpawningListener implements Listener {
 
   @EventHandler
   public void onMobSpawn(MobSpawningEvent e) {
-    e.setCancelled(towns.getCacheManager().checkLocationFlag(CoreUtil.serializeLocation(e.getLocation()), Flag.MONSTER_SPAWNING));
+    e.setCancelled(towns.getCacheManager().checkLocationFlag(ChunkUtil.serializeChunkLocation(e.getLocation().getChunk()), Flag.MONSTER_SPAWNING));
   }
 }

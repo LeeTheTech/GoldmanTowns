@@ -83,6 +83,9 @@ public class PermissionTable {
   @DatabaseField(columnName = "fire_spread", canBeNull = false)
   private boolean fireSpread;
 
+  @DatabaseField(columnName = "ice_melt", canBeNull = false)
+  private boolean iceMelt;
+
   public PermissionTable(UUID uniqueID, PermissionType permissionType) {
     this.uniqueID = uniqueID;
     this.permissionType = permissionType;
@@ -104,5 +107,6 @@ public class PermissionTable {
     this.claim = false;
     this.unclaim = false;
     this.fireSpread = false;
+    this.iceMelt = true;
   }
 }

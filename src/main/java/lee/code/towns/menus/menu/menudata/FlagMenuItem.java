@@ -10,24 +10,25 @@ import org.bukkit.inventory.ItemStack;
 
 @AllArgsConstructor
 public enum FlagMenuItem {
-  INVITE("&e&lInvite", "&7Able to invite players\n&7to the town.", Flag.INVITE),
+  INVITE("&e&lInvite", "&7Able to invite players to the town.", Flag.INVITE),
   BUILD("&e&lBuild", "&7Anything that can be built by\n&7a player or mob.", Flag.BUILD),
-  CHUNK_FLAGS_ENABLED("&e&lChunk Flags Enabled", "&7Should chunk flags be enabled.\n&7When enabled they override global\n&7flags set.", Flag.CHUNK_FLAGS_ENABLED),
+  CHUNK_FLAGS_ENABLED("&e&lChunk Flags Enabled", "&7If chunk flags should be enabled. When\n&7enabled they override global town flags.\n&7These flags also include players not\n&7apart of your town.", Flag.CHUNK_FLAGS_ENABLED),
   BREAK("&e&lBreak", "&7Anything that can be broken by\n&7a player or mob.", Flag.BREAK),
   INTERACT("&e&lInteract", "&7Anything that can be interacted\n&7with by a player or mob.", Flag.INTERACT),
   DAMAGE("&e&lDamage", "&7Anything that inflicts damage\n&7that is not from a player.", Flag.DAMAGE),
   PVP("&e&lPvP", "&7Damage taken or inflicted by a player.", Flag.PVP),
   PVE("&e&lPvE", "&7Damage taken or inflicted by a mob.", Flag.PVE),
   MONSTER_SPAWNING("&e&lMonster Spawning", "&7Spawn hostile monsters.", Flag.MONSTER_SPAWNING),
-  REDSTONE("&e&lRedstone", "&7Redstone usage.", Flag.REDSTONE),
+  REDSTONE("&e&lRedstone", "&7If redstone can be used.", Flag.REDSTONE),
   EXPLOSION("&e&lExplosions", "&7Explosions from mobs or players.", Flag.EXPLOSION),
   TELEPORT("&e&lTeleport", "&7Ender pearl or chorus fruit usage.", Flag.TELEPORT),
   CHANGE_CHUNK_FLAGS("&e&lChange Chunk Flags", "&7Able to change town chunk flags.", Flag.CHANGE_CHUNK_FLAGS),
   CHANGE_GLOBAL_FLAGS("&e&lChange Global Flags", "&7Able to change global town flags.", Flag.CHANGE_GLOBAL_FLAGS),
-  WITHDRAW("&e&lWithdraw", "&7Able to withdraw money\n&7from the town bank.", Flag.WITHDRAW),
-  CLAIM("&e&lClaim", "&7Able to claim chunks\n&7for the town.", Flag.CLAIM),
-  UNCLAIM("&e&lUnclaim", "&7Able to unclaim chunks\n&7from the town.", Flag.UNCLAIM),
-  FIRE_SPREAD("&e&lFire Spread", "&7If fire should spread\n&7to other blocks.", Flag.FIRE_SPREAD),
+  WITHDRAW("&e&lWithdraw", "&7Able to withdraw money from the town bank.", Flag.WITHDRAW),
+  CLAIM("&e&lClaim", "&7Able to claim chunks for the town.", Flag.CLAIM),
+  UNCLAIM("&e&lUnclaim", "&7Able to unclaim chunks from the town.", Flag.UNCLAIM),
+  FIRE_SPREAD("&e&lFire Spread", "&7If fire should spread to other blocks.", Flag.FIRE_SPREAD),
+  ICE_MELT("&e&lIce Melt", "&7If ice should be possible to melt.", Flag.ICE_MELT),
 
   ;
   private final String name;

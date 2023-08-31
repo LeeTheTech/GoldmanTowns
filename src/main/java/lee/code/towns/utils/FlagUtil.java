@@ -42,6 +42,7 @@ public class FlagUtil {
       case CLAIM -> permissionTable.setClaim(result);
       case UNCLAIM -> permissionTable.setUnclaim(result);
       case FIRE_SPREAD -> permissionTable.setFireSpread(result);
+      case ICE_MELT -> permissionTable.setIceMelt(result);
     }
   }
 
@@ -100,6 +101,9 @@ public class FlagUtil {
       }
       case FIRE_SPREAD -> {
         return permissionTable.isFireSpread();
+      }
+      case ICE_MELT -> {
+        return permissionTable.isIceMelt();
       }
       default -> {
         return false;

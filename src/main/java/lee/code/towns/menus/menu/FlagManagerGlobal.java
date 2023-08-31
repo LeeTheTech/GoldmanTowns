@@ -48,6 +48,7 @@ public class FlagManagerGlobal extends MenuGUI {
     addButton(16, createFlagButton(FlagMenuItem.MONSTER_SPAWNING, owner));
     addButton(20, createFlagButton(FlagMenuItem.REDSTONE, owner));
     addButton(21, createFlagButton(FlagMenuItem.EXPLOSION, owner));
+    addButton(22, createFlagButton(FlagMenuItem.ICE_MELT, owner));
     addButton(23, createFlagButton(FlagMenuItem.TELEPORT, owner));
     addButton(24, createFlagButton(FlagMenuItem.FIRE_SPREAD, owner));
     addButton(40, backButton(player));

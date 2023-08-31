@@ -18,5 +18,6 @@ public enum Flag {
   WITHDRAW,
   CLAIM,
   UNCLAIM,
-  FIRE_SPREAD
+  FIRE_SPREAD,
+  ICE_MELT
 }

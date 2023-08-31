@@ -51,6 +51,7 @@ public class FlagManagerChunk extends MenuGUI {
     addButton(25, createFlagButton(FlagMenuItem.MONSTER_SPAWNING));
     addButton(29, createFlagButton(FlagMenuItem.REDSTONE));
     addButton(30, createFlagButton(FlagMenuItem.EXPLOSION));
+    addButton(31, createFlagButton(FlagMenuItem.ICE_MELT));
     addButton(32, createFlagButton(FlagMenuItem.TELEPORT));
     addButton(33, createFlagButton(FlagMenuItem.FIRE_SPREAD));
     if (backSupport) addButton(49, backButton(player));

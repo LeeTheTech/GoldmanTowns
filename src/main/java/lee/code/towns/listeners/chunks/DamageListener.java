@@ -3,7 +3,7 @@ package lee.code.towns.listeners.chunks;
 import lee.code.towns.Towns;
 import lee.code.towns.enums.Flag;
 import lee.code.towns.events.DamageEvent;
-import lee.code.towns.utils.CoreUtil;
+import lee.code.towns.utils.ChunkUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
@@ -67,6 +67,6 @@ public class DamageListener implements Listener {
 
   @EventHandler
   public void onDamage(DamageEvent e) {
-    e.setCancelled(towns.getCacheManager().checkLocationFlag(CoreUtil.serializeLocation(e.getLocation()), Flag.DAMAGE));
+    e.setCancelled(towns.getCacheManager().checkLocationFlag(ChunkUtil.serializeChunkLocation(e.getLocation().getChunk()), Flag.DAMAGE));
   }
 }
