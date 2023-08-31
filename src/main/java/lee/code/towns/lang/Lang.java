@@ -58,6 +58,7 @@ public enum Lang {
   COMMAND_SPAWN_SUCCESS("&aYou successfully teleported to your town spawn."),
   COMMAND_INFO_TOWN_NAME("&3&lTown Name&7: &e{0}"),
   COMMAND_INFO_TOWN_OWNER("&3&lTown Mayor&7: &e{0}"),
+  COMMAND_INFO_TOWN_BANK("&3&lTown Bank&7: {0}"),
   COMMAND_INFO_TOWN_CITIZENS("&3&lTown Citizens&7: &e{0}"),
   COMMAND_INFO_TOWN_CHUNKS("&3&lTown Claims&7: &e{0}&7/&e{1}"),
   COMMAND_INFO_TOWN_OUTPOSTS("&3&lTown Outposts&7: &e{0}&7/&e{1}"),
