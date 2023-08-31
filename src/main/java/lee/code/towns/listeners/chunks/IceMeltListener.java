@@ -20,12 +20,9 @@ public class IceMeltListener implements Listener {
   @EventHandler
   public void onIceMeltListener(BlockFadeEvent e) {
     final Material material = e.getBlock().getType();
-    System.out.println("MAT: " + material.name());
     if (!material.equals(Material.ICE) && !material.equals(Material.BLUE_ICE) && !material.equals(Material.PACKED_ICE) && !material.equals(Material.SNOW) && !material.equals(Material.POWDER_SNOW)) return;
-    System.out.println("Running");
     final IceMeltEvent iceMeltEvent = new IceMeltEvent(e.getBlock().getLocation());
     Bukkit.getServer().getPluginManager().callEvent(iceMeltEvent);
-    System.out.println("isCanceled: " + iceMeltEvent.isCancelled());
     if (iceMeltEvent.isCancelled()) e.setCancelled(true);
 
   }
