@@ -75,9 +75,9 @@ public class InfoCMD extends SubCommand {
     lines.add(Lang.COMMAND_INFO_TOWN_OWNER.getComponent(new String[]{ColorAPI.getNameColor(owner, Bukkit.getOfflinePlayer(owner).getName())}));
     lines.add(Lang.COMMAND_INFO_TOWN_BANK.getComponent(new String[]{Lang.VALUE_FORMAT.getString(new String[]{CoreUtil.parseValue(cacheTowns.getBankBalance(owner))})}));
     lines.add(Lang.COMMAND_INFO_TOWN_CITIZENS.getComponent(new String[]{String.valueOf(cacheTowns.getCitizenData().getCitizenAmount(owner))}));
-    lines.add(Lang.COMMAND_INFO_TOWN_CHUNKS.getComponent(new String[]{String.valueOf(cacheChunks.getChunkListData().getChunkClaims(owner)), String.valueOf(cacheTowns.getMaxChunkClaims(owner))}));
+    lines.add(Lang.COMMAND_INFO_TOWN_CHUNKS.getComponent(new String[]{CoreUtil.parseValue(cacheChunks.getChunkListData().getChunkClaims(owner)), CoreUtil.parseValue(cacheTowns.getMaxChunkClaims(owner))}));
     lines.add(Lang.COMMAND_INFO_TOWN_BONUS_CLAIMS.getComponent(new String[]{CoreUtil.parseValue(cacheTowns.getBonusClaims(owner))}));
-    lines.add(Lang.COMMAND_INFO_TOWN_OUTPOSTS.getComponent(new String[]{String.valueOf(cacheChunks.getChunkOutpostData().getOutpostAmount(owner)), String.valueOf(cacheChunks.getChunkOutpostData().getMaxOutpostAmount())}));
+    lines.add(Lang.COMMAND_INFO_TOWN_OUTPOSTS.getComponent(new String[]{CoreUtil.parseValue(cacheChunks.getChunkOutpostData().getOutpostAmount(owner)), CoreUtil.parseValue(cacheChunks.getChunkOutpostData().getMaxOutpostAmount())}));
     lines.add(Lang.COMMAND_INFO_TOWN_RENT.getComponent(new String[]{CoreUtil.parseTime(cacheServer.getNextRentCollectionTime())}));
     lines.add(Component.text(""));
     lines.add(Lang.COMMAND_INFO_FOOTER.getComponent(null));
