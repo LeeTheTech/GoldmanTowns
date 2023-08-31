@@ -208,4 +208,20 @@ public class CacheTowns extends DatabaseHandler {
     townsTable.setBonusClaims(Math.max(townsTable.getBonusClaims() - amount, 0));
     updateTownsDatabase(townsTable);
   }
+
+  public double getBankBalance(UUID uuid) {
+    return getTownTable(uuid).getBank();
+  }
+
+  public void addBank(UUID uuid, double amount) {
+    final TownsTable townsTable = getTownTable(uuid);
+    townsTable.setBank(townsTable.getBank() + amount);
+    updateTownsDatabase(townsTable);
+  }
+
+  public void removeBank(UUID uuid, double amount) {
+    final TownsTable townsTable = getTownTable(uuid);
+    townsTable.setBank(Math.max(townsTable.getBank() - amount, 0));
+    updateTownsDatabase(townsTable);
+  }
 }

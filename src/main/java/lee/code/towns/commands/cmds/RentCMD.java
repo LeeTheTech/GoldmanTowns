@@ -136,7 +136,8 @@ public class RentCMD extends SubCommand {
           player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_RENT_NOT_CLAIMED.getComponent(null)));
           return;
         }
-        if (!cacheManager.getCacheTowns().getCitizenData().isCitizen(cacheManager.getCacheChunks().getChunkOwner(chunk), uuid)) {
+        final UUID owner = cacheManager.getCacheChunks().getChunkOwner(chunk);
+        if (!cacheManager.getCacheTowns().getCitizenData().isCitizen(owner, uuid)) {
           player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_RENT_CLAIM_NOT_CITIZEN.getComponent(new String[]{cacheManager.getChunkTownName(chunk)})));
           return;
         }
@@ -155,6 +156,7 @@ public class RentCMD extends SubCommand {
                 return;
               }
               EcoAPI.removeBalance(uuid, cost);
+              cacheManager.getCacheTowns().addBank(owner, cost);
               cacheManager.getCacheRenters().setRenter(uuid, chunk);
               borderParticleManager.spawnParticleChunkBorder(player, player.getLocation().getChunk(), ChunkRenderType.CLAIM, false);
               player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_RENT_CLAIM_SUCCESS.getComponent(new String[]{chunk, Lang.VALUE_FORMAT.getString(new String[]{CoreUtil.parseValue(cost)})})));

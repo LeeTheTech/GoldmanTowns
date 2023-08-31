@@ -97,4 +97,12 @@ towns {
     chunk brigadier:string single_word;
   }
   unclaim;
+  bank {
+    withdraw {
+      amount brigadier:integer;
+    }
+    deposit {
+      amount brigadier:integer;
+    }
+  }
 }

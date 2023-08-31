@@ -28,9 +28,6 @@ public class TownsTable {
   @DatabaseField(columnName = "spawn")
   private String spawn;
 
-  @DatabaseField(columnName = "last_joined")
-  private String lastJoined;
-
   @DatabaseField(columnName = "player_roles")
   private String playerRoles;
 
@@ -45,6 +42,9 @@ public class TownsTable {
 
   @DatabaseField(columnName = "bonus_claims")
   private int bonusClaims;
+
+  @DatabaseField(columnName = "bank")
+  private double bank;
 
   public TownsTable(UUID uniqueId) {
     this.uniqueId = uniqueId;
