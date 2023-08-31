@@ -21,6 +21,7 @@ towns {
     }
   }
   autoclaim;
+  automap;
   border {
     town;
     chunk;

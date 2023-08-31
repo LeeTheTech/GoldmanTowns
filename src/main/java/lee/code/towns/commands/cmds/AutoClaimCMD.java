@@ -55,6 +55,10 @@ public class AutoClaimCMD extends SubCommand {
     final CacheManager cacheManager = towns.getCacheManager();
     final AutoClaimManager autoClaimManager = towns.getAutoClaimManager();
     final UUID uuid = player.getUniqueId();
+    if (towns.getAutoMapManager().isAutoMapping(uuid)) {
+      player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_AUTO_CLAIM_AUTO_MAPPING.getComponent(null)));
+      return;
+    }
     final boolean active = autoClaimManager.isAutoClaiming(uuid);
     if (active) {
       autoClaimManager.removeAutoClaiming(uuid);

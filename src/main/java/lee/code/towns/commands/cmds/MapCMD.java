@@ -58,6 +58,25 @@ public class MapCMD extends SubCommand {
 
   @Override
   public void perform(Player player, String[] args) {
+    if (towns.getAutoMapManager().isAutoMapping(player.getUniqueId())) sendMap(player, false, 7);
+    else sendMap(player, true, 12);
+  }
+
+  @Override
+  public void performConsole(CommandSender console, String[] args) {
+    console.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_NOT_CONSOLE_COMMAND.getComponent(null)));
+  }
+
+  @Override
+  public void performSender(CommandSender sender, String[] args) {
+  }
+
+  @Override
+  public List<String> onTabComplete(CommandSender sender, String[] args) {
+    return new ArrayList<>();
+  }
+
+  private void sendMap(Player player, boolean sendKey, int gridSize) {
     final CacheManager cacheManager = towns.getCacheManager();
     final UUID uuid = player.getUniqueId();
     final Chunk chunk = player.getLocation().getChunk();
@@ -66,15 +85,19 @@ public class MapCMD extends SubCommand {
     final int playerChunkZ = chunk.getZ();
     final BlockFace playerDirection = CoreUtil.getPlayerFacingDirection(player);
     final ArrayList<Component> lines = new ArrayList<>();
-    final Component spacer = Component.text("");
-    lines.add(Lang.COMMAND_MAP_HEADER.getComponent(null));
-    lines.add(spacer);
-    lines.add(Lang.COMMAND_MAP_LINE_1.getComponent(new String[]{playerDirection.equals(BlockFace.NORTH) ? "&9" : "&b"}));
-    lines.add(Lang.COMMAND_MAP_LINE_2.getComponent(new String[]{playerDirection.equals(BlockFace.WEST) ? "&9" : "&b", playerDirection.equals(BlockFace.EAST) ? "&9" : "&b"}));
-    lines.add(Lang.COMMAND_MAP_LINE_3.getComponent(new String[]{playerDirection.equals(BlockFace.SOUTH) ? "&9" : "&b"}));
-    lines.add(spacer);
-    lines.add(Lang.COMMAND_MAP_FOOTER.getComponent(null));
-    for (int z = playerChunkZ - 6; z <= playerChunkZ + 6; z++) {
+    if (sendKey) {
+      final Component spacer = Component.text("");
+      lines.add(Lang.COMMAND_MAP_HEADER.getComponent(null));
+      lines.add(spacer);
+      lines.add(Lang.COMMAND_MAP_LINE_1.getComponent(new String[]{playerDirection.equals(BlockFace.NORTH) ? "&9" : "&b"}));
+      lines.add(Lang.COMMAND_MAP_LINE_2.getComponent(new String[]{playerDirection.equals(BlockFace.WEST) ? "&9" : "&b", playerDirection.equals(BlockFace.EAST) ? "&9" : "&b"}));
+      lines.add(Lang.COMMAND_MAP_LINE_3.getComponent(new String[]{playerDirection.equals(BlockFace.SOUTH) ? "&9" : "&b"}));
+      lines.add(spacer);
+      lines.add(Lang.COMMAND_MAP_SPACER.getComponent(null));
+    } else {
+      lines.add(Lang.COMMAND_AUTO_MAP_HEADER.getComponent(null));
+    }
+    for (int z = playerChunkZ - (gridSize / 2); z <= playerChunkZ + (gridSize / 2); z++) {
       Component rowBuilder = Component.empty();
       for (int x = playerChunkX - 10; x <= playerChunkX + 10; x++) {
         final String targetChunkString = chunk.getWorld().getName() + "," + x + "," + z;
@@ -129,20 +152,7 @@ public class MapCMD extends SubCommand {
       }
       lines.add(rowBuilder);
     }
+    if (!sendKey) lines.add(Lang.COMMAND_AUTO_MAP_SPACER.getComponent(null));
     for (Component line : lines) player.sendMessage(line);
-  }
-
-  @Override
-  public void performConsole(CommandSender console, String[] args) {
-    console.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_NOT_CONSOLE_COMMAND.getComponent(null)));
-  }
-
-  @Override
-  public void performSender(CommandSender sender, String[] args) {
-  }
-
-  @Override
-  public List<String> onTabComplete(CommandSender sender, String[] args) {
-    return new ArrayList<>();
   }
 }

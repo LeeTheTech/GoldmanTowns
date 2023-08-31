@@ -35,6 +35,7 @@ public class CommandManager implements CommandExecutor {
     storeSubCommand(new BorderCMD(towns));
     storeSubCommand(new ClaimCMD(towns));
     storeSubCommand(new AutoClaimCMD(towns));
+    storeSubCommand(new AutoMapCMD(towns));
     storeSubCommand(new UnclaimCMD(towns));
     storeSubCommand(new MapCMD(towns));
     storeSubCommand(new SpawnCMD(towns));

@@ -23,6 +23,7 @@ public class Towns extends JavaPlugin {
   @Getter private BorderParticleManager borderParticleManager;
   @Getter private AutoMessageManager autoMessageManager;
   @Getter private AutoClaimManager autoClaimManager;
+  @Getter private AutoMapManager autoMapManager;
   @Getter private MenuManager menuManager;
   @Getter private InviteManager inviteManager;
   @Getter private Data data;
@@ -32,6 +33,7 @@ public class Towns extends JavaPlugin {
   public void onEnable() {
     this.borderParticleManager = new BorderParticleManager(this);
     this.autoClaimManager = new AutoClaimManager();
+    this.autoMapManager = new AutoMapManager();
     this.autoMessageManager = new AutoMessageManager();
     this.databaseManager = new DatabaseManager(this);
     this.cacheManager = new CacheManager(this, databaseManager);
@@ -69,6 +71,7 @@ public class Towns extends JavaPlugin {
     getServer().getPluginManager().registerEvents(new TeleportListener(this), this);
     getServer().getPluginManager().registerEvents(new ChatListener(this), this);
     getServer().getPluginManager().registerEvents(new AutoMessageListener(this), this);
+    getServer().getPluginManager().registerEvents(new AutoMapListener(this), this);
   }
 
   private void registerCommands() {

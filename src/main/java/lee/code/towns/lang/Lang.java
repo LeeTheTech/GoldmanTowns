@@ -41,7 +41,9 @@ public enum Lang {
   COMMAND_CLAIM_OUTPOST_SUCCESS("&aYou successfully claimed outpost chunk &3{0}&a. &b(&3{1}&7/&3{2}&b)"),
   COMMAND_UNCLAIM_SUCCESS("&aYou successfully unclaimed the chunk &3{0}&a."),
   COMMAND_MAP_HEADER("&a----------- &7[ &2&lMap Key &7] &a-----------"),
-  COMMAND_MAP_FOOTER("&a----------------------------------"),
+  COMMAND_AUTO_MAP_HEADER("&a----------- &7[ &2&lAuto Map &7] &a-----------"),
+  COMMAND_AUTO_MAP_SPACER("&a-----------------------------------"),
+  COMMAND_MAP_SPACER("&a----------------------------------"),
   COMMAND_MAP_LINE_1("    &e\\ {0}&lN &e/  &6&lYOU&7: &9■ &6&lOWNER&7: &2■ &6&lWILD&7: &7■"),
   COMMAND_MAP_LINE_2("    {0}&lW &6&l• {1}&lE  &6&lCITIZEN&7: &a■ &6&lCLAIMED&7: &c■"),
   COMMAND_MAP_LINE_3("    &e/ {0}&lS &e\\"),
@@ -89,6 +91,7 @@ public enum Lang {
   COMMAND_SET_SPAWN_SUCCESS("&aYou successfully set your town spawn!"),
   COMMAND_SPAWN_FAILED("&cFailed to teleport to town spawn."),
   COMMAND_AUTO_CLAIM_SUCCESS("&aYou successfully toggled auto claim {0}&a."),
+  COMMAND_AUTO_MAP_SUCCESS("&aYou successfully toggled auto map {0}&a."),
   COMMAND_ROLE_SET_SUCCESS("&aYou successfully set player &6{0} &ato the town role &b{1}&a."),
   COMMAND_ROLE_CREATE_SUCCESS("&aYou successfully created the town role &b{0}&a."),
   COMMAND_ROLE_DELETE_SUCCESS("&aYou successfully deleted the town role &b{0}&a."),
@@ -200,6 +203,8 @@ public enum Lang {
   ERROR_TOWN_OWNER_LEAVE("&cYou are the owner of the town, if you want to leave you'll need to abandon the town."),
   ERROR_BORDER_NONE_RENTED("&cYou currently don't have any rented chunks."),
   ERROR_NO_PLAYER_DATA("&cCould not find any player data for &6{0}&c."),
+  ERROR_AUTO_MAP_AUTO_CLAIMING("&cYou can't turn on auto map while auto claim is active."),
+  ERROR_AUTO_CLAIM_AUTO_MAPPING("&cYou can't turn on auto claim while auto mapping is on."),
 
   ;
   @Getter private final String string;
