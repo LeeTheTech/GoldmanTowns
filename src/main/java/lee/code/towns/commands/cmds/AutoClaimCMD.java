@@ -59,12 +59,16 @@ public class AutoClaimCMD extends SubCommand {
       player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_AUTO_CLAIM_AUTO_MAPPING.getComponent(null)));
       return;
     }
+    if (!cacheManager.getCacheTowns().hasTownOrJoinedTown(uuid)) {
+      player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_NO_TOWN.getComponent(null)));
+      return;
+    }
     final boolean active = autoClaimManager.isAutoClaiming(uuid);
     if (active) {
       autoClaimManager.removeAutoClaiming(uuid);
     } else {
       final String chunkString = ChunkUtil.serializeChunkLocation(player.getLocation().getChunk());
-      if (!cacheManager.getCacheChunks().isClaimed(chunkString) || !cacheManager.getCacheChunks().isChunkOwner(chunkString, uuid)) {
+      if (!cacheManager.getCacheChunks().isClaimed(chunkString) || !cacheManager.getCacheChunks().isChunkOwner(chunkString, cacheManager.getCacheTowns().getTargetTownOwner(uuid))) {
         player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_AUTO_CLAIM_NOT_OWNER.getComponent(null)));
         return;
       }

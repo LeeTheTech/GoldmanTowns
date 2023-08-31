@@ -71,6 +71,18 @@ public class PermissionTable {
   @DatabaseField(columnName = "teleport", canBeNull = false)
   private boolean teleport;
 
+  @DatabaseField(columnName = "withdraw", canBeNull = false)
+  private boolean withdraw;
+
+  @DatabaseField(columnName = "claim", canBeNull = false)
+  private boolean claim;
+
+  @DatabaseField(columnName = "unclaim", canBeNull = false)
+  private boolean unclaim;
+
+  @DatabaseField(columnName = "fire_spread", canBeNull = false)
+  private boolean fireSpread;
+
   public PermissionTable(UUID uniqueID, PermissionType permissionType) {
     this.uniqueID = uniqueID;
     this.permissionType = permissionType;
@@ -88,5 +100,9 @@ public class PermissionTable {
     this.explosion = false;
     this.mobSpawning = false;
     this.teleport = false;
+    this.withdraw = false;
+    this.claim = false;
+    this.unclaim = false;
+    this.fireSpread = false;
   }
 }

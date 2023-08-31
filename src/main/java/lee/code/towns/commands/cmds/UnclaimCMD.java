@@ -4,6 +4,7 @@ import lee.code.towns.Towns;
 import lee.code.towns.commands.SubCommand;
 import lee.code.towns.database.CacheManager;
 import lee.code.towns.enums.ChunkRenderType;
+import lee.code.towns.enums.Flag;
 import lee.code.towns.lang.Lang;
 import lee.code.towns.utils.ChunkUtil;
 import org.bukkit.command.CommandSender;
@@ -59,9 +60,17 @@ public class UnclaimCMD extends SubCommand {
       player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_UNCLAIM_NOT_CLAIMED.getComponent(new String[]{chunk})));
       return;
     }
-    if (!cacheManager.getCacheChunks().isChunkOwner(chunk, uuid)) {
+    final UUID owner = cacheManager.getCacheTowns().getTargetTownOwner(uuid);
+    if (!cacheManager.getCacheChunks().isChunkOwner(chunk, owner)) {
       player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_UNCLAIM_NOT_OWNER.getComponent(new String[]{chunk})));
       return;
+    }
+    if (!uuid.equals(owner)) {
+      final String role = cacheManager.getCacheTowns().getPlayerRoleData().getPlayerRole(owner, uuid);
+      if (!cacheManager.getCacheTowns().getRoleData().checkRolePermissionFlag(owner, role, Flag.UNCLAIM)) {
+        player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_UNCLAIM_NO_PERMISSION.getComponent(null)));
+        return;
+      }
     }
     if (towns.getAutoClaimManager().isAutoClaiming(uuid)) {
       player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_UNCLAIM_AUTO_CLAIM_ON.getComponent(null)));
@@ -71,7 +80,7 @@ public class UnclaimCMD extends SubCommand {
       player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_UNCLAIM_ESTABLISHED_CHUNK.getComponent(new String[]{chunk})));
       return;
     }
-    if (!cacheManager.getCacheChunks().isUnclaimSafe(uuid, chunk)) {
+    if (!cacheManager.getCacheChunks().isUnclaimSafe(owner, chunk)) {
       player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_UNCLAIM_UNSAFE.getComponent(new String[]{chunk})));
       return;
     }

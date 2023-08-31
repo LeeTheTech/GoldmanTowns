@@ -4,6 +4,7 @@ import lee.code.economy.EcoAPI;
 import lee.code.towns.Towns;
 import lee.code.towns.commands.SubCommand;
 import lee.code.towns.database.cache.towns.CacheTowns;
+import lee.code.towns.enums.Flag;
 import lee.code.towns.lang.Lang;
 import lee.code.towns.utils.CoreUtil;
 import org.bukkit.command.CommandSender;
@@ -69,6 +70,13 @@ public class BankCMD extends SubCommand {
       final int amount = Integer.parseInt(amountString);
       switch (option) {
         case "withdraw" -> {
+          if (!uuid.equals(owner)) {
+            final String role = cacheTowns.getPlayerRoleData().getPlayerRole(owner, uuid);
+            if (!cacheTowns.getRoleData().checkRolePermissionFlag(owner, role, Flag.WITHDRAW)) {
+              player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_BANK_WITHDRAW_NO_PERMISSION.getComponent(null)));
+              return;
+            }
+          }
           if (cacheTowns.getBankBalance(owner) < amount) {
             player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_BANK_WITHDRAW_INSUFFICIENT_FUNDS.getComponent(new String[]{Lang.VALUE_FORMAT.getString(new String[]{CoreUtil.parseValue(amount)})})));
             return;

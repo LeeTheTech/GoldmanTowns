@@ -16,7 +16,10 @@ public class FlagUtil {
     Flag.BREAK,
     Flag.INTERACT,
     Flag.INVITE,
-    Flag.TELEPORT
+    Flag.TELEPORT,
+    Flag.WITHDRAW,
+    Flag.CLAIM,
+    Flag.UNCLAIM
   )));
 
   public static void setPermissionFlag(PermissionTable permissionTable, Flag flag, boolean result) {
@@ -35,6 +38,10 @@ public class FlagUtil {
       case INVITE -> permissionTable.setInvite(result);
       case CHANGE_CHUNK_FLAGS -> permissionTable.setChangeChunkFlags(result);
       case CHANGE_GLOBAL_FLAGS -> permissionTable.setChangeGlobalFlags(result);
+      case WITHDRAW -> permissionTable.setWithdraw(result);
+      case CLAIM -> permissionTable.setClaim(result);
+      case UNCLAIM -> permissionTable.setUnclaim(result);
+      case FIRE_SPREAD -> permissionTable.setFireSpread(result);
     }
   }
 
@@ -81,6 +88,18 @@ public class FlagUtil {
       }
       case CHANGE_GLOBAL_FLAGS -> {
         return permissionTable.isChangeGlobalFlags();
+      }
+      case WITHDRAW -> {
+        return permissionTable.isWithdraw();
+      }
+      case CLAIM -> {
+        return permissionTable.isClaim();
+      }
+      case UNCLAIM -> {
+        return permissionTable.isUnclaim();
+      }
+      case FIRE_SPREAD -> {
+        return permissionTable.isFireSpread();
       }
       default -> {
         return false;

@@ -99,10 +99,10 @@ towns {
   unclaim;
   bank {
     withdraw {
-      amount brigadier:integer;
+      amount brigadier:double;
     }
     deposit {
-      amount brigadier:integer;
+      amount brigadier:double;
     }
   }
 }

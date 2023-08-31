@@ -72,6 +72,7 @@ public class Towns extends JavaPlugin {
     getServer().getPluginManager().registerEvents(new ChatListener(this), this);
     getServer().getPluginManager().registerEvents(new AutoMessageListener(this), this);
     getServer().getPluginManager().registerEvents(new AutoMapListener(this), this);
+    getServer().getPluginManager().registerEvents(new FireSpreadListener(this), this);
   }
 
   private void registerCommands() {

@@ -24,6 +24,10 @@ public enum FlagMenuItem {
   TELEPORT("&e&lTeleport", "&7Ender pearl or chorus fruit usage.", Flag.TELEPORT),
   CHANGE_CHUNK_FLAGS("&e&lChange Chunk Flags", "&7Able to change town chunk flags.", Flag.CHANGE_CHUNK_FLAGS),
   CHANGE_GLOBAL_FLAGS("&e&lChange Global Flags", "&7Able to change global town flags.", Flag.CHANGE_GLOBAL_FLAGS),
+  WITHDRAW("&e&lWithdraw", "&7Able to withdraw money\n&7from the town bank.", Flag.WITHDRAW),
+  CLAIM("&e&lClaim", "&7Able to claim chunks\n&7for the town.", Flag.CLAIM),
+  UNCLAIM("&e&lUnclaim", "&7Able to unclaim chunks\n&7from the town.", Flag.UNCLAIM),
+  FIRE_SPREAD("&e&lFire Spread", "&7If fire should spread\n&7to other blocks.", Flag.FIRE_SPREAD),
 
   ;
   private final String name;
