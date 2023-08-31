@@ -98,6 +98,10 @@ public class CacheChunks extends DatabaseHandler {
     return chunksCache.get(chunk).isEstablishedChunk();
   }
 
+  public boolean isOutpostChunk(String chunk) {
+    return chunksCache.get(chunk).isOutpost();
+  }
+
   public UUID getChunkOwner(String chunk) {
     return chunksCache.get(chunk).getOwner();
   }

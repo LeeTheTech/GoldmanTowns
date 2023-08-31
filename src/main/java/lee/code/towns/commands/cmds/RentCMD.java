@@ -132,6 +132,10 @@ public class RentCMD extends SubCommand {
       }
 
       case "claim" -> {
+        if (!cacheManager.getCacheChunks().isClaimed(chunk)) {
+          player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_RENT_NOT_CLAIMED.getComponent(null)));
+          return;
+        }
         if (!cacheManager.getCacheTowns().getCitizenData().isCitizen(cacheManager.getCacheChunks().getChunkOwner(chunk), uuid)) {
           player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_RENT_CLAIM_NOT_CITIZEN.getComponent(new String[]{cacheManager.getChunkTownName(chunk)})));
           return;

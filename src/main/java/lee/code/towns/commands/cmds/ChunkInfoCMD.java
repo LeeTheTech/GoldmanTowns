@@ -81,6 +81,9 @@ public class ChunkInfoCMD extends SubCommand {
     if (cacheManager.getCacheChunks().isEstablishedChunk(chunk)) {
       lines.add(Lang.COMMAND_CHUNK_INFO_TOWN_ESTABLISHED_CHUNK.getComponent(new String[]{Lang.TRUE.getString()}));
     }
+    if (cacheManager.getCacheChunks().isOutpostChunk(chunk)) {
+      lines.add(Lang.COMMAND_CHUNK_INFO_TOWN_OUTPOST_CHUNK.getComponent(new String[]{Lang.TRUE.getString()}));
+    }
     lines.add(Component.text(""));
     lines.add(Lang.COMMAND_CHUNK_INFO_FOOTER.getComponent(null));
     for (Component line : lines) player.sendMessage(line);

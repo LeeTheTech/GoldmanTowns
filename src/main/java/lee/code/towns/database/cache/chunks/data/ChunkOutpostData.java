@@ -30,7 +30,8 @@ public class ChunkOutpostData {
     outpostCache.remove(uuid);
   }
 
-  public boolean isOutpost(UUID uuid, String chunk) {
+  public boolean isOutpostOwner(UUID uuid, String chunk) {
+    if (uuid == null) return false;
     if (!outpostCache.containsKey(uuid)) return false;
     return outpostCache.get(uuid).contains(chunk);
   }

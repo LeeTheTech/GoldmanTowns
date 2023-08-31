@@ -1,5 +1,6 @@
 package lee.code.towns.commands.cmds;
 
+import lee.code.colors.ColorAPI;
 import lee.code.towns.Towns;
 import lee.code.towns.commands.SubCommand;
 import lee.code.towns.database.CacheManager;
@@ -16,6 +17,7 @@ import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class MapCMD extends SubCommand {
   private final Towns towns;
@@ -56,8 +58,8 @@ public class MapCMD extends SubCommand {
 
   @Override
   public void perform(Player player, String[] args) {
-    //TODO add better messages for hover
     final CacheManager cacheManager = towns.getCacheManager();
+    final UUID uuid = player.getUniqueId();
     final Chunk chunk = player.getLocation().getChunk();
     final String chunkString = ChunkUtil.serializeChunkLocation(chunk);
     final int playerChunkX = chunk.getX();
@@ -78,17 +80,50 @@ public class MapCMD extends SubCommand {
         final String targetChunkString = chunk.getWorld().getName() + "," + x + "," + z;
         final boolean isClaimed = cacheManager.getCacheChunks().isClaimed(targetChunkString);
 
-        final NamedTextColor color;
-        if (chunkString.equals(targetChunkString)) color = NamedTextColor.BLUE;
-        else if (isClaimed && cacheManager.getCacheChunks().isChunkOwner(targetChunkString, player.getUniqueId()))
-          color = NamedTextColor.DARK_GREEN;
-        else if (isClaimed && cacheManager.getCacheTowns().getCitizenData().isCitizen(cacheManager.getCacheChunks().getChunkOwner(targetChunkString), player.getUniqueId()))
-          color = NamedTextColor.GREEN;
-        else if (isClaimed) color = NamedTextColor.RED;
-        else color = NamedTextColor.GRAY;
-
+        final StringBuilder info = new StringBuilder();
+        info.append(Lang.COMMAND_MAP_CHUNK_HOVER_CHUNK.getString(new String[]{targetChunkString}));
+        NamedTextColor color = NamedTextColor.GRAY;
+        if (chunkString.equals(targetChunkString)) {
+          final String directionArrow = switch (playerDirection) {
+            case NORTH -> "↑";
+            case SOUTH -> "↓";
+            case WEST -> "←";
+            case EAST -> "→";
+            default -> "■";
+          };
+          info.append(Lang.COMMAND_MAP_CHUNK_HOVER_DIRECTION.getString(new String[]{directionArrow}));
+          color = NamedTextColor.BLUE;
+        }
+        if (isClaimed) {
+          if (!color.equals(NamedTextColor.BLUE)) color = NamedTextColor.RED;
+          final UUID owner = cacheManager.getCacheChunks().getChunkOwner(targetChunkString);
+          final boolean isCitizen = cacheManager.getCacheTowns().getCitizenData().isCitizen(owner, uuid);
+          final boolean isOwner = cacheManager.getCacheChunks().isChunkOwner(targetChunkString, uuid);
+          info.append(Lang.COMMAND_MAP_CHUNK_HOVER_TOWN.getString(new String[]{cacheManager.getChunkTownName(targetChunkString)}));
+          if (isOwner) {
+            if (!color.equals(NamedTextColor.BLUE)) color = NamedTextColor.DARK_GREEN;
+          }
+          if (isCitizen) {
+            if (!color.equals(NamedTextColor.BLUE)) color = NamedTextColor.GREEN;
+          }
+          if (cacheManager.getCacheRenters().isRented(targetChunkString)) {
+            info.append(Lang.COMMAND_MAP_CHUNK_HOVER_RENTED.getString(new String[]{ColorAPI.getNameColor(cacheManager.getCacheRenters().getRenter(targetChunkString), cacheManager.getCacheRenters().getRenterName(targetChunkString))}));
+            info.append(Lang.COMMAND_MAP_CHUNK_HOVER_RENT_COST.getString(new String[]{Lang.VALUE_FORMAT.getString(new String[]{CoreUtil.parseValue(cacheManager.getCacheRenters().getRentPrice(targetChunkString))})}));
+          }
+          if (cacheManager.getCacheRenters().isRentable(targetChunkString)) {
+            info.append(Lang.COMMAND_MAP_CHUNK_HOVER_RENT_COST.getString(new String[]{Lang.VALUE_FORMAT.getString(new String[]{CoreUtil.parseValue(cacheManager.getCacheRenters().getRentPrice(targetChunkString))})}));
+          }
+          if (cacheManager.getCacheChunks().isOutpostChunk(targetChunkString)) {
+            info.append(Lang.COMMAND_MAP_CHUNK_HOVER_OUTPOST.getString(null));
+          }
+          if (cacheManager.getCacheChunks().isEstablishedChunk(targetChunkString)) {
+            info.append(Lang.COMMAND_MAP_CHUNK_HOVER_ESTABLISHED.getString(null));
+          }
+        } else {
+          info.append(Lang.COMMAND_MAP_CHUNK_HOVER_WILD.getString(null));
+        }
         final Component chunkSquare = Component.text("■ ").color(color)
-          .hoverEvent(Component.text(targetChunkString).color(NamedTextColor.BLUE))
+          .hoverEvent(CoreUtil.parseColorComponent(info.toString()))
           .clickEvent(ClickEvent.clickEvent(ClickEvent.Action.RUN_COMMAND, "/towns teleport chunk " + targetChunkString));
         rowBuilder = rowBuilder.append(chunkSquare);
       }
