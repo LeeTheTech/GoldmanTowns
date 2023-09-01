@@ -109,7 +109,7 @@ public class CacheManager {
     cacheTowns.updateTownsDatabase(townsTable);
   }
 
-  public void leaveTown(UUID uuid) {
+  public void removeFromTown(UUID uuid) {
     cacheRenters.deleteAllRenterData(uuid);
     cacheTowns.getTrustData().removeAllTrustedData(uuid);
     cacheTowns.getCitizenData().removeCitizen(cacheTowns.getJoinedTownOwner(uuid), uuid);

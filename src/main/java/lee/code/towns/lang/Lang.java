@@ -115,6 +115,13 @@ public enum Lang {
   COMMAND_ABANDON_TOWN_MESSAGE("&cThe mayor has abandoned the town."),
   COMMAND_ABANDON_SUCCESS("&aYou successfully abandoned your town &3{0}&a."),
   COMMAND_ABANDON_DENY("&aYou successfully denied abandoning your town."),
+  COMMAND_KICK_HOVER_CONFIRM("&aKick &6{0} &afrom town!"),
+  COMMAND_KICK_HOVER_DENY("&cDeny kicking &6{0} &cfrom town."),
+  COMMAND_KICK_WARNING("&aDo you want to kick &6{0} &afrom your town?"),
+  COMMAND_KICK_DENY_SUCCESS("&aYou successfully denied kicking the player &6{0} &afrom your town."),
+  COMMAND_KICK_SUCCESS("&aYou successfully kicked the player &6{0} &afrom your town."),
+  COMMAND_KICK_TOWN("&cThe player &6{0} &chas been kicked from the town."),
+  COMMAND_KICK_TARGET("&cYou have been kicked from your town."),
   COMMAND_LEAVE_SUCCESS("&aYou successfully left the town &6{0}&a."),
   COMMAND_LEAVE_DENY("&aYou successfully denied leaving the town &6{0}&a."),
   COMMAND_LEAVE_PLAYER_LEFT_TOWN("&7The player &6{0} &7has left the town."),
@@ -157,7 +164,7 @@ public enum Lang {
   ERROR_AUTO_CLAIM_NOT_OWNER("&cYou can only toggle on auto claim when you're within your town."),
   ERROR_SET_SPAWN_NOT_CLAIMED("&cYou can only set your town spawn in chunks you own."),
   ERROR_NO_TOWN("&cYou're currently not apart of a town so you can't run this command."),
-  ERROR_NOT_TOWN_OWNER("&cYou need to be the town owner to run this command."),
+  ERROR_NOT_TOWN_OWNER("&cYou need to be the town mayor to run this command."),
   ERROR_UNCLAIM_NOT_CLAIMED("&cThe chunk &3{0} &cis not claimed."),
   ERROR_UNCLAIM_NO_PERMISSION("&cYou do not have permission to unclaim chunks from your town."),
   ERROR_UNCLAIM_NOT_OWNER("&cYou're not the owner of chunk &3{0} &cso you can't unclaim it."),
@@ -215,6 +222,7 @@ public enum Lang {
   ERROR_NO_PLAYER_DATA("&cCould not find any player data for &6{0}&c."),
   ERROR_AUTO_MAP_AUTO_CLAIMING("&cYou can't turn on auto map while auto claim is active."),
   ERROR_AUTO_CLAIM_AUTO_MAPPING("&cYou can't turn on auto claim while auto mapping is on."),
+  ERROR_KICK_NOT_CITIZEN("&cThe player &6{0} &cis not a citizen so they can not be kicked."),
 
   ;
   @Getter private final String string;

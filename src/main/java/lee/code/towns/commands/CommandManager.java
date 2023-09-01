@@ -51,6 +51,7 @@ public class CommandManager implements CommandExecutor {
     storeSubCommand(new RentCMD(towns));
     storeSubCommand(new BonusClaimsCMD(towns));
     storeSubCommand(new BankCMD(towns));
+    storeSubCommand(new KickCMD(towns));
     storeSubCommand(new TeleportCMD());
   }
 

@@ -105,4 +105,10 @@ towns {
       amount brigadier:double;
     }
   }
+  kick {
+    player brigadier:string single_word {
+      confirm;
+      deny;
+    }
+  }
 }

@@ -60,14 +60,14 @@ public class TownCitizenData {
 
 
 
-  public String getCitizenNames(UUID uuid) {
-    if (cacheTowns.getTownTable(uuid).getTownCitizens() == null) return "None";
-    final Set<String> playerNames = ConcurrentHashMap.newKeySet();
+  public List<String> getCitizenNames(UUID uuid) {
+    if (cacheTowns.getTownTable(uuid).getTownCitizens() == null) new ArrayList<>();
+    final List<String> playerNames = new ArrayList<>();
     for (UUID citizen : getCitizensList(uuid)) {
       final OfflinePlayer oPlayer = Bukkit.getOfflinePlayer(citizen);
       playerNames.add(oPlayer.getName());
     }
-    return StringUtils.join(playerNames, ", ");
+    return playerNames;
   }
 
   public boolean isCitizen(UUID owner, UUID target) {
