@@ -32,7 +32,7 @@ public class AutoClaimCMD extends SubCommand {
 
   @Override
   public String getSyntax() {
-    return "/towns autoclaim";
+    return "/t autoclaim";
   }
 
   @Override

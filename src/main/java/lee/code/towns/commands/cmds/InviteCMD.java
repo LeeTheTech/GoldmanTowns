@@ -35,7 +35,7 @@ public class InviteCMD extends SubCommand {
 
   @Override
   public String getSyntax() {
-    return "/towns invite &f<player> <accept/deny>";
+    return "/t invite &f<player> <accept/deny>";
   }
 
   @Override

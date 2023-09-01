@@ -31,7 +31,7 @@ public class AutoMapCMD extends SubCommand {
 
   @Override
   public String getSyntax() {
-    return "/towns automap";
+    return "/t automap";
   }
 
   @Override

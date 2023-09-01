@@ -32,7 +32,7 @@ public class BorderCMD extends SubCommand {
 
   @Override
   public String getSyntax() {
-    return "/towns border &f<town, rented, chunk, off>";
+    return "/t border &f<town, rented, chunk, off>";
   }
 
   @Override

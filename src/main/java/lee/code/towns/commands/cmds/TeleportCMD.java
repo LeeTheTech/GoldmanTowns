@@ -23,7 +23,7 @@ public class TeleportCMD extends SubCommand {
 
   @Override
   public String getSyntax() {
-    return "/towns teleport &f<chunk/town> <chunk/town>";
+    return "/t teleport &f<chunk/town> <chunk/town>";
   }
 
   @Override

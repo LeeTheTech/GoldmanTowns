@@ -40,7 +40,7 @@ public class RentCMD extends SubCommand {
 
   @Override
   public String getSyntax() {
-    return "/towns rent &f<options>";
+    return "/t rent &f<options>";
   }
 
   @Override

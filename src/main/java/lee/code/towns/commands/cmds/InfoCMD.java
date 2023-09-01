@@ -36,7 +36,7 @@ public class InfoCMD extends SubCommand {
 
   @Override
   public String getSyntax() {
-    return "/towns info";
+    return "/t info";
   }
 
   @Override

@@ -33,7 +33,7 @@ public class ClaimCMD extends SubCommand {
 
   @Override
   public String getSyntax() {
-    return "/towns claim";
+    return "/t claim";
   }
 
   @Override

@@ -33,7 +33,7 @@ public class BankCMD extends SubCommand {
 
   @Override
   public String getSyntax() {
-    return "/towns bank &f<withdraw/deposit> <amount>";
+    return "/t bank &f<withdraw/deposit> <amount>";
   }
 
   @Override

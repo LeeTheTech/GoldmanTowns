@@ -34,7 +34,7 @@ public class ChunkInfoCMD extends SubCommand {
 
   @Override
   public String getSyntax() {
-    return "/towns chunkinfo";
+    return "/t chunkinfo";
   }
 
   @Override

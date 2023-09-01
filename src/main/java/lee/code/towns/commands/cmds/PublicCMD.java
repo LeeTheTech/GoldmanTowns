@@ -30,7 +30,7 @@ public class PublicCMD extends SubCommand {
 
   @Override
   public String getSyntax() {
-    return "/towns public";
+    return "/t public";
   }
 
   @Override

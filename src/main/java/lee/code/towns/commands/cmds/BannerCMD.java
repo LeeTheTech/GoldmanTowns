@@ -31,7 +31,7 @@ public class BannerCMD extends SubCommand {
 
   @Override
   public String getSyntax() {
-    return "/towns banner";
+    return "/t banner";
   }
 
   @Override

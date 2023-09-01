@@ -35,7 +35,7 @@ public class BonusClaimsCMD extends SubCommand {
 
   @Override
   public String getSyntax() {
-    return "/towns bonusclaims &f<set/remove/add> <player> <amount>";
+    return "/t bonusclaims &f<set/remove/add> <player> <amount>";
   }
 
   @Override

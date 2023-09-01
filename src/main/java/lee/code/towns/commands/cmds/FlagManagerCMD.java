@@ -34,7 +34,7 @@ public class FlagManagerCMD extends SubCommand {
 
   @Override
   public String getSyntax() {
-    return "/towns flagmanager";
+    return "/t flagmanager";
   }
 
   @Override

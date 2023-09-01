@@ -33,7 +33,7 @@ public class AbandonCMD extends SubCommand {
 
   @Override
   public String getSyntax() {
-    return "/towns abandon &f<confirm/deny>";
+    return "/t abandon &f<confirm/deny>";
   }
 
   @Override

@@ -31,7 +31,7 @@ public class LeaveCMD extends SubCommand {
 
   @Override
   public String getSyntax() {
-    return "/towns leave &f<confirm/deny>";
+    return "/t leave &f<confirm/deny>";
   }
 
   @Override

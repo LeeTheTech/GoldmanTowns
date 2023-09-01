@@ -30,7 +30,7 @@ public class HelpCMD extends SubCommand {
 
   @Override
   public String getSyntax() {
-    return "/towns help";
+    return "/t help";
   }
 
   @Override
@@ -60,27 +60,39 @@ public class HelpCMD extends SubCommand {
 
   @Override
   public void performSender(CommandSender sender, String[] args) {
-    int number = 1;
+    int index;
+    int page = 0;
+    final int maxDisplayed = 10;
+    if (args.length > 1) {
+      if (CoreUtil.isPositiveIntNumber(args[1])) page = Integer.parseInt(args[1]);
+    }
+    int position = page * maxDisplayed + 1;
+
     final Map<SubCommand, String> commands = new HashMap<>();
-    for (SubCommand subCommand : towns.getCommandManager().getSubCommandList()) commands.put(subCommand, subCommand.getName());
+    for (SubCommand subCommand : towns.getCommandManager().getSubCommandList()){
+      if (sender.hasPermission(subCommand.getPermission())) commands.put(subCommand, subCommand.getName());
+    }
     final Map<SubCommand, String> sortedCommands = CoreUtil.sortByValue(commands, Comparator.naturalOrder());
+    final List<SubCommand> sortedCommandList = new ArrayList<>(sortedCommands.keySet());
+
     final List<Component> lines = new ArrayList<>();
-    lines.add(Lang.COMMAND_HELP_DIVIDER.getComponent(null));
     lines.add(Lang.COMMAND_HELP_TITLE.getComponent(null));
     lines.add(Component.text(""));
 
-    for (SubCommand subCommand : sortedCommands.keySet()) {
-      if (sender.hasPermission(subCommand.getPermission())) {
-        final Component helpSubCommand = Lang.COMMAND_HELP_SUB_COMMAND.getComponent(new String[]{String.valueOf(number), subCommand.getSyntax()})
-          .clickEvent(ClickEvent.clickEvent(ClickEvent.Action.SUGGEST_COMMAND, CoreUtil.getTextBeforeCharacter(subCommand.getSyntax(), '&')))
-          .hoverEvent(Lang.COMMAND_HELP_SUB_COMMAND_HOVER.getComponent(new String[]{subCommand.getDescription()}));
-        lines.add(helpSubCommand);
-        number++;
-      }
+    for (int i = 0; i < maxDisplayed; i++) {
+      index = maxDisplayed * page + i;
+      if (index >= sortedCommandList.size()) break;
+      final SubCommand subCommand = sortedCommandList.get(index);
+      final Component helpSubCommand = Lang.COMMAND_HELP_SUB_COMMAND.getComponent(new String[]{String.valueOf(position), subCommand.getSyntax()})
+        .clickEvent(ClickEvent.clickEvent(ClickEvent.Action.SUGGEST_COMMAND, CoreUtil.getTextBeforeCharacter(subCommand.getSyntax(), '&')))
+        .hoverEvent(Lang.COMMAND_HELP_SUB_COMMAND_HOVER.getComponent(new String[]{subCommand.getDescription()}));
+      lines.add(helpSubCommand);
+      position++;
     }
 
+    if (lines.size() == 2) return;
     lines.add(Component.text(""));
-    lines.add(Lang.COMMAND_HELP_DIVIDER.getComponent(null));
+    lines.add(CoreUtil.createPageSelectionComponent("/towns help", page));
     for (Component line : lines) sender.sendMessage(line);
   }
 

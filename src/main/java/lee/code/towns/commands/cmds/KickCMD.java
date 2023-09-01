@@ -35,7 +35,7 @@ public class KickCMD extends SubCommand {
 
   @Override
   public String getSyntax() {
-    return "/towns kick &f<player> <confirm/deny>";
+    return "/t kick &f<player> <confirm/deny>";
   }
 
   @Override

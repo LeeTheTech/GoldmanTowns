@@ -37,7 +37,7 @@ public class RoleCMD extends SubCommand {
 
   @Override
   public String getSyntax() {
-    return "/towns role &f<set/create/delete/color> <options>";
+    return "/t role &f<options>";
   }
 
   @Override

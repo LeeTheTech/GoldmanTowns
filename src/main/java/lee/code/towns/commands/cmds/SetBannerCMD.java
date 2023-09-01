@@ -31,7 +31,7 @@ public class SetBannerCMD extends SubCommand {
 
   @Override
   public String getSyntax() {
-    return "/towns setbanner";
+    return "/t setbanner";
   }
 
   @Override

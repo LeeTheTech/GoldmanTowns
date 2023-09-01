@@ -160,4 +160,12 @@ public class CoreUtil {
       .forEachOrdered(entry -> temp.put(entry.getKey(), entry.getValue()));
     return temp;
   }
+
+  public static Component createPageSelectionComponent(String command, int page) {
+    final Component next = Lang.NEXT_PAGE_TEXT.getComponent(null).hoverEvent(Lang.NEXT_PAGE_HOVER.getComponent(null)).clickEvent(ClickEvent.clickEvent(ClickEvent.Action.RUN_COMMAND, command + " " + (page + 1)));
+    final Component split = Lang.PAGE_SPACER_TEXT.getComponent(null);
+    final Component prev = Lang.PREVIOUS_PAGE_TEXT.getComponent(null).hoverEvent(Lang.PREVIOUS_PAGE_HOVER.getComponent(null)).clickEvent(ClickEvent.clickEvent(ClickEvent.Action.RUN_COMMAND, command + " " + (page - 1)));
+    return prev.append(split).append(next);
+  }
+
 }
