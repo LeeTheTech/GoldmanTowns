@@ -72,14 +72,14 @@ public class AbandonCMD extends SubCommand {
         case "deny" -> player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_ABANDON_DENY.getComponent(null)));
         default -> player.sendMessage(Lang.USAGE.getComponent(new String[]{SubSyntax.COMMAND_ABANDON_OPTION_SYNTAX.getString()}));
       }
-    } else {
-      CoreUtil.sendConfirmMessage(player, Lang.PREFIX.getComponent(null).append(Lang.COMMAND_ABANDON_WARNING.getComponent(new String[]{cacheManager.getCacheTowns().getTownName(uuid)})),
-        "/towns abandon",
-        Lang.CONFIRM_ABANDON_HOVER.getComponent(null),
-        Lang.DENY_ABANDON_HOVER.getComponent(null),
-        true
-      );
+      return;
     }
+    CoreUtil.sendConfirmMessage(player, Lang.PREFIX.getComponent(null).append(Lang.COMMAND_ABANDON_WARNING.getComponent(new String[]{cacheManager.getCacheTowns().getTownName(uuid)})),
+      "/towns abandon",
+      Lang.CONFIRM_ABANDON_HOVER.getComponent(null),
+      Lang.DENY_ABANDON_HOVER.getComponent(null),
+      true
+    );
   }
 
   @Override

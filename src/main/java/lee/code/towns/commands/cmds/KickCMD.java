@@ -94,14 +94,14 @@ public class KickCMD extends SubCommand {
         case "deny" -> player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_KICK_DENY_SUCCESS.getComponent(new String[]{ColorAPI.getNameColor(targetID, targetString)})));
         default -> player.sendMessage(Lang.USAGE.getComponent(new String[]{getSyntax()}));
       }
-    } else {
-      CoreUtil.sendConfirmMessage(player, Lang.PREFIX.getComponent(null).append(Lang.COMMAND_KICK_WARNING.getComponent(new String[]{ColorAPI.getNameColor(targetID, targetString)})),
-        "/towns kick " + targetString,
-        Lang.COMMAND_KICK_HOVER_CONFIRM.getComponent(new String[]{ColorAPI.getNameColor(targetID, targetString)}),
-        Lang.COMMAND_KICK_HOVER_DENY.getComponent(new String[]{ColorAPI.getNameColor(targetID, targetString)}),
-        true
-      );
+      return;
     }
+    CoreUtil.sendConfirmMessage(player, Lang.PREFIX.getComponent(null).append(Lang.COMMAND_KICK_WARNING.getComponent(new String[]{ColorAPI.getNameColor(targetID, targetString)})),
+      "/towns kick " + targetString,
+      Lang.COMMAND_KICK_HOVER_CONFIRM.getComponent(new String[]{ColorAPI.getNameColor(targetID, targetString)}),
+      Lang.COMMAND_KICK_HOVER_DENY.getComponent(new String[]{ColorAPI.getNameColor(targetID, targetString)}),
+      true
+    );
   }
 
   @Override

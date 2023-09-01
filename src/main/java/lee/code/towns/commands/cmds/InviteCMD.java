@@ -104,7 +104,6 @@ public class InviteCMD extends SubCommand {
       return;
     }
     if (!cacheManager.getCacheTowns().hasTown(playerID)) {
-      //TODO NEEDS TESTING 3 PLAYERS
       if (cacheManager.getCacheTowns().hasJoinedTown(playerID)) {
         final UUID owner = cacheManager.getCacheTowns().getJoinedTownOwner(playerID);
         final String role = cacheManager.getCacheTowns().getPlayerRoleData().getPlayerRole(owner, playerID);

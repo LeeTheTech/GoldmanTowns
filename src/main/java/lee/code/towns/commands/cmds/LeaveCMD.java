@@ -72,14 +72,14 @@ public class LeaveCMD extends SubCommand {
         case "deny" -> player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_LEAVE_DENY.getComponent(new String[]{town})));
         default -> player.sendMessage(Lang.USAGE.getComponent(new String[]{SubSyntax.COMMAND_LEAVE_OPTION_SYNTAX.getString()}));
       }
-    } else {
-      CoreUtil.sendConfirmMessage(player, Lang.PREFIX.getComponent(null).append(Lang.COMMAND_LEAVE_WARNING.getComponent(new String[]{town})),
-        "/towns leave",
-        Lang.COMMAND_LEAVE_HOVER_CONFIRM.getComponent(new String[]{town}),
-        Lang.COMMAND_LEAVE_HOVER_DENY.getComponent(new String[]{town}),
-        true
-      );
+      return;
     }
+    CoreUtil.sendConfirmMessage(player, Lang.PREFIX.getComponent(null).append(Lang.COMMAND_LEAVE_WARNING.getComponent(new String[]{town})),
+      "/towns leave",
+      Lang.COMMAND_LEAVE_HOVER_CONFIRM.getComponent(new String[]{town}),
+      Lang.COMMAND_LEAVE_HOVER_DENY.getComponent(new String[]{town}),
+      true
+    );
   }
 
   @Override
