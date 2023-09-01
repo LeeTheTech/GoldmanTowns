@@ -18,7 +18,6 @@ import java.util.UUID;
 
 public class KickCMD extends SubCommand {
   private final Towns towns;
-  private UUID targetID;
 
   public KickCMD(Towns towns) {
     this.towns = towns;
