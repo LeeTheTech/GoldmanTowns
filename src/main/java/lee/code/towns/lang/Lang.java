@@ -115,6 +115,7 @@ public enum Lang {
   COMMAND_ABANDON_TOWN_MESSAGE("&cThe mayor has abandoned the town."),
   COMMAND_ABANDON_SUCCESS("&aYou successfully abandoned your town &3{0}&a."),
   COMMAND_ABANDON_DENY("&aYou successfully denied abandoning your town."),
+  COMMAND_SET_BANNER_SUCCESS("&aYou successfully set your town's banner!"),
   COMMAND_KICK_HOVER_CONFIRM("&aKick &6{0} &afrom town!"),
   COMMAND_KICK_HOVER_DENY("&cDeny kicking &6{0} &cfrom town."),
   COMMAND_KICK_WARNING("&aDo you want to kick &6{0} &afrom your town?"),
@@ -140,6 +141,9 @@ public enum Lang {
   MENU_FLAG_MANAGER_GLOBAL_TITLE("&2&lGlobal Flag Manager"),
   MENU_FLAG_MANAGER_ROLE_TITLE("&2&lRole Flag Manager"),
   MENU_ROLE_SELECTION_MANAGER_TITLE("&2&lRole Selection Manager"),
+  MENU_BANNER_TITLE("&2&lTown Banner"),
+  MENU_BANNER_BANNER_LORE("&e&lCost&7: {0}"),
+  MENU_BANNER_PURCHASE_SUCCESS("&aYou successfully bought a town banner!"),
   MENU_FLAG("&aEnabled&8: {0}"),
   MENU_ROLE_NAME("&e&l{0}"),
   CHAT_GLOBAL("{display-name}&7: &f{message}"),
@@ -229,6 +233,10 @@ public enum Lang {
   ERROR_AUTO_MAP_AUTO_CLAIMING("&cYou can't turn on auto map while auto claim is active."),
   ERROR_AUTO_CLAIM_AUTO_MAPPING("&cYou can't turn on auto claim while auto mapping is on."),
   ERROR_KICK_NOT_CITIZEN("&cThe player &6{0} &cis not a citizen so they can not be kicked."),
+  ERROR_SET_BANNER_NOT_BANNER("&cThe item you're holding is not a banner."),
+  ERROR_BANNER_NOT_SET("&cYour town currently does not have a banner set."),
+  ERROR_BANNER_INSUFFICIENT_FUNDS("&cYou do not have enough money to purchase a town banner."),
+  ERROR_BANNER_INVENTORY_SPACE("&cYou do not have enough money to purchase a town banner."),
 
   ;
   @Getter private final String string;

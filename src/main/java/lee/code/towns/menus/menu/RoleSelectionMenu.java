@@ -6,7 +6,6 @@ import lee.code.towns.lang.Lang;
 import lee.code.towns.menus.menu.menudata.MenuItem;
 import lee.code.towns.menus.system.MenuButton;
 import lee.code.towns.menus.system.MenuGUI;
-import lee.code.towns.menus.system.MenuPlayerData;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -17,13 +16,12 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class RoleSelectionManager extends MenuGUI {
+public class RoleSelectionMenu extends MenuGUI {
   private final Towns towns;
   private final ArrayList<Integer> roleSlots = new ArrayList<>(List.of(10, 11, 12, 13, 14, 15, 16));
   private int roleIndex = 0;
 
-  public RoleSelectionManager(MenuPlayerData menuPlayerData, Towns towns) {
-    super(menuPlayerData);
+  public RoleSelectionMenu(Towns towns) {
     this.towns = towns;
     setInventory();
   }
@@ -56,7 +54,7 @@ public class RoleSelectionManager extends MenuGUI {
           e.getWhoClicked().getInventory().close();
           return;
         }
-        towns.getMenuManager().openMenu(new FlagManagerRole(menuPlayerData, towns, role), player);
+        towns.getMenuManager().openMenu(new FlagRoleMenu(towns, role), player);
       });
   }
 
@@ -64,7 +62,7 @@ public class RoleSelectionManager extends MenuGUI {
     return new MenuButton()
       .creator(p -> MenuItem.BACK.createItem())
       .consumer(e -> {
-        towns.getMenuManager().openMenu(new FlagManager(menuPlayerData, towns), player);
+        towns.getMenuManager().openMenu(new FlagMenu(towns), player);
       });
   }
 }

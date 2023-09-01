@@ -8,12 +8,14 @@ import lee.code.towns.enums.PermissionType;
 import lee.code.towns.database.tables.TownsTable;
 import lee.code.towns.enums.TownRole;
 import lee.code.towns.utils.CoreUtil;
+import lee.code.towns.utils.ItemUtil;
 import lombok.Getter;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -223,5 +225,19 @@ public class CacheTowns extends DatabaseHandler {
     final TownsTable townsTable = getTownTable(uuid);
     townsTable.setBank(Math.max(townsTable.getBank() - amount, 0));
     updateTownsDatabase(townsTable);
+  }
+
+  public void setBanner(UUID uuid, ItemStack banner) {
+    final TownsTable townsTable = getTownTable(uuid);
+    townsTable.setBanner(ItemUtil.serializeItemStack(banner));
+    updateTownsDatabase(townsTable);
+  }
+
+  public ItemStack getBanner(UUID uuid) {
+    return ItemUtil.parseItemStack(getTownTable(uuid).getBanner());
+  }
+
+  public boolean hasBanner(UUID uuid) {
+    return getTownTable(uuid).getBanner() != null;
   }
 }

@@ -7,7 +7,6 @@ import lee.code.towns.menus.menu.menudata.FlagMenuItem;
 import lee.code.towns.menus.menu.menudata.MenuItem;
 import lee.code.towns.menus.system.MenuButton;
 import lee.code.towns.menus.system.MenuGUI;
-import lee.code.towns.menus.system.MenuPlayerData;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
@@ -15,12 +14,11 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.UUID;
 
-public class FlagManagerRole extends MenuGUI {
+public class FlagRoleMenu extends MenuGUI {
   private final Towns towns;
   private final String role;
 
-  public FlagManagerRole(MenuPlayerData menuPlayerData, Towns towns, String role) {
-    super(menuPlayerData);
+  public FlagRoleMenu(Towns towns, String role) {
     this.towns = towns;
     this.role = role;
     setInventory();
@@ -72,7 +70,7 @@ public class FlagManagerRole extends MenuGUI {
     return new MenuButton()
       .creator(p -> MenuItem.BACK.createItem())
       .consumer(e -> {
-        towns.getMenuManager().openMenu(new RoleSelectionManager(menuPlayerData, towns), player);
+        towns.getMenuManager().openMenu(new RoleSelectionMenu(towns), player);
       });
   }
 }

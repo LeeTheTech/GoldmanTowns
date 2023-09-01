@@ -9,7 +9,6 @@ import lee.code.towns.menus.system.MenuButton;
 import lee.code.towns.menus.system.MenuGUI;
 import lee.code.towns.menus.menu.menudata.MenuItem;
 import lee.code.towns.menus.system.MenuManager;
-import lee.code.towns.menus.system.MenuPlayerData;
 import lee.code.towns.utils.ChunkUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -17,11 +16,10 @@ import org.bukkit.inventory.Inventory;
 
 import java.util.UUID;
 
-public class FlagManager extends MenuGUI {
+public class FlagMenu extends MenuGUI {
   private final Towns towns;
 
-  public FlagManager(MenuPlayerData menuPlayerData, Towns towns) {
-    super(menuPlayerData);
+  public FlagMenu(Towns towns) {
     this.towns = towns;
     setInventory();
   }
@@ -72,7 +70,7 @@ public class FlagManager extends MenuGUI {
           }
         }
         if (menuManager.getMenuLockManager().checkChunkMenuLocked(player, chunk)) return;
-        menuManager.openMenu(new FlagManagerChunk(menuPlayerData, towns, chunk, true), player);
+        menuManager.openMenu(new FlagChunkMenu(towns, chunk, true), player);
       }));
   }
 
@@ -96,7 +94,7 @@ public class FlagManager extends MenuGUI {
           }
         }
         if (menuManager.getMenuLockManager().checkTownMenuLocked(player, cacheManager.getCacheTowns().getTownName(owner))) return;
-        menuManager.openMenu(new FlagManagerGlobal(menuPlayerData, towns), player);
+        menuManager.openMenu(new FlagGlobalMenu(towns), player);
       }));
   }
 
@@ -115,7 +113,7 @@ public class FlagManager extends MenuGUI {
           player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_FLAG_MANAGER_ROLE_NOT_OWNER.getComponent(null)));
           return;
         }
-        towns.getMenuManager().openMenu(new RoleSelectionManager(menuPlayerData, towns), player);
+        towns.getMenuManager().openMenu(new RoleSelectionMenu(towns), player);
       }));
   }
 }

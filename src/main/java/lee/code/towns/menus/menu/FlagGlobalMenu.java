@@ -16,11 +16,10 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.UUID;
 
-public class FlagManagerGlobal extends MenuGUI {
+public class FlagGlobalMenu extends MenuGUI {
   private final Towns towns;
 
-  public FlagManagerGlobal(MenuPlayerData menuPlayerData, Towns towns) {
-    super(menuPlayerData);
+  public FlagGlobalMenu(Towns towns) {
     this.towns = towns;
     setInventory();
   }
@@ -78,7 +77,7 @@ public class FlagManagerGlobal extends MenuGUI {
     return new MenuButton()
       .creator(p -> MenuItem.BACK.createItem())
       .consumer(e -> {
-        towns.getMenuManager().openMenu(new FlagManager(menuPlayerData, towns), player);
+        towns.getMenuManager().openMenu(new FlagMenu(towns), player);
       });
   }
 }

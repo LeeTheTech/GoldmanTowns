@@ -2,12 +2,10 @@ package lee.code.towns.commands.cmds;
 
 import lee.code.towns.Towns;
 import lee.code.towns.commands.SubCommand;
-import lee.code.towns.database.CacheManager;
+import lee.code.towns.database.cache.towns.CacheTowns;
 import lee.code.towns.lang.Lang;
-import lee.code.towns.menus.menu.FlagMenu;
-import lee.code.towns.menus.menu.FlagChunkMenu;
+import lee.code.towns.menus.menu.TownBannerMenu;
 import lee.code.towns.menus.system.MenuManager;
-import lee.code.towns.utils.ChunkUtil;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -15,31 +13,31 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public class FlagManagerCMD extends SubCommand {
+public class BannerCMD extends SubCommand {
   private final Towns towns;
 
-  public FlagManagerCMD(Towns towns) {
+  public BannerCMD(Towns towns) {
     this.towns = towns;
   }
 
   @Override
   public String getName() {
-    return "flagmanager";
+    return "banner";
   }
 
   @Override
   public String getDescription() {
-    return "Open your town flag manager menu.";
+    return "Purchase your town banner.";
   }
 
   @Override
   public String getSyntax() {
-    return "/towns flagmanager";
+    return "/towns banner";
   }
 
   @Override
   public String getPermission() {
-    return "towns.command.flagmanager";
+    return "towns.command.banner";
   }
 
   @Override
@@ -54,21 +52,18 @@ public class FlagManagerCMD extends SubCommand {
 
   @Override
   public void perform(Player player, String[] args) {
-    final UUID uuid = player.getUniqueId();
-    final MenuManager menuManager = towns.getMenuManager();
-    final CacheManager cacheManager = towns.getCacheManager();
-    final String chunk = ChunkUtil.serializeChunkLocation(player.getLocation().getChunk());
-    if (cacheManager.getCacheRenters().isRented(chunk)) {
-      if (cacheManager.getCacheRenters().isPlayerRenting(uuid, chunk)) {
-        menuManager.openMenu(new FlagChunkMenu(towns, chunk, false), player);
-        return;
-      }
-    }
-    if (!cacheManager.getCacheTowns().hasTownOrJoinedTown(uuid)) {
+    final CacheTowns cacheTowns = towns.getCacheManager().getCacheTowns();
+    final UUID playerID = player.getUniqueId();
+    if (!cacheTowns.hasTownOrJoinedTown(playerID)) {
       player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_NO_TOWN.getComponent(null)));
       return;
     }
-    menuManager.openMenu(new FlagMenu(towns), player);
+    final UUID ownerID = cacheTowns.getTargetTownOwner(playerID);
+    if (!cacheTowns.hasBanner(ownerID)) {
+      player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_BANNER_NOT_SET.getComponent(null)));
+      return;
+    }
+    towns.getMenuManager().openMenu(new TownBannerMenu(towns), player);
   }
 
   @Override

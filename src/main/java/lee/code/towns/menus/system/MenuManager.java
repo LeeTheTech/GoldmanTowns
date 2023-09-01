@@ -22,6 +22,11 @@ public class MenuManager {
     player.openInventory(gui.getInventory());
   }
 
+  public void openMenu(MenuPaginatedGUI gui, Player player) {
+    registerHandledInventory(gui.getInventory(), gui);
+    player.openInventory(gui.getInventory());
+  }
+
   public MenuPlayerData getMenuPlayerData(UUID uuid) {
     if (!playerMenuData.containsKey(uuid)) playerMenuData.put(uuid, new MenuPlayerData(uuid));
     return playerMenuData.get(uuid);

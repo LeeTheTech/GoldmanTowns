@@ -7,20 +7,18 @@ import lee.code.towns.menus.menu.menudata.FlagMenuItem;
 import lee.code.towns.menus.menu.menudata.MenuItem;
 import lee.code.towns.menus.system.MenuButton;
 import lee.code.towns.menus.system.MenuGUI;
-import lee.code.towns.menus.system.MenuPlayerData;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
-public class FlagManagerChunk extends MenuGUI {
+public class FlagChunkMenu extends MenuGUI {
   private final Towns towns;
   private final String chunk;
   private final boolean backSupport;
 
-  public FlagManagerChunk(MenuPlayerData menuPlayerData, Towns towns, String chunk, boolean backSupport) {
-    super(menuPlayerData);
+  public FlagChunkMenu(Towns towns, String chunk, boolean backSupport) {
     this.towns = towns;
     this.chunk = chunk;
     this.backSupport = backSupport;
@@ -81,7 +79,7 @@ public class FlagManagerChunk extends MenuGUI {
     return new MenuButton()
       .creator(p -> MenuItem.BACK.createItem())
       .consumer(e -> {
-        towns.getMenuManager().openMenu(new FlagManager(menuPlayerData, towns), player);
+        towns.getMenuManager().openMenu(new FlagMenu(towns), player);
       });
   }
 }

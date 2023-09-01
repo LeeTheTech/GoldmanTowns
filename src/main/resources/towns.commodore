@@ -111,4 +111,6 @@ towns {
       deny;
     }
   }
+  setbanner;
+  banner;
 }
