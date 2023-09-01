@@ -115,9 +115,7 @@ public class KickCMD extends SubCommand {
 
   @Override
   public List<String> onTabComplete(CommandSender sender, String[] args) {
-    if (sender instanceof Player player) {
-      if (args.length == 2) return StringUtil.copyPartialMatches(args[1], towns.getCacheManager().getCacheTowns().getCitizenData().getCitizenNames(player.getUniqueId()), new ArrayList<>());
-    }
+    if (args.length == 2) return StringUtil.copyPartialMatches(args[1], CoreUtil.getOnlinePlayers(), new ArrayList<>());
     return new ArrayList<>();
   }
 }
