@@ -240,7 +240,6 @@ public class RentCMD extends SubCommand {
             return;
           }
         }
-        //TODO NEEDS TESTING 3 PLAYERS
         switch (action) {
           case "add" -> {
             if (uuid.equals(targetID)) {
