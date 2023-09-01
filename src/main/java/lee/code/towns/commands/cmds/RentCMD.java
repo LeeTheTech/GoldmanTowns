@@ -18,7 +18,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.util.StringUtil;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
@@ -123,7 +122,7 @@ public class RentCMD extends SubCommand {
           return;
         }
         if (cacheManager.getCacheRenters().isRented(chunk)) {
-          player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_RENT_REMOVE_BEING_RENTED.getComponent(new String[]{cacheManager.getCacheRenters().getRenterName(chunk)})));
+          player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_RENT_REMOVE_BEING_RENTED.getComponent(new String[]{chunk, cacheManager.getCacheRenters().getRenterName(chunk)})));
           return;
         }
         borderParticleManager.spawnParticleChunkBorder(player, player.getLocation().getChunk(), ChunkRenderType.INFO, true);
@@ -137,6 +136,10 @@ public class RentCMD extends SubCommand {
           return;
         }
         final UUID owner = cacheManager.getCacheChunks().getChunkOwner(chunk);
+        if (uuid.equals(owner)) {
+          player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_RENT_CLAIM_OWNER.getComponent(null)));
+          return;
+        }
         if (!cacheManager.getCacheTowns().getCitizenData().isCitizen(owner, uuid)) {
           player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_RENT_CLAIM_NOT_CITIZEN.getComponent(new String[]{cacheManager.getChunkTownName(chunk)})));
           return;
@@ -176,8 +179,8 @@ public class RentCMD extends SubCommand {
       }
 
       case "unclaim" -> {
-        if (!cacheManager.getCacheTowns().getCitizenData().isCitizen(cacheManager.getCacheChunks().getChunkOwner(chunk), uuid)) {
-          player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_RENT_CLAIM_NOT_CITIZEN.getComponent(new String[]{cacheManager.getChunkTownName(chunk)})));
+        if (cacheManager.getCacheTowns().hasTown(uuid)) {
+          player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_RENT_UNCLAIM_OWNER.getComponent(null)));
           return;
         }
         if (!cacheManager.getCacheRenters().isRented(chunk)) {
@@ -227,17 +230,35 @@ public class RentCMD extends SubCommand {
         }
         final UUID targetID = offlineTarget.getUniqueId();
         final UUID ownerID = cacheManager.getCacheTowns().getTargetTownOwner(offlineTarget.getUniqueId());
-        if (!cacheManager.getCacheTowns().getCitizenData().isCitizen(ownerID, targetID)) {
-          player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_RENT_TRUST_NOT_CITIZEN.getComponent(new String[]{ColorAPI.getNameColor(targetID, targetString)})));
+        if (uuid.equals(ownerID)) {
+          player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_RENT_TRUST_OWNER.getComponent(null)));
           return;
+        }
+        if (!cacheManager.getCacheTowns().getCitizenData().isCitizen(ownerID, targetID)) {
+          if (!targetID.equals(ownerID)) {
+            player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_RENT_TRUST_NOT_CITIZEN.getComponent(new String[]{ColorAPI.getNameColor(targetID, targetString)})));
+            return;
+          }
         }
         //TODO NEEDS TESTING 3 PLAYERS
         switch (action) {
           case "add" -> {
+            if (uuid.equals(targetID)) {
+              player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_RENT_TRUST_ADD_SELF.getComponent(null)));
+              return;
+            }
+            if (cacheManager.getCacheTowns().getTrustData().isTrusted(uuid, targetID)) {
+              player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_RENT_TRUST_ADD_ALREADY_ADDED.getComponent(new String[]{ColorAPI.getNameColor(targetID, targetString)})));
+              return;
+            }
             cacheManager.getCacheTowns().getTrustData().addTrusted(uuid, targetID);
             player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_RENT_TRUST_ADD_SUCCESS.getComponent(new String[]{ColorAPI.getNameColor(targetID, targetString)})));
           }
           case "remove" -> {
+            if (!cacheManager.getCacheTowns().getTrustData().isTrusted(uuid, targetID)) {
+              player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_RENT_TRUST_REMOVE_INVALID.getComponent(new String[]{ColorAPI.getNameColor(targetID, targetString)})));
+              return;
+            }
             cacheManager.getCacheTowns().getTrustData().removeTrusted(uuid, targetID);
             player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_RENT_TRUST_REMOVE_SUCCESS.getComponent(new String[]{ColorAPI.getNameColor(targetID, targetString)})));
           }
