@@ -11,6 +11,7 @@ import lee.code.towns.enums.TownRole;
 import lee.code.towns.lang.Lang;
 import lee.code.towns.utils.CoreUtil;
 import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.util.StringUtil;
@@ -76,9 +77,14 @@ public class RoleCMD extends SubCommand {
         final String targetString = args[2];
         final String role = args[3];
 
-        final UUID targetID = Bukkit.getPlayerUniqueId(targetString);
-        if (targetID == null) {
+        final OfflinePlayer offlineTarget = Bukkit.getOfflinePlayerIfCached(targetString);
+        if (offlineTarget == null) {
           player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_PLAYER_NOT_FOUND.getComponent(new String[]{targetString})));
+          return;
+        }
+        final UUID targetID = offlineTarget.getUniqueId();
+        if (!cacheTowns.hasTownsData(targetID)) {
+          player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_NO_PLAYER_DATA.getComponent(new String[]{targetString})));
           return;
         }
         if (!cacheTowns.getRoleData().getAllRoles(owner).contains(role)) {

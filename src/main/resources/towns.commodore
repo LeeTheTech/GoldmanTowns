@@ -41,7 +41,7 @@ towns {
   info;
   invite {
     player brigadier:string single_word {
-        confirm;
+        accept;
         deny;
     }
   }

@@ -61,18 +61,19 @@ public class KickCMD extends SubCommand {
     }
     final UUID playerID = player.getUniqueId();
     final String targetString = args[1];
-    final UUID targetID = Bukkit.getPlayerUniqueId(targetString);
-    if (targetID == null) {
+    final OfflinePlayer offlineTarget = Bukkit.getOfflinePlayerIfCached(targetString);
+    if (offlineTarget == null) {
       player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_PLAYER_NOT_FOUND.getComponent(new String[]{targetString})));
       return;
     }
+    final UUID targetID = offlineTarget.getUniqueId();
     final CacheManager cacheManager = towns.getCacheManager();
-    if (!cacheManager.getCacheTowns().hasTown(playerID)) {
-      player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_NOT_TOWN_OWNER.getComponent(null)));
-      return;
-    }
     if (!cacheManager.getCacheTowns().hasTownsData(targetID)) {
       player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_NO_PLAYER_DATA.getComponent(new String[]{targetString})));
+      return;
+    }
+    if (!cacheManager.getCacheTowns().hasTown(playerID)) {
+      player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_NOT_TOWN_OWNER.getComponent(null)));
       return;
     }
     if (!cacheManager.getCacheTowns().getCitizenData().isCitizen(playerID, targetID)) {
@@ -85,7 +86,6 @@ public class KickCMD extends SubCommand {
           cacheManager.removeFromTown(targetID);
           cacheManager.getCacheTowns().sendTownMessage(playerID, Lang.PREFIX.getComponent(null).append(Lang.COMMAND_KICK_TOWN.getComponent(new String[]{ColorAPI.getNameColor(targetID, targetString)})));
           player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_KICK_SUCCESS.getComponent(new String[]{ColorAPI.getNameColor(targetID, targetString)})));
-          final OfflinePlayer offlineTarget = Bukkit.getOfflinePlayer(targetID);
           if (offlineTarget.isOnline()) {
             final Player onlineTarget = offlineTarget.getPlayer();
             if (onlineTarget != null) onlineTarget.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_KICK_TARGET.getComponent(null)));
