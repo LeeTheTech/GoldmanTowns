@@ -96,6 +96,8 @@ public enum Lang {
   DENY_RENT_CLAIM_HOVER("&cClick to deny rent chunk!"),
   CONFIRM_RENT_UNCLAIM_HOVER("&aClick to confirm unclaiming rented chunk!"),
   DENY_RENT_UNCLAIM_HOVER("&cClick to deny unclaiming rented chunk!"),
+  COMMAND_TELEPORT_TOWN_SUCCESS("&aYou successfully teleported to &3{0}&a!"),
+  COMMAND_TELEPORT_TOWN_FAILED("&cFailed to teleport to &3{0}&c."),
   COMMAND_SET_SPAWN_SUCCESS("&aYou successfully set your town spawn!"),
   COMMAND_SPAWN_FAILED("&cFailed to teleport to town spawn."),
   COMMAND_AUTO_CLAIM_SUCCESS("&aYou successfully toggled auto claim {0}&a."),
@@ -154,7 +156,7 @@ public enum Lang {
   CHAT_TOWN("{channel} &7[&e{role}&7] {color-name}&7: &3{message}"),
   ERROR_LOCATION_PERMISSION("&2&lTown&7: &3{0} &8| &2&l{1}&7: &6{2}"),
   ERROR_LOCATION_RENTER_PERMISSION("&2&lTown&7: &3{0} &8| &2&lRenter&7: &6{1} &8| &2&l{2}&7: &6{3}"),
-  ERROR_NO_PERMISSION("&cYou sadly do not have permission for this."),
+  ERROR_NO_PERMISSION("&cYou do not have permission for this."),
   ERROR_NOT_CONSOLE_COMMAND("&cThis command does not work in console."),
   ERROR_ONE_COMMAND_AT_A_TIME("&cYou're currently processing another command, please wait for it to finish."),
   ERROR_CREATE_HAS_TOWN("&cYou already own a town called &3{0}&c, if you want to create a new town you'll need to disband your current town."),
@@ -241,6 +243,9 @@ public enum Lang {
   ERROR_BANNER_NOT_SET("&cYour town currently does not have a banner set."),
   ERROR_BANNER_INSUFFICIENT_FUNDS("&cYou do not have enough money to purchase a town banner."),
   ERROR_BANNER_INVENTORY_SPACE("&cYou do not have enough money to purchase a town banner."),
+  ERROR_TELEPORT_NOT_APART_OF_TOWN("&cYou can only teleport to your town's chunks."),
+  ERROR_TELEPORT_TOWN_DOES_NOT_EXIST("&cCould not find a town named &3{0}&c."),
+  ERROR_TELEPORT_TOWN_PRIVATE("&cThis town is set to {0} &cso you can't teleport to it.")
 
   ;
   @Getter private final String string;

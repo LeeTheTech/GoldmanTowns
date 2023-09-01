@@ -21,6 +21,7 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class CacheTowns extends DatabaseHandler {
+  @Getter private final TownNameListData townNameListData;
   @Getter private final TownPermData permData;
   @Getter private final TownRoleData roleData;
   @Getter private final TownPlayerRoleData playerRoleData;
@@ -37,6 +38,7 @@ public class CacheTowns extends DatabaseHandler {
     this.roleColorData = new TownRoleColorData(this);
     this.trustData = new TownTrustData(this);
     this.citizenData = new TownCitizenData(this);
+    this.townNameListData = new TownNameListData(this);
   }
 
   public void createPlayerData(UUID uuid) {
@@ -61,6 +63,7 @@ public class CacheTowns extends DatabaseHandler {
     roleColorData.cacheRoleColors(townsTable);
     trustData.cacheTrustedPlayers(townsTable);
     citizenData.cacheCitizenPlayers(townsTable);
+    townNameListData.cacheTownName(townsTable);
   }
 
   public boolean hasTown(UUID uuid) {
@@ -124,11 +127,6 @@ public class CacheTowns extends DatabaseHandler {
     final UUID owner = getJoinedTownOwner(target);
     final String role = getPlayerRoleData().getPlayerRole(owner, target);
     return roleColorData.getRoleColor(owner, role) + role;
-  }
-
-  public boolean isTownNameTaken(String name) {
-    return townsCache.values().stream()
-      .anyMatch(playerData -> playerData.getTown() != null && playerData.getTown().equals(name));
   }
 
   public Location getTownSpawn(UUID uuid) {

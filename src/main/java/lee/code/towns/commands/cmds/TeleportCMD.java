@@ -1,15 +1,24 @@
 package lee.code.towns.commands.cmds;
 
+import lee.code.towns.Towns;
 import lee.code.towns.commands.SubCommand;
+import lee.code.towns.database.CacheManager;
 import lee.code.towns.lang.Lang;
 import lee.code.towns.utils.ChunkUtil;
+import lee.code.towns.utils.CoreUtil;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class TeleportCMD extends SubCommand {
+  private final Towns towns;
+
+  public TeleportCMD(Towns towns) {
+    this.towns = towns;
+  }
 
   @Override
   public String getName() {
@@ -43,16 +52,42 @@ public class TeleportCMD extends SubCommand {
 
   @Override
   public void perform(Player player, String[] args) {
-    if (args.length < 2) {
+    if (args.length < 3) {
       player.sendMessage(Lang.USAGE.getComponent(new String[]{getSyntax()}));
       return;
     }
-    //TODO check if valid chunk to teleport to
-    //TODO check if owner or renting chunk
+    final UUID playerID = player.getUniqueId();
     final String option = args[1].toLowerCase();
-    final String target = args[2].toLowerCase();
+    final String target = CoreUtil.buildStringFromArgs(args, 2);
+    final CacheManager cacheManager = towns.getCacheManager();
     switch (option) {
-      case "chunk" -> ChunkUtil.teleportToMiddleOfChunk(player, target);
+      case "chunk" -> {
+        if (!cacheManager.getCacheChunks().isClaimed(target) || !cacheManager.getCacheTowns().hasTownOrJoinedTown(playerID)) {
+          player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_TELEPORT_NOT_APART_OF_TOWN.getComponent(null)));
+          return;
+        }
+        if (!cacheManager.getCacheChunks().getChunkOwner(target).equals(cacheManager.getCacheTowns().getTargetTownOwner(playerID))) {
+          player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_TELEPORT_NOT_APART_OF_TOWN.getComponent(null)));
+          return;
+        }
+        ChunkUtil.teleportToMiddleOfChunk(player, target);
+      }
+      case "town" -> {
+        if (!cacheManager.getCacheTowns().getTownNameListData().isTownName(target)) {
+          player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_TELEPORT_TOWN_DOES_NOT_EXIST.getComponent(new String[]{target})));
+          return;
+        }
+        final UUID owner = cacheManager.getCacheTowns().getTownNameListData().getTownNameOwner(target);
+        if (!cacheManager.getCacheTowns().isTownPublic(owner)) {
+          player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_TELEPORT_TOWN_PRIVATE.getComponent(new String[]{Lang.PRIVATE.getString()})));
+          return;
+        }
+        player.teleportAsync(cacheManager.getCacheTowns().getTownSpawn(owner)).thenAccept(result -> {
+          if (result) player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_TELEPORT_TOWN_SUCCESS.getComponent(new String[]{target})));
+          else player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_TELEPORT_TOWN_FAILED.getComponent(new String[]{target})));
+        });
+      }
+      default -> player.sendMessage(Lang.USAGE.getComponent(new String[]{getSyntax()}));
     }
   }
 

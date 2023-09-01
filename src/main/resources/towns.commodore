@@ -94,7 +94,12 @@ towns {
   setspawn;
   spawn;
   teleport {
-    chunk brigadier:string single_word;
+    chunk {
+      chunk brigadier:string single_word;
+    }
+    town {
+      town brigadier:string greedy_phrase;
+    }
   }
   unclaim;
   bank {

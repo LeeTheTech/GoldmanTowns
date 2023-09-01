@@ -105,7 +105,7 @@ public class CoreUtil {
 
   public static String removeSpecialCharacters(String input) {
     final StringBuilder output = new StringBuilder();
-    final String regex = "[^a-zA-Z0-9]";
+    final String regex = "[^a-zA-Z0-9\\s]";
     for (int i = 0; i < input.length(); i++) {
       final char c = input.charAt(i);
       if (Character.toString(c).matches(regex)) continue;

@@ -71,12 +71,12 @@ public class CreateCMD extends SubCommand {
       return;
     }
     final String town = CoreUtil.removeSpecialCharacters(CoreUtil.buildStringFromArgs(args, 1));
-    if (cacheManager.getCacheTowns().isTownNameTaken(town)) {
+    if (cacheManager.getCacheTowns().getTownNameListData().isTownName(town)) {
       player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_CREATE_ALREADY_EXIST.getComponent(new String[]{town})));
       return;
     }
     if (cacheManager.getCacheChunks().isClaimed(chunk)) {
-      player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_CREATE_CHUNK_CLAIMED.getComponent(new String[]{town})));
+      player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_CREATE_CHUNK_CLAIMED.getComponent(new String[]{cacheManager.getChunkTownName(chunk)})));
       return;
     }
     cacheManager.createTown(uuid, town, player.getLocation());

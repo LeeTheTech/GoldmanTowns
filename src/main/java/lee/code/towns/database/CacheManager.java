@@ -78,7 +78,7 @@ public class CacheManager {
   public void createTown(UUID uuid, String town, Location spawn) {
     cacheChunks.claimEstablishedChunk(ChunkUtil.serializeChunkLocation(spawn.getChunk()), uuid);
     final TownsTable townsTable = cacheTowns.getTownTable(uuid);
-    townsTable.setTown(town);
+    cacheTowns.getTownNameListData().setTownName(town, uuid, false);
     townsTable.setSpawn(CoreUtil.serializeLocation(spawn));
     cacheTowns.getRoleColorData().setDefaultRoleColor(uuid, false);
     cacheTowns.updateTownsDatabase(townsTable);
@@ -87,14 +87,13 @@ public class CacheManager {
 
   public void deleteTown(UUID uuid) {
     final TownsTable townsTable = cacheTowns.getTownTable(uuid);
-
     for (UUID citizen : cacheTowns.getCitizenData().getCitizensList(uuid)) {
       final TownsTable citizenTable = cacheTowns.getTownTable(citizen);
       citizenTable.setJoinedTown(null);
       cacheTowns.getTrustData().removeAllTrustedData(citizen);
       cacheTowns.updateTownsDatabase(citizenTable);
     }
-
+    cacheTowns.getTownNameListData().removeTownName(townsTable.getTown());
     townsTable.setTown(null);
     townsTable.setTownCitizens(null);
     townsTable.setPlayerRoles(null);

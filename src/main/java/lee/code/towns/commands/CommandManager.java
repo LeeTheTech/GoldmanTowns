@@ -54,7 +54,7 @@ public class CommandManager implements CommandExecutor {
     storeSubCommand(new KickCMD(towns));
     storeSubCommand(new SetBannerCMD(towns));
     storeSubCommand(new BannerCMD(towns));
-    storeSubCommand(new TeleportCMD());
+    storeSubCommand(new TeleportCMD(towns));
   }
 
   private void storeSubCommand(SubCommand subCommand) {

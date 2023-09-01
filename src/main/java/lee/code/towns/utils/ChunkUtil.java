@@ -32,10 +32,8 @@ public class ChunkUtil {
 
       final Location teleportLocation = new Location(world, middleX + 0.5, yLevel, middleZ + 0.5, player.getLocation().getYaw(), player.getLocation().getPitch());
       player.teleportAsync(teleportLocation).thenAccept(result -> {
-        if (result)
-          player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.TELEPORT_CHUNK_SUCCESS.getComponent(new String[]{chunkString})));
-        else
-          player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.TELEPORT_CHUNK_FAILED.getComponent(new String[]{chunkString})));
+        if (result) player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.TELEPORT_CHUNK_SUCCESS.getComponent(new String[]{chunkString})));
+        else player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.TELEPORT_CHUNK_FAILED.getComponent(new String[]{chunkString})));
       });
     });
   }
