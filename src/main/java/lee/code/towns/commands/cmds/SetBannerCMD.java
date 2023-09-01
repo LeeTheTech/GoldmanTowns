@@ -4,7 +4,6 @@ import lee.code.towns.Towns;
 import lee.code.towns.commands.SubCommand;
 import lee.code.towns.database.cache.towns.CacheTowns;
 import lee.code.towns.lang.Lang;
-import org.bukkit.block.Banner;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;

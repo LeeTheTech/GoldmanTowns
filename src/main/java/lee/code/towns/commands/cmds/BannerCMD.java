@@ -5,7 +5,6 @@ import lee.code.towns.commands.SubCommand;
 import lee.code.towns.database.cache.towns.CacheTowns;
 import lee.code.towns.lang.Lang;
 import lee.code.towns.menus.menu.TownBannerMenu;
-import lee.code.towns.menus.system.MenuManager;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
