@@ -159,7 +159,7 @@ public class RentCMD extends SubCommand {
                 return;
               }
               EcoAPI.removeBalance(uuid, cost);
-              cacheManager.getCacheTowns().addBank(owner, cost);
+              cacheManager.getCacheBank().getData().addTownBalance(owner, cost);
               cacheManager.getCacheRenters().setRenter(uuid, chunk);
               borderParticleManager.spawnParticleChunkBorder(player, player.getLocation().getChunk(), ChunkRenderType.CLAIM, false);
               player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_RENT_CLAIM_SUCCESS.getComponent(new String[]{chunk, Lang.VALUE_FORMAT.getString(new String[]{CoreUtil.parseValue(cost)})})));

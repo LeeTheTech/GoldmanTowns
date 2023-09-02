@@ -79,4 +79,16 @@ public class DatabaseHandler {
   public void updateServerDatabase(ServerTable serverTable) {
     databaseManager.updateServerTable(serverTable);
   }
+
+  public void createBankDatabase(BankTable bankTable) {
+    databaseManager.createBankTable(bankTable);
+  }
+
+  public void updateBankDatabase(BankTable bankTable) {
+    databaseManager.updateBankTable(bankTable);
+  }
+
+  public void deleteBankDatabase(BankTable bankTable) {
+    databaseManager.deleteBankTable(bankTable);
+  }
 }

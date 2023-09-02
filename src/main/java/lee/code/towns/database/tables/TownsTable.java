@@ -43,9 +43,6 @@ public class TownsTable {
   @DatabaseField(columnName = "bonus_claims")
   private int bonusClaims;
 
-  @DatabaseField(columnName = "bank")
-  private double bank;
-
   @DatabaseField(columnName = "banner")
   private String banner;
 

@@ -21,10 +21,11 @@ import java.util.UUID;
 
 public class DatabaseManager {
   private final Towns towns;
+  private Dao<BankTable, UUID> bankDao;
   private Dao<ChunkTable, String> chunkDao;
   private Dao<TownsTable, UUID> townsDao;
   private Dao<PermissionTable, Integer> permissionDao;
-  private Dao<RentTable, Integer> rentDao;
+  private Dao<RentTable, String> rentDao;
   private Dao<ServerTable, Integer> serverDao;
   private ConnectionSource connectionSource;
 
@@ -68,6 +69,10 @@ public class DatabaseManager {
     TableUtils.createTableIfNotExists(connectionSource, PermissionTable.class);
     permissionDao = DaoManager.createDao(connectionSource, PermissionTable.class);
 
+    //Bank data
+    TableUtils.createTableIfNotExists(connectionSource, BankTable.class);
+    bankDao = DaoManager.createDao(connectionSource, BankTable.class);
+
     //Chunk data
     TableUtils.createTableIfNotExists(connectionSource, ChunkTable.class);
     chunkDao = DaoManager.createDao(connectionSource, ChunkTable.class);
@@ -98,8 +103,11 @@ public class DatabaseManager {
 
     for (TownsTable townsTable : townsDao.queryForAll()) {
       cacheManager.getCacheTowns().setTownsTable(townsTable);
-      cacheManager.getCacheTowns().getPermData().setPermissionTable(queryPermTownsTable(townsTable));
-      cacheManager.getCacheTowns().getRoleData().setRolePermissionTable(queryPermTownsRoleTable(townsTable));
+      if (townsTable.getTown() != null) {
+        cacheManager.getCacheTowns().getPermData().setPermissionTable(queryPermTownsTable(townsTable));
+        cacheManager.getCacheTowns().getRoleData().setRolePermissionTable(queryPermTownsRoleTable(townsTable));
+        cacheManager.getCacheBank().setBankTable(queryBankTownsTable(townsTable));
+      }
     }
   }
 
@@ -126,13 +134,23 @@ public class DatabaseManager {
     }
   }
 
-  private PermissionTable queryPermTownsTable(TownsTable townsTable) {
+  private List<BankTable> queryBankTownsTable(TownsTable townsTable) {
+    try {
+      final QueryBuilder<BankTable, UUID> queryBuilder = bankDao.queryBuilder();
+      queryBuilder.where().eq("uniqueId", townsTable.getUniqueId());
+      return queryBuilder.query();
+    } catch (SQLException e) {
+      throw new RuntimeException(e);
+    }
+  }
+
+  private List<PermissionTable> queryPermTownsTable(TownsTable townsTable) {
     try {
       final QueryBuilder<PermissionTable, Integer> queryBuilder = permissionDao.queryBuilder();
       queryBuilder.where().eq("uuid", townsTable.getUniqueId())
         .and()
         .like("permission_type", PermissionType.TOWN);
-      return queryBuilder.query().get(0);
+      return queryBuilder.query();
     } catch (SQLException e) {
       throw new RuntimeException(e);
     }
@@ -277,6 +295,36 @@ public class DatabaseManager {
     Bukkit.getAsyncScheduler().runNow(towns, scheduledTask -> {
       try {
         permissionDao.delete(permissionTable);
+      } catch (SQLException e) {
+        e.printStackTrace();
+      }
+    });
+  }
+
+  public synchronized void createBankTable(BankTable bankTable) {
+    Bukkit.getAsyncScheduler().runNow(towns, scheduledTask -> {
+      try {
+        bankDao.createIfNotExists(bankTable);
+      } catch (SQLException e) {
+        e.printStackTrace();
+      }
+    });
+  }
+
+  public synchronized void updateBankTable(BankTable bankTable) {
+    Bukkit.getAsyncScheduler().runNow(towns, scheduledTask -> {
+      try {
+        bankDao.update(bankTable);
+      } catch (SQLException e) {
+        e.printStackTrace();
+      }
+    });
+  }
+
+  public synchronized void deleteBankTable(BankTable bankTable) {
+    Bukkit.getAsyncScheduler().runNow(towns, scheduledTask -> {
+      try {
+        bankDao.delete(bankTable);
       } catch (SQLException e) {
         e.printStackTrace();
       }

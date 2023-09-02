@@ -1,6 +1,7 @@
 package lee.code.towns.database;
 
 import lee.code.towns.Towns;
+import lee.code.towns.database.cache.bank.CacheBank;
 import lee.code.towns.database.cache.chunks.CacheChunks;
 import lee.code.towns.utils.CoreUtil;
 import lee.code.towns.utils.FlagUtil;
@@ -24,6 +25,7 @@ public class CacheManager {
   @Getter private final CacheTowns cacheTowns;
   @Getter private final CacheRenters cacheRenters;
   @Getter private final CacheServer cacheServer;
+  @Getter private final CacheBank cacheBank;
 
   public CacheManager(Towns towns, DatabaseManager databaseManager) {
     this.towns = towns;
@@ -31,6 +33,7 @@ public class CacheManager {
     this.cacheTowns = new CacheTowns(databaseManager);
     this.cacheRenters = new CacheRenters(databaseManager);
     this.cacheServer = new CacheServer(databaseManager);
+    this.cacheBank = new CacheBank(databaseManager);
   }
 
   public boolean checkPlayerLocationFlag(UUID uuid, String chunk, Flag flag, boolean ownerBypass) {
@@ -82,7 +85,9 @@ public class CacheManager {
     townsTable.setSpawn(CoreUtil.serializeLocation(spawn));
     cacheTowns.getRoleColorData().setDefaultRoleColor(uuid, false);
     cacheTowns.updateTownsDatabase(townsTable);
+    cacheTowns.getPermData().createDefaultTownPermissionTable(uuid);
     cacheTowns.getRoleData().createDefaultRolePermissionTable(uuid);
+    cacheBank.createBankData(uuid);
   }
 
   public void deleteTown(UUID uuid) {
@@ -105,6 +110,7 @@ public class CacheManager {
     cacheTowns.getRoleData().deleteAllRoleData(uuid);
     cacheRenters.deleteAllRentData(uuid);
     cacheChunks.deleteAllChunkData(uuid);
+    cacheBank.deleteAllBankData(uuid);
     cacheTowns.updateTownsDatabase(townsTable);
   }
 

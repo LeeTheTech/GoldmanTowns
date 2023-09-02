@@ -3,6 +3,7 @@ package lee.code.towns.commands.cmds;
 import lee.code.colors.ColorAPI;
 import lee.code.towns.Towns;
 import lee.code.towns.commands.SubCommand;
+import lee.code.towns.database.cache.bank.CacheBank;
 import lee.code.towns.database.cache.chunks.CacheChunks;
 import lee.code.towns.database.cache.server.CacheServer;
 import lee.code.towns.database.cache.towns.CacheTowns;
@@ -59,6 +60,7 @@ public class InfoCMD extends SubCommand {
     final CacheTowns cacheTowns = towns.getCacheManager().getCacheTowns();
     final CacheChunks cacheChunks = towns.getCacheManager().getCacheChunks();
     final CacheServer cacheServer = towns.getCacheManager().getCacheServer();
+    final CacheBank cacheBank = towns.getCacheManager().getCacheBank();
     final UUID uuid = player.getUniqueId();
     if (!cacheTowns.hasTownOrJoinedTown(uuid)) {
       player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_NO_TOWN.getComponent(null)));
@@ -73,7 +75,7 @@ public class InfoCMD extends SubCommand {
     lines.add(Lang.COMMAND_INFO_TOWN_PUBLIC.getComponent(new String[]{status}));
     lines.add(Lang.COMMAND_INFO_TOWN_NAME.getComponent(new String[]{cacheTowns.getTownName(owner)}));
     lines.add(Lang.COMMAND_INFO_TOWN_OWNER.getComponent(new String[]{ColorAPI.getNameColor(owner, Bukkit.getOfflinePlayer(owner).getName())}));
-    lines.add(Lang.COMMAND_INFO_TOWN_BANK.getComponent(new String[]{Lang.VALUE_FORMAT.getString(new String[]{CoreUtil.parseValue(cacheTowns.getBankBalance(owner))})}));
+    lines.add(Lang.COMMAND_INFO_TOWN_BANK.getComponent(new String[]{Lang.VALUE_FORMAT.getString(new String[]{CoreUtil.parseValue(cacheBank.getData().getTownBalance(owner))})}));
     lines.add(Lang.COMMAND_INFO_TOWN_CITIZENS.getComponent(new String[]{String.valueOf(cacheTowns.getCitizenData().getCitizenAmount(owner))}));
     lines.add(Lang.COMMAND_INFO_TOWN_CHUNKS.getComponent(new String[]{CoreUtil.parseValue(cacheChunks.getChunkListData().getChunkClaims(owner)), CoreUtil.parseValue(cacheTowns.getMaxChunkClaims(owner))}));
     lines.add(Lang.COMMAND_INFO_TOWN_BONUS_CLAIMS.getComponent(new String[]{CoreUtil.parseValue(cacheTowns.getBonusClaims(owner))}));

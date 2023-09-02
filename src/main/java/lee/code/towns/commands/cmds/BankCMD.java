@@ -3,7 +3,7 @@ package lee.code.towns.commands.cmds;
 import lee.code.economy.EcoAPI;
 import lee.code.towns.Towns;
 import lee.code.towns.commands.SubCommand;
-import lee.code.towns.database.cache.towns.CacheTowns;
+import lee.code.towns.database.CacheManager;
 import lee.code.towns.enums.Flag;
 import lee.code.towns.lang.Lang;
 import lee.code.towns.utils.CoreUtil;
@@ -53,13 +53,13 @@ public class BankCMD extends SubCommand {
 
   @Override
   public void perform(Player player, String[] args) {
-    final CacheTowns cacheTowns = towns.getCacheManager().getCacheTowns();
+    final CacheManager cacheManager = towns.getCacheManager();
     final UUID uuid = player.getUniqueId();
-    if (!cacheTowns.hasTownOrJoinedTown(uuid)) {
+    if (!cacheManager.getCacheTowns().hasTownOrJoinedTown(uuid)) {
       player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_NO_TOWN.getComponent(null)));
       return;
     }
-    final UUID owner = cacheTowns.getTargetTownOwner(uuid);
+    final UUID owner = cacheManager.getCacheTowns().getTargetTownOwner(uuid);
     if (args.length > 2) {
       final String option = args[1].toLowerCase();
       final String amountString = args[2];
@@ -71,17 +71,17 @@ public class BankCMD extends SubCommand {
       switch (option) {
         case "withdraw" -> {
           if (!uuid.equals(owner)) {
-            final String role = cacheTowns.getPlayerRoleData().getPlayerRole(owner, uuid);
-            if (!cacheTowns.getRoleData().checkRolePermissionFlag(owner, role, Flag.WITHDRAW)) {
+            final String role = cacheManager.getCacheTowns().getPlayerRoleData().getPlayerRole(owner, uuid);
+            if (!cacheManager.getCacheTowns().getRoleData().checkRolePermissionFlag(owner, role, Flag.WITHDRAW)) {
               player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_BANK_WITHDRAW_NO_PERMISSION.getComponent(null)));
               return;
             }
           }
-          if (cacheTowns.getBankBalance(owner) < amount) {
+          if (cacheManager.getCacheBank().getData().getTownBalance(owner) < amount) {
             player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_BANK_WITHDRAW_INSUFFICIENT_FUNDS.getComponent(new String[]{Lang.VALUE_FORMAT.getString(new String[]{CoreUtil.parseValue(amount)})})));
             return;
           }
-          cacheTowns.removeBank(owner, amount);
+          cacheManager.getCacheBank().getData().removeTownBalance(owner, amount);
           EcoAPI.addBalance(uuid, amount);
           player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_BANK_WITHDRAW_SUCCESS.getComponent(new String[]{Lang.VALUE_FORMAT.getString(new String[]{CoreUtil.parseValue(amount)})})));
         }
@@ -91,13 +91,13 @@ public class BankCMD extends SubCommand {
             return;
           }
           EcoAPI.removeBalance(uuid, amount);
-          cacheTowns.addBank(owner, amount);
+          cacheManager.getCacheBank().getData().addTownBalance(owner, amount);
           player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_BANK_DEPOSIT_SUCCESS.getComponent(new String[]{Lang.VALUE_FORMAT.getString(new String[]{CoreUtil.parseValue(amount)})})));
         }
         default -> player.sendMessage(Lang.USAGE.getComponent(new String[]{getSyntax()}));
       }
     } else {
-      player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_BANK_SUCCESS.getComponent(new String[]{Lang.VALUE_FORMAT.getString(new String[]{CoreUtil.parseValue(cacheTowns.getBankBalance(owner))})})));
+      player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_BANK_SUCCESS.getComponent(new String[]{Lang.VALUE_FORMAT.getString(new String[]{CoreUtil.parseValue(cacheManager.getCacheBank().getData().getTownBalance(owner))})})));
     }
   }
 

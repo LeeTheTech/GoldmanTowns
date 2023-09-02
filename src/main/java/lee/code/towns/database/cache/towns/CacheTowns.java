@@ -43,10 +43,9 @@ public class CacheTowns extends DatabaseHandler {
 
   public void createPlayerData(UUID uuid) {
     final TownsTable townsTable = new TownsTable(uuid);
-    final PermissionTable permissionTable = new PermissionTable(uuid, PermissionType.TOWN);
     setTownsTable(townsTable);
-    permData.setPermissionTable(permissionTable);
-    createTownAndPermissionDatabase(townsTable, permissionTable);
+    createTownsDatabase(townsTable);
+    //createTownAndPermissionDatabase(townsTable, permissionTable);
   }
 
   public TownsTable getTownTable(UUID uuid) {
@@ -206,22 +205,6 @@ public class CacheTowns extends DatabaseHandler {
   public void removeBonusClaims(UUID uuid, int amount) {
     final TownsTable townsTable = getTownTable(uuid);
     townsTable.setBonusClaims(Math.max(townsTable.getBonusClaims() - amount, 0));
-    updateTownsDatabase(townsTable);
-  }
-
-  public double getBankBalance(UUID uuid) {
-    return getTownTable(uuid).getBank();
-  }
-
-  public void addBank(UUID uuid, double amount) {
-    final TownsTable townsTable = getTownTable(uuid);
-    townsTable.setBank(townsTable.getBank() + amount);
-    updateTownsDatabase(townsTable);
-  }
-
-  public void removeBank(UUID uuid, double amount) {
-    final TownsTable townsTable = getTownTable(uuid);
-    townsTable.setBank(Math.max(townsTable.getBank() - amount, 0));
     updateTownsDatabase(townsTable);
   }
 
