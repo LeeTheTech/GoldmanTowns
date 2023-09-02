@@ -36,13 +36,14 @@ public class CacheBank extends DatabaseHandler {
   }
 
   public void deleteAllBankData(UUID uuid) {
-    data.removeTownBalanceData(uuid);
     deleteBankDatabase(getBankTable(uuid));
+    data.removeTownBalanceData(uuid);
+    bankCache.remove(uuid);
   }
 
   public void createBankData(UUID uuid) {
     final BankTable bankTable = new BankTable(uuid);
-    data.setBalanceCache(bankTable);
+    setBankTable(bankTable);
     createBankDatabase(bankTable);
   }
 }

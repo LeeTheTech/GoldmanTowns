@@ -46,4 +46,9 @@ public class TownPermData extends DatabaseHandler {
     setPermissionTable(permissionTable);
     createPermissionDatabase(permissionTable);
   }
+
+  public void deleteTownPermissionTable(UUID uuid) {
+    deletePermissionDatabase(getPermissionTable(uuid));
+    permissionCache.remove(uuid);
+  }
 }

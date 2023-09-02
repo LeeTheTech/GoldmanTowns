@@ -104,10 +104,12 @@ public class CacheManager {
     townsTable.setPlayerRoles(null);
     townsTable.setSpawn(null);
     townsTable.setRoleColors(null);
+    townsTable.setBanner(null);
     cacheTowns.getCitizenData().deleteCitizenCache(uuid);
     cacheTowns.getRoleColorData().deleteRoleColorCache(uuid);
     cacheTowns.getPlayerRoleData().deletePlayerRolesCache(uuid);
     cacheTowns.getRoleData().deleteAllRoleData(uuid);
+    cacheTowns.getPermData().deleteTownPermissionTable(uuid);
     cacheRenters.deleteAllRentData(uuid);
     cacheChunks.deleteAllChunkData(uuid);
     cacheBank.deleteAllBankData(uuid);
