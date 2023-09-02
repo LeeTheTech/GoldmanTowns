@@ -221,4 +221,14 @@ public class CacheTowns extends DatabaseHandler {
   public boolean hasBanner(UUID uuid) {
     return getTownTable(uuid).getBanner() != null;
   }
+
+  public boolean isFlying(UUID uuid) {
+    return getTownTable(uuid).isFlying();
+  }
+
+  public void setFlying(UUID uuid, boolean result) {
+    final TownsTable townsTable = getTownTable(uuid);
+    townsTable.setFlying(result);
+    updateTownsDatabase(townsTable);
+  }
 }

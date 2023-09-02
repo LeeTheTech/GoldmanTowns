@@ -46,6 +46,9 @@ public class TownsTable {
   @DatabaseField(columnName = "banner")
   private String banner;
 
+  @DatabaseField(columnName = "flying")
+  private boolean flying;
+
   public TownsTable(UUID uniqueId) {
     this.uniqueId = uniqueId;
   }

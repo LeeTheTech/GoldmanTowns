@@ -42,6 +42,8 @@ public enum Lang {
   COMMAND_BONUS_CLAIMS_SET_SUCCESS("&aSuccessfully set player &6{0} &abonus claims to &3{1}&a!"),
   COMMAND_BONUS_CLAIMS_ADD_SUCCESS("&aSuccessfully added &3{0} &abonus claims to player &6{1}&a!"),
   COMMAND_BONUS_CLAIMS_REMOVE_SUCCESS("&aSuccessfully removed &3{0} &abonus claims from player &6{1}&a!"),
+  COMMAND_FLY_SUCCESS("&aSuccessfully toggled town flight {0}&a!"),
+  COMMAND_FLY_OFF_SUCCESS("&aYour town flight has been toggled {0}&a."),
   COMMAND_CLAIM_SUCCESS("&aYou successfully claimed the chunk &3{0}&a. &b(&3{1}&7/&3{2}&b)"),
   COMMAND_CLAIM_OUTPOST_SUCCESS("&aYou successfully claimed outpost chunk &3{0}&a. &b(&3{1}&7/&3{2}&b)"),
   COMMAND_UNCLAIM_SUCCESS("&aYou successfully unclaimed the chunk &3{0}&a."),
@@ -250,7 +252,8 @@ public enum Lang {
   ERROR_BANNER_INVENTORY_SPACE("&cYou do not have enough money to purchase a town banner."),
   ERROR_TELEPORT_NOT_APART_OF_TOWN("&cYou can only teleport to your town's chunks."),
   ERROR_TELEPORT_TOWN_DOES_NOT_EXIST("&cCould not find a town named &3{0}&c."),
-  ERROR_TELEPORT_TOWN_PRIVATE("&cThis town is set to {0} &cso you can't teleport to it.")
+  ERROR_TELEPORT_TOWN_PRIVATE("&cThis town is set to {0} &cso you can't teleport to it."),
+  ERROR_FLY_NOT_TOWN_CHUNK("&cYou can only toggle town flight within your town's chunks.")
 
   ;
   @Getter private final String string;

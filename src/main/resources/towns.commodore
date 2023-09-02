@@ -128,4 +128,7 @@ towns {
       page brigadier:integer;
     }
   }
+  fly {
+    off;
+  }
 }

@@ -33,5 +33,7 @@ public class QuitListener implements Listener {
     towns.getChatChannelManager().removeChatChannel(uuid);
     //Auto message manager
     towns.getAutoMessageManager().removeAutoMessageData(uuid);
+    //Fly Manager
+    towns.getFlyManager().removeFlying(uuid);
   }
 }

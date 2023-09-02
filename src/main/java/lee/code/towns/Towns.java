@@ -24,6 +24,7 @@ public class Towns extends JavaPlugin {
   @Getter private AutoMessageManager autoMessageManager;
   @Getter private AutoClaimManager autoClaimManager;
   @Getter private AutoMapManager autoMapManager;
+  @Getter private FlyManager flyManager;
   @Getter private MenuManager menuManager;
   @Getter private InviteManager inviteManager;
   @Getter private Data data;
@@ -39,6 +40,7 @@ public class Towns extends JavaPlugin {
     this.cacheManager = new CacheManager(this, databaseManager);
     this.commandManager = new CommandManager(this);
     this.chatChannelManager = new ChatChannelManager(this);
+    this.flyManager = new FlyManager(this);
     this.menuManager = new MenuManager();
     this.inviteManager = new InviteManager(this);
     this.data = new Data();
@@ -74,6 +76,7 @@ public class Towns extends JavaPlugin {
     getServer().getPluginManager().registerEvents(new AutoMapListener(this), this);
     getServer().getPluginManager().registerEvents(new FireSpreadListener(this), this);
     getServer().getPluginManager().registerEvents(new IceMeltListener(this), this);
+    getServer().getPluginManager().registerEvents(new FlyListener(this), this);
   }
 
   private void registerCommands() {
