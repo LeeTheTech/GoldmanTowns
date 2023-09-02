@@ -58,7 +58,7 @@ public class TopCMD extends SubCommand {
     switch (option) {
       case "bank" -> {
         final Map<UUID, Double> sortedBalances = CoreUtil.sortByValue(towns.getCacheManager().getCacheBank().getData().getTownBalances(), Comparator.reverseOrder());
-        final ArrayList<UUID> players = new ArrayList<>(sortedBalances.keySet());
+        final ArrayList<UUID> owners = new ArrayList<>(sortedBalances.keySet());
         int index;
         int page = 0;
         final int maxDisplayed = 10;
@@ -72,8 +72,8 @@ public class TopCMD extends SubCommand {
 
         for (int i = 0; i < maxDisplayed; i++) {
           index = maxDisplayed * page + i;
-          if (index >= players.size()) break;
-          final UUID targetID = players.get(index);
+          if (index >= owners.size()) break;
+          final UUID targetID = owners.get(index);
           lines.add(Lang.COMMAND_TOP_BANK_LINE.getComponent(new String[]{
             String.valueOf(position),
             towns.getCacheManager().getCacheTowns().getTownName(targetID),
