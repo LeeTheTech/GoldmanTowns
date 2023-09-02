@@ -1,5 +1,6 @@
 package lee.code.towns.database;
 
+import lee.code.economy.EcoAPI;
 import lee.code.towns.Towns;
 import lee.code.towns.database.cache.bank.CacheBank;
 import lee.code.towns.database.cache.chunks.CacheChunks;
@@ -15,6 +16,8 @@ import lee.code.towns.utils.ChunkUtil;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.OfflinePlayer;
+import org.bukkit.entity.Player;
 
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
@@ -124,10 +127,24 @@ public class CacheManager {
 
   public void startRentCollectionTask() {
     Bukkit.getAsyncScheduler().runAtFixedRate(towns, (scheduledTask) -> {
-        if (cacheServer.getLastRentCollectionTime() <= System.currentTimeMillis()) {
-          //TODO take that money from all players renting
+        if (cacheServer.getLastRentCollectionTime() < System.currentTimeMillis()) {
+          cacheServer.setLastRentCollectionTime(System.currentTimeMillis() + CoreUtil.millisecondsToMidnightPST());
+          for (UUID uuid : cacheRenters.getRenterListData().getRenterList()) {
+            double amount = 0;
+            for (String chunk : cacheRenters.getRenterListData().getChunkList(uuid)) {
+              if (!cacheRenters.isRented(chunk)) continue;
+              final double rentCost = cacheRenters.getRentPrice(chunk);
+              EcoAPI.removeBalance(uuid, rentCost);
+              cacheBank.getData().addTownBalance(cacheChunks.getChunkOwner(chunk), rentCost);
+              amount += rentCost;
+            }
+            final OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(uuid);
+            if (offlinePlayer.isOnline()) {
+              final Player onlinePlayer = offlinePlayer.getPlayer();
+              if (onlinePlayer != null) onlinePlayer.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.AUTO_RENT_COLLECTION_MESSAGE.getComponent(new String[]{Lang.VALUE_FORMAT.getString(new String[]{CoreUtil.parseValue(amount)})})));
+            }
+          }
           Bukkit.getServer().sendMessage(Lang.PREFIX.getComponent(null).append(Lang.RENT_COLLECTION_FINISHED.getComponent(null)));
-          cacheServer.setLastRentCollectionTime(System.currentTimeMillis() + 86400000L);
         }
       },
       0,

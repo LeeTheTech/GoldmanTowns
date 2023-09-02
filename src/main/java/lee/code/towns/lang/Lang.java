@@ -28,6 +28,7 @@ public enum Lang {
   AUTO_MESSAGE_TOWN("&eWelcome to &6&l{0}&e!"),
   AUTO_MESSAGE_RENTABLE("&eChunk is rentable for {0} &ea day!"),
   AUTO_MESSAGE_RENTED("&eChunk is being rented by &6{0}&e!"),
+  AUTO_RENT_COLLECTION_MESSAGE("&aA total of {0} &awas withdrawn from your balance for town rent. All money withdrawn is sent to your town's bank."),
   MESSAGE_HOVER("&2&lPlayer&7: &e{display-name}\n&2&lTown&7: &e{town}\n&2&lTown Role&7: {role}"),
   RENT_COLLECTION_FINISHED("&aRent has been collected!"),
   COMMAND_PUBLIC_SUCCESS("&aYour town status is now set to {0}&a."),

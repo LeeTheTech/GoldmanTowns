@@ -29,6 +29,10 @@ public class RenterListData {
     return rentedChunkListCache.get(uuid);
   }
 
+  public Set<UUID> getRenterList() {
+    return rentedChunkListCache.keySet();
+  }
+
   public boolean hasRentedChunks(UUID uuid) {
     return rentedChunkListCache.containsKey(uuid);
   }

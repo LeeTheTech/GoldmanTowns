@@ -168,4 +168,17 @@ public class CoreUtil {
     return prev.append(split).append(next);
   }
 
+  public static long millisecondsToMidnightPST() {
+    final Calendar losAngelesCalendar = Calendar.getInstance(TimeZone.getTimeZone("America/Los_Angeles"));
+    losAngelesCalendar.set(Calendar.HOUR_OF_DAY, 0);
+    losAngelesCalendar.set(Calendar.MINUTE, 0);
+    losAngelesCalendar.set(Calendar.SECOND, 0);
+    losAngelesCalendar.set(Calendar.MILLISECOND, 0);
+
+    final long currentTime = System.currentTimeMillis();
+    final long midnightPST = losAngelesCalendar.getTimeInMillis();
+    long millisecondsRemaining = midnightPST - currentTime;
+    if (millisecondsRemaining < 0) millisecondsRemaining += 24 * 60 * 60 * 1000;
+    return millisecondsRemaining;
+  }
 }
