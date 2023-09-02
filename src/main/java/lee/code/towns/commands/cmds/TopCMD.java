@@ -2,6 +2,8 @@ package lee.code.towns.commands.cmds;
 
 import lee.code.towns.Towns;
 import lee.code.towns.commands.SubCommand;
+import lee.code.towns.database.CacheManager;
+import lee.code.towns.database.cache.towns.CacheTowns;
 import lee.code.towns.database.cache.towns.data.TownCitizenData;
 import lee.code.towns.lang.Lang;
 import lee.code.towns.utils.CoreUtil;
@@ -54,10 +56,11 @@ public class TopCMD extends SubCommand {
       player.sendMessage(Lang.PREFIX.getComponent(new String[]{getSyntax()}));
       return;
     }
+    final CacheManager cacheManager = towns.getCacheManager();
     final String option = args[1].toLowerCase();
     switch (option) {
       case "bank" -> {
-        final Map<UUID, Double> sortedBalances = CoreUtil.sortByValue(towns.getCacheManager().getCacheBank().getData().getTownBalances(), Comparator.reverseOrder());
+        final Map<UUID, Double> sortedBalances = CoreUtil.sortByValue(cacheManager.getCacheBank().getData().getTownBalances(), Comparator.reverseOrder());
         final ArrayList<UUID> owners = new ArrayList<>(sortedBalances.keySet());
         int index;
         int page = 0;
@@ -76,7 +79,7 @@ public class TopCMD extends SubCommand {
           final UUID targetID = owners.get(index);
           lines.add(Lang.COMMAND_TOP_BANK_LINE.getComponent(new String[]{
             String.valueOf(position),
-            towns.getCacheManager().getCacheTowns().getTownName(targetID),
+            cacheManager.getCacheTowns().getTownName(targetID),
             Lang.VALUE_FORMAT.getString(new String[]{CoreUtil.parseValue(sortedBalances.get(targetID))})
           }));
           position++;
@@ -88,7 +91,7 @@ public class TopCMD extends SubCommand {
         for (Component line : lines) player.sendMessage(line);
       }
       case "size" -> {
-        final TownCitizenData townCitizenData = towns.getCacheManager().getCacheTowns().getCitizenData();
+        final TownCitizenData townCitizenData = cacheManager.getCacheTowns().getCitizenData();
         final Map<UUID, Integer> ownerCitizens = new HashMap<>();
         for (UUID owner : townCitizenData.getCitizenOwnerList()) ownerCitizens.put(owner, townCitizenData.getCitizenAmount(owner));
         final Map<UUID, Integer> sortedOwnerCitizens = CoreUtil.sortByValue(ownerCitizens, Comparator.reverseOrder());
