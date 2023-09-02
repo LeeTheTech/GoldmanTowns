@@ -3,6 +3,7 @@ package lee.code.towns.commands.cmds;
 import lee.code.towns.Towns;
 import lee.code.towns.commands.SubCommand;
 import lee.code.towns.database.CacheManager;
+import lee.code.towns.enums.Flag;
 import lee.code.towns.lang.Lang;
 import lee.code.towns.managers.AutoClaimManager;
 import lee.code.towns.utils.ChunkUtil;
@@ -54,25 +55,29 @@ public class AutoClaimCMD extends SubCommand {
   public void perform(Player player, String[] args) {
     final CacheManager cacheManager = towns.getCacheManager();
     final AutoClaimManager autoClaimManager = towns.getAutoClaimManager();
-    final UUID uuid = player.getUniqueId();
-    if (towns.getAutoMapManager().isAutoMapping(uuid)) {
-      player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_AUTO_CLAIM_AUTO_MAPPING.getComponent(null)));
-      return;
-    }
-    if (!cacheManager.getCacheTowns().hasTownOrJoinedTown(uuid)) {
+    final UUID playerID = player.getUniqueId();
+    if (!cacheManager.getCacheTowns().hasTownOrJoinedTown(playerID)) {
       player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_NO_TOWN.getComponent(null)));
       return;
     }
-    final boolean active = autoClaimManager.isAutoClaiming(uuid);
+    final UUID ownerID = cacheManager.getCacheTowns().getTargetTownOwner(playerID);
+    if (!playerID.equals(ownerID)) {
+      final String role = cacheManager.getCacheTowns().getPlayerRoleData().getPlayerRole(ownerID, playerID);
+      if (!cacheManager.getCacheTowns().getRoleData().checkRolePermissionFlag(ownerID, role, Flag.CLAIM)) {
+        player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_CLAIM_NO_PERMISSION.getComponent(null)));
+        return;
+      }
+    }
+    final boolean active = autoClaimManager.isAutoClaiming(playerID);
     if (active) {
-      autoClaimManager.removeAutoClaiming(uuid);
+      autoClaimManager.removeAutoClaiming(playerID);
     } else {
       final String chunkString = ChunkUtil.serializeChunkLocation(player.getLocation().getChunk());
-      if (!cacheManager.getCacheChunks().isClaimed(chunkString) || !cacheManager.getCacheChunks().isChunkOwner(chunkString, cacheManager.getCacheTowns().getTargetTownOwner(uuid))) {
+      if (!cacheManager.getCacheChunks().isClaimed(chunkString) || !cacheManager.getCacheChunks().isChunkOwner(chunkString, ownerID)) {
         player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_AUTO_CLAIM_NOT_OWNER.getComponent(null)));
         return;
       }
-      autoClaimManager.setAutoClaiming(uuid, chunkString);
+      autoClaimManager.setAutoClaiming(playerID, chunkString);
     }
     final String result = active ? Lang.OFF.getString() : Lang.ON.getString();
     player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_AUTO_CLAIM_SUCCESS.getComponent(new String[]{result})));

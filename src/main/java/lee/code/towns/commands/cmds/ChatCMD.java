@@ -53,19 +53,19 @@ public class ChatCMD extends SubCommand {
   @Override
   public void perform(Player player, String[] args) {
     final CacheManager cacheManager = towns.getCacheManager();
-    final UUID uuid = player.getUniqueId();
-    if (!cacheManager.getCacheTowns().hasTown(uuid) && !cacheManager.getCacheTowns().hasJoinedTown(uuid)) {
+    final UUID playerID = player.getUniqueId();
+    if (!cacheManager.getCacheTowns().hasTown(playerID) && !cacheManager.getCacheTowns().hasJoinedTown(playerID)) {
       player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_NO_TOWN.getComponent(null)));
       return;
     }
     final ChatChannelManager chatChannelManager = towns.getChatChannelManager();
-    switch (chatChannelManager.getChatChannel(uuid)) {
+    switch (chatChannelManager.getChatChannel(playerID)) {
       case GLOBAL -> {
-        chatChannelManager.setChatChannel(uuid, ChatChannel.TOWN);
+        chatChannelManager.setChatChannel(playerID, ChatChannel.TOWN);
         player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_CHAT_TOGGLE_SUCCESS.getComponent(new String[]{Lang.CHAT_CHANNEL_TOWN.getString(null)})));
       }
       case TOWN -> {
-        chatChannelManager.setChatChannel(uuid, ChatChannel.GLOBAL);
+        chatChannelManager.setChatChannel(playerID, ChatChannel.GLOBAL);
         player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_CHAT_TOGGLE_SUCCESS.getComponent(new String[]{Lang.CHAT_CHANNEL_GLOBAL.getString(null)})));
       }
     }

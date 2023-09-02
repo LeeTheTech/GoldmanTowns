@@ -1,11 +1,12 @@
 package lee.code.towns.listeners;
 
 import lee.code.towns.Towns;
-import lee.code.towns.commands.CommandManager;
 import lee.code.towns.database.CacheManager;
 import lee.code.towns.events.FlyEvent;
+import lee.code.towns.lang.Lang;
 import lee.code.towns.managers.FlyManager;
 import lee.code.towns.utils.ChunkUtil;
+import lee.code.towns.utils.CoreUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.event.EventHandler;
@@ -50,7 +51,11 @@ public class FlyListener implements Listener {
       }
     }
     e.getPlayer().addPotionEffect(PotionEffectType.SLOW_FALLING.createEffect(20*7, 1));
-    final CommandManager commandManager = towns.getCommandManager();
-    commandManager.performAsync(e.getPlayer(), commandManager.getSubCommand("fly"), new String[]{"fly", "off"});
+    synchronized (CoreUtil.getSynchronizedThreadLock()) {
+      Bukkit.getScheduler().runTaskAsynchronously(towns, () -> {
+        towns.getFlyManager().disableFlying(e.getPlayer());
+        e.getPlayer().sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_FLY_OUTSIDE_OF_TOWN.getComponent(new String[]{Lang.OFF.getString()})));
+      });
+    }
   }
 }

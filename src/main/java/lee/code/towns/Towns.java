@@ -23,7 +23,7 @@ public class Towns extends JavaPlugin {
   @Getter private BorderParticleManager borderParticleManager;
   @Getter private AutoMessageManager autoMessageManager;
   @Getter private AutoClaimManager autoClaimManager;
-  @Getter private AutoMapManager autoMapManager;
+  @Getter private MapManager mapManager;
   @Getter private FlyManager flyManager;
   @Getter private MenuManager menuManager;
   @Getter private InviteManager inviteManager;
@@ -34,7 +34,7 @@ public class Towns extends JavaPlugin {
   public void onEnable() {
     this.borderParticleManager = new BorderParticleManager(this);
     this.autoClaimManager = new AutoClaimManager();
-    this.autoMapManager = new AutoMapManager();
+    this.mapManager = new MapManager(this);
     this.autoMessageManager = new AutoMessageManager();
     this.databaseManager = new DatabaseManager(this);
     this.cacheManager = new CacheManager(this, databaseManager);

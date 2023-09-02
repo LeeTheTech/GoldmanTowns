@@ -63,8 +63,8 @@ public class RoleCMD extends SubCommand {
     }
     final CacheTowns cacheTowns = towns.getCacheManager().getCacheTowns();
     final String option = args[1].toLowerCase();
-    final UUID owner = player.getUniqueId();
-    if (!cacheTowns.hasTown(owner)) {
+    final UUID ownerID = player.getUniqueId();
+    if (!cacheTowns.hasTown(ownerID)) {
       player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_NOT_TOWN_OWNER.getComponent(null)));
       return;
     }
@@ -87,20 +87,20 @@ public class RoleCMD extends SubCommand {
           player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_NO_PLAYER_DATA.getComponent(new String[]{targetString})));
           return;
         }
-        if (!cacheTowns.getRoleData().getAllRoles(owner).contains(role)) {
+        if (!cacheTowns.getRoleData().getAllRoles(ownerID).contains(role)) {
           player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_ROLE_ROLE_NOT_FOUND.getComponent(new String[]{role})));
           return;
         }
-        if (!cacheTowns.getCitizenData().isCitizen(owner, targetID)) {
+        if (!cacheTowns.getCitizenData().isCitizen(ownerID, targetID)) {
           player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_ROLE_SET_PLAYER_NOT_CITIZEN.getComponent(new String[]{ColorAPI.getNameColor(targetID, targetString)})));
           return;
         }
-        if (cacheTowns.getPlayerRoleData().getPlayerRole(owner, targetID).equals(role)) {
-          player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_ROLE_SET_PLAYER_ALREADY_HAS_ROLE.getComponent(new String[]{ColorAPI.getNameColor(targetID, targetString), cacheTowns.getRoleColorData().getRoleWithColor(owner, role)})));
+        if (cacheTowns.getPlayerRoleData().getPlayerRole(ownerID, targetID).equals(role)) {
+          player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_ROLE_SET_PLAYER_ALREADY_HAS_ROLE.getComponent(new String[]{ColorAPI.getNameColor(targetID, targetString), cacheTowns.getRoleColorData().getRoleWithColor(ownerID, role)})));
           return;
         }
-        cacheTowns.getPlayerRoleData().setPlayerRole(owner, targetID, role, true);
-        player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_ROLE_SET_SUCCESS.getComponent(new String[]{ColorAPI.getNameColor(targetID, targetString), cacheTowns.getRoleColorData().getRoleWithColor(owner, role)})));
+        cacheTowns.getPlayerRoleData().setPlayerRole(ownerID, targetID, role, true);
+        player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_ROLE_SET_SUCCESS.getComponent(new String[]{ColorAPI.getNameColor(targetID, targetString), cacheTowns.getRoleColorData().getRoleWithColor(ownerID, role)})));
       }
       case "create" -> {
         if (args.length < 3) {
@@ -108,16 +108,16 @@ public class RoleCMD extends SubCommand {
           return;
         }
         final String role = CoreUtil.removeSpecialCharacters(CoreUtil.buildStringFromArgs(args, 2));
-        final List<String> roles = cacheTowns.getRoleData().getAllRoles(owner);
+        final List<String> roles = cacheTowns.getRoleData().getAllRoles(ownerID);
         if (roles.contains(role)) {
-          player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_ROLE_CREATE_ROLE_EXISTS.getComponent(new String[]{cacheTowns.getRoleColorData().getRoleWithColor(owner, role)})));
+          player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_ROLE_CREATE_ROLE_EXISTS.getComponent(new String[]{cacheTowns.getRoleColorData().getRoleWithColor(ownerID, role)})));
           return;
         }
         if (roles.size() >= 7) {
           player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_ROLE_CREATE_MAX_ROLES.getComponent(null)));
           return;
         }
-        cacheTowns.createRole(owner, role);
+        cacheTowns.createRole(ownerID, role);
         player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_ROLE_CREATE_SUCCESS.getComponent(new String[]{role})));
       }
       case "delete" -> {
@@ -126,7 +126,7 @@ public class RoleCMD extends SubCommand {
           return;
         }
         final String role = args[2];
-        if (!cacheTowns.getRoleData().getAllRoles(owner).contains(role)) {
+        if (!cacheTowns.getRoleData().getAllRoles(ownerID).contains(role)) {
           player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_ROLE_ROLE_NOT_FOUND.getComponent(new String[]{role})));
           return;
         }
@@ -134,8 +134,8 @@ public class RoleCMD extends SubCommand {
           player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_ROLE_DELETE_DEFAULT_ROLE.getComponent(null)));
           return;
         }
-        final String roleWithColor = cacheTowns.getRoleColorData().getRoleWithColor(owner, role);
-        cacheTowns.deleteRole(owner, role);
+        final String roleWithColor = cacheTowns.getRoleColorData().getRoleWithColor(ownerID, role);
+        cacheTowns.deleteRole(ownerID, role);
         player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_ROLE_DELETE_SUCCESS.getComponent(new String[]{roleWithColor})));
       }
       case "color" -> {
@@ -145,7 +145,7 @@ public class RoleCMD extends SubCommand {
         }
         final String role = args[2];
         final String color = args[3];
-        if (!cacheTowns.getRoleData().getAllRolesAndMayor(owner).contains(role)) {
+        if (!cacheTowns.getRoleData().getAllRolesAndMayor(ownerID).contains(role)) {
           player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_ROLE_ROLE_NOT_FOUND.getComponent(new String[]{role})));
           return;
         }
@@ -154,7 +154,7 @@ public class RoleCMD extends SubCommand {
           player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_ROLE_COLOR_NOT_FOUND.getComponent(new String[]{role})));
           return;
         }
-        cacheTowns.getRoleColorData().setRoleColor(owner, role, data.getColors().get(color), true);
+        cacheTowns.getRoleColorData().setRoleColor(ownerID, role, data.getColors().get(color), true);
         player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_ROLE_COLOR_SUCCESS.getComponent(new String[]{role, data.getColors().get(color), CoreUtil.capitalize(color)})));
       }
       default -> player.sendMessage(Lang.USAGE.getComponent(new String[]{getSyntax()}));

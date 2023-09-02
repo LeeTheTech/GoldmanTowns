@@ -4,6 +4,7 @@ import io.papermc.paper.threadedregions.scheduler.ScheduledTask;
 import lee.code.towns.Towns;
 import lee.code.towns.commands.cmds.*;
 import lee.code.towns.lang.Lang;
+import lee.code.towns.utils.CoreUtil;
 import lombok.Getter;
 import lombok.NonNull;
 import org.bukkit.Bukkit;
@@ -19,7 +20,6 @@ import java.util.concurrent.ConcurrentHashMap;
 public class CommandManager implements CommandExecutor {
   @Getter private final ConcurrentHashMap<String, SubCommand> subCommands = new ConcurrentHashMap<>();
   private final ConcurrentHashMap<UUID, ScheduledTask> asyncTasks = new ConcurrentHashMap<>();
-  private final Object synchronizedThreadLock = new Object();
   private final Towns towns;
 
   public CommandManager(Towns towns) {
@@ -106,7 +106,7 @@ public class CommandManager implements CommandExecutor {
         return;
       }
       if (subCommand.performAsyncSynchronized()) {
-        synchronized (synchronizedThreadLock) {
+        synchronized (CoreUtil.getSynchronizedThreadLock()) {
           performPlayerSubCommandAsync(player, uuid, subCommand, args);
         }
       } else {
@@ -115,7 +115,7 @@ public class CommandManager implements CommandExecutor {
     } else if (sender instanceof ConsoleCommandSender console) {
       if (subCommand.performAsync()) {
         if (subCommand.performAsyncSynchronized()) {
-          synchronized (synchronizedThreadLock) {
+          synchronized (CoreUtil.getSynchronizedThreadLock()) {
             performConsoleSubCommandAsync(sender, args, subCommand);
           }
         } else {

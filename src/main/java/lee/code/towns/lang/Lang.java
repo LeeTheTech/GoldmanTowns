@@ -43,7 +43,6 @@ public enum Lang {
   COMMAND_BONUS_CLAIMS_ADD_SUCCESS("&aSuccessfully added &3{0} &abonus claims to player &6{1}&a!"),
   COMMAND_BONUS_CLAIMS_REMOVE_SUCCESS("&aSuccessfully removed &3{0} &abonus claims from player &6{1}&a!"),
   COMMAND_FLY_SUCCESS("&aSuccessfully toggled town flight {0}&a!"),
-  COMMAND_FLY_OFF_SUCCESS("&aYour town flight has been toggled {0}&a."),
   COMMAND_CLAIM_SUCCESS("&aYou successfully claimed the chunk &3{0}&a. &b(&3{1}&7/&3{2}&b)"),
   COMMAND_CLAIM_OUTPOST_SUCCESS("&aYou successfully claimed outpost chunk &3{0}&a. &b(&3{1}&7/&3{2}&b)"),
   COMMAND_UNCLAIM_SUCCESS("&aYou successfully unclaimed the chunk &3{0}&a."),
@@ -176,7 +175,9 @@ public enum Lang {
   ERROR_CLAIM_MAX_OUTPOSTS("&cYou have already reached your town's max outpost claims of &3{0}&c."),
   ERROR_CLAIM_OUTPOST_CONNECTED("&cOutposts are claims that don't need to be connected to current town claims."),
   ERROR_CLAIM_NO_PERMISSION("&cYou do not have permission to claim chunks for your town."),
-  ERROR_AUTO_CLAIM_NO_PERMISSION("&cYou do not have permission to auto claim chunks for your town."),
+  ERROR_CLAIM_AUTO_CLAIM_ON("&cYou can't run this command while auto claim is toggled {0}&c."),
+  ERROR_AUTO_CLAIM_TOWN_DOES_NOT_EXIST("&cYour town no longer exist, auto claim has been toggled {0}&c."),
+  ERROR_AUTO_CLAIM_NO_PERMISSION("&cYou no longer have permission to auto claim."),
   ERROR_AUTO_CLAIM_MAX_CLAIMS("&cYou have already reached your town's max chunk claims of &3{0}&c. Auto claim has been disabled."),
   ERROR_AUTO_CLAIM_NOT_OWNER("&cYou can only toggle on auto claim when you're within your town."),
   ERROR_SET_SPAWN_NOT_CLAIMED("&cYou can only set your town spawn in chunks you own."),
@@ -243,7 +244,6 @@ public enum Lang {
   ERROR_TOWN_OWNER_LEAVE("&cYou are the owner of the town, if you want to leave you'll need to abandon the town."),
   ERROR_BORDER_NONE_RENTED("&cYou currently don't have any rented chunks."),
   ERROR_NO_PLAYER_DATA("&cCould not find any player data for &6{0}&c."),
-  ERROR_AUTO_MAP_AUTO_CLAIMING("&cYou can't turn on auto map while auto claim is active."),
   ERROR_AUTO_CLAIM_AUTO_MAPPING("&cYou can't turn on auto claim while auto mapping is on."),
   ERROR_KICK_NOT_CITIZEN("&cThe player &6{0} &cis not a citizen so they can not be kicked."),
   ERROR_SET_BANNER_NOT_BANNER("&cThe item you're holding is not a banner."),
@@ -253,7 +253,8 @@ public enum Lang {
   ERROR_TELEPORT_NOT_APART_OF_TOWN("&cYou can only teleport to your town's chunks."),
   ERROR_TELEPORT_TOWN_DOES_NOT_EXIST("&cCould not find a town named &3{0}&c."),
   ERROR_TELEPORT_TOWN_PRIVATE("&cThis town is set to {0} &cso you can't teleport to it."),
-  ERROR_FLY_NOT_TOWN_CHUNK("&cYou can only toggle town flight within your town's chunks.")
+  ERROR_FLY_NOT_TOWN_CHUNK("&cYou can only toggle town flight within your town's chunks."),
+  ERROR_FLY_OUTSIDE_OF_TOWN("&cYou flew outside of your town chunks so town flight has been toggled {0}&c.")
 
   ;
   @Getter private final String string;

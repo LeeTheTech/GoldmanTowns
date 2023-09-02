@@ -61,14 +61,13 @@ public class InfoCMD extends SubCommand {
     final CacheChunks cacheChunks = towns.getCacheManager().getCacheChunks();
     final CacheServer cacheServer = towns.getCacheManager().getCacheServer();
     final CacheBank cacheBank = towns.getCacheManager().getCacheBank();
-    final UUID uuid = player.getUniqueId();
-    if (!cacheTowns.hasTownOrJoinedTown(uuid)) {
+    final UUID playerID = player.getUniqueId();
+    if (!cacheTowns.hasTownOrJoinedTown(playerID)) {
       player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_NO_TOWN.getComponent(null)));
       return;
     }
-
     final List<Component> lines = new ArrayList<>();
-    final UUID owner = cacheTowns.getTargetTownOwner(uuid);
+    final UUID owner = cacheTowns.getTargetTownOwner(playerID);
     final String status = cacheTowns.isTownPublic(owner) ? Lang.PUBLIC.getString() : Lang.PRIVATE.getString();
     lines.add(Lang.COMMAND_INFO_HEADER.getComponent(null));
     lines.add(Component.text(""));

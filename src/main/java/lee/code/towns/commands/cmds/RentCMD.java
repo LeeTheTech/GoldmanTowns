@@ -66,11 +66,11 @@ public class RentCMD extends SubCommand {
     }
     final CacheManager cacheManager = towns.getCacheManager();
     final BorderParticleManager borderParticleManager = towns.getBorderParticleManager();
-    final UUID uuid = player.getUniqueId();
+    final UUID playerID = player.getUniqueId();
     final String chunk = ChunkUtil.serializeChunkLocation(player.getLocation().getChunk());
     final String option = args[1].toLowerCase();
 
-    if (!cacheManager.getCacheTowns().hasTownOrJoinedTown(uuid)) {
+    if (!cacheManager.getCacheTowns().hasTownOrJoinedTown(playerID)) {
       player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_NO_TOWN.getComponent(null)));
       return;
     }
@@ -85,7 +85,7 @@ public class RentCMD extends SubCommand {
           player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_RENT_NOT_CLAIMED.getComponent(null)));
           return;
         }
-        if (!cacheManager.getCacheChunks().isChunkOwner(chunk, uuid)) {
+        if (!cacheManager.getCacheChunks().isChunkOwner(chunk, playerID)) {
           player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_RENT_PRICE_NOT_OWNER.getComponent(null)));
           return;
         }
@@ -101,7 +101,7 @@ public class RentCMD extends SubCommand {
           return;
         }
         borderParticleManager.spawnParticleChunkBorder(player, player.getLocation().getChunk(), ChunkRenderType.INFO, true);
-        cacheManager.getCacheRenters().setRentChunkPrice(uuid, chunk, price);
+        cacheManager.getCacheRenters().setRentChunkPrice(playerID, chunk, price);
         player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_RENT_PRICE_SUCCESS.getComponent(new String[]{
           chunk,
           Lang.VALUE_FORMAT.getString(new String[]{CoreUtil.parseValue(price)})
@@ -113,7 +113,7 @@ public class RentCMD extends SubCommand {
           player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_RENT_NOT_CLAIMED.getComponent(null)));
           return;
         }
-        if (!cacheManager.getCacheChunks().isChunkOwner(chunk, uuid)) {
+        if (!cacheManager.getCacheChunks().isChunkOwner(chunk, playerID)) {
           player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_RENT_REMOVE_NOT_OWNER.getComponent(null)));
           return;
         }
@@ -135,12 +135,12 @@ public class RentCMD extends SubCommand {
           player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_RENT_NOT_CLAIMED.getComponent(null)));
           return;
         }
-        final UUID owner = cacheManager.getCacheChunks().getChunkOwner(chunk);
-        if (uuid.equals(owner)) {
+        final UUID ownerID = cacheManager.getCacheChunks().getChunkOwner(chunk);
+        if (playerID.equals(ownerID)) {
           player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_RENT_CLAIM_OWNER.getComponent(null)));
           return;
         }
-        if (!cacheManager.getCacheTowns().getCitizenData().isCitizen(owner, uuid)) {
+        if (!cacheManager.getCacheTowns().getCitizenData().isCitizen(ownerID, playerID)) {
           player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_RENT_CLAIM_NOT_CITIZEN.getComponent(new String[]{cacheManager.getChunkTownName(chunk)})));
           return;
         }
@@ -154,13 +154,13 @@ public class RentCMD extends SubCommand {
           switch (result) {
             case "confirm" -> {
               final double cost = cacheManager.getCacheRenters().getRentPrice(chunk);
-              if (EcoAPI.getBalance(uuid) < cost) {
+              if (EcoAPI.getBalance(playerID) < cost) {
                 player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_RENT_INSUFFICIENT_FUNDS.getComponent(null)));
                 return;
               }
-              EcoAPI.removeBalance(uuid, cost);
-              cacheManager.getCacheBank().getData().addTownBalance(owner, cost);
-              cacheManager.getCacheRenters().setRenter(uuid, chunk);
+              EcoAPI.removeBalance(playerID, cost);
+              cacheManager.getCacheBank().getData().addTownBalance(ownerID, cost);
+              cacheManager.getCacheRenters().setRenter(playerID, chunk);
               borderParticleManager.spawnParticleChunkBorder(player, player.getLocation().getChunk(), ChunkRenderType.CLAIM, false);
               player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_RENT_CLAIM_SUCCESS.getComponent(new String[]{chunk, Lang.VALUE_FORMAT.getString(new String[]{CoreUtil.parseValue(cost)})})));
             }
@@ -179,7 +179,7 @@ public class RentCMD extends SubCommand {
       }
 
       case "unclaim" -> {
-        if (cacheManager.getCacheTowns().hasTown(uuid)) {
+        if (cacheManager.getCacheTowns().hasTown(playerID)) {
           player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_RENT_UNCLAIM_OWNER.getComponent(null)));
           return;
         }
@@ -187,7 +187,7 @@ public class RentCMD extends SubCommand {
           player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_RENT_UNCLAIM_NOT_RENTED.getComponent(new String[]{chunk})));
           return;
         }
-        if (!cacheManager.getCacheRenters().getRenter(chunk).equals(uuid)) {
+        if (!cacheManager.getCacheRenters().getRenter(chunk).equals(playerID)) {
           player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_RENT_UNCLAIM_NOT_RENTED_BY_PLAYER.getComponent(new String[]{chunk})));
           return;
         }
@@ -230,7 +230,7 @@ public class RentCMD extends SubCommand {
         }
         final UUID targetID = offlineTarget.getUniqueId();
         final UUID ownerID = cacheManager.getCacheTowns().getTargetTownOwner(offlineTarget.getUniqueId());
-        if (uuid.equals(ownerID)) {
+        if (playerID.equals(ownerID)) {
           player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_RENT_TRUST_OWNER.getComponent(null)));
           return;
         }
@@ -242,23 +242,23 @@ public class RentCMD extends SubCommand {
         }
         switch (action) {
           case "add" -> {
-            if (uuid.equals(targetID)) {
+            if (playerID.equals(targetID)) {
               player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_RENT_TRUST_ADD_SELF.getComponent(null)));
               return;
             }
-            if (cacheManager.getCacheTowns().getTrustData().isTrusted(uuid, targetID)) {
+            if (cacheManager.getCacheTowns().getTrustData().isTrusted(playerID, targetID)) {
               player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_RENT_TRUST_ADD_ALREADY_ADDED.getComponent(new String[]{ColorAPI.getNameColor(targetID, targetString)})));
               return;
             }
-            cacheManager.getCacheTowns().getTrustData().addTrusted(uuid, targetID);
+            cacheManager.getCacheTowns().getTrustData().addTrusted(playerID, targetID);
             player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_RENT_TRUST_ADD_SUCCESS.getComponent(new String[]{ColorAPI.getNameColor(targetID, targetString)})));
           }
           case "remove" -> {
-            if (!cacheManager.getCacheTowns().getTrustData().isTrusted(uuid, targetID)) {
+            if (!cacheManager.getCacheTowns().getTrustData().isTrusted(playerID, targetID)) {
               player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_RENT_TRUST_REMOVE_INVALID.getComponent(new String[]{ColorAPI.getNameColor(targetID, targetString)})));
               return;
             }
-            cacheManager.getCacheTowns().getTrustData().removeTrusted(uuid, targetID);
+            cacheManager.getCacheTowns().getTrustData().removeTrusted(playerID, targetID);
             player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_RENT_TRUST_REMOVE_SUCCESS.getComponent(new String[]{ColorAPI.getNameColor(targetID, targetString)})));
           }
           default -> player.sendMessage(Lang.USAGE.getComponent(new String[]{SubSyntax.COMMAND_RENT_TRUST.getString()}));

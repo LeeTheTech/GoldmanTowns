@@ -55,24 +55,24 @@ public class UnclaimCMD extends SubCommand {
   public void perform(Player player, String[] args) {
     final CacheManager cacheManager = towns.getCacheManager();
     final String chunk = ChunkUtil.serializeChunkLocation(player.getLocation().getChunk());
-    final UUID uuid = player.getUniqueId();
+    final UUID playerID = player.getUniqueId();
     if (!cacheManager.getCacheChunks().isClaimed(chunk)) {
       player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_UNCLAIM_NOT_CLAIMED.getComponent(new String[]{chunk})));
       return;
     }
-    final UUID owner = cacheManager.getCacheTowns().getTargetTownOwner(uuid);
-    if (!cacheManager.getCacheChunks().isChunkOwner(chunk, owner)) {
+    final UUID ownerID = cacheManager.getCacheTowns().getTargetTownOwner(playerID);
+    if (!cacheManager.getCacheChunks().isChunkOwner(chunk, ownerID)) {
       player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_UNCLAIM_NOT_OWNER.getComponent(new String[]{chunk})));
       return;
     }
-    if (!uuid.equals(owner)) {
-      final String role = cacheManager.getCacheTowns().getPlayerRoleData().getPlayerRole(owner, uuid);
-      if (!cacheManager.getCacheTowns().getRoleData().checkRolePermissionFlag(owner, role, Flag.UNCLAIM)) {
+    if (!playerID.equals(ownerID)) {
+      final String role = cacheManager.getCacheTowns().getPlayerRoleData().getPlayerRole(ownerID, playerID);
+      if (!cacheManager.getCacheTowns().getRoleData().checkRolePermissionFlag(ownerID, role, Flag.UNCLAIM)) {
         player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_UNCLAIM_NO_PERMISSION.getComponent(null)));
         return;
       }
     }
-    if (towns.getAutoClaimManager().isAutoClaiming(uuid)) {
+    if (towns.getAutoClaimManager().isAutoClaiming(playerID)) {
       player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_UNCLAIM_AUTO_CLAIM_ON.getComponent(null)));
       return;
     }
@@ -80,7 +80,7 @@ public class UnclaimCMD extends SubCommand {
       player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_UNCLAIM_ESTABLISHED_CHUNK.getComponent(new String[]{chunk})));
       return;
     }
-    if (!cacheManager.getCacheChunks().isUnclaimSafe(owner, chunk)) {
+    if (!cacheManager.getCacheChunks().isUnclaimSafe(ownerID, chunk)) {
       player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_UNCLAIM_UNSAFE.getComponent(new String[]{chunk})));
       return;
     }

@@ -52,8 +52,8 @@ public class SetBannerCMD extends SubCommand {
   @Override
   public void perform(Player player, String[] args) {
     final CacheTowns cacheTowns = towns.getCacheManager().getCacheTowns();
-    final UUID uuid = player.getUniqueId();
-    if (!cacheTowns.hasTown(uuid)) {
+    final UUID ownerID = player.getUniqueId();
+    if (!cacheTowns.hasTown(ownerID)) {
       player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_NOT_TOWN_OWNER.getComponent(null)));
     }
     final ItemStack handItem = player.getInventory().getItemInMainHand();
@@ -61,7 +61,7 @@ public class SetBannerCMD extends SubCommand {
       player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_SET_BANNER_NOT_BANNER.getComponent(null)));
       return;
     }
-    cacheTowns.setBanner(uuid, handItem);
+    cacheTowns.setBanner(ownerID, handItem);
     player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_SET_BANNER_SUCCESS.getComponent(null)));
   }
 

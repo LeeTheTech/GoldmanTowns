@@ -1,6 +1,7 @@
 package lee.code.towns.utils;
 
 import lee.code.towns.lang.Lang;
+import lombok.Getter;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.format.TextDecoration;
@@ -21,6 +22,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class CoreUtil {
+  @Getter private final static Object synchronizedThreadLock = new Object();
   private final static DecimalFormat amountFormatter = new DecimalFormat("#,###.##");
   private final static Pattern numberDoublePattern = Pattern.compile("^(?=.*[1-9])(\\d*\\.?\\d*)$");
   private final static Pattern numberIntPattern = Pattern.compile("^[1-9]\\d*$");

@@ -105,9 +105,9 @@ public class InviteCMD extends SubCommand {
     }
     if (!cacheManager.getCacheTowns().hasTown(playerID)) {
       if (cacheManager.getCacheTowns().hasJoinedTown(playerID)) {
-        final UUID owner = cacheManager.getCacheTowns().getJoinedTownOwner(playerID);
-        final String role = cacheManager.getCacheTowns().getPlayerRoleData().getPlayerRole(owner, playerID);
-        if (!cacheManager.getCacheTowns().getRoleData().checkRolePermissionFlag(owner, role, Flag.INVITE)) {
+        final UUID ownerID = cacheManager.getCacheTowns().getJoinedTownOwner(playerID);
+        final String role = cacheManager.getCacheTowns().getPlayerRoleData().getPlayerRole(ownerID, playerID);
+        if (!cacheManager.getCacheTowns().getRoleData().checkRolePermissionFlag(ownerID, role, Flag.INVITE)) {
           player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_INVITE_INVALID_PERMISSION.getComponent(new String[]{CoreUtil.capitalize(Flag.INVITE.name())})));
           return;
         }

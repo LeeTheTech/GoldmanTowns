@@ -55,19 +55,19 @@ public class CreateCMD extends SubCommand {
 
   @Override
   public void perform(Player player, String[] args) {
-    final UUID uuid = player.getUniqueId();
+    final UUID playerID = player.getUniqueId();
     final String chunk = ChunkUtil.serializeChunkLocation(player.getLocation().getChunk());
     final CacheManager cacheManager = towns.getCacheManager();
     if (args.length <= 1) {
       player.sendMessage(Lang.USAGE.getComponent(new String[]{getSyntax()}));
       return;
     }
-    if (cacheManager.getCacheTowns().hasTown(uuid)) {
-      player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_CREATE_HAS_TOWN.getComponent(new String[]{cacheManager.getCacheTowns().getTownName(uuid)})));
+    if (cacheManager.getCacheTowns().hasTown(playerID)) {
+      player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_CREATE_HAS_TOWN.getComponent(new String[]{cacheManager.getCacheTowns().getTownName(playerID)})));
       return;
     }
-    if (cacheManager.getCacheTowns().hasJoinedTown(uuid)) {
-      player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_CREATE_HAS_JOINED_TOWN.getComponent(new String[]{cacheManager.getCacheTowns().getJoinedTownName(uuid)})));
+    if (cacheManager.getCacheTowns().hasJoinedTown(playerID)) {
+      player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_CREATE_HAS_JOINED_TOWN.getComponent(new String[]{cacheManager.getCacheTowns().getJoinedTownName(playerID)})));
       return;
     }
     final String town = CoreUtil.removeSpecialCharacters(CoreUtil.buildStringFromArgs(args, 1));
@@ -79,7 +79,7 @@ public class CreateCMD extends SubCommand {
       player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_CREATE_CHUNK_CLAIMED.getComponent(new String[]{cacheManager.getChunkTownName(chunk)})));
       return;
     }
-    cacheManager.createTown(uuid, town, player.getLocation());
+    cacheManager.createTown(playerID, town, player.getLocation());
     towns.getBorderParticleManager().spawnParticleChunkBorder(player, player.getLocation().getChunk(), ChunkRenderType.CLAIM, false);
     Bukkit.getServer().sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_CREATE_ANNOUNCEMENT_TOWN_CREATED.getComponent(new String[]{ColorAPI.getNameColor(player.getUniqueId(), player.getName()), town})));
     player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_CREATE_SUCCESS.getComponent(new String[]{town})));

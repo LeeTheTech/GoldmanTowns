@@ -5,7 +5,6 @@ import lee.code.towns.commands.SubCommand;
 import lee.code.towns.commands.SubSyntax;
 import lee.code.towns.database.CacheManager;
 import lee.code.towns.lang.Lang;
-import lee.code.towns.managers.AutoClaimManager;
 import lee.code.towns.utils.CoreUtil;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -54,19 +53,17 @@ public class AbandonCMD extends SubCommand {
   @Override
   public void perform(Player player, String[] args) {
     final CacheManager cacheManager = towns.getCacheManager();
-    final AutoClaimManager autoClaimManager = towns.getAutoClaimManager();
-    final UUID uuid = player.getUniqueId();
-    if (!cacheManager.getCacheTowns().hasTown(uuid)) {
+    final UUID playerID = player.getUniqueId();
+    if (!cacheManager.getCacheTowns().hasTown(playerID)) {
       player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_NOT_TOWN_OWNER.getComponent(null)));
       return;
     }
-    if (autoClaimManager.isAutoClaiming(uuid)) autoClaimManager.removeAutoClaiming(uuid);
-    final String town = cacheManager.getCacheTowns().getTownName(uuid);
+    final String town = cacheManager.getCacheTowns().getTownName(playerID);
     if (args.length > 1) {
       switch (args[1].toLowerCase()) {
         case "confirm" -> {
-          cacheManager.getCacheTowns().sendTownMessage(uuid, Lang.PREFIX.getComponent(null).append(Lang.COMMAND_ABANDON_TOWN_MESSAGE.getComponent(null)));
-          cacheManager.deleteTown(uuid);
+          cacheManager.getCacheTowns().sendTownMessage(playerID, Lang.PREFIX.getComponent(null).append(Lang.COMMAND_ABANDON_TOWN_MESSAGE.getComponent(null)));
+          cacheManager.deleteTown(playerID);
           player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_ABANDON_SUCCESS.getComponent(new String[]{town})));
         }
         case "deny" -> player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_ABANDON_DENY.getComponent(null)));
@@ -74,7 +71,7 @@ public class AbandonCMD extends SubCommand {
       }
       return;
     }
-    CoreUtil.sendConfirmMessage(player, Lang.PREFIX.getComponent(null).append(Lang.COMMAND_ABANDON_WARNING.getComponent(new String[]{cacheManager.getCacheTowns().getTownName(uuid)})),
+    CoreUtil.sendConfirmMessage(player, Lang.PREFIX.getComponent(null).append(Lang.COMMAND_ABANDON_WARNING.getComponent(new String[]{cacheManager.getCacheTowns().getTownName(playerID)})),
       "/towns abandon",
       Lang.CONFIRM_ABANDON_HOVER.getComponent(null),
       Lang.DENY_ABANDON_HOVER.getComponent(null),

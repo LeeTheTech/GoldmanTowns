@@ -54,12 +54,12 @@ public class BankCMD extends SubCommand {
   @Override
   public void perform(Player player, String[] args) {
     final CacheManager cacheManager = towns.getCacheManager();
-    final UUID uuid = player.getUniqueId();
-    if (!cacheManager.getCacheTowns().hasTownOrJoinedTown(uuid)) {
+    final UUID playerID = player.getUniqueId();
+    if (!cacheManager.getCacheTowns().hasTownOrJoinedTown(playerID)) {
       player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_NO_TOWN.getComponent(null)));
       return;
     }
-    final UUID owner = cacheManager.getCacheTowns().getTargetTownOwner(uuid);
+    final UUID ownerID = cacheManager.getCacheTowns().getTargetTownOwner(playerID);
     if (args.length > 2) {
       final String option = args[1].toLowerCase();
       final String amountString = args[2];
@@ -70,34 +70,34 @@ public class BankCMD extends SubCommand {
       final double amount = Double.parseDouble(amountString);
       switch (option) {
         case "withdraw" -> {
-          if (!uuid.equals(owner)) {
-            final String role = cacheManager.getCacheTowns().getPlayerRoleData().getPlayerRole(owner, uuid);
-            if (!cacheManager.getCacheTowns().getRoleData().checkRolePermissionFlag(owner, role, Flag.WITHDRAW)) {
+          if (!playerID.equals(ownerID)) {
+            final String role = cacheManager.getCacheTowns().getPlayerRoleData().getPlayerRole(ownerID, playerID);
+            if (!cacheManager.getCacheTowns().getRoleData().checkRolePermissionFlag(ownerID, role, Flag.WITHDRAW)) {
               player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_BANK_WITHDRAW_NO_PERMISSION.getComponent(null)));
               return;
             }
           }
-          if (cacheManager.getCacheBank().getData().getTownBalance(owner) < amount) {
+          if (cacheManager.getCacheBank().getData().getTownBalance(ownerID) < amount) {
             player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_BANK_WITHDRAW_INSUFFICIENT_FUNDS.getComponent(new String[]{Lang.VALUE_FORMAT.getString(new String[]{CoreUtil.parseValue(amount)})})));
             return;
           }
-          cacheManager.getCacheBank().getData().removeTownBalance(owner, amount);
-          EcoAPI.addBalance(uuid, amount);
+          cacheManager.getCacheBank().getData().removeTownBalance(ownerID, amount);
+          EcoAPI.addBalance(playerID, amount);
           player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_BANK_WITHDRAW_SUCCESS.getComponent(new String[]{Lang.VALUE_FORMAT.getString(new String[]{CoreUtil.parseValue(amount)})})));
         }
         case "deposit" -> {
-          if (EcoAPI.getBalance(uuid) < amount) {
+          if (EcoAPI.getBalance(playerID) < amount) {
             player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_BANK_DEPOSIT_INSUFFICIENT_FUNDS.getComponent(new String[]{Lang.VALUE_FORMAT.getString(new String[]{CoreUtil.parseValue(amount)})})));
             return;
           }
-          EcoAPI.removeBalance(uuid, amount);
-          cacheManager.getCacheBank().getData().addTownBalance(owner, amount);
+          EcoAPI.removeBalance(playerID, amount);
+          cacheManager.getCacheBank().getData().addTownBalance(ownerID, amount);
           player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_BANK_DEPOSIT_SUCCESS.getComponent(new String[]{Lang.VALUE_FORMAT.getString(new String[]{CoreUtil.parseValue(amount)})})));
         }
         default -> player.sendMessage(Lang.USAGE.getComponent(new String[]{getSyntax()}));
       }
     } else {
-      player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_BANK_SUCCESS.getComponent(new String[]{Lang.VALUE_FORMAT.getString(new String[]{CoreUtil.parseValue(cacheManager.getCacheBank().getData().getTownBalance(owner))})})));
+      player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_BANK_SUCCESS.getComponent(new String[]{Lang.VALUE_FORMAT.getString(new String[]{CoreUtil.parseValue(cacheManager.getCacheBank().getData().getTownBalance(ownerID))})})));
     }
   }
 

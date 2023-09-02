@@ -84,7 +84,6 @@ public class BonusClaimsCMD extends SubCommand {
       return;
     }
     final UUID targetID = offlineTarget.getUniqueId();
-
     switch (option) {
       case "set" -> {
         cacheTowns.setBonusClaims(targetID, amount);

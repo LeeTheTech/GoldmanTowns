@@ -54,13 +54,6 @@ public class FlyCMD extends SubCommand {
   public void perform(Player player, String[] args) {
     final UUID playerID = player.getUniqueId();
     final FlyManager flyManager = towns.getFlyManager();
-    if (args.length > 1) {
-      if (args[1].equalsIgnoreCase("off")) {
-        flyManager.disableFlying(player);
-        player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_FLY_OFF_SUCCESS.getComponent(new String[]{Lang.OFF.getString()})));
-        return;
-      }
-    }
     if (flyManager.isFlying(playerID)) {
       flyManager.disableFlying(player);
       player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_FLY_SUCCESS.getComponent(new String[]{Lang.OFF.getString()})));

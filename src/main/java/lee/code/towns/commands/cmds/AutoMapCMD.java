@@ -3,7 +3,7 @@ package lee.code.towns.commands.cmds;
 import lee.code.towns.Towns;
 import lee.code.towns.commands.SubCommand;
 import lee.code.towns.lang.Lang;
-import lee.code.towns.managers.AutoMapManager;
+import lee.code.towns.managers.MapManager;
 import lee.code.towns.utils.ChunkUtil;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -51,15 +51,11 @@ public class AutoMapCMD extends SubCommand {
 
   @Override
   public void perform(Player player, String[] args) {
-    final AutoMapManager autoMapManager = towns.getAutoMapManager();
-    final UUID uuid = player.getUniqueId();
-    if (towns.getAutoClaimManager().isAutoClaiming(uuid)) {
-      player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_AUTO_MAP_AUTO_CLAIMING.getComponent(null)));
-      return;
-    }
-    final boolean active = autoMapManager.isAutoMapping(uuid);
-    if (active) autoMapManager.removeAutoMapping(uuid);
-    else autoMapManager.setAutoMapping(uuid, ChunkUtil.serializeChunkLocation(player.getLocation().getChunk()));
+    final MapManager mapManager = towns.getMapManager();
+    final UUID playerID = player.getUniqueId();
+    final boolean active = mapManager.isAutoMapping(playerID);
+    if (active) mapManager.removeAutoMapping(playerID);
+    else mapManager.setAutoMapping(playerID, ChunkUtil.serializeChunkLocation(player.getLocation().getChunk()));
     final String result = active ? Lang.OFF.getString() : Lang.ON.getString();
     player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_AUTO_MAP_SUCCESS.getComponent(new String[]{result})));
   }
