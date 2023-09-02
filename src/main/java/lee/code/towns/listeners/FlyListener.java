@@ -9,6 +9,7 @@ import lee.code.towns.utils.ChunkUtil;
 import lee.code.towns.utils.CoreUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
@@ -41,7 +42,8 @@ public class FlyListener implements Listener {
   @EventHandler
   public void onFly(FlyEvent e) {
     final CacheManager cacheManager = towns.getCacheManager();
-    final UUID playerID = e.getPlayer().getUniqueId();
+    final Player player = e.getPlayer();
+    final UUID playerID = player.getUniqueId();
     if (cacheManager.getCacheChunks().isClaimed(e.getChunk())) {
       if (cacheManager.getCacheTowns().hasTownOrJoinedTown(playerID)) {
         final UUID ownerID = cacheManager.getCacheTowns().getTargetTownOwner(playerID);
@@ -50,11 +52,11 @@ public class FlyListener implements Listener {
         }
       }
     }
-    e.getPlayer().addPotionEffect(PotionEffectType.SLOW_FALLING.createEffect(20*7, 1));
+    player.addPotionEffect(PotionEffectType.SLOW_FALLING.createEffect(20*7, 1));
     synchronized (CoreUtil.getSynchronizedThreadLock()) {
       Bukkit.getScheduler().runTaskAsynchronously(towns, () -> {
         towns.getFlyManager().disableFlying(e.getPlayer());
-        e.getPlayer().sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_FLY_OUTSIDE_OF_TOWN.getComponent(new String[]{Lang.OFF.getString()})));
+        player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_FLY_OUTSIDE_OF_TOWN.getComponent(new String[]{Lang.OFF.getString()})));
       });
     }
   }
