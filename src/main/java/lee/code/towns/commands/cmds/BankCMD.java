@@ -67,7 +67,7 @@ public class BankCMD extends SubCommand {
         player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_VALUE_INVALID.getComponent(new String[]{amountString})));
         return;
       }
-      final int amount = Integer.parseInt(amountString);
+      final double amount = Double.parseDouble(amountString);
       switch (option) {
         case "withdraw" -> {
           if (!uuid.equals(owner)) {

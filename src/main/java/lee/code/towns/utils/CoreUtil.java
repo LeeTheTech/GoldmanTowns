@@ -21,7 +21,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class CoreUtil {
-  private final static DecimalFormat amountFormatter = new DecimalFormat("#,###");
+  private final static DecimalFormat amountFormatter = new DecimalFormat("#,###.##");
   private final static Pattern numberDoublePattern = Pattern.compile("^(?=.*[1-9])(\\d*\\.?\\d*)$");
   private final static Pattern numberIntPattern = Pattern.compile("^[1-9]\\d*$");
 

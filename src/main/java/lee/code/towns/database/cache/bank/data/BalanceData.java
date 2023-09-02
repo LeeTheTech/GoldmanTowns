@@ -4,8 +4,10 @@ import com.google.common.util.concurrent.AtomicDouble;
 import lee.code.towns.database.cache.bank.CacheBank;
 import lee.code.towns.database.tables.BankTable;
 
+import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 public class BalanceData {
   private final CacheBank cacheBank;
@@ -41,8 +43,13 @@ public class BalanceData {
     cacheBank.updateBankDatabase(bankTable);
   }
 
-  public ConcurrentHashMap<UUID, AtomicDouble> getTownBalances() {
-    return balanceCache;
+  public Map<UUID, Double> getTownBalances() {
+    return balanceCache.entrySet()
+      .stream()
+      .collect(Collectors.toMap(
+        Map.Entry::getKey,
+        entry -> entry.getValue().get()
+      ));
   }
 
   public void removeTownBalanceData(UUID uuid) {

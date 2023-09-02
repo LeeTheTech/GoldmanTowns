@@ -37,7 +37,9 @@ towns {
     name brigadier:string greedy_phrase;
   }
   flagmanager;
-  help;
+  help {
+    page brigadier:integer;
+  }
   info;
   invite {
     player brigadier:string single_word {
@@ -53,7 +55,7 @@ towns {
   public;
   rent {
     price {
-        value brigadier:integer;
+        value brigadier:double;
     }
     remove;
     claim {
@@ -118,4 +120,12 @@ towns {
   }
   setbanner;
   banner;
+  top {
+    size {
+      page brigadier:integer;
+    }
+    bank {
+      page brigadier:integer;
+    }
+  }
 }

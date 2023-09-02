@@ -57,8 +57,9 @@ public class TownCitizenData {
     if (!hasCitizens(uuid)) return ConcurrentHashMap.newKeySet();
     return citizenCache.get(uuid);
   }
-
-
+  public Set<UUID> getCitizenOwnerList() {
+    return citizenCache.keySet();
+  }
 
   public List<String> getCitizenNames(UUID uuid) {
     if (cacheTowns.getTownTable(uuid).getTownCitizens() == null) new ArrayList<>();
