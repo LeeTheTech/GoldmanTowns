@@ -49,7 +49,7 @@ public class AutoClaimListener implements Listener {
         final CacheManager cacheManager = towns.getCacheManager();
         final AutoClaimManager autoClaimManager = towns.getAutoClaimManager();
         if (!cacheManager.getCacheTowns().hasTownOrJoinedTown(playerID)) {
-          towns.getAutoClaimManager().removeAutoClaiming(playerID);
+          autoClaimManager.removeAutoClaiming(playerID);
           player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_AUTO_CLAIM_TOWN_DOES_NOT_EXIST.getComponent(new String[]{Lang.OFF.getString()})));
           return;
         }
@@ -58,7 +58,7 @@ public class AutoClaimListener implements Listener {
         if (!playerID.equals(ownerID)) {
           final String role = cacheManager.getCacheTowns().getPlayerRoleData().getPlayerRole(ownerID, playerID);
           if (!cacheManager.getCacheTowns().getRoleData().checkRolePermissionFlag(ownerID, role, Flag.CLAIM)) {
-            towns.getAutoClaimManager().removeAutoClaiming(playerID);
+            autoClaimManager.removeAutoClaiming(playerID);
             player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_AUTO_CLAIM_NO_PERMISSION.getComponent(null)));
             return;
           }
@@ -66,7 +66,7 @@ public class AutoClaimListener implements Listener {
         final int currentChunks = cacheManager.getCacheChunks().getChunkListData().getChunkClaims(ownerID);
         final int maxChunks = cacheManager.getCacheTowns().getMaxChunkClaims(ownerID);
         if (maxChunks < currentChunks + 1) {
-          towns.getAutoClaimManager().removeAutoClaiming(playerID);
+          autoClaimManager.removeAutoClaiming(playerID);
           player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_CLAIM_MAX_CLAIMS.getComponent(new String[]{String.valueOf(maxChunks)})));
           return;
         }
