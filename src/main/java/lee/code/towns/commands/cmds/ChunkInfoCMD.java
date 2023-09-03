@@ -64,7 +64,8 @@ public class ChunkInfoCMD extends SubCommand {
     lines.add(Lang.COMMAND_CHUNK_INFO_HEADER.getComponent(null));
     lines.add(Component.text(""));
     lines.add(Lang.COMMAND_CHUNK_INFO_CHUNK.getComponent(new String[]{chunk}));
-    lines.add(Lang.COMMAND_CHUNK_INFO_TOWN_OWNER.getComponent(new String[]{cacheManager.getChunkTownName(chunk)}));
+    lines.add(Lang.COMMAND_CHUNK_INFO_TOWN.getComponent(new String[]{cacheManager.getChunkTownName(chunk)}));
+    lines.add(Lang.COMMAND_CHUNK_INFO_TOWN_OWNER.getComponent(new String[]{cacheManager.getChunkTownOwnerName(chunk)}));
     if (cacheManager.getCacheRenters().isRented(chunk)) {
       lines.add(Lang.COMMAND_CHUNK_INFO_RENTER.getComponent(new String[]{
         ColorAPI.getNameColor(cacheManager.getCacheRenters().getRenter(chunk), cacheManager.getCacheRenters().getRenterName(chunk))

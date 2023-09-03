@@ -67,12 +67,12 @@ public class AutoClaimListener implements Listener {
         final int maxChunks = cacheManager.getCacheTowns().getMaxChunkClaims(ownerID);
         if (maxChunks < currentChunks + 1) {
           autoClaimManager.removeAutoClaiming(playerID);
-          player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_CLAIM_MAX_CLAIMS.getComponent(new String[]{String.valueOf(maxChunks)})));
+          player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_AUTO_CLAIM_MAX_CLAIMS.getComponent(new String[]{String.valueOf(maxChunks), Lang.OFF.getString()})));
           return;
         }
         if (!cacheManager.getCacheChunks().isConnectedChunk(ownerID, chunk)) {
           autoClaimManager.removeAutoClaiming(playerID);
-          player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_CLAIM_NOT_CONNECTED_CHUNK.getComponent(new String[]{chunk})));
+          player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_AUTO_CLAIM_RANGE.getComponent(new String[]{Lang.OFF.getString()})));
           return;
         }
         cacheManager.getCacheChunks().claimChunk(chunk, ownerID);

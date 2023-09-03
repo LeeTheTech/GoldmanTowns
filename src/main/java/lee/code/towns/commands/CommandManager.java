@@ -49,7 +49,6 @@ public class CommandManager implements CommandExecutor {
     storeSubCommand(new LeaveCMD(towns));
     storeSubCommand(new ChunkInfoCMD(towns));
     storeSubCommand(new RentCMD(towns));
-    storeSubCommand(new BonusClaimsCMD(towns));
     storeSubCommand(new BankCMD(towns));
     storeSubCommand(new KickCMD(towns));
     storeSubCommand(new SetBannerCMD(towns));
@@ -57,6 +56,7 @@ public class CommandManager implements CommandExecutor {
     storeSubCommand(new TeleportCMD(towns));
     storeSubCommand(new TopCMD(towns));
     storeSubCommand(new FlyCMD(towns));
+    storeSubCommand(new AdminCMD(towns));
   }
 
   private void storeSubCommand(SubCommand subCommand) {

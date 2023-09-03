@@ -3,23 +3,6 @@ towns {
     confirm;
     deny;
   }
-  bonusclaims {
-    add {
-        player brigadier:string single_word {
-            value brigadier:integer;
-        }
-    }
-    remove {
-        player brigadier:string single_word {
-            value brigadier:integer;
-        }
-    }
-    set {
-        player brigadier:string single_word {
-            value brigadier:integer;
-        }
-    }
-  }
   autoclaim;
   automap;
   border {
@@ -129,4 +112,27 @@ towns {
     }
   }
   fly;
+  admin {
+    bonusclaims {
+      add {
+        player brigadier:string single_word {
+          value brigadier:integer;
+        }
+      }
+      remove {
+        player brigadier:string single_word {
+          value brigadier:integer;
+        }
+      }
+      set {
+        player brigadier:string single_word {
+          value brigadier:integer;
+        }
+      }
+    }
+    unclaim;
+    delete {
+      player brigadier:string single_word;
+    }
+  }
 }

@@ -54,7 +54,8 @@ public enum Lang {
   COMMAND_MAP_LINE_2("    {0}&lW &6&l• {1}&lE  &6&lCITIZEN&7: &a■ &6&lCLAIMED&7: &c■"),
   COMMAND_MAP_LINE_3("    &e/ {0}&lS &e\\"),
   COMMAND_MAP_CHUNK_HOVER_CHUNK("&3&lChunk&7: &e{0}"),
-  COMMAND_MAP_CHUNK_HOVER_TOWN("\n&3&lTown&7: &e{0}"),
+  COMMAND_MAP_CHUNK_HOVER_TOWN("\n&3&lTown Name&7: &e{0}"),
+  COMMAND_MAP_CHUNK_HOVER_TOWN_OWNER("\n&3&lTown Mayor&7: &e{0}"),
   COMMAND_MAP_CHUNK_HOVER_RENTED("\n&3&lRenter&7: &6{0}"),
   COMMAND_MAP_CHUNK_HOVER_RENT_COST("\n&3&lChunk Rent Cost&7: {0} &6a day"),
   COMMAND_MAP_CHUNK_HOVER_OUTPOST("\n&3&lOutpost Chunk&7: &etrue"),
@@ -74,7 +75,8 @@ public enum Lang {
   COMMAND_INFO_HEADER("&a---------- &7[ &2&lTown Info &7] &a----------"),
   COMMAND_INFO_FOOTER("&a----------------------------------"),
   COMMAND_CHUNK_INFO_CHUNK("&3&lChunk&7: &e{0}"),
-  COMMAND_CHUNK_INFO_TOWN_OWNER("&3&lTown Owner&7: &e{0}"),
+  COMMAND_CHUNK_INFO_TOWN("&3&lTown Name&7: &e{0}"),
+  COMMAND_CHUNK_INFO_TOWN_OWNER("&3&lTown Mayor&7: &e{0}"),
   COMMAND_CHUNK_INFO_TOWN_ESTABLISHED_CHUNK("&3&lEstablished Chunk&7: {0}"),
   COMMAND_CHUNK_INFO_TOWN_OUTPOST_CHUNK("&3&lOutpost Chunk&7: {0}"),
   COMMAND_CHUNK_INFO_RENTER("&3&lRenting&7: &e{0}"),
@@ -124,6 +126,8 @@ public enum Lang {
   COMMAND_ABANDON_SUCCESS("&aYou successfully abandoned your town &3{0}&a."),
   COMMAND_ABANDON_DENY("&aYou successfully denied abandoning your town."),
   COMMAND_SET_BANNER_SUCCESS("&aYou successfully set your town's banner!"),
+  COMMAND_ADMIN_UNCLAIM_SUCCESS("&aYou successfully unclaimed the chunk &3{0}&a!"),
+  COMMAND_ADMIN_DELETE_SUCCESS("&aYou successfully deleted {0}'s &atown."),
   COMMAND_KICK_HOVER_CONFIRM("&aKick &6{0} &afrom town!"),
   COMMAND_KICK_HOVER_DENY("&cDeny kicking &6{0} &cfrom town."),
   COMMAND_KICK_WARNING("&aDo you want to kick &6{0} &afrom your town?"),
@@ -178,7 +182,7 @@ public enum Lang {
   ERROR_CLAIM_AUTO_CLAIM_ON("&cYou can't run this command while auto claim is toggled {0}&c."),
   ERROR_AUTO_CLAIM_TOWN_DOES_NOT_EXIST("&cYour town no longer exist, auto claim has been toggled {0}&c."),
   ERROR_AUTO_CLAIM_NO_PERMISSION("&cYou no longer have permission to auto claim."),
-  ERROR_AUTO_CLAIM_MAX_CLAIMS("&cYou have already reached your town's max chunk claims of &3{0}&c. Auto claim has been disabled."),
+  ERROR_AUTO_CLAIM_MAX_CLAIMS("&cYou have already reached your town's max chunk claims of &3{0}&c. Auto claim has been toggled {1}&c."),
   ERROR_AUTO_CLAIM_NOT_OWNER("&cYou can only toggle on auto claim when you're within your town."),
   ERROR_SET_SPAWN_NOT_CLAIMED("&cYou can only set your town spawn in chunks you own."),
   ERROR_NO_TOWN("&cYou're currently not apart of a town so you can't run this command."),
@@ -254,7 +258,11 @@ public enum Lang {
   ERROR_TELEPORT_TOWN_DOES_NOT_EXIST("&cCould not find a town named &3{0}&c."),
   ERROR_TELEPORT_TOWN_PRIVATE("&cThis town is set to {0} &cso you can't teleport to it."),
   ERROR_FLY_NOT_TOWN_CHUNK("&cYou can only toggle town flight within your town's chunks."),
-  ERROR_FLY_OUTSIDE_OF_TOWN("&cYou flew outside of your town chunks so town flight has been toggled {0}&c.")
+  ERROR_FLY_OUTSIDE_OF_TOWN("&cYou flew outside of your town chunks so town flight has been toggled {0}&c."),
+  ERROR_ADMIN_UNCLAIM_ESTABLISHED_CHUNK("&cYou can't unclaim a town's established chunk, if you need this chunk removed use the command &e/t admin delete&c."),
+  ERROR_ADMIN_UNCLAIM_NOT_CLAIMED("&cThe chunk &3{0} &cis not claimed."),
+  ERROR_ADMIN_DELETE_NO_TOWN("&cThe player &6{0} &cdoes not own a town."),
+  ERROR_ADMIN_UNCLAIM_UNSAFE("&cYou can't unclaim chunk &3{0} &cbecause is would disconnect other chunks from &6{1}'s &cestablished town chunk.")
 
   ;
   @Getter private final String string;

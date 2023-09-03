@@ -92,6 +92,7 @@ public class MapManager {
           final boolean isCitizen = cacheManager.getCacheTowns().getCitizenData().isCitizen(owner, uuid);
           final boolean isOwner = cacheManager.getCacheChunks().isChunkOwner(targetChunkString, uuid);
           info.append(Lang.COMMAND_MAP_CHUNK_HOVER_TOWN.getString(new String[]{cacheManager.getChunkTownName(targetChunkString)}));
+          info.append(Lang.COMMAND_MAP_CHUNK_HOVER_TOWN_OWNER.getString(new String[]{cacheManager.getChunkTownOwnerName(targetChunkString)}));
           if (isOwner) {
             if (!color.equals(NamedTextColor.BLUE)) color = NamedTextColor.DARK_GREEN;
           }

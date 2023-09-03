@@ -17,6 +17,8 @@ public enum SubSyntax {
   COMMAND_INVITE_OPTION_SYNTAX("/town invite &f<player> <accept/deny>"),
   COMMAND_ABANDON_OPTION_SYNTAX("/town abandon &f<confirm/deny>"),
   COMMAND_LEAVE_OPTION_SYNTAX("/town leave &f<confirm/deny>"),
+  COMMAND_ADMIN_BONUSCLAIMS_SYNTAX("/town admin bonusclaims &f<set/add/remove> <player> <amount>"),
+  COMMAND_ADMIN_DELETE_SYNTAX("/town admin delete &f<player>"),
 
   ;
 

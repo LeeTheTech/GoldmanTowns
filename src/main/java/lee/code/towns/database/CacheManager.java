@@ -81,6 +81,10 @@ public class CacheManager {
     return cacheTowns.getTownName(cacheChunks.getChunkOwner(chunk));
   }
 
+  public String getChunkTownOwnerName(String chunk) {
+    return Bukkit.getOfflinePlayer(cacheChunks.getChunkOwner(chunk)).getName();
+  }
+
   public void createTown(UUID uuid, String town, Location spawn) {
     cacheChunks.claimEstablishedChunk(ChunkUtil.serializeChunkLocation(spawn.getChunk()), uuid);
     final TownsTable townsTable = cacheTowns.getTownTable(uuid);
