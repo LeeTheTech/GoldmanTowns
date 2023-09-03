@@ -137,7 +137,7 @@ public class AdminCMD extends SubCommand {
           sender.sendMessage(Lang.USAGE.getComponent(new String[]{SubSyntax.COMMAND_ADMIN_DELETE_SYNTAX.getString()}));
           return;
         }
-        final String targetString = args[2].toLowerCase();
+        final String targetString = args[2];
         final OfflinePlayer offlineTarget = Bukkit.getOfflinePlayerIfCached(targetString);
         if (offlineTarget == null) {
           sender.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_PLAYER_NOT_FOUND.getComponent(new String[]{targetString})));
