@@ -59,7 +59,7 @@ public class AutoClaimListener implements Listener {
           final String role = cacheManager.getCacheTowns().getPlayerRoleData().getPlayerRole(ownerID, playerID);
           if (!cacheManager.getCacheTowns().getRoleData().checkRolePermissionFlag(ownerID, role, Flag.CLAIM)) {
             autoClaimManager.removeAutoClaiming(playerID);
-            player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_AUTO_CLAIM_NO_PERMISSION.getComponent(null)));
+            player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_AUTO_CLAIM_NO_PERMISSION.getComponent(new String[]{Lang.OFF.getString()})));
             return;
           }
         }

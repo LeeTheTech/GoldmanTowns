@@ -152,7 +152,7 @@ public class BorderParticleManager {
             renderBorderParticlesAroundChunks(player, chunks);
           }
           case RENTED -> {
-            if (!cacheManager.getCacheTowns().hasTownOrJoinedTown(uuid)) {
+            if (!cacheManager.getCacheTowns().hasTownOrJoinedTown(uuid) || !cacheManager.getCacheRenters().getRenterListData().hasRentedChunks(uuid)) {
               stopBorder(uuid);
               return;
             }
