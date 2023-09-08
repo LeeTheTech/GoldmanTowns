@@ -47,6 +47,9 @@ dependencies {
 
   //goldman economy
   compileOnly 'lee.code.economy:economy:1.0.0'
+
+  //goldman playerdata
+  compileOnly 'lee.code.playerdata:playerdata:1.0.0'
 }
 
 shadowJar {

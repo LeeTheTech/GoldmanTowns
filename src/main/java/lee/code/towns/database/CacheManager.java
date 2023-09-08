@@ -1,6 +1,7 @@
 package lee.code.towns.database;
 
 import lee.code.economy.EcoAPI;
+import lee.code.playerdata.PlayerDataAPI;
 import lee.code.towns.Towns;
 import lee.code.towns.database.cache.bank.CacheBank;
 import lee.code.towns.database.cache.chunks.CacheChunks;
@@ -82,7 +83,7 @@ public class CacheManager {
   }
 
   public String getChunkTownOwnerName(String chunk) {
-    return Bukkit.getOfflinePlayer(cacheChunks.getChunkOwner(chunk)).getName();
+    return PlayerDataAPI.getName(cacheChunks.getChunkOwner(chunk));
   }
 
   public void createTown(UUID uuid, String town, Location spawn) {
@@ -142,11 +143,7 @@ public class CacheManager {
               cacheBank.getData().addTownBalance(cacheChunks.getChunkOwner(chunk), rentCost);
               amount += rentCost;
             }
-            final OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(uuid);
-            if (offlinePlayer.isOnline()) {
-              final Player onlinePlayer = offlinePlayer.getPlayer();
-              if (onlinePlayer != null) onlinePlayer.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.AUTO_RENT_COLLECTION_MESSAGE.getComponent(new String[]{Lang.VALUE_FORMAT.getString(new String[]{CoreUtil.parseValue(amount)})})));
-            }
+            PlayerDataAPI.sendPlayerMessageIfOnline(uuid, Lang.PREFIX.getComponent(null).append(Lang.AUTO_RENT_COLLECTION_MESSAGE.getComponent(new String[]{Lang.VALUE_FORMAT.getString(new String[]{CoreUtil.parseValue(amount)})})));
           }
           Bukkit.getServer().sendMessage(Lang.PREFIX.getComponent(null).append(Lang.RENT_COLLECTION_FINISHED.getComponent(null)));
         }

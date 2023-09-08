@@ -1,5 +1,6 @@
 package lee.code.towns.database.cache.towns;
 
+import lee.code.playerdata.PlayerDataAPI;
 import lee.code.towns.database.DatabaseManager;
 import lee.code.towns.database.cache.handlers.DatabaseHandler;
 import lee.code.towns.database.cache.towns.data.*;
@@ -161,13 +162,7 @@ public class CacheTowns extends DatabaseHandler {
     final Set<UUID> players = ConcurrentHashMap.newKeySet();
     players.addAll(citizenData.getCitizensList(owner));
     players.add(owner);
-    for (UUID citizen : players) {
-      final OfflinePlayer oPlayer = Bukkit.getOfflinePlayer(citizen);
-      if (oPlayer.isOnline()) {
-        final Player player = oPlayer.getPlayer();
-        if (player != null) player.sendMessage(message);
-      }
-    }
+    for (UUID citizen : players) PlayerDataAPI.sendPlayerMessageIfOnline(citizen, message);
   }
 
   public void createRole(UUID uuid, String role) {

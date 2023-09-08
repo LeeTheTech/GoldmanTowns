@@ -1,10 +1,10 @@
 name: GoldmanTowns
 version: ${version}
 main: lee.code.towns.Towns
-api-version: 1.19
+api-version: 1.20
 author: Lee
 folia-supported: true
-depend: [GoldmanColors]
+depend: [GoldmanEconomy, GoldmanColors, GoldmanPlayerData]
 commands:
   towns:
     description: Main towns command.

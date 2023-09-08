@@ -1,13 +1,12 @@
 package lee.code.towns.commands.cmds;
 
 import lee.code.colors.ColorAPI;
+import lee.code.playerdata.PlayerDataAPI;
 import lee.code.towns.Towns;
 import lee.code.towns.commands.SubCommand;
 import lee.code.towns.database.CacheManager;
 import lee.code.towns.lang.Lang;
 import lee.code.towns.utils.CoreUtil;
-import org.bukkit.Bukkit;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.util.StringUtil;
@@ -61,17 +60,12 @@ public class KickCMD extends SubCommand {
     }
     final UUID playerID = player.getUniqueId();
     final String targetString = args[1];
-    final OfflinePlayer offlineTarget = Bukkit.getOfflinePlayerIfCached(targetString);
-    if (offlineTarget == null) {
-      player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_PLAYER_NOT_FOUND.getComponent(new String[]{targetString})));
-      return;
-    }
-    final UUID targetID = offlineTarget.getUniqueId();
-    final CacheManager cacheManager = towns.getCacheManager();
-    if (!cacheManager.getCacheTowns().hasTownsData(targetID)) {
+    final UUID targetID = PlayerDataAPI.getUniqueId(targetString);
+    if (targetID == null) {
       player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_NO_PLAYER_DATA.getComponent(new String[]{targetString})));
       return;
     }
+    final CacheManager cacheManager = towns.getCacheManager();
     if (!cacheManager.getCacheTowns().hasTown(playerID)) {
       player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_NOT_TOWN_OWNER.getComponent(null)));
       return;
@@ -86,10 +80,7 @@ public class KickCMD extends SubCommand {
           cacheManager.removeFromTown(targetID);
           cacheManager.getCacheTowns().sendTownMessage(playerID, Lang.PREFIX.getComponent(null).append(Lang.COMMAND_KICK_TOWN.getComponent(new String[]{ColorAPI.getNameColor(targetID, targetString)})));
           player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_KICK_SUCCESS.getComponent(new String[]{ColorAPI.getNameColor(targetID, targetString)})));
-          if (offlineTarget.isOnline()) {
-            final Player onlineTarget = offlineTarget.getPlayer();
-            if (onlineTarget != null) onlineTarget.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_KICK_TARGET.getComponent(null)));
-          }
+          PlayerDataAPI.sendPlayerMessageIfOnline(targetID, Lang.PREFIX.getComponent(null).append(Lang.COMMAND_KICK_TARGET.getComponent(null)));
         }
         case "deny" -> player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_KICK_DENY_SUCCESS.getComponent(new String[]{ColorAPI.getNameColor(targetID, targetString)})));
         default -> player.sendMessage(Lang.USAGE.getComponent(new String[]{getSyntax()}));

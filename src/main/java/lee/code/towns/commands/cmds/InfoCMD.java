@@ -1,6 +1,7 @@
 package lee.code.towns.commands.cmds;
 
 import lee.code.colors.ColorAPI;
+import lee.code.playerdata.PlayerDataAPI;
 import lee.code.towns.Towns;
 import lee.code.towns.commands.SubCommand;
 import lee.code.towns.database.cache.bank.CacheBank;
@@ -10,7 +11,6 @@ import lee.code.towns.database.cache.towns.CacheTowns;
 import lee.code.towns.lang.Lang;
 import lee.code.towns.utils.CoreUtil;
 import net.kyori.adventure.text.Component;
-import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -67,18 +67,18 @@ public class InfoCMD extends SubCommand {
       return;
     }
     final List<Component> lines = new ArrayList<>();
-    final UUID owner = cacheTowns.getTargetTownOwner(playerID);
-    final String status = cacheTowns.isTownPublic(owner) ? Lang.PUBLIC.getString() : Lang.PRIVATE.getString();
+    final UUID ownerID = cacheTowns.getTargetTownOwner(playerID);
+    final String status = cacheTowns.isTownPublic(ownerID) ? Lang.PUBLIC.getString() : Lang.PRIVATE.getString();
     lines.add(Lang.COMMAND_INFO_HEADER.getComponent(null));
     lines.add(Component.text(""));
     lines.add(Lang.COMMAND_INFO_TOWN_PUBLIC.getComponent(new String[]{status}));
-    lines.add(Lang.COMMAND_INFO_TOWN_NAME.getComponent(new String[]{cacheTowns.getTownName(owner)}));
-    lines.add(Lang.COMMAND_INFO_TOWN_OWNER.getComponent(new String[]{ColorAPI.getNameColor(owner, Bukkit.getOfflinePlayer(owner).getName())}));
-    lines.add(Lang.COMMAND_INFO_TOWN_BANK.getComponent(new String[]{Lang.VALUE_FORMAT.getString(new String[]{CoreUtil.parseValue(cacheBank.getData().getTownBalance(owner))})}));
-    lines.add(Lang.COMMAND_INFO_TOWN_CITIZENS.getComponent(new String[]{String.valueOf(cacheTowns.getCitizenData().getCitizenAmount(owner))}));
-    lines.add(Lang.COMMAND_INFO_TOWN_CHUNKS.getComponent(new String[]{CoreUtil.parseValue(cacheChunks.getChunkListData().getChunkClaims(owner)), CoreUtil.parseValue(cacheTowns.getMaxChunkClaims(owner))}));
-    lines.add(Lang.COMMAND_INFO_TOWN_BONUS_CLAIMS.getComponent(new String[]{CoreUtil.parseValue(cacheTowns.getBonusClaims(owner))}));
-    lines.add(Lang.COMMAND_INFO_TOWN_OUTPOSTS.getComponent(new String[]{CoreUtil.parseValue(cacheChunks.getChunkOutpostData().getOutpostAmount(owner)), CoreUtil.parseValue(cacheChunks.getChunkOutpostData().getMaxOutpostAmount())}));
+    lines.add(Lang.COMMAND_INFO_TOWN_NAME.getComponent(new String[]{cacheTowns.getTownName(ownerID)}));
+    lines.add(Lang.COMMAND_INFO_TOWN_OWNER.getComponent(new String[]{ColorAPI.getNameColor(ownerID, PlayerDataAPI.getName(ownerID))}));
+    lines.add(Lang.COMMAND_INFO_TOWN_BANK.getComponent(new String[]{Lang.VALUE_FORMAT.getString(new String[]{CoreUtil.parseValue(cacheBank.getData().getTownBalance(ownerID))})}));
+    lines.add(Lang.COMMAND_INFO_TOWN_CITIZENS.getComponent(new String[]{String.valueOf(cacheTowns.getCitizenData().getCitizenAmount(ownerID))}));
+    lines.add(Lang.COMMAND_INFO_TOWN_CHUNKS.getComponent(new String[]{CoreUtil.parseValue(cacheChunks.getChunkListData().getChunkClaims(ownerID)), CoreUtil.parseValue(cacheTowns.getMaxChunkClaims(ownerID))}));
+    lines.add(Lang.COMMAND_INFO_TOWN_BONUS_CLAIMS.getComponent(new String[]{CoreUtil.parseValue(cacheTowns.getBonusClaims(ownerID))}));
+    lines.add(Lang.COMMAND_INFO_TOWN_OUTPOSTS.getComponent(new String[]{CoreUtil.parseValue(cacheChunks.getChunkOutpostData().getOutpostAmount(ownerID)), CoreUtil.parseValue(cacheChunks.getChunkOutpostData().getMaxOutpostAmount())}));
     lines.add(Lang.COMMAND_INFO_TOWN_RENT.getComponent(new String[]{CoreUtil.parseTime(cacheServer.getNextRentCollectionTime())}));
     lines.add(Component.text(""));
     lines.add(Lang.COMMAND_INFO_FOOTER.getComponent(null));

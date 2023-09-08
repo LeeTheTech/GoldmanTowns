@@ -1,6 +1,7 @@
 package lee.code.towns.commands.cmds;
 
 import lee.code.colors.ColorAPI;
+import lee.code.playerdata.PlayerDataAPI;
 import lee.code.towns.Towns;
 import lee.code.towns.commands.SubCommand;
 import lee.code.towns.commands.SubSyntax;
@@ -87,12 +88,11 @@ public class AdminCMD extends SubCommand {
           return;
         }
         final int amount = Integer.parseInt(amountString);
-        final OfflinePlayer offlineTarget = Bukkit.getOfflinePlayerIfCached(targetString);
-        if (offlineTarget == null) {
-          sender.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_PLAYER_NOT_FOUND.getComponent(new String[]{targetString})));
+        final UUID targetID = PlayerDataAPI.getUniqueId(targetString);
+        if (targetID == null) {
+          sender.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_NO_PLAYER_DATA.getComponent(new String[]{targetString})));
           return;
         }
-        final UUID targetID = offlineTarget.getUniqueId();
         switch (bonusOption) {
           case "set" -> {
             cacheManager.getCacheTowns().setBonusClaims(targetID, amount);
@@ -122,8 +122,7 @@ public class AdminCMD extends SubCommand {
           }
           final UUID ownerID = cacheManager.getCacheChunks().getChunkOwner(chunk);
           if (!cacheManager.getCacheChunks().isUnclaimSafe(ownerID, chunk)) {
-            final OfflinePlayer offlineOwner = Bukkit.getOfflinePlayer(ownerID);
-            player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_ADMIN_UNCLAIM_UNSAFE.getComponent(new String[]{chunk, ColorAPI.getNameColor(ownerID, offlineOwner.getName())})));
+            player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_ADMIN_UNCLAIM_UNSAFE.getComponent(new String[]{chunk, ColorAPI.getNameColor(ownerID, PlayerDataAPI.getName(ownerID))})));
             return;
           }
           cacheManager.getCacheChunks().unclaimChunk(chunk);
@@ -138,13 +137,8 @@ public class AdminCMD extends SubCommand {
           return;
         }
         final String targetString = args[2];
-        final OfflinePlayer offlineTarget = Bukkit.getOfflinePlayerIfCached(targetString);
-        if (offlineTarget == null) {
-          sender.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_PLAYER_NOT_FOUND.getComponent(new String[]{targetString})));
-          return;
-        }
-        final UUID targetID =  offlineTarget.getUniqueId();
-        if (!cacheManager.getCacheTowns().hasTownsData(targetID)) {
+        final UUID targetID = PlayerDataAPI.getUniqueId(targetString);
+        if (targetID == null) {
           sender.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_NO_PLAYER_DATA.getComponent(new String[]{targetString})));
           return;
         }

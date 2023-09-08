@@ -24,7 +24,6 @@ public class IceMeltListener implements Listener {
     final IceMeltEvent iceMeltEvent = new IceMeltEvent(e.getBlock().getLocation());
     Bukkit.getServer().getPluginManager().callEvent(iceMeltEvent);
     if (iceMeltEvent.isCancelled()) e.setCancelled(true);
-
   }
 
   @EventHandler

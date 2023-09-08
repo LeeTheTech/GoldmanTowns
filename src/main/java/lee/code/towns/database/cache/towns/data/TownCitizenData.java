@@ -1,5 +1,6 @@
 package lee.code.towns.database.cache.towns.data;
 
+import lee.code.playerdata.PlayerDataAPI;
 import lee.code.towns.database.cache.towns.CacheTowns;
 import lee.code.towns.database.tables.TownsTable;
 import lee.code.towns.enums.TownRole;
@@ -64,10 +65,7 @@ public class TownCitizenData {
   public List<String> getCitizenNames(UUID uuid) {
     if (cacheTowns.getTownTable(uuid).getTownCitizens() == null) new ArrayList<>();
     final List<String> playerNames = new ArrayList<>();
-    for (UUID citizen : getCitizensList(uuid)) {
-      final OfflinePlayer oPlayer = Bukkit.getOfflinePlayer(citizen);
-      playerNames.add(oPlayer.getName());
-    }
+    for (UUID citizen : getCitizensList(uuid)) playerNames.add(PlayerDataAPI.getName(citizen));
     return playerNames;
   }
 

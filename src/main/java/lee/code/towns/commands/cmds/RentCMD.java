@@ -2,6 +2,7 @@ package lee.code.towns.commands.cmds;
 
 import lee.code.colors.ColorAPI;
 import lee.code.economy.EcoAPI;
+import lee.code.playerdata.PlayerDataAPI;
 import lee.code.towns.Towns;
 import lee.code.towns.commands.SubCommand;
 import lee.code.towns.commands.SubSyntax;
@@ -219,17 +220,12 @@ public class RentCMD extends SubCommand {
         }
         final String action = args[2].toLowerCase();
         final String targetString = args[3];
-        final OfflinePlayer offlineTarget = Bukkit.getOfflinePlayerIfCached(targetString);
-        if (offlineTarget == null) {
+        final UUID targetID = PlayerDataAPI.getUniqueId(targetString);
+        if (targetID == null) {
           player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_PLAYER_NOT_FOUND.getComponent(new String[]{targetString})));
           return;
         }
-        if (!cacheManager.getCacheTowns().hasTownsData(offlineTarget.getUniqueId())) {
-          player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_NO_PLAYER_DATA.getComponent(new String[]{targetString})));
-          return;
-        }
-        final UUID targetID = offlineTarget.getUniqueId();
-        final UUID ownerID = cacheManager.getCacheTowns().getTargetTownOwner(offlineTarget.getUniqueId());
+        final UUID ownerID = cacheManager.getCacheTowns().getTargetTownOwner(targetID);
         if (playerID.equals(ownerID)) {
           player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_RENT_TRUST_OWNER.getComponent(null)));
           return;

@@ -1,5 +1,6 @@
 package lee.code.towns.database.cache.renters;
 
+import lee.code.playerdata.PlayerDataAPI;
 import lee.code.towns.database.DatabaseManager;
 import lee.code.towns.database.cache.handlers.DatabaseHandler;
 import lee.code.towns.database.cache.renters.data.OwnerListData;
@@ -115,7 +116,7 @@ public class CacheRenters extends DatabaseHandler {
 
   public String getRenterName(String chunk) {
     if (!isRented(chunk)) return null;
-    return Bukkit.getOfflinePlayer(getRentTable(chunk).getRenter()).getName();
+    return PlayerDataAPI.getName(getRentTable(chunk).getRenter());
   }
 
   public boolean isPlayerRenting(UUID uuid, String chunk) {
