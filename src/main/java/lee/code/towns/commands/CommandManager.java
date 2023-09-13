@@ -112,17 +112,13 @@ public class CommandManager implements CommandExecutor {
       } else {
         performPlayerSubCommandAsync(player, uuid, subCommand, args);
       }
-    } else if (sender instanceof ConsoleCommandSender console) {
-      if (subCommand.performAsync()) {
-        if (subCommand.performAsyncSynchronized()) {
-          synchronized (CoreUtil.getSynchronizedThreadLock()) {
-            performConsoleSubCommandAsync(sender, args, subCommand);
-          }
-        } else {
+    } else if (sender instanceof ConsoleCommandSender) {
+      if (subCommand.performAsyncSynchronized()) {
+        synchronized (CoreUtil.getSynchronizedThreadLock()) {
           performConsoleSubCommandAsync(sender, args, subCommand);
         }
       } else {
-        subCommand.performConsole(console, args);
+        performConsoleSubCommandAsync(sender, args, subCommand);
       }
     }
   }
