@@ -49,6 +49,7 @@ public class RoleSelectionMenu extends MenuGUI {
     return new MenuButton()
       .creator(p -> MenuItem.ROLE.createRoleItem(role))
       .consumer(e -> {
+        getMenuSoundManager().playClickSound(player);
         final CacheTowns cacheTowns = towns.getCacheManager().getCacheTowns();
         if (!cacheTowns.hasTown(player.getUniqueId())) {
           e.getWhoClicked().getInventory().close();
@@ -62,6 +63,7 @@ public class RoleSelectionMenu extends MenuGUI {
     return new MenuButton()
       .creator(p -> MenuItem.BACK.createItem())
       .consumer(e -> {
+        getMenuSoundManager().playClickSound(player);
         towns.getMenuManager().openMenu(new FlagMenu(towns), player);
       });
   }

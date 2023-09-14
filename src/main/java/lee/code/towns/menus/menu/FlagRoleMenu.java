@@ -32,25 +32,26 @@ public class FlagRoleMenu extends MenuGUI {
   @Override
   public void decorate(Player player) {
     addFillerGlass();
-    final UUID uuid = player.getUniqueId();
-    addButton(10, createFlagButton(FlagMenuItem.BREAK, uuid));
-    addButton(11, createFlagButton(FlagMenuItem.BUILD, uuid));
-    addButton(12, createFlagButton(FlagMenuItem.INTERACT, uuid));
-    addButton(13, createFlagButton(FlagMenuItem.TELEPORT, uuid));
-    addButton(14, createFlagButton(FlagMenuItem.INVITE, uuid));
-    addButton(15, createFlagButton(FlagMenuItem.CHANGE_CHUNK_FLAGS, uuid));
-    addButton(16, createFlagButton(FlagMenuItem.CHANGE_GLOBAL_FLAGS, uuid));
-    addButton(21, createFlagButton(FlagMenuItem.WITHDRAW, uuid));
-    addButton(22, createFlagButton(FlagMenuItem.CLAIM, uuid));
-    addButton(23, createFlagButton(FlagMenuItem.UNCLAIM, uuid));
+    addButton(10, createFlagButton(player, FlagMenuItem.BREAK));
+    addButton(11, createFlagButton(player, FlagMenuItem.BUILD));
+    addButton(12, createFlagButton(player, FlagMenuItem.INTERACT));
+    addButton(13, createFlagButton(player, FlagMenuItem.TELEPORT));
+    addButton(14, createFlagButton(player, FlagMenuItem.INVITE));
+    addButton(15, createFlagButton(player, FlagMenuItem.CHANGE_CHUNK_FLAGS));
+    addButton(16, createFlagButton(player, FlagMenuItem.CHANGE_GLOBAL_FLAGS));
+    addButton(21, createFlagButton(player, FlagMenuItem.WITHDRAW));
+    addButton(22, createFlagButton(player, FlagMenuItem.CLAIM));
+    addButton(23, createFlagButton(player, FlagMenuItem.UNCLAIM));
     addButton(40, backButton(player));
     super.decorate(player);
   }
 
-  private MenuButton createFlagButton(FlagMenuItem flagMenuItem, UUID uuid) {
+  private MenuButton createFlagButton(Player player, FlagMenuItem flagMenuItem) {
+    final UUID uuid = player.getUniqueId();
     return new MenuButton()
       .creator(p -> flagMenuItem.createItem(towns.getCacheManager().getCacheTowns().getRoleData().checkRolePermissionFlag(uuid, role, flagMenuItem.getFlag())))
       .consumer(e -> {
+        getMenuSoundManager().playClickSound(player);
         final CacheTowns cacheTowns = towns.getCacheManager().getCacheTowns();
         if (!cacheTowns.hasTown(uuid)) {
           e.getWhoClicked().getInventory().close();
@@ -70,6 +71,7 @@ public class FlagRoleMenu extends MenuGUI {
     return new MenuButton()
       .creator(p -> MenuItem.BACK.createItem())
       .consumer(e -> {
+        getMenuSoundManager().playClickSound(player);
         towns.getMenuManager().openMenu(new RoleSelectionMenu(towns), player);
       });
   }

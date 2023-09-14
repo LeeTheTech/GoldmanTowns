@@ -1,6 +1,7 @@
 package lee.code.towns.menus.system;
 
 import lee.code.towns.menus.menu.menudata.MenuItem;
+import lombok.Getter;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -14,9 +15,11 @@ import java.util.Map;
 
 public abstract class MenuGUI implements InventoryHandler {
   private Inventory inventory;
-  public final ItemStack fillerGlass = MenuItem.FILLER_GLASS.createItem();
+  private final ItemStack fillerGlass = MenuItem.FILLER_GLASS.createItem();
   private final DelayManager delayManager = new DelayManager();
   private final Map<Integer, MenuButton> buttonMap = new HashMap<>();
+  @Getter
+  private final MenuSoundManager menuSoundManager = new MenuSoundManager();
 
   public void setInventory() {
     this.inventory = createInventory();

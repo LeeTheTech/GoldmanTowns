@@ -39,27 +39,28 @@ public class FlagChunkMenu extends MenuGUI {
   @Override
   public void decorate(Player player) {
     addFillerGlass();
-    addButton(4, createFlagButton(FlagMenuItem.CHUNK_FLAGS_ENABLED));
-    addButton(19, createFlagButton(FlagMenuItem.BREAK));
-    addButton(20, createFlagButton(FlagMenuItem.BUILD));
-    addButton(21, createFlagButton(FlagMenuItem.INTERACT));
-    addButton(22, createFlagButton(FlagMenuItem.DAMAGE));
-    addButton(23, createFlagButton(FlagMenuItem.PVP));
-    addButton(24, createFlagButton(FlagMenuItem.PVE));
-    addButton(25, createFlagButton(FlagMenuItem.MONSTER_SPAWNING));
-    addButton(29, createFlagButton(FlagMenuItem.REDSTONE));
-    addButton(30, createFlagButton(FlagMenuItem.EXPLOSION));
-    addButton(31, createFlagButton(FlagMenuItem.ICE_MELT));
-    addButton(32, createFlagButton(FlagMenuItem.TELEPORT));
-    addButton(33, createFlagButton(FlagMenuItem.FIRE_SPREAD));
+    addButton(4, createFlagButton(player, FlagMenuItem.CHUNK_FLAGS_ENABLED));
+    addButton(19, createFlagButton(player, FlagMenuItem.BREAK));
+    addButton(20, createFlagButton(player, FlagMenuItem.BUILD));
+    addButton(21, createFlagButton(player, FlagMenuItem.INTERACT));
+    addButton(22, createFlagButton(player, FlagMenuItem.DAMAGE));
+    addButton(23, createFlagButton(player, FlagMenuItem.PVP));
+    addButton(24, createFlagButton(player, FlagMenuItem.PVE));
+    addButton(25, createFlagButton(player, FlagMenuItem.MONSTER_SPAWNING));
+    addButton(29, createFlagButton(player, FlagMenuItem.REDSTONE));
+    addButton(30, createFlagButton(player, FlagMenuItem.EXPLOSION));
+    addButton(31, createFlagButton(player, FlagMenuItem.ICE_MELT));
+    addButton(32, createFlagButton(player, FlagMenuItem.TELEPORT));
+    addButton(33, createFlagButton(player, FlagMenuItem.FIRE_SPREAD));
     if (backSupport) addButton(49, backButton(player));
     super.decorate(player);
   }
 
-  private MenuButton createFlagButton(FlagMenuItem flagMenuItem) {
+  private MenuButton createFlagButton(Player player, FlagMenuItem flagMenuItem) {
     return new MenuButton()
       .creator(p -> flagMenuItem.createItem(towns.getCacheManager().getCacheChunks().getChunkPermData().checkChunkPermissionFlag(chunk, flagMenuItem.getFlag())))
       .consumer(e -> {
+        getMenuSoundManager().playClickSound(player);
         final CacheChunks cacheChunks = towns.getCacheManager().getCacheChunks();
         if (!cacheChunks.isClaimed(chunk)) {
           e.getWhoClicked().getInventory().close();
@@ -79,6 +80,7 @@ public class FlagChunkMenu extends MenuGUI {
     return new MenuButton()
       .creator(p -> MenuItem.BACK.createItem())
       .consumer(e -> {
+        getMenuSoundManager().playClickSound(player);
         towns.getMenuManager().openMenu(new FlagMenu(towns), player);
       });
   }

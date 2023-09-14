@@ -7,7 +7,6 @@ import lee.code.towns.menus.menu.menudata.FlagMenuItem;
 import lee.code.towns.menus.menu.menudata.MenuItem;
 import lee.code.towns.menus.system.MenuButton;
 import lee.code.towns.menus.system.MenuGUI;
-import lee.code.towns.menus.system.MenuPlayerData;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryCloseEvent;
@@ -38,33 +37,34 @@ public class FlagGlobalMenu extends MenuGUI {
   public void decorate(Player player) {
     addFillerGlass();
     final UUID owner = towns.getCacheManager().getCacheTowns().getTargetTownOwner(player.getUniqueId());
-    addButton(10, createFlagButton(FlagMenuItem.BREAK, owner));
-    addButton(11, createFlagButton(FlagMenuItem.BUILD, owner));
-    addButton(12, createFlagButton(FlagMenuItem.INTERACT, owner));
-    addButton(13, createFlagButton(FlagMenuItem.DAMAGE, owner));
-    addButton(14, createFlagButton(FlagMenuItem.PVP, owner));
-    addButton(15, createFlagButton(FlagMenuItem.PVE, owner));
-    addButton(16, createFlagButton(FlagMenuItem.MONSTER_SPAWNING, owner));
-    addButton(20, createFlagButton(FlagMenuItem.REDSTONE, owner));
-    addButton(21, createFlagButton(FlagMenuItem.EXPLOSION, owner));
-    addButton(22, createFlagButton(FlagMenuItem.ICE_MELT, owner));
-    addButton(23, createFlagButton(FlagMenuItem.TELEPORT, owner));
-    addButton(24, createFlagButton(FlagMenuItem.FIRE_SPREAD, owner));
+    addButton(10, createFlagButton(player, FlagMenuItem.BREAK, owner));
+    addButton(11, createFlagButton(player, FlagMenuItem.BUILD, owner));
+    addButton(12, createFlagButton(player, FlagMenuItem.INTERACT, owner));
+    addButton(13, createFlagButton(player, FlagMenuItem.DAMAGE, owner));
+    addButton(14, createFlagButton(player, FlagMenuItem.PVP, owner));
+    addButton(15, createFlagButton(player, FlagMenuItem.PVE, owner));
+    addButton(16, createFlagButton(player, FlagMenuItem.MONSTER_SPAWNING, owner));
+    addButton(20, createFlagButton(player, FlagMenuItem.REDSTONE, owner));
+    addButton(21, createFlagButton(player, FlagMenuItem.EXPLOSION, owner));
+    addButton(22, createFlagButton(player, FlagMenuItem.ICE_MELT, owner));
+    addButton(23, createFlagButton(player, FlagMenuItem.TELEPORT, owner));
+    addButton(24, createFlagButton(player, FlagMenuItem.FIRE_SPREAD, owner));
     addButton(40, backButton(player));
     super.decorate(player);
   }
 
-  private MenuButton createFlagButton(FlagMenuItem flagMenuItem, UUID uuid) {
+  private MenuButton createFlagButton(Player player, FlagMenuItem flagMenuItem, UUID owner) {
     return new MenuButton()
-      .creator(p -> flagMenuItem.createItem(towns.getCacheManager().getCacheTowns().getPermData().checkGlobalPermissionFlag(uuid, flagMenuItem.getFlag())))
+      .creator(p -> flagMenuItem.createItem(towns.getCacheManager().getCacheTowns().getPermData().checkGlobalPermissionFlag(owner, flagMenuItem.getFlag())))
       .consumer(e -> {
+        getMenuSoundManager().playClickSound(player);
         final CacheTowns cacheTowns = towns.getCacheManager().getCacheTowns();
-        if (!cacheTowns.hasTownOrJoinedTown(uuid)) {
+        if (!cacheTowns.hasTownOrJoinedTown(owner)) {
           e.getWhoClicked().getInventory().close();
           return;
         }
-        final boolean newResult = !cacheTowns.getPermData().checkGlobalPermissionFlag(uuid, flagMenuItem.getFlag());
-        cacheTowns.getPermData().setGlobalPermissionFlag(uuid, flagMenuItem.getFlag(), newResult);
+        final boolean newResult = !cacheTowns.getPermData().checkGlobalPermissionFlag(owner, flagMenuItem.getFlag());
+        cacheTowns.getPermData().setGlobalPermissionFlag(owner, flagMenuItem.getFlag(), newResult);
         final ItemStack item = e.getCurrentItem();
         if (item == null) return;
         final ItemStack newItem = flagMenuItem.createItem(newResult);
@@ -77,6 +77,7 @@ public class FlagGlobalMenu extends MenuGUI {
     return new MenuButton()
       .creator(p -> MenuItem.BACK.createItem())
       .consumer(e -> {
+        getMenuSoundManager().playClickSound(player);
         towns.getMenuManager().openMenu(new FlagMenu(towns), player);
       });
   }

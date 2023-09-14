@@ -58,6 +58,7 @@ public class TownBannerMenu extends MenuGUI {
           player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_BANNER_INSUFFICIENT_FUNDS.getComponent(null)));
           return;
         }
+        getMenuSoundManager().playPurchaseSound(player);
         EcoAPI.removeBalance(playerID, cost);
         player.getInventory().addItem(newBanner);
         player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.MENU_BANNER_PURCHASE_SUCCESS.getComponent(null)));

@@ -42,6 +42,7 @@ public class FlagMenu extends MenuGUI {
     addButton(10, new MenuButton()
       .creator(p -> MenuItem.FLAG_MANAGER_CHUNK.createItem())
       .consumer(e -> {
+        getMenuSoundManager().playClickSound(player);
         final UUID uuid = player.getUniqueId();
         final CacheManager cacheManager = towns.getCacheManager();
         final MenuManager menuManager = towns.getMenuManager();
@@ -78,6 +79,7 @@ public class FlagMenu extends MenuGUI {
     addButton(13, new MenuButton()
       .creator(p -> MenuItem.FLAG_MANAGER_GLOBAL.createItem())
       .consumer(e -> {
+        getMenuSoundManager().playClickSound(player);
         final UUID uuid = player.getUniqueId();
         final CacheManager cacheManager = towns.getCacheManager();
         final MenuManager menuManager = towns.getMenuManager();
@@ -102,6 +104,7 @@ public class FlagMenu extends MenuGUI {
     addButton(16, new MenuButton()
       .creator(p -> MenuItem.FLAG_MANAGER_ROLE.createItem())
       .consumer(e -> {
+        getMenuSoundManager().playClickSound(player);
         final UUID uuid = player.getUniqueId();
         final CacheManager cacheManager = towns.getCacheManager();
         if (!cacheManager.getCacheTowns().hasTownOrJoinedTown(uuid)) {
@@ -112,7 +115,7 @@ public class FlagMenu extends MenuGUI {
         if (!uuid.equals(owner)) {
           player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_FLAG_MANAGER_ROLE_NOT_OWNER.getComponent(null)));
           return;
-        }
+        };
         towns.getMenuManager().openMenu(new RoleSelectionMenu(towns), player);
       }));
   }

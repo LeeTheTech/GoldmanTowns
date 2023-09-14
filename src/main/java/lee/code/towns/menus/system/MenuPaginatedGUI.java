@@ -1,6 +1,7 @@
 package lee.code.towns.menus.system;
 
 import lee.code.towns.menus.menu.menudata.MenuItem;
+import lombok.Getter;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -22,9 +23,10 @@ public abstract class MenuPaginatedGUI implements InventoryHandler {
   protected int index = 0;
   protected final int maxItemsPerPage = 28;
   private Inventory inventory;
-  public final ItemStack fillerGlass = MenuItem.FILLER_GLASS.createItem();
+  private final ItemStack fillerGlass = MenuItem.FILLER_GLASS.createItem();
   private final DelayManager delayManager = new DelayManager();
   private final Map<Integer, MenuButton> buttonMap = new HashMap<>();
+  @Getter private final MenuSoundManager menuSoundManager = new MenuSoundManager();
 
   public MenuPaginatedGUI(MenuPlayerData menuPlayerData) {
     this.menuPlayerData = menuPlayerData;
