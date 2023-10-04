@@ -27,13 +27,12 @@ public class AutoClaimListener implements Listener {
 
   @EventHandler
   public void onPlayerMoveListener(PlayerMoveEvent e) {
-    final AutoClaimManager autoClaimManager = towns.getAutoClaimManager();
     final UUID uuid = e.getPlayer().getUniqueId();
-    if (autoClaimManager.isAutoClaiming(uuid)) {
+    if (towns.getAutoClaimManager().isAutoClaiming(uuid)) {
       final Location location = e.getTo();
       final String chunk = ChunkUtil.serializeChunkLocation(location.getChunk());
-      if (autoClaimManager.getLastAutoClaimChunkChecked(uuid).equals(chunk)) return;
-      autoClaimManager.setLastAutoClaimChunkChecked(uuid, chunk);
+      if (towns.getAutoClaimManager().getLastAutoClaimChunkChecked(uuid).equals(chunk)) return;
+      towns.getAutoClaimManager().setLastAutoClaimChunkChecked(uuid, chunk);
       final AutoClaimEvent autoClaimEvent = new AutoClaimEvent(e.getPlayer(), location, chunk);
       Bukkit.getServer().getPluginManager().callEvent(autoClaimEvent);
     }
