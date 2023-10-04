@@ -48,7 +48,7 @@ public class TownBannerMenu extends MenuGUI {
     return new MenuButton()
       .creator(p-> banner)
       .consumer(e -> {
-        final ItemStack newBanner = new ItemStack(cacheTowns.getBanner(owner));
+        final ItemStack newBanner = new ItemStack(towns.getCacheManager().getCacheTowns().getBanner(owner));
         if (!ItemUtil.canReceiveItems(player, newBanner, 1)) {
           player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_BANNER_INVENTORY_SPACE.getComponent(null)));
           return;
