@@ -21,6 +21,7 @@ import java.util.UUID;
 
 public class DatabaseManager {
   private final Towns towns;
+  private final Object synchronizedThreadLock = new Object();
   private Dao<BankTable, UUID> bankDao;
   private Dao<ChunkTable, String> chunkDao;
   private Dao<TownsTable, UUID> townsDao;
@@ -34,7 +35,6 @@ public class DatabaseManager {
   }
 
   private String getDatabaseURL() {
-    //Setup MongoDB
     if (!towns.getDataFolder().exists()) towns.getDataFolder().mkdir();
     return "jdbc:sqlite:" + new File(towns.getDataFolder(), "database.db");
   }
@@ -168,216 +168,258 @@ public class DatabaseManager {
     }
   }
 
-  public synchronized void deleteAllChunkTables(UUID uuid) {
-    Bukkit.getScheduler().runTaskAsynchronously(towns, () -> {
-      try {
-        chunkDao.executeRaw("DELETE FROM chunks WHERE owner = '" + uuid + "';");
-        permissionDao.executeRaw("DELETE FROM permissions WHERE uuid = '" + uuid + "' AND permission_type = '" + PermissionType.CHUNK.name() + "';");
-      } catch (SQLException e) {
-        e.printStackTrace();
-      }
-    });
+  public void deleteAllChunkTables(UUID uuid) {
+    synchronized (synchronizedThreadLock) {
+      Bukkit.getScheduler().runTaskAsynchronously(towns, () -> {
+        try {
+          chunkDao.executeRaw("DELETE FROM chunks WHERE owner = '" + uuid + "';");
+          permissionDao.executeRaw("DELETE FROM permissions WHERE uuid = '" + uuid + "' AND permission_type = '" + PermissionType.CHUNK.name() + "';");
+        } catch (SQLException e) {
+          e.printStackTrace();
+        }
+      });
+    }
   }
 
-  public synchronized void deleteAllRentTables(UUID uuid) {
-    Bukkit.getScheduler().runTaskAsynchronously(towns, () -> {
-      try {
-        rentDao.executeRaw("DELETE FROM renters WHERE owner = '" + uuid + "';");
-      } catch (SQLException e) {
-        e.printStackTrace();
-      }
-    });
+  public void deleteAllRentTables(UUID uuid) {
+    synchronized (synchronizedThreadLock) {
+      Bukkit.getScheduler().runTaskAsynchronously(towns, () -> {
+        try {
+          rentDao.executeRaw("DELETE FROM renters WHERE owner = '" + uuid + "';");
+        } catch (SQLException e) {
+          e.printStackTrace();
+        }
+      });
+    }
   }
 
-  public synchronized void deleteAllRolePermissionTables(UUID uuid) {
-    Bukkit.getScheduler().runTaskAsynchronously(towns, () -> {
-      try {
-        permissionDao.executeRaw("DELETE FROM permissions WHERE uuid = '" + uuid + "' AND permission_type = '" + PermissionType.ROLE.name() + "';");
-      } catch (SQLException e) {
-        e.printStackTrace();
-      }
-    });
+  public void deleteAllRolePermissionTables(UUID uuid) {
+    synchronized (synchronizedThreadLock) {
+      Bukkit.getScheduler().runTaskAsynchronously(towns, () -> {
+        try {
+          permissionDao.executeRaw("DELETE FROM permissions WHERE uuid = '" + uuid + "' AND permission_type = '" + PermissionType.ROLE.name() + "';");
+        } catch (SQLException e) {
+          e.printStackTrace();
+        }
+      });
+    }
   }
 
-  public synchronized void createTownsTable(TownsTable townsTable) {
-    Bukkit.getAsyncScheduler().runNow(towns, scheduledTask -> {
-      try {
-        townsDao.createIfNotExists(townsTable);
-      } catch (SQLException e) {
-        e.printStackTrace();
-      }
-    });
+  public void createTownsTable(TownsTable townsTable) {
+    synchronized (synchronizedThreadLock) {
+      Bukkit.getAsyncScheduler().runNow(towns, scheduledTask -> {
+        try {
+          townsDao.createIfNotExists(townsTable);
+        } catch (SQLException e) {
+          e.printStackTrace();
+        }
+      });
+    }
   }
 
-  public synchronized void updateTownsTable(TownsTable townsTable) {
-    Bukkit.getAsyncScheduler().runNow(towns, scheduledTask -> {
-      try {
-        townsDao.update(townsTable);
-      } catch (SQLException e) {
-        e.printStackTrace();
-      }
-    });
+  public void updateTownsTable(TownsTable townsTable) {
+    synchronized (synchronizedThreadLock) {
+      Bukkit.getAsyncScheduler().runNow(towns, scheduledTask -> {
+        try {
+          townsDao.update(townsTable);
+        } catch (SQLException e) {
+          e.printStackTrace();
+        }
+      });
+    }
   }
 
-  public synchronized void createChunkTable(ChunkTable chunkTable) {
-    Bukkit.getAsyncScheduler().runNow(towns, scheduledTask -> {
-      try {
-        chunkDao.createIfNotExists(chunkTable);
-      } catch (SQLException e) {
-        e.printStackTrace();
-      }
-    });
+  public void createChunkTable(ChunkTable chunkTable) {
+    synchronized (synchronizedThreadLock) {
+      Bukkit.getAsyncScheduler().runNow(towns, scheduledTask -> {
+        try {
+          chunkDao.createIfNotExists(chunkTable);
+        } catch (SQLException e) {
+          e.printStackTrace();
+        }
+      });
+    }
   }
 
-  public synchronized void createChunkAndPermissionTable(ChunkTable chunkTable, PermissionTable permissionTable) {
-    Bukkit.getAsyncScheduler().runNow(towns, scheduledTask -> {
-      try {
-        permissionDao.createIfNotExists(permissionTable);
-        chunkDao.createIfNotExists(chunkTable);
-      } catch (SQLException e) {
-        e.printStackTrace();
-      }
-    });
+  public void createChunkAndPermissionTable(ChunkTable chunkTable, PermissionTable permissionTable) {
+    synchronized (synchronizedThreadLock) {
+      Bukkit.getAsyncScheduler().runNow(towns, scheduledTask -> {
+        try {
+          permissionDao.createIfNotExists(permissionTable);
+          chunkDao.createIfNotExists(chunkTable);
+        } catch (SQLException e) {
+          e.printStackTrace();
+        }
+      });
+    }
   }
 
-  public synchronized void updateChunkTable(ChunkTable chunkTable) {
-    Bukkit.getAsyncScheduler().runNow(towns, scheduledTask -> {
-      try {
-        chunkDao.update(chunkTable);
-      } catch (SQLException e) {
-        e.printStackTrace();
-      }
-    });
+  public void updateChunkTable(ChunkTable chunkTable) {
+    synchronized (synchronizedThreadLock) {
+      Bukkit.getAsyncScheduler().runNow(towns, scheduledTask -> {
+        try {
+          chunkDao.update(chunkTable);
+        } catch (SQLException e) {
+          e.printStackTrace();
+        }
+      });
+    }
   }
 
-  public synchronized void deleteChunkTable(ChunkTable chunkTable) {
-    Bukkit.getAsyncScheduler().runNow(towns, scheduledTask -> {
-      try {
-        chunkDao.delete(chunkTable);
-      } catch (SQLException e) {
-        e.printStackTrace();
-      }
-    });
+  public void deleteChunkTable(ChunkTable chunkTable) {
+    synchronized (synchronizedThreadLock) {
+      Bukkit.getAsyncScheduler().runNow(towns, scheduledTask -> {
+        try {
+          chunkDao.delete(chunkTable);
+        } catch (SQLException e) {
+          e.printStackTrace();
+        }
+      });
+    }
   }
 
-  public synchronized void updatePermissionTable(PermissionTable permissionTable) {
-    Bukkit.getAsyncScheduler().runNow(towns, scheduledTask -> {
-      try {
-        permissionDao.update(permissionTable);
-      } catch (SQLException e) {
-        e.printStackTrace();
-      }
-    });
+  public void updatePermissionTable(PermissionTable permissionTable) {
+    synchronized (synchronizedThreadLock) {
+      Bukkit.getAsyncScheduler().runNow(towns, scheduledTask -> {
+        try {
+          permissionDao.update(permissionTable);
+        } catch (SQLException e) {
+          e.printStackTrace();
+        }
+      });
+    }
   }
 
-  public synchronized void createPermissionTable(PermissionTable permissionTable) {
-    Bukkit.getAsyncScheduler().runNow(towns, scheduledTask -> {
-      try {
-        permissionDao.createIfNotExists(permissionTable);
-      } catch (SQLException e) {
-        e.printStackTrace();
-      }
-    });
+  public void createPermissionTable(PermissionTable permissionTable) {
+    synchronized (synchronizedThreadLock) {
+      Bukkit.getAsyncScheduler().runNow(towns, scheduledTask -> {
+        try {
+          permissionDao.createIfNotExists(permissionTable);
+        } catch (SQLException e) {
+          e.printStackTrace();
+        }
+      });
+    }
   }
 
-  public synchronized void createTownAndPermissionTable(TownsTable townsTable, PermissionTable permissionTable) {
-    Bukkit.getAsyncScheduler().runNow(towns, scheduledTask -> {
-      try {
-        permissionDao.createIfNotExists(permissionTable);
-        townsDao.createIfNotExists(townsTable);
-      } catch (SQLException e) {
-        e.printStackTrace();
-      }
-    });
+  public void createTownAndPermissionTable(TownsTable townsTable, PermissionTable permissionTable) {
+    synchronized (synchronizedThreadLock) {
+      Bukkit.getAsyncScheduler().runNow(towns, scheduledTask -> {
+        try {
+          permissionDao.createIfNotExists(permissionTable);
+          townsDao.createIfNotExists(townsTable);
+        } catch (SQLException e) {
+          e.printStackTrace();
+        }
+      });
+    }
   }
 
-  public synchronized void deletePermissionTable(PermissionTable permissionTable) {
-    Bukkit.getAsyncScheduler().runNow(towns, scheduledTask -> {
-      try {
-        permissionDao.delete(permissionTable);
-      } catch (SQLException e) {
-        e.printStackTrace();
-      }
-    });
+  public void deletePermissionTable(PermissionTable permissionTable) {
+    synchronized (synchronizedThreadLock) {
+      Bukkit.getAsyncScheduler().runNow(towns, scheduledTask -> {
+        try {
+          permissionDao.delete(permissionTable);
+        } catch (SQLException e) {
+          e.printStackTrace();
+        }
+      });
+    }
   }
 
-  public synchronized void createBankTable(BankTable bankTable) {
-    Bukkit.getAsyncScheduler().runNow(towns, scheduledTask -> {
-      try {
-        bankDao.createIfNotExists(bankTable);
-      } catch (SQLException e) {
-        e.printStackTrace();
-      }
-    });
+  public void createBankTable(BankTable bankTable) {
+    synchronized (synchronizedThreadLock) {
+      Bukkit.getAsyncScheduler().runNow(towns, scheduledTask -> {
+        try {
+          bankDao.createIfNotExists(bankTable);
+        } catch (SQLException e) {
+          e.printStackTrace();
+        }
+      });
+    }
   }
 
-  public synchronized void updateBankTable(BankTable bankTable) {
-    Bukkit.getAsyncScheduler().runNow(towns, scheduledTask -> {
-      try {
-        bankDao.update(bankTable);
-      } catch (SQLException e) {
-        e.printStackTrace();
-      }
-    });
+  public void updateBankTable(BankTable bankTable) {
+    synchronized (synchronizedThreadLock) {
+      Bukkit.getAsyncScheduler().runNow(towns, scheduledTask -> {
+        try {
+          bankDao.update(bankTable);
+        } catch (SQLException e) {
+          e.printStackTrace();
+        }
+      });
+    }
   }
 
-  public synchronized void deleteBankTable(BankTable bankTable) {
-    Bukkit.getAsyncScheduler().runNow(towns, scheduledTask -> {
-      try {
-        bankDao.delete(bankTable);
-      } catch (SQLException e) {
-        e.printStackTrace();
-      }
-    });
+  public void deleteBankTable(BankTable bankTable) {
+    synchronized (synchronizedThreadLock) {
+      Bukkit.getAsyncScheduler().runNow(towns, scheduledTask -> {
+        try {
+          bankDao.delete(bankTable);
+        } catch (SQLException e) {
+          e.printStackTrace();
+        }
+      });
+    }
   }
 
-  public synchronized void updateRentTable(RentTable rentTable) {
-    Bukkit.getAsyncScheduler().runNow(towns, scheduledTask -> {
-      try {
-        rentDao.update(rentTable);
-      } catch (SQLException e) {
-        e.printStackTrace();
-      }
-    });
+  public void updateRentTable(RentTable rentTable) {
+    synchronized (synchronizedThreadLock) {
+      Bukkit.getAsyncScheduler().runNow(towns, scheduledTask -> {
+        try {
+          rentDao.update(rentTable);
+        } catch (SQLException e) {
+          e.printStackTrace();
+        }
+      });
+    }
   }
 
-  public synchronized void createRentTable(RentTable rentTable) {
-    Bukkit.getAsyncScheduler().runNow(towns, scheduledTask -> {
-      try {
-        rentDao.createIfNotExists(rentTable);
-      } catch (SQLException e) {
-        e.printStackTrace();
-      }
-    });
+  public void createRentTable(RentTable rentTable) {
+    synchronized (synchronizedThreadLock) {
+      Bukkit.getAsyncScheduler().runNow(towns, scheduledTask -> {
+        try {
+          rentDao.createIfNotExists(rentTable);
+        } catch (SQLException e) {
+          e.printStackTrace();
+        }
+      });
+    }
   }
 
-  public synchronized void deleteRentTable(RentTable rentTable) {
-    Bukkit.getAsyncScheduler().runNow(towns, scheduledTask -> {
-      try {
-        rentDao.delete(rentTable);
-      } catch (SQLException e) {
-        e.printStackTrace();
-      }
-    });
+  public void deleteRentTable(RentTable rentTable) {
+    synchronized (synchronizedThreadLock) {
+      Bukkit.getAsyncScheduler().runNow(towns, scheduledTask -> {
+        try {
+          rentDao.delete(rentTable);
+        } catch (SQLException e) {
+          e.printStackTrace();
+        }
+      });
+    }
   }
 
-  private synchronized void createServerTable(ServerTable serverTable) {
-    Bukkit.getAsyncScheduler().runNow(towns, scheduledTask -> {
-      try {
-        serverDao.createIfNotExists(serverTable);
-      } catch (SQLException e) {
-        e.printStackTrace();
-      }
-    });
+  private void createServerTable(ServerTable serverTable) {
+    synchronized (synchronizedThreadLock) {
+      Bukkit.getAsyncScheduler().runNow(towns, scheduledTask -> {
+        try {
+          serverDao.createIfNotExists(serverTable);
+        } catch (SQLException e) {
+          e.printStackTrace();
+        }
+      });
+    }
   }
 
-  public synchronized void updateServerTable(ServerTable serverTable) {
-    Bukkit.getAsyncScheduler().runNow(towns, scheduledTask -> {
-      try {
-        serverDao.update(serverTable);
-      } catch (SQLException e) {
-        e.printStackTrace();
-      }
-    });
+  public void updateServerTable(ServerTable serverTable) {
+    synchronized (synchronizedThreadLock) {
+      Bukkit.getAsyncScheduler().runNow(towns, scheduledTask -> {
+        try {
+          serverDao.update(serverTable);
+        } catch (SQLException e) {
+          e.printStackTrace();
+        }
+      });
+    }
   }
 }
