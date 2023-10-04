@@ -57,6 +57,7 @@ public class CommandManager implements CommandExecutor {
     storeSubCommand(new TopCMD(towns));
     storeSubCommand(new FlyCMD(towns));
     storeSubCommand(new AdminCMD(towns));
+    storeSubCommand(new TaxesCMD(towns));
   }
 
   private void storeSubCommand(SubCommand subCommand) {

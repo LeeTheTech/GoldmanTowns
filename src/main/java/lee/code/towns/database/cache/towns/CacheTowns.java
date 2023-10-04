@@ -46,7 +46,6 @@ public class CacheTowns extends DatabaseHandler {
     final TownsTable townsTable = new TownsTable(uuid);
     setTownsTable(townsTable);
     createTownsDatabase(townsTable);
-    //createTownAndPermissionDatabase(townsTable, permissionTable);
   }
 
   public TownsTable getTownTable(UUID uuid) {
@@ -142,6 +141,7 @@ public class CacheTowns extends DatabaseHandler {
   }
 
   public int getMaxChunkClaims(UUID uuid) {
+    //TODO set real value
     final int defaultAmount = 1000000;
     final int size = citizenData.hasCitizens(uuid) ? citizenData.getCitizenAmount(uuid) : 0;
     return (size * 2 + defaultAmount + getBonusClaims(uuid));
@@ -225,5 +225,9 @@ public class CacheTowns extends DatabaseHandler {
     final TownsTable townsTable = getTownTable(uuid);
     townsTable.setFlying(result);
     updateTownsDatabase(townsTable);
+  }
+
+  public Set<UUID> getAllPlayers() {
+    return new HashSet<>(townsCache.keySet());
   }
 }

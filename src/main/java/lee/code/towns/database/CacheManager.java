@@ -5,6 +5,7 @@ import lee.code.playerdata.PlayerDataAPI;
 import lee.code.towns.Towns;
 import lee.code.towns.database.cache.bank.CacheBank;
 import lee.code.towns.database.cache.chunks.CacheChunks;
+import lee.code.towns.enums.GlobalValue;
 import lee.code.towns.utils.CoreUtil;
 import lee.code.towns.utils.FlagUtil;
 import lee.code.towns.database.cache.renters.CacheRenters;
@@ -17,8 +18,6 @@ import lee.code.towns.utils.ChunkUtil;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.OfflinePlayer;
-import org.bukkit.entity.Player;
 
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
@@ -130,27 +129,43 @@ public class CacheManager {
     cacheTowns.getCitizenData().removeCitizen(cacheTowns.getJoinedTownOwner(uuid), uuid);
   }
 
-  public void startRentCollectionTask() {
+  public void startCollectionTask() {
     Bukkit.getAsyncScheduler().runAtFixedRate(towns, (scheduledTask) -> {
-        if (cacheServer.getLastRentCollectionTime() < System.currentTimeMillis()) {
-          cacheServer.setLastRentCollectionTime(System.currentTimeMillis() + CoreUtil.millisecondsToMidnightPST());
-          for (UUID uuid : cacheRenters.getRenterListData().getRenterList()) {
-            double amount = 0;
-            for (String chunk : cacheRenters.getRenterListData().getChunkList(uuid)) {
-              if (!cacheRenters.isRented(chunk)) continue;
-              final double rentCost = cacheRenters.getRentPrice(chunk);
-              EcoAPI.removeBalance(uuid, rentCost);
-              cacheBank.getData().addTownBalance(cacheChunks.getChunkOwner(chunk), rentCost);
-              amount += rentCost;
-            }
-            PlayerDataAPI.sendPlayerMessageIfOnline(uuid, Lang.PREFIX.getComponent(null).append(Lang.AUTO_RENT_COLLECTION_MESSAGE.getComponent(new String[]{Lang.VALUE_FORMAT.getString(new String[]{CoreUtil.parseValue(amount)})})));
-          }
-          Bukkit.getServer().sendMessage(Lang.PREFIX.getComponent(null).append(Lang.RENT_COLLECTION_FINISHED.getComponent(null)));
+        if (cacheServer.getLastCollectionTime() < System.currentTimeMillis()) {
+          cacheServer.setLastCollectionTime(System.currentTimeMillis() + CoreUtil.millisecondsToMidnightPST());
+          startRentCollection();
+          startTaxCollection();
         }
       },
       0,
       1,
       TimeUnit.MINUTES
     );
+  }
+
+  private void startRentCollection() {
+    for (UUID uuid : cacheRenters.getRenterListData().getRenterList()) {
+      double amount = 0;
+      for (String chunk : cacheRenters.getRenterListData().getChunkList(uuid)) {
+        if (!cacheRenters.isRented(chunk)) continue;
+        final double rentCost = cacheRenters.getRentPrice(chunk);
+        EcoAPI.removeBalance(uuid, rentCost);
+        cacheBank.getData().addTownBalance(cacheChunks.getChunkOwner(chunk), rentCost);
+        amount += rentCost;
+      }
+      PlayerDataAPI.sendPlayerMessageIfOnline(uuid, Lang.PREFIX.getComponent(null).append(Lang.AUTO_RENT_COLLECTION_MESSAGE.getComponent(new String[]{Lang.VALUE_FORMAT.getString(new String[]{CoreUtil.parseValue(amount)})})));
+    }
+    Bukkit.getServer().sendMessage(Lang.PREFIX.getComponent(null).append(Lang.RENT_COLLECTION_FINISHED.getComponent(null)));
+  }
+
+  private void startTaxCollection() {
+    for (UUID playerID : cacheTowns.getAllPlayers()) {
+      if (!cacheTowns.hasTown(playerID)) continue;
+      final int claimAmount = cacheChunks.getChunkListData().getChunkClaims(playerID);
+      final double cost = claimAmount * GlobalValue.CLAIM_TAX_AMOUNT.getValue();
+      cacheBank.getData().removeTownBalance(playerID, cost);
+      PlayerDataAPI.sendPlayerMessageIfOnline(playerID, Lang.PREFIX.getComponent(null).append(Lang.AUTO_TAX_COLLECTION_MESSAGE.getComponent(new String[]{Lang.VALUE_FORMAT.getString(new String[]{CoreUtil.parseValue(cost)})})));
+    }
+    Bukkit.getServer().sendMessage(Lang.PREFIX.getComponent(null).append(Lang.TAX_COLLECTION_FINISHED.getComponent(null)));
   }
 }

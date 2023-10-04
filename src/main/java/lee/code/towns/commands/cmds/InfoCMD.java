@@ -79,7 +79,7 @@ public class InfoCMD extends SubCommand {
     lines.add(Lang.COMMAND_INFO_TOWN_CHUNKS.getComponent(new String[]{CoreUtil.parseValue(cacheChunks.getChunkListData().getChunkClaims(ownerID)), CoreUtil.parseValue(cacheTowns.getMaxChunkClaims(ownerID))}));
     lines.add(Lang.COMMAND_INFO_TOWN_BONUS_CLAIMS.getComponent(new String[]{CoreUtil.parseValue(cacheTowns.getBonusClaims(ownerID))}));
     lines.add(Lang.COMMAND_INFO_TOWN_OUTPOSTS.getComponent(new String[]{CoreUtil.parseValue(cacheChunks.getChunkOutpostData().getOutpostAmount(ownerID)), CoreUtil.parseValue(cacheChunks.getChunkOutpostData().getMaxOutpostAmount())}));
-    lines.add(Lang.COMMAND_INFO_TOWN_RENT.getComponent(new String[]{CoreUtil.parseTime(cacheServer.getNextRentCollectionTime())}));
+    lines.add(Lang.COMMAND_INFO_TOWN_RENT.getComponent(new String[]{CoreUtil.parseTime(cacheServer.getNextCollectionTime())}));
     lines.add(Component.text(""));
     lines.add(Lang.COMMAND_INFO_FOOTER.getComponent(null));
     for (Component line : lines) player.sendMessage(line);

@@ -117,7 +117,7 @@ public class DatabaseManager {
       towns.getCacheManager().getCacheServer().setServerTable(serverTable);
       createServerTable(serverTable);
     }
-    towns.getCacheManager().startRentCollectionTask();
+    towns.getCacheManager().startCollectionTask();
   }
 
   private PermissionTable queryPermChunkTable(ChunkTable chunkTable) {

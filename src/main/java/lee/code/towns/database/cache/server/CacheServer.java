@@ -16,16 +16,16 @@ public class CacheServer extends DatabaseHandler {
     this.serverTable = serverTable;
   }
 
-  public long getLastRentCollectionTime() {
-    return serverTable.getRentCollectionTime();
+  public long getLastCollectionTime() {
+    return serverTable.getCollectionTime();
   }
 
-  public long getNextRentCollectionTime() {
-    return Math.max(serverTable.getRentCollectionTime() - System.currentTimeMillis(), 0);
+  public long getNextCollectionTime() {
+    return Math.max(serverTable.getCollectionTime() - System.currentTimeMillis(), 0);
   }
 
-  public void setLastRentCollectionTime(Long time) {
-    serverTable.setRentCollectionTime(time);
+  public void setLastCollectionTime(Long time) {
+    serverTable.setCollectionTime(time);
     updateServerDatabase(serverTable);
   }
 }

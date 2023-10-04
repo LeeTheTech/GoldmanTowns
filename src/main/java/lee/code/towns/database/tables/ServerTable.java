@@ -12,10 +12,10 @@ public class ServerTable {
   @DatabaseField(generatedId = true)
   private int id;
 
-  @DatabaseField(columnName = "rent_collection_time", canBeNull = false)
-  private Long rentCollectionTime;
+  @DatabaseField(columnName = "collection_time", canBeNull = false)
+  private long collectionTime;
 
   public ServerTable() {
-    this.rentCollectionTime = 0L;
+    this.collectionTime = 0L;
   }
 }

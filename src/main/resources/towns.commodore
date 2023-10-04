@@ -112,6 +112,7 @@ towns {
     }
   }
   fly;
+  taxes;
   admin {
     bonusclaims {
       add {
