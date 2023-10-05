@@ -19,8 +19,8 @@ public enum Lang {
   DENY("&4[&c&lDeny&4]"),
   PUBLIC("&2&lPublic"),
   PRIVATE("&c&lPrivate"),
-  NEXT_PAGE_TEXT("&2&lNext &a&l>>--------"),
-  PREVIOUS_PAGE_TEXT("&a&l--------<< &2&lPrev"),
+  NEXT_PAGE_TEXT("&2&lNext &a&l>>&a--------"),
+  PREVIOUS_PAGE_TEXT("&a--------&a&l<< &2&lPrev"),
   PAGE_SPACER_TEXT(" &e| "),
   NEXT_PAGE_HOVER("&6&lNext Page"),
   PREVIOUS_PAGE_HOVER("&6&lPrevious Page"),
@@ -162,6 +162,8 @@ public enum Lang {
   COMMAND_PROFIT_TAXES("&3&lTaxes&7: {0} a day"),
   COMMAND_PROFIT_PROFIT("&3&lProfit&7: {0} a day"),
   COMMAND_PROFIT_FOOTER("&a-------------------------"),
+  COMMAND_RENT_TRUSTED_LIST_TITLE("&a------- &7[ &2&lRent Trusted &7] &a--------"),
+  COMMAND_RENT_TRUSTED_LIST_LINE("&3{0}&7. &e{1}"),
   CHAT_CHANNEL_GLOBAL_PREFIX("&a[&2G&a]"),
   CHAT_CHANNEL_GLOBAL("&2&lGlobal"),
   CHAT_CHANNEL_TOWN_PREFIX("&b[&3T&b]"),
@@ -280,7 +282,8 @@ public enum Lang {
   ERROR_ADMIN_UNCLAIM_ESTABLISHED_CHUNK("&cYou can't unclaim a town's established chunk, if you need this chunk removed use the command &e/t admin delete&c."),
   ERROR_ADMIN_UNCLAIM_NOT_CLAIMED("&cThe chunk &3{0} &cis not claimed."),
   ERROR_ADMIN_DELETE_NO_TOWN("&cThe player &6{0} &cdoes not own a town."),
-  ERROR_ADMIN_UNCLAIM_UNSAFE("&cYou can't unclaim chunk &3{0} &cbecause is would disconnect other chunks from &6{1}'s &cestablished town chunk.")
+  ERROR_ADMIN_UNCLAIM_UNSAFE("&cYou can't unclaim chunk &3{0} &cbecause is would disconnect other chunks from &6{1}'s &cestablished town chunk."),
+  ERROR_RENT_TRUST_LIST_NO_TRUSTED("&cYou currently don't have any rent trusted players."),
 
   ;
   @Getter private final String string;

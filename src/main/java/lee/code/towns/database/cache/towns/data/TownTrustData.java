@@ -66,4 +66,9 @@ public class TownTrustData {
     if (!trustedCache.containsKey(uuid)) return false;
     return trustedCache.get(uuid).contains(target);
   }
+
+  public List<UUID> getAllTrusted(UUID uuid) {
+    if (!trustedCache.containsKey(uuid)) return new ArrayList<>();
+    return new ArrayList<>(trustedCache.get(uuid));
+  }
 }
