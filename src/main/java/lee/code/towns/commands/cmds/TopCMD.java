@@ -115,7 +115,7 @@ public class TopCMD extends SubCommand {
           lines.add(Lang.COMMAND_TOP_SIZE_LINE.getComponent(new String[]{
             String.valueOf(position),
             towns.getCacheManager().getCacheTowns().getTownName(targetID),
-            CoreUtil.parseValue(sortedOwnerCitizens.get(targetID))
+            CoreUtil.parseValue(sortedOwnerCitizens.get(targetID) + 1)
           }));
           position++;
         }
