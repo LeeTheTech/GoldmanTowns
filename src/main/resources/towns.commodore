@@ -113,6 +113,13 @@ towns {
   }
   fly;
   taxes;
+  bonusclaim {
+    gift {
+      player brigadier:string single_word {
+        amount brigadier:integer;
+      }
+    }
+  }
   admin {
     bonusclaims {
       add {
