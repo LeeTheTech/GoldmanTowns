@@ -44,7 +44,7 @@ public class AutoClaimListener implements Listener {
     final UUID playerID = e.getPlayer().getUniqueId();
     final String chunk = e.getChunk();
     synchronized (CoreUtil.getSynchronizedThreadLock()) {
-      Bukkit.getScheduler().runTaskAsynchronously(towns, () -> {
+      Bukkit.getAsyncScheduler().runNow(towns, scheduledTask -> {
         final CacheManager cacheManager = towns.getCacheManager();
         final AutoClaimManager autoClaimManager = towns.getAutoClaimManager();
         if (!cacheManager.getCacheTowns().hasTownOrJoinedTown(playerID)) {

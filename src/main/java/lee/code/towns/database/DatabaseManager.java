@@ -170,7 +170,7 @@ public class DatabaseManager {
 
   public void deleteAllChunkTables(UUID uuid) {
     synchronized (synchronizedThreadLock) {
-      Bukkit.getScheduler().runTaskAsynchronously(towns, () -> {
+      Bukkit.getAsyncScheduler().runNow(towns, scheduledTask -> {
         try {
           chunkDao.executeRaw("DELETE FROM chunks WHERE owner = '" + uuid + "';");
           permissionDao.executeRaw("DELETE FROM permissions WHERE uuid = '" + uuid + "' AND permission_type = '" + PermissionType.CHUNK.name() + "';");
@@ -183,7 +183,7 @@ public class DatabaseManager {
 
   public void deleteAllRentTables(UUID uuid) {
     synchronized (synchronizedThreadLock) {
-      Bukkit.getScheduler().runTaskAsynchronously(towns, () -> {
+      Bukkit.getAsyncScheduler().runNow(towns, scheduledTask -> {
         try {
           rentDao.executeRaw("DELETE FROM renters WHERE owner = '" + uuid + "';");
         } catch (SQLException e) {
@@ -195,7 +195,7 @@ public class DatabaseManager {
 
   public void deleteAllRolePermissionTables(UUID uuid) {
     synchronized (synchronizedThreadLock) {
-      Bukkit.getScheduler().runTaskAsynchronously(towns, () -> {
+      Bukkit.getAsyncScheduler().runNow(towns, scheduledTask -> {
         try {
           permissionDao.executeRaw("DELETE FROM permissions WHERE uuid = '" + uuid + "' AND permission_type = '" + PermissionType.ROLE.name() + "';");
         } catch (SQLException e) {

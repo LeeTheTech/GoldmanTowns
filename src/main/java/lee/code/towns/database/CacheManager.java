@@ -149,6 +149,16 @@ public class CacheManager {
       for (String chunk : cacheRenters.getRenterListData().getChunkList(uuid)) {
         if (!cacheRenters.isRented(chunk)) continue;
         final double rentCost = cacheRenters.getRentPrice(chunk);
+        final double balance = EcoAPI.getBalance(uuid);
+        if (balance < rentCost) {
+          synchronized (CoreUtil.getSynchronizedThreadLock()) {
+            Bukkit.getAsyncScheduler().runNow(towns, scheduledTask -> {
+              cacheRenters.removeRenter(chunk);
+              PlayerDataAPI.sendPlayerMessageIfOnline(uuid, Lang.PREFIX.getComponent(null).append(Lang.AUTO_EVICTED_WARNING_TARGET.getComponent(new String[]{chunk})));
+              });
+            continue;
+          }
+        }
         EcoAPI.removeBalance(uuid, rentCost);
         cacheBank.getData().addTownBalance(cacheChunks.getChunkOwner(chunk), rentCost);
         amount += rentCost;

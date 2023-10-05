@@ -8,12 +8,11 @@ import lee.code.towns.commands.SubCommand;
 import lee.code.towns.commands.SubSyntax;
 import lee.code.towns.database.CacheManager;
 import lee.code.towns.enums.ChunkRenderType;
+import lee.code.towns.enums.GlobalValue;
 import lee.code.towns.lang.Lang;
 import lee.code.towns.managers.BorderParticleManager;
 import lee.code.towns.utils.ChunkUtil;
 import lee.code.towns.utils.CoreUtil;
-import org.bukkit.Bukkit;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.util.StringUtil;
@@ -96,7 +95,7 @@ public class RentCMD extends SubCommand {
           return;
         }
         final double price = Double.parseDouble(priceString);
-        final double max = 1000000;
+        final double max = GlobalValue.RENT_MAX_PRICE.getValue();
         if (price > max) {
           player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_RENT_PRICE_MAX.getComponent(new String[]{Lang.VALUE_FORMAT.getString(new String[]{CoreUtil.parseValue(max)})})));
           return;
@@ -260,7 +259,6 @@ public class RentCMD extends SubCommand {
           default -> player.sendMessage(Lang.USAGE.getComponent(new String[]{SubSyntax.COMMAND_RENT_TRUST.getString()}));
         }
       }
-
       default -> player.sendMessage(Lang.USAGE.getComponent(new String[]{getSyntax()}));
     }
   }

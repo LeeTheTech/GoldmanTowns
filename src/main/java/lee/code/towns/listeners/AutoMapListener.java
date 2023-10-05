@@ -35,6 +35,6 @@ public class AutoMapListener implements Listener {
 
   @EventHandler
   public void onAutoMap(AutoMapEvent e) {
-    Bukkit.getScheduler().runTaskAsynchronously(towns, () -> towns.getMapManager().sendMap(e.getPlayer(), false, 7));
+    Bukkit.getAsyncScheduler().runNow(towns, scheduledTask -> towns.getMapManager().sendMap(e.getPlayer(), false, 7));
   }
 }

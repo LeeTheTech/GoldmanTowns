@@ -54,7 +54,7 @@ public class FlyListener implements Listener {
     }
     player.addPotionEffect(PotionEffectType.SLOW_FALLING.createEffect(20*7, 1));
     synchronized (CoreUtil.getSynchronizedThreadLock()) {
-      Bukkit.getScheduler().runTaskAsynchronously(towns, () -> {
+      Bukkit.getAsyncScheduler().runNow(towns, scheduledTask -> {
         towns.getFlyManager().disableFlying(e.getPlayer());
         player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_FLY_OUTSIDE_OF_TOWN.getComponent(new String[]{Lang.OFF.getString()})));
       });
