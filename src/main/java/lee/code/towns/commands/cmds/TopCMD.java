@@ -53,7 +53,7 @@ public class TopCMD extends SubCommand {
   @Override
   public void perform(Player player, String[] args) {
     if (args.length < 2) {
-      player.sendMessage(Lang.PREFIX.getComponent(new String[]{getSyntax()}));
+      player.sendMessage(Lang.USAGE.getComponent(new String[]{getSyntax()}));
       return;
     }
     final CacheManager cacheManager = towns.getCacheManager();
