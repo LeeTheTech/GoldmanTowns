@@ -1,6 +1,7 @@
 package lee.code.towns.managers;
 
 import lee.code.colors.ColorAPI;
+import lee.code.playerdata.PlayerDataAPI;
 import lee.code.towns.Towns;
 import lee.code.towns.database.CacheManager;
 import lee.code.towns.enums.ChatChannel;
@@ -10,10 +11,13 @@ import lee.code.towns.utils.ChatVariableUtil;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextReplacementConfig;
 import net.kyori.adventure.text.event.ClickEvent;
+import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class ChatChannelManager {
@@ -27,6 +31,7 @@ public class ChatChannelManager {
   private final Pattern rolePattern = Pattern.compile("\\{role\\}");
   private final Pattern itemInHandPattern = Pattern.compile("\\[item\\]");
   private final Pattern shopPattern = Pattern.compile("\\[shop\\]");
+  private final Pattern tagPattern = Pattern.compile("@[A-Za-z0-9_]+");
   private final ConcurrentHashMap<UUID, ChatChannel> playerChatChannels = new ConcurrentHashMap<>();
 
   public ChatChannelManager(Towns towns) {
@@ -70,6 +75,19 @@ public class ChatChannelManager {
     if (message == null) return null;
     message = message.replaceText(createTextReplacementConfig(itemInHandPattern, ChatVariableUtil.getHandItemDisplayName(player).hoverEvent(ChatVariableUtil.getHandItemInfo(player))));
     message = message.replaceText(createTextReplacementConfig(shopPattern, ChatVariableUtil.getShopInfo(player)));
+
+    final String tempMessage = PlainTextComponentSerializer.plainText().serialize(message);
+    final Matcher matcher = tagPattern.matcher(tempMessage);
+
+    while (matcher.find()) {
+      final String group = matcher.group();
+      final String target = group.substring(1);
+      final Player targetPlayer = PlayerDataAPI.getOnlinePlayer(target);
+      if (targetPlayer == null) continue;
+      final String mention = ColorAPI.getColorChar(targetPlayer.getUniqueId()) + group;
+      targetPlayer.playSound(targetPlayer, Sound.BLOCK_NOTE_BLOCK_PLING, (float) 0.3, (float) 1);
+      message = message.replaceText(createTextReplacementConfig(Pattern.compile(matcher.group()), CoreUtil.parseColorComponent(mention)));
+    }
     return message;
   }
 
