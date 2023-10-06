@@ -6,7 +6,7 @@ import lee.code.towns.database.CacheManager;
 import lee.code.towns.enums.ChatChannel;
 import lee.code.towns.lang.Lang;
 import lee.code.towns.utils.CoreUtil;
-import lee.code.towns.utils.ItemUtil;
+import lee.code.towns.utils.ChatVariableUtil;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextReplacementConfig;
 import net.kyori.adventure.text.event.ClickEvent;
@@ -26,6 +26,7 @@ public class ChatChannelManager {
   private final Pattern channelPattern = Pattern.compile("\\{channel\\}");
   private final Pattern rolePattern = Pattern.compile("\\{role\\}");
   private final Pattern itemInHandPattern = Pattern.compile("\\[item\\]");
+  private final Pattern shopPattern = Pattern.compile("\\[shop\\]");
   private final ConcurrentHashMap<UUID, ChatChannel> playerChatChannels = new ConcurrentHashMap<>();
 
   public ChatChannelManager(Towns towns) {
@@ -67,7 +68,8 @@ public class ChatChannelManager {
 
   private Component parseMessageVariables(Player player, Component message) {
     if (message == null) return null;
-    message = message.replaceText(createTextReplacementConfig(itemInHandPattern, ItemUtil.getHandItemDisplayName(player).hoverEvent(ItemUtil.getHandItemInfo(player))));
+    message = message.replaceText(createTextReplacementConfig(itemInHandPattern, ChatVariableUtil.getHandItemDisplayName(player).hoverEvent(ChatVariableUtil.getHandItemInfo(player))));
+    message = message.replaceText(createTextReplacementConfig(shopPattern, ChatVariableUtil.getShopInfo(player)));
     return message;
   }
 
