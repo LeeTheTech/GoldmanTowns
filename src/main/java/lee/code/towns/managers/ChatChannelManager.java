@@ -86,7 +86,7 @@ public class ChatChannelManager {
       if (targetPlayer == null) continue;
       final String mention = ColorAPI.getColorChar(targetPlayer.getUniqueId()) + group;
       targetPlayer.playSound(targetPlayer, Sound.BLOCK_NOTE_BLOCK_PLING, (float) 0.3, (float) 1);
-      message = message.replaceText(createTextReplacementConfig(Pattern.compile(matcher.group()), CoreUtil.parseColorComponent(mention)));
+      message = message.replaceText(createTextReplacementConfig(Pattern.compile(group), CoreUtil.parseColorComponent(mention)));
     }
     return message;
   }
