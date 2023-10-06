@@ -75,7 +75,7 @@ public class ChatChannelManager {
     if (message == null) return null;
     message = message.replaceText(createTextReplacementConfig(itemInHandPattern, ChatVariableUtil.getHandItemDisplayName(player).hoverEvent(ChatVariableUtil.getHandItemInfo(player))));
     message = message.replaceText(createTextReplacementConfig(shopPattern, ChatVariableUtil.getShopInfo(player)));
-
+    if (!getChatChannel(player.getUniqueId()).equals(ChatChannel.GLOBAL)) return message;
     final String tempMessage = PlainTextComponentSerializer.plainText().serialize(message);
     final Matcher matcher = tagPattern.matcher(tempMessage);
 
