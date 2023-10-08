@@ -5,6 +5,7 @@ import lee.code.towns.lang.Lang;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
 import org.bukkit.Material;
+import org.bukkit.Statistic;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -66,7 +67,7 @@ public class ChatVariableUtil {
   public static Component getHandItemDisplayName(Player player) {
     final ItemStack itemStack = player.getInventory().getItemInMainHand();
     final ItemMeta itemMeta = itemStack.getItemMeta();
-    if (itemMeta.hasDisplayName()) {
+    if (itemMeta != null && itemMeta.hasDisplayName()) {
       return CoreUtil.parseColorComponent("&6[").append(Objects.requireNonNull(itemMeta.displayName())).append(CoreUtil.parseColorComponent("&6]"));
     } else {
       return CoreUtil.parseColorComponent("&6[").append(CoreUtil.parseColorComponent(getItemNameColor(itemStack) + CoreUtil.capitalize(itemStack.getType().name()))).append(CoreUtil.parseColorComponent("&6]"));
@@ -104,5 +105,17 @@ public class ChatVariableUtil {
     return CoreUtil.parseColorComponent(shop)
       .clickEvent(ClickEvent.clickEvent(ClickEvent.Action.RUN_COMMAND, "/shop spawn " + player.getName()))
       .hoverEvent(CoreUtil.parseColorComponent(shopInfo));
+  }
+
+  public static Component getPlaytime(Player player) {
+    final long secondsPlayed = player.getStatistic(Statistic.PLAY_ONE_MINUTE) / 20;
+    final long millisecondsPlayed = secondsPlayed * 1000;
+    return CoreUtil.parseColorComponent(CoreUtil.parseTime(millisecondsPlayed));
+  }
+
+  public static Component getKD(Player player) {
+    final int kills = player.getStatistic(Statistic.PLAYER_KILLS);
+    final int deaths = player.getStatistic(Statistic.DEATHS);
+    return null;
   }
 }
