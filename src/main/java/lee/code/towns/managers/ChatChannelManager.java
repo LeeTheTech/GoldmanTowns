@@ -30,6 +30,7 @@ public class ChatChannelManager {
   private final Pattern channelPattern = Pattern.compile("\\{channel\\}");
   private final Pattern rolePattern = Pattern.compile("\\{role\\}");
   private final Pattern playtimePattern = Pattern.compile("\\{playtime\\}");
+  private final Pattern kdrPattern = Pattern.compile("\\{kdr\\}");
   private final Pattern itemInHandPattern = Pattern.compile("\\[item\\]");
   private final Pattern shopPattern = Pattern.compile("\\[shop\\]");
   private final Pattern tagPattern = Pattern.compile("@[A-Za-z0-9_]+");
@@ -69,6 +70,7 @@ public class ChatChannelManager {
     chatFormat = chatFormat.replaceText(createTextReplacementConfig(channelPattern, getChatChannelPrefix(uuid)));
     chatFormat = chatFormat.replaceText(createTextReplacementConfig(rolePattern, CoreUtil.parseColorComponent(cacheManager.getCacheTowns().getTargetTownRole(uuid))));
     chatFormat = chatFormat.replaceText(createTextReplacementConfig(playtimePattern, ChatVariableUtil.getPlaytime(player)));
+    chatFormat = chatFormat.replaceText(createTextReplacementConfig(kdrPattern, ChatVariableUtil.getKD(player)));
     chatFormat = chatFormat.replaceText(createTextReplacementConfig(messagePattern, parseMessageVariables(player, message)));
     return chatFormat;
   }
