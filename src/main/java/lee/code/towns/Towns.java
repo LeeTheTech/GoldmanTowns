@@ -17,6 +17,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.io.IOException;
 
 public class Towns extends JavaPlugin {
+  @Getter private static Towns instance;
   @Getter private CacheManager cacheManager;
   @Getter private CommandManager commandManager;
   @Getter private ChatChannelManager chatChannelManager;
@@ -32,6 +33,7 @@ public class Towns extends JavaPlugin {
 
   @Override
   public void onEnable() {
+    instance = this;
     this.borderParticleManager = new BorderParticleManager(this);
     this.autoClaimManager = new AutoClaimManager();
     this.mapManager = new MapManager(this);

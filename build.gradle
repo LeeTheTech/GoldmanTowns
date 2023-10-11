@@ -1,10 +1,22 @@
 plugins {
   id 'java'
   id 'com.github.johnrengelman.shadow' version '7.1.2'
+  id 'maven-publish'
 }
 
 group 'lee.code.towns'
 version '1.0.0'
+
+publishing {
+  publications {
+    mavenJava(MavenPublication) {
+      groupId = group
+      artifactId = 'towns'
+      version = '1.0.0'
+      from components.java
+    }
+  }
+}
 
 repositories {
   mavenCentral()
