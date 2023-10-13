@@ -37,7 +37,7 @@ towns {
   map;
   public;
   rent {
-    price {
+    setprice {
         value brigadier:double;
     }
     remove;
@@ -60,6 +60,7 @@ towns {
           page brigadier:integer;
         }
     }
+    cost;
   }
   role {
     set {

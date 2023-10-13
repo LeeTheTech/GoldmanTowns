@@ -163,6 +163,7 @@ public enum Lang {
   COMMAND_PROFIT_TAXES("&3&lTaxes&7: {0} a day"),
   COMMAND_PROFIT_PROFIT("&3&lProfit&7: {0} a day"),
   COMMAND_PROFIT_FOOTER("&a-------------------------"),
+  COMMAND_RENT_COST_SUCCESS("&aYour daily total rent cost is&7: &6{0}"),
   COMMAND_RENT_TRUSTED_LIST_TITLE("&a------- &7[ &2&lRent Trusted &7] &a--------"),
   COMMAND_RENT_TRUSTED_LIST_LINE("&3{0}&7. &e{1}"),
   CHAT_CHANNEL_GLOBAL_PREFIX("&a[&2G&a]"),
@@ -288,6 +289,7 @@ public enum Lang {
   ERROR_ADMIN_DELETE_NO_TOWN("&cThe player &6{0} &cdoes not own a town."),
   ERROR_ADMIN_UNCLAIM_UNSAFE("&cYou can't unclaim chunk &3{0} &cbecause is would disconnect other chunks from &6{1}'s &cestablished town chunk."),
   ERROR_RENT_TRUST_LIST_NO_TRUSTED("&cYou currently don't have any rent trusted players."),
+  ERROR_RENT_COST_OWNER("&cThis command is only for citizens in your town."),
 
   ;
   @Getter private final String string;

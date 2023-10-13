@@ -122,4 +122,11 @@ public class CacheRenters extends DatabaseHandler {
   public boolean isPlayerRenting(UUID uuid, String chunk) {
     return getRentTable(chunk).getRenter().equals(uuid);
   }
+
+  public double getTotalRentCost(UUID uuid) {
+    if (!getRenterListData().hasRentedChunks(uuid)) return 0;
+    double total = 0;
+    for (String chunk : getRenterListData().getChunkList(uuid)) total += getRentPrice(chunk);
+    return total;
+  }
 }

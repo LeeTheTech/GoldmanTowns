@@ -7,7 +7,6 @@ import lee.code.towns.Towns;
 import lee.code.towns.commands.SubCommand;
 import lee.code.towns.commands.SubSyntax;
 import lee.code.towns.database.CacheManager;
-import lee.code.towns.database.cache.towns.data.TownCitizenData;
 import lee.code.towns.enums.ChunkRenderType;
 import lee.code.towns.enums.GlobalValue;
 import lee.code.towns.lang.Lang;
@@ -76,7 +75,7 @@ public class RentCMD extends SubCommand {
     }
 
     switch (option) {
-      case "price" -> {
+      case "setprice" -> {
         if (args.length < 3) {
           player.sendMessage(Lang.USAGE.getComponent(new String[] {SubSyntax.COMMAND_RENT_PRICE.getString()}));
           return;
@@ -316,6 +315,19 @@ public class RentCMD extends SubCommand {
           }
           default -> player.sendMessage(Lang.USAGE.getComponent(new String[]{SubSyntax.COMMAND_RENT_TRUST.getString()}));
         }
+      }
+      case "cost" -> {
+        if (!cacheManager.getCacheTowns().hasTownOrJoinedTown(playerID)) {
+          player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_NO_TOWN.getComponent(null)));
+          return;
+        }
+        if (cacheManager.getCacheTowns().hasTown(playerID)) {
+          player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_RENT_COST_OWNER.getComponent(null)));
+          return;
+        }
+        player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_RENT_COST_SUCCESS.getComponent(new String[]{
+          Lang.VALUE_FORMAT.getString(new String[]{CoreUtil.parseValue(cacheManager.getCacheRenters().getTotalRentCost(playerID))})
+        })));
       }
       default -> player.sendMessage(Lang.USAGE.getComponent(new String[]{getSyntax()}));
     }
