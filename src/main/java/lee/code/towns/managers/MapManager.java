@@ -47,7 +47,7 @@ public class MapManager {
 
   public void sendMap(Player player, boolean sendKey, int gridSize) {
     final CacheManager cacheManager = towns.getCacheManager();
-    final UUID uuid = player.getUniqueId();
+    final UUID playerID = player.getUniqueId();
     final Chunk chunk = player.getLocation().getChunk();
     final String chunkString = ChunkUtil.serializeChunkLocation(chunk);
     final int playerChunkX = chunk.getX();
@@ -89,8 +89,8 @@ public class MapManager {
         if (isClaimed) {
           if (!color.equals(NamedTextColor.BLUE)) color = NamedTextColor.RED;
           final UUID owner = cacheManager.getCacheChunks().getChunkOwner(targetChunkString);
-          final boolean isCitizen = cacheManager.getCacheTowns().getCitizenData().isCitizen(owner, uuid);
-          final boolean isOwner = cacheManager.getCacheChunks().isChunkOwner(targetChunkString, uuid);
+          final boolean isCitizen = cacheManager.getCacheTowns().getCitizenData().isCitizen(owner, playerID);
+          final boolean isOwner = cacheManager.getCacheChunks().isChunkOwner(targetChunkString, playerID);
           info.append(Lang.COMMAND_MAP_CHUNK_HOVER_TOWN.getString(new String[]{cacheManager.getChunkTownName(targetChunkString)}));
           info.append(Lang.COMMAND_MAP_CHUNK_HOVER_TOWN_OWNER.getString(new String[]{cacheManager.getChunkTownOwnerName(targetChunkString)}));
           if (isOwner) {
@@ -100,11 +100,15 @@ public class MapManager {
             if (!color.equals(NamedTextColor.BLUE)) color = NamedTextColor.GREEN;
           }
           if (cacheManager.getCacheRenters().isRented(targetChunkString)) {
-            info.append(Lang.COMMAND_MAP_CHUNK_HOVER_RENTED.getString(new String[]{ColorAPI.getNameColor(cacheManager.getCacheRenters().getRenter(targetChunkString), cacheManager.getCacheRenters().getRenterName(targetChunkString))}));
+            final UUID renterID = cacheManager.getCacheRenters().getRenter(targetChunkString);
+            info.append(Lang.COMMAND_MAP_CHUNK_HOVER_RENTED.getString(new String[]{ColorAPI.getNameColor(renterID, cacheManager.getCacheRenters().getRenterName(targetChunkString))}));
             info.append(Lang.COMMAND_MAP_CHUNK_HOVER_RENT_COST.getString(new String[]{Lang.VALUE_FORMAT.getString(new String[]{CoreUtil.parseValue(cacheManager.getCacheRenters().getRentPrice(targetChunkString))})}));
+            if (!color.equals(NamedTextColor.BLUE) && renterID.equals(playerID)) color = NamedTextColor.DARK_GREEN;
           }
           if (cacheManager.getCacheRenters().isRentable(targetChunkString)) {
             info.append(Lang.COMMAND_MAP_CHUNK_HOVER_RENT_COST.getString(new String[]{Lang.VALUE_FORMAT.getString(new String[]{CoreUtil.parseValue(cacheManager.getCacheRenters().getRentPrice(targetChunkString))})}));
+            final UUID townOwner = cacheManager.getCacheTowns().getTargetTownOwner(playerID);
+            if (!color.equals(NamedTextColor.BLUE) && owner.equals(townOwner)) color = NamedTextColor.YELLOW;
           }
           if (cacheManager.getCacheChunks().isOutpostChunk(targetChunkString)) {
             info.append(Lang.COMMAND_MAP_CHUNK_HOVER_OUTPOST.getString(null));

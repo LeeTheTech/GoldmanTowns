@@ -56,7 +56,7 @@ public enum Lang {
   COMMAND_MAP_SPACER("&a----------------------------------"),
   COMMAND_MAP_LINE_1("    &e\\ {0}&lN &e/  &6&lYOU&7: &9■ &6&lOWNER&7: &2■ &6&lWILD&7: &7■"),
   COMMAND_MAP_LINE_2("    {0}&lW &6&l• {1}&lE  &6&lCITIZEN&7: &a■ &6&lCLAIMED&7: &c■"),
-  COMMAND_MAP_LINE_3("    &e/ {0}&lS &e\\"),
+  COMMAND_MAP_LINE_3("    &e/ {0}&lS &e\\        &6&lRENTABLE&7: &e■"),
   COMMAND_MAP_CHUNK_HOVER_CHUNK("&3&lChunk&7: &e{0}"),
   COMMAND_MAP_CHUNK_HOVER_TOWN("\n&3&lTown Name&7: &e{0}"),
   COMMAND_MAP_CHUNK_HOVER_TOWN_OWNER("\n&3&lTown Mayor&7: &e{0}"),
