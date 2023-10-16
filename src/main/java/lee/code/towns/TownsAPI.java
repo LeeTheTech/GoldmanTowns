@@ -12,4 +12,7 @@ public class TownsAPI {
     return !Towns.getInstance().getCacheManager().checkPlayerLocationFlag(uuid, ChunkUtil.serializeChunkLocation(chunk), Flag.INTERACT, true);
   }
 
+  public static boolean isClaimed(Chunk chunk) {
+    return Towns.getInstance().getCacheManager().getCacheChunks().isClaimed(ChunkUtil.serializeChunkLocation(chunk));
+  }
 }
