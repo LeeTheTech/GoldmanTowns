@@ -8,7 +8,7 @@ depend: [GoldmanEconomy, GoldmanColors, GoldmanPlayerData]
 commands:
   towns:
     description: Main towns command.
-    permission: towns.command.use
+    permission: towns.command.towns
     aliases: [t]
   tc:
     description: Toggle through chat channels.
