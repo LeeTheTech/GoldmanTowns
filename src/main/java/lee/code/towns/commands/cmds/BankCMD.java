@@ -38,7 +38,7 @@ public class BankCMD extends SubCommand {
 
   @Override
   public String getPermission() {
-    return "towns.command.balance";
+    return "towns.command.bank";
   }
 
   @Override
