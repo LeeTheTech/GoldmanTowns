@@ -14,6 +14,8 @@ public enum Lang {
   OFF("&c&lOFF"),
   TRUE("&2true"),
   FALSE("&cfalse"),
+  LINK("&b[&3Link&b]"),
+  LINK_HOVER("&bClick to open web link!"),
   ACCEPT("&2[&a&lAccept&2]"),
   CONFIRM("&2[&a&lConfirm&2]"),
   DENY("&4[&c&lDeny&4]"),
