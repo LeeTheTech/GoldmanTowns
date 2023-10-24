@@ -5,6 +5,7 @@ import lee.code.towns.Towns;
 import lee.code.towns.database.CacheManager;
 import lee.code.towns.enums.BorderType;
 import lee.code.towns.enums.ChunkRenderType;
+import lee.code.towns.lang.Lang;
 import lee.code.towns.utils.ChunkUtil;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
@@ -36,6 +37,12 @@ public class BorderParticleManager {
       final World world = Bukkit.getWorld(parts[0]);
       final int chunkX = Integer.parseInt(parts[1]);
       final int chunkZ = Integer.parseInt(parts[2]);
+
+      if (player.getWorld() != world) {
+        player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_BORDER_CHANGE_WORLD.getComponent(new String[]{Lang.OFF.getString()})));
+        stopBorder(player.getUniqueId());
+        return;
+      }
 
       final Location chunkLocation = new Location(world, (chunkX << 4) + 8, playerY, (chunkZ << 4) + 8);
       final double distance = player.getLocation().distance(chunkLocation) / 16;

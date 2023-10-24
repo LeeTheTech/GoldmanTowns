@@ -68,12 +68,12 @@ public class BorderCMD extends SubCommand {
         }
         if (borderParticleManager.hasBorderActive(playerID)) borderParticleManager.stopBorder(playerID);
         borderParticleManager.scheduleBorder(player, BorderType.valueOf(option.toUpperCase()));
-        player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_BORDER_SUCCESS.getComponent(new String[]{option})));
+        player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_BORDER_SUCCESS.getComponent(new String[]{option, Lang.ON.getString()})));
       }
       case "chunk" -> {
         if (borderParticleManager.hasBorderActive(playerID)) borderParticleManager.stopBorder(playerID);
         borderParticleManager.scheduleBorder(player, BorderType.valueOf(option.toUpperCase()));
-        player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_BORDER_SUCCESS.getComponent(new String[]{option})));
+        player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_BORDER_SUCCESS.getComponent(new String[]{option, Lang.ON.getString()})));
       }
       case "rented" -> {
         if (!cacheManager.getCacheRenters().getRenterListData().hasRentedChunks(playerID)) {
@@ -82,11 +82,11 @@ public class BorderCMD extends SubCommand {
         }
         if (borderParticleManager.hasBorderActive(playerID)) borderParticleManager.stopBorder(playerID);
         borderParticleManager.scheduleBorder(player, BorderType.valueOf(option.toUpperCase()));
-        player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_BORDER_SUCCESS.getComponent(new String[]{option})));
+        player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_BORDER_SUCCESS.getComponent(new String[]{option, Lang.ON.getString()})));
       }
       case "off" -> {
         if (borderParticleManager.hasBorderActive(playerID)) borderParticleManager.stopBorder(playerID);
-        player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_BORDER_OFF_SUCCESS.getComponent(new String[]{Lang.OFF.getString(null)})));
+        player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_BORDER_OFF_SUCCESS.getComponent(new String[]{Lang.OFF.getString()})));
       }
       default -> player.sendMessage(Lang.USAGE.getComponent(new String[]{getSyntax()}));
     }
