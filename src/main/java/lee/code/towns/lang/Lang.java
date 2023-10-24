@@ -274,7 +274,6 @@ public enum Lang {
   ERROR_VALUE_INVALID("&cThe input &3{0} &cis not an acceptable value."),
   ERROR_TOWN_OWNER_LEAVE("&cYou are the owner of the town, if you want to leave you'll need to abandon the town."),
   ERROR_BORDER_NONE_RENTED("&cYou currently don't have any rented chunks."),
-  ERROR_BORDER_CHANGE_WORLD("&cTown border has been toggled {0} &cdue to changing worlds."),
   ERROR_NO_PLAYER_DATA("&cCould not find any player data for &6{0}&c."),
   ERROR_AUTO_CLAIM_AUTO_MAPPING("&cYou can't turn on auto claim while auto mapping is on."),
   ERROR_KICK_NOT_CITIZEN("&cThe player &6{0} &cis not a citizen so they can not be kicked."),

@@ -38,11 +38,7 @@ public class BorderParticleManager {
       final int chunkX = Integer.parseInt(parts[1]);
       final int chunkZ = Integer.parseInt(parts[2]);
 
-      if (player.getWorld() != world) {
-        player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_BORDER_CHANGE_WORLD.getComponent(new String[]{Lang.OFF.getString()})));
-        stopBorder(player.getUniqueId());
-        return;
-      }
+      if (player.getWorld() != world) continue;
 
       final Location chunkLocation = new Location(world, (chunkX << 4) + 8, playerY, (chunkZ << 4) + 8);
       final double distance = player.getLocation().distance(chunkLocation) / 16;
