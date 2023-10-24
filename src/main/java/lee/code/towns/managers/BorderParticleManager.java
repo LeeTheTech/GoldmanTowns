@@ -5,7 +5,6 @@ import lee.code.towns.Towns;
 import lee.code.towns.database.CacheManager;
 import lee.code.towns.enums.BorderType;
 import lee.code.towns.enums.ChunkRenderType;
-import lee.code.towns.lang.Lang;
 import lee.code.towns.utils.ChunkUtil;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
