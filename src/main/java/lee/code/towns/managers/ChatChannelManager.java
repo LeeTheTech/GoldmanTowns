@@ -34,7 +34,7 @@ public class ChatChannelManager {
   private final Pattern itemInHandPattern = Pattern.compile("\\[item\\]");
   private final Pattern shopPattern = Pattern.compile("\\[shop\\]");
   private final Pattern tagPattern = Pattern.compile("@[A-Za-z0-9_]+");
-  private final Pattern linkPattern = Pattern.compile("https?://[A-Za-z0-9\\-\\._~:/?\\[#\\]@!$&'\\(\\)*\\+,;=%]+");
+  private final Pattern linkPattern = Pattern.compile("https?://[A-Za-z0-9\\-\\._~:/?\\[\\]@!$&'()*+,;=%#]+");
   private final ConcurrentHashMap<UUID, ChatChannel> playerChatChannels = new ConcurrentHashMap<>();
 
   public ChatChannelManager(Towns towns) {
@@ -97,7 +97,7 @@ public class ChatChannelManager {
     final Matcher matcherLink = linkPattern.matcher(tempMessage);
     while (matcherLink.find()) {
       final String group = matcherLink.group();
-      message = message.replaceText(createTextReplacementConfig(Pattern.compile(group), Lang.LINK.getComponent(null).hoverEvent(Lang.LINK_HOVER.getComponent(null)).clickEvent(ClickEvent.clickEvent(ClickEvent.Action.OPEN_URL, group))));
+      message = message.replaceText(createTextReplacementConfig(Pattern.compile(group, Pattern.LITERAL), Lang.LINK.getComponent(null).hoverEvent(Lang.LINK_HOVER.getComponent(null)).clickEvent(ClickEvent.clickEvent(ClickEvent.Action.OPEN_URL, group))));
     }
     return message;
   }
