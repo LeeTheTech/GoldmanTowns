@@ -1,5 +1,6 @@
 package lee.code.towns.utils;
 
+import com.destroystokyo.paper.profile.PlayerProfile;
 import lee.code.colors.ColorAPI;
 import lee.code.towns.lang.Lang;
 import net.kyori.adventure.text.Component;
@@ -11,6 +12,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.SkullMeta;
 
 import java.util.Map;
 import java.util.Objects;
@@ -27,8 +29,20 @@ public class ChatVariableUtil {
       return CoreUtil.parseColorComponent(itemInfo.toString());
     }
     //name
-    if (itemMeta.hasDisplayName()) itemInfo.append(itemMeta.getDisplayName()).append("\n");
-    else itemInfo.append(getItemNameColor(itemStack)).append(CoreUtil.capitalize(itemStack.getType().name())).append("\n");
+    if (itemStack.getType().equals(Material.PLAYER_HEAD) && !itemMeta.hasDisplayName()) {
+      final SkullMeta skull = (SkullMeta) itemMeta;
+      final PlayerProfile playerProfile = skull.getPlayerProfile();
+      if (playerProfile != null) {
+        final String name = playerProfile.getName();
+        itemInfo.append("&e").append(name).append("'s Head").append("\n");
+      } else {
+        itemInfo.append(getItemNameColor(itemStack)).append(CoreUtil.capitalize(itemStack.getType().name())).append("\n");
+      }
+    } else if (itemMeta.hasDisplayName()) {
+      itemInfo.append(itemMeta.getDisplayName()).append("\n");
+    } else {
+      itemInfo.append(getItemNameColor(itemStack)).append(CoreUtil.capitalize(itemStack.getType().name())).append("\n");
+    }
     //lore
     if (itemMeta.hasLore()) {
       for (String lore : Objects.requireNonNull(itemMeta.getLore())) {
@@ -67,11 +81,20 @@ public class ChatVariableUtil {
   public static Component getHandItemDisplayName(Player player) {
     final ItemStack itemStack = player.getInventory().getItemInMainHand();
     final ItemMeta itemMeta = itemStack.getItemMeta();
-    if (itemMeta != null && itemMeta.hasDisplayName()) {
-      return CoreUtil.parseColorComponent("&6[").append(Objects.requireNonNull(itemMeta.displayName())).append(CoreUtil.parseColorComponent("&6]"));
-    } else {
-      return CoreUtil.parseColorComponent("&6[").append(CoreUtil.parseColorComponent(getItemNameColor(itemStack) + CoreUtil.capitalize(itemStack.getType().name()))).append(CoreUtil.parseColorComponent("&6]"));
+    if (itemMeta != null) {
+      if (itemStack.getType().equals(Material.PLAYER_HEAD) && !itemMeta.hasDisplayName()) {
+        final SkullMeta skull = (SkullMeta) itemMeta;
+        final PlayerProfile playerProfile = skull.getPlayerProfile();
+        if (playerProfile != null) {
+          final String name = playerProfile.getName();
+          return CoreUtil.parseColorComponent("&6[").append(CoreUtil.parseColorComponent("&e" + name + "'s Head")).append(CoreUtil.parseColorComponent("&6]"));
+        }
+      }
+      if (itemMeta.hasDisplayName()) {
+        return CoreUtil.parseColorComponent("&6[").append(Objects.requireNonNull(itemMeta.displayName())).append(CoreUtil.parseColorComponent("&6]"));
+      }
     }
+    return CoreUtil.parseColorComponent("&6[").append(CoreUtil.parseColorComponent(getItemNameColor(itemStack) + CoreUtil.capitalize(itemStack.getType().name()))).append(CoreUtil.parseColorComponent("&6]"));
   }
 
   public static String getItemNameColor(ItemStack itemStack) {
