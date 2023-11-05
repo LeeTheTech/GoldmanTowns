@@ -26,6 +26,7 @@ public class OwnerListData {
   }
 
   public Set<String> getChunkList(UUID uuid) {
+    if (!rentChunkListCache.containsKey(uuid)) return ConcurrentHashMap.newKeySet();
     return rentChunkListCache.get(uuid);
   }
 
