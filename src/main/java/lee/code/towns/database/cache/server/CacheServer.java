@@ -24,7 +24,7 @@ public class CacheServer extends DatabaseHandler {
     return Math.max(serverTable.getCollectionTime() - System.currentTimeMillis(), 0);
   }
 
-  public void setLastCollectionTime(Long time) {
+  public void setLastCollectionTime(long time) {
     serverTable.setCollectionTime(time);
     updateServerDatabase(serverTable);
   }

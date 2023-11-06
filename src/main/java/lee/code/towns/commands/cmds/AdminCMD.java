@@ -149,6 +149,10 @@ public class AdminCMD extends SubCommand {
         cacheManager.deleteTown(targetID);
         sender.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_ADMIN_DELETE_SUCCESS.getComponent(new String[]{ColorAPI.getNameColor(targetID, targetString)})));
       }
+      case "collect" -> {
+        cacheManager.getCacheServer().setLastCollectionTime(0);
+        sender.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_ADMIN_COLLECT_SUCCESS.getComponent(null)));
+      }
       default -> sender.sendMessage(Lang.USAGE.getComponent(new String[]{SubSyntax.COMMAND_ADMIN_DELETE_SYNTAX.getString()}));
     }
   }

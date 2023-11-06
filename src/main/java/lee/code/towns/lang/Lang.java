@@ -134,6 +134,7 @@ public enum Lang {
   COMMAND_SET_BANNER_SUCCESS("&aYou successfully set your town's banner!"),
   COMMAND_ADMIN_UNCLAIM_SUCCESS("&aYou successfully unclaimed the chunk &3{0}&a!"),
   COMMAND_ADMIN_DELETE_SUCCESS("&aYou successfully deleted {0}'s &atown."),
+  COMMAND_ADMIN_COLLECT_SUCCESS("&aThe collect time has been set to now, it will begin shortly."),
   COMMAND_KICK_HOVER_CONFIRM("&aKick &6{0} &afrom town!"),
   COMMAND_KICK_HOVER_DENY("&cDeny kicking &6{0} &cfrom town."),
   COMMAND_KICK_WARNING("&aDo you want to kick &6{0} &afrom your town?"),

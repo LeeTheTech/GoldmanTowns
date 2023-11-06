@@ -16,6 +16,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
 import java.text.DecimalFormat;
+import java.time.Duration;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
@@ -172,16 +175,15 @@ public class CoreUtil {
   }
 
   public static long millisecondsToMidnightPST() {
-    final Calendar losAngelesCalendar = Calendar.getInstance(TimeZone.getTimeZone("America/Los_Angeles"));
-    losAngelesCalendar.set(Calendar.HOUR_OF_DAY, 0);
-    losAngelesCalendar.set(Calendar.MINUTE, 0);
-    losAngelesCalendar.set(Calendar.SECOND, 0);
-    losAngelesCalendar.set(Calendar.MILLISECOND, 0);
-
-    final long currentTime = System.currentTimeMillis();
-    final long midnightPST = losAngelesCalendar.getTimeInMillis();
-    long millisecondsRemaining = midnightPST - currentTime;
-    if (millisecondsRemaining < 0) millisecondsRemaining += 24 * 60 * 60 * 1000;
-    return millisecondsRemaining;
+    final ZoneId losAngelesZone = ZoneId.of("America/Los_Angeles");
+    final ZonedDateTime now = ZonedDateTime.now(losAngelesZone);
+    final ZonedDateTime midnightPST = now
+      .withHour(0)
+      .withMinute(0)
+      .withSecond(0)
+      .withNano(0)
+      .plusDays(1);
+    final Duration duration = Duration.between(now, midnightPST);
+    return duration.toMillis();
   }
 }
