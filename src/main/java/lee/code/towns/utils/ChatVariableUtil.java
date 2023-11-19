@@ -139,7 +139,7 @@ public class ChatVariableUtil {
   public static Component getKD(Player player) {
     final double kills = player.getStatistic(Statistic.PLAYER_KILLS);
     final double deaths = player.getStatistic(Statistic.DEATHS);
-    final double kdr = kills / deaths;
-    return Lang.KILL_DEATH_RATIO.getComponent(new String[]{String.valueOf(kdr)});
+    final double kdr = (deaths != 0) ? kills / deaths : 0;
+    return Lang.KILL_DEATH_RATIO.getComponent(new String[]{CoreUtil.parseStatValue(kdr)});
   }
 }

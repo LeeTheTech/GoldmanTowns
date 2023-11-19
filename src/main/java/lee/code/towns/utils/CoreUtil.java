@@ -26,6 +26,7 @@ import java.util.stream.Collectors;
 
 public class CoreUtil {
   @Getter private final static Object synchronizedThreadLock = new Object();
+  private final static DecimalFormat statFormatter = new DecimalFormat("#.##");
   private final static DecimalFormat amountFormatter = new DecimalFormat("#,###.##");
   private final static Pattern numberDoublePattern = Pattern.compile("^(?=.*[1-9])(\\d*\\.?\\d*)$");
   private final static Pattern numberIntPattern = Pattern.compile("^[1-9]\\d*$");
@@ -33,6 +34,11 @@ public class CoreUtil {
   public static String parseValue(int value) {
     if (value == 0) return "0";
     return amountFormatter.format(value);
+  }
+
+  public static String parseStatValue(double value) {
+    if (value == 0) return "0";
+    return statFormatter.format(value);
   }
 
   public static String parseValue(double value) {
