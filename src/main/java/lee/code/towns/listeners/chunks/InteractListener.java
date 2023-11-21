@@ -60,6 +60,10 @@ public class InteractListener implements Listener {
     final String chunk = ChunkUtil.serializeChunkLocation(e.getLocation().getChunk());
     final boolean result = cacheManager.checkPlayerLocationFlag(e.getPlayer().getUniqueId(), chunk, Flag.INTERACT, true);
     e.setCancelled(result);
-    if (result && !(e.getBlock().getState() instanceof Sign)) FlagUtil.sendFlagErrorMessage(e.getPlayer(), Flag.INTERACT, cacheManager.getChunkTownName(chunk), cacheManager.getCacheRenters().getRenter(chunk), cacheManager.getCacheRenters().getRenterName(chunk));
+    if (result) {
+      if (e.getBlock() == null || !(e.getBlock().getState() instanceof Sign)) {
+        FlagUtil.sendFlagErrorMessage(e.getPlayer(), Flag.INTERACT, cacheManager.getChunkTownName(chunk), cacheManager.getCacheRenters().getRenter(chunk), cacheManager.getCacheRenters().getRenterName(chunk));
+      }
+    }
   }
 }
