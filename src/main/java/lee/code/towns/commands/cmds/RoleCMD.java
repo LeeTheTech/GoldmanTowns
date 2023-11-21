@@ -101,6 +101,10 @@ public class RoleCMD extends SubCommand {
           return;
         }
         final String role = CoreUtil.removeSpecialCharacters(CoreUtil.buildStringFromArgs(args, 2));
+        if (role.isBlank()) {
+          player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_ROLE_CREATE_BLANK.getComponent(new String[]{cacheTowns.getRoleColorData().getRoleWithColor(ownerID, role)})));
+          return;
+        }
         final List<String> roles = cacheTowns.getRoleData().getAllRoles(ownerID);
         if (roles.contains(role)) {
           player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_ROLE_CREATE_ROLE_EXISTS.getComponent(new String[]{cacheTowns.getRoleColorData().getRoleWithColor(ownerID, role)})));

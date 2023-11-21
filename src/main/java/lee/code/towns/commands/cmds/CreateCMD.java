@@ -71,6 +71,10 @@ public class CreateCMD extends SubCommand {
       return;
     }
     final String town = CoreUtil.removeSpecialCharacters(CoreUtil.buildStringFromArgs(args, 1));
+    if (town.isBlank()) {
+      player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_CREATE_BLANK.getComponent(null)));
+      return;
+    }
     if (cacheManager.getCacheTowns().getTownNameListData().isTownName(town)) {
       player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_CREATE_ALREADY_EXIST.getComponent(new String[]{town})));
       return;
