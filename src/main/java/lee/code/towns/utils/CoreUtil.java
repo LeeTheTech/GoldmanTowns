@@ -46,6 +46,11 @@ public class CoreUtil {
     return amountFormatter.format(value);
   }
 
+  public static String shortenString(String text, int max) {
+    if (text.length() > max) return text.substring(0, max);
+    else return text;
+  }
+
   public static Component parseColorComponent(String text) {
     final LegacyComponentSerializer serializer = LegacyComponentSerializer.legacyAmpersand();
     return (Component.empty().decoration(TextDecoration.ITALIC, false)).append(serializer.deserialize(text));
