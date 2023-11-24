@@ -19,7 +19,8 @@ public class FlagUtil {
     Flag.TELEPORT,
     Flag.WITHDRAW,
     Flag.CLAIM,
-    Flag.UNCLAIM
+    Flag.UNCLAIM,
+    Flag.PVE
   )));
 
   public static void setPermissionFlag(PermissionTable permissionTable, Flag flag, boolean result) {

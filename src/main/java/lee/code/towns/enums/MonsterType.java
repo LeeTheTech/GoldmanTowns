@@ -30,7 +30,10 @@ public enum MonsterType {
   GIANT(EntityType.GIANT),
   STRIDER(EntityType.STRIDER),
   ILLUSIONER(EntityType.ILLUSIONER),
-  WARDEN(EntityType.WARDEN)
+  WARDEN(EntityType.WARDEN),
+  SPIDER(EntityType.SPIDER),
+  CAVE_SPIDER(EntityType.CAVE_SPIDER),
+  STRAY(EntityType.STRAY)
 
   ;
 

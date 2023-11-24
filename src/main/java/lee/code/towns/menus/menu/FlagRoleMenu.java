@@ -36,12 +36,13 @@ public class FlagRoleMenu extends MenuGUI {
     addButton(11, createFlagButton(player, FlagMenuItem.BUILD));
     addButton(12, createFlagButton(player, FlagMenuItem.INTERACT));
     addButton(13, createFlagButton(player, FlagMenuItem.TELEPORT));
-    addButton(14, createFlagButton(player, FlagMenuItem.INVITE));
+    addButton(14, createFlagButton(player, FlagMenuItem.PVE));
     addButton(15, createFlagButton(player, FlagMenuItem.CHANGE_CHUNK_FLAGS));
     addButton(16, createFlagButton(player, FlagMenuItem.CHANGE_GLOBAL_FLAGS));
+    addButton(20, createFlagButton(player, FlagMenuItem.INVITE));
     addButton(21, createFlagButton(player, FlagMenuItem.WITHDRAW));
-    addButton(22, createFlagButton(player, FlagMenuItem.CLAIM));
-    addButton(23, createFlagButton(player, FlagMenuItem.UNCLAIM));
+    addButton(23, createFlagButton(player, FlagMenuItem.CLAIM));
+    addButton(24, createFlagButton(player, FlagMenuItem.UNCLAIM));
     addButton(40, backButton(player));
     super.decorate(player);
   }

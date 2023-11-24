@@ -32,7 +32,7 @@ public class ExplosionListener implements Listener {
   }
 
   @EventHandler
-  public void onEntityExplodeListener(EntityChangeBlockEvent e) {
+  public void onEntityChangeListener(EntityChangeBlockEvent e) {
     if (e.getEntity() instanceof Wither || e.getEntity() instanceof EnderDragon) {
       final ExplosionEvent explosionEvent = new ExplosionEvent(e.getBlock().getLocation());
       Bukkit.getServer().getPluginManager().callEvent(explosionEvent);

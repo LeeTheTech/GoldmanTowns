@@ -8,6 +8,9 @@ import lee.code.towns.utils.ChunkUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.CreatureSpawnEvent;
+import org.bukkit.event.entity.EntitySpawnEvent;
+import org.bukkit.event.entity.SpawnerSpawnEvent;
 
 public class MonsterSpawningListener implements Listener {
   private final Towns towns;
@@ -17,9 +20,36 @@ public class MonsterSpawningListener implements Listener {
   }
 
   @EventHandler
-  public void onCreatureSpawnEventListener(PreCreatureSpawnEvent e) {
+  public void onPreCreatureSpawn(PreCreatureSpawnEvent e) {
     if (towns.getData().getMonsterTypes().contains(e.getType())) {
       final MobSpawningEvent mobSpawningEvent = new MobSpawningEvent(e.getSpawnLocation());
+      Bukkit.getServer().getPluginManager().callEvent(mobSpawningEvent);
+      if (mobSpawningEvent.isCancelled()) e.setCancelled(true);
+    }
+  }
+
+  @EventHandler
+  public void onCreatureSpawn(CreatureSpawnEvent e) {
+    if (towns.getData().getMonsterTypes().contains(e.getEntity().getType())) {
+      final MobSpawningEvent mobSpawningEvent = new MobSpawningEvent(e.getLocation());
+      Bukkit.getServer().getPluginManager().callEvent(mobSpawningEvent);
+      if (mobSpawningEvent.isCancelled()) e.setCancelled(true);
+    }
+  }
+
+  @EventHandler
+  public void onEntitySpawn(EntitySpawnEvent e) {
+    if (towns.getData().getMonsterTypes().contains(e.getEntity().getType())) {
+      final MobSpawningEvent mobSpawningEvent = new MobSpawningEvent(e.getLocation());
+      Bukkit.getServer().getPluginManager().callEvent(mobSpawningEvent);
+      if (mobSpawningEvent.isCancelled()) e.setCancelled(true);
+    }
+  }
+
+  @EventHandler
+  public void onSpawnerSpawn(SpawnerSpawnEvent e) {
+    if (towns.getData().getMonsterTypes().contains(e.getEntity().getType())) {
+      final MobSpawningEvent mobSpawningEvent = new MobSpawningEvent(e.getLocation());
       Bukkit.getServer().getPluginManager().callEvent(mobSpawningEvent);
       if (mobSpawningEvent.isCancelled()) e.setCancelled(true);
     }
