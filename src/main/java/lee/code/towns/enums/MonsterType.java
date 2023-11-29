@@ -33,8 +33,8 @@ public enum MonsterType {
   WARDEN(EntityType.WARDEN),
   SPIDER(EntityType.SPIDER),
   CAVE_SPIDER(EntityType.CAVE_SPIDER),
-  STRAY(EntityType.STRAY)
-
+  STRAY(EntityType.STRAY),
+  WITCH(EntityType.WITCH)
   ;
 
   @Getter private final EntityType entityType;
