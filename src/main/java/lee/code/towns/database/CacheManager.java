@@ -173,8 +173,16 @@ public class CacheManager {
       if (!cacheTowns.hasTown(playerID)) continue;
       final int claimAmount = cacheChunks.getChunkListData().getChunkClaims(playerID);
       final double cost = claimAmount * GlobalValue.CLAIM_TAX_AMOUNT.getValue();
-      cacheBank.getData().removeTownBalance(playerID, cost);
-      PlayerDataAPI.sendPlayerMessageIfOnline(playerID, Lang.PREFIX.getComponent(null).append(Lang.AUTO_TAX_COLLECTION_MESSAGE.getComponent(new String[]{Lang.VALUE_FORMAT.getString(new String[]{CoreUtil.parseValue(cost)})})));
+      final double townBank = cacheBank.getData().getTownBalance(playerID);
+      if (cost > townBank) {
+        final double remainingBalance = cost - townBank;
+        cacheBank.getData().removeTownBalance(playerID, townBank);
+        EcoAPI.removeBalance(playerID, remainingBalance);
+        PlayerDataAPI.sendPlayerMessageIfOnline(playerID, Lang.PREFIX.getComponent(null).append(Lang.AUTO_TAX_COLLECTION_MESSAGE_MAYOR.getComponent(new String[]{Lang.VALUE_FORMAT.getString(new String[]{CoreUtil.parseValue(remainingBalance)})})));
+      } else {
+        cacheBank.getData().removeTownBalance(playerID, cost);
+        PlayerDataAPI.sendPlayerMessageIfOnline(playerID, Lang.PREFIX.getComponent(null).append(Lang.AUTO_TAX_COLLECTION_MESSAGE_BANK.getComponent(new String[]{Lang.VALUE_FORMAT.getString(new String[]{CoreUtil.parseValue(cost)})})));
+      }
     }
     Bukkit.getServer().sendMessage(Lang.PREFIX.getComponent(null).append(Lang.TAX_COLLECTION_FINISHED.getComponent(null)));
   }

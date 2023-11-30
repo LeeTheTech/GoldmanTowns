@@ -13,6 +13,7 @@ import lee.code.towns.utils.CoreUtil;
 import net.kyori.adventure.text.Component;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.util.StringUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -61,7 +62,11 @@ public class InfoCMD extends SubCommand {
     final CacheChunks cacheChunks = towns.getCacheManager().getCacheChunks();
     final CacheServer cacheServer = towns.getCacheManager().getCacheServer();
     final CacheBank cacheBank = towns.getCacheManager().getCacheBank();
-    final UUID playerID = player.getUniqueId();
+    final UUID playerID = args.length > 1 ? PlayerDataAPI.getUniqueId(args[1]) : player.getUniqueId();
+    if (playerID == null) {
+      player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_NO_PLAYER_DATA.getComponent(new String[]{args[1]})));
+      return;
+    }
     if (!cacheTowns.hasTownOrJoinedTown(playerID)) {
       player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_NO_TOWN.getComponent(null)));
       return;
@@ -70,6 +75,8 @@ public class InfoCMD extends SubCommand {
     final UUID ownerID = cacheTowns.getTargetTownOwner(playerID);
     final String status = cacheTowns.isTownPublic(ownerID) ? Lang.PUBLIC.getString() : Lang.PRIVATE.getString();
     lines.add(Lang.COMMAND_INFO_HEADER.getComponent(null));
+    lines.add(Component.text(""));
+    lines.add(Lang.COMMAND_INFO_TOWN_TARGET_PLAYER.getComponent(new String[]{ColorAPI.getNameColor(playerID, PlayerDataAPI.getName(playerID))}));
     lines.add(Component.text(""));
     lines.add(Lang.COMMAND_INFO_TOWN_PUBLIC.getComponent(new String[]{status}));
     lines.add(Lang.COMMAND_INFO_TOWN_NAME.getComponent(new String[]{cacheTowns.getTownName(ownerID)}));
@@ -96,6 +103,7 @@ public class InfoCMD extends SubCommand {
 
   @Override
   public List<String> onTabComplete(CommandSender sender, String[] args) {
+    if (args.length == 2) return StringUtil.copyPartialMatches(args[1], CoreUtil.getOnlinePlayers(), new ArrayList<>());
     return new ArrayList<>();
   }
 }

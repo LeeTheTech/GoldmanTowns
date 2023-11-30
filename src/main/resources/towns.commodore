@@ -23,7 +23,9 @@ towns {
   help {
     page brigadier:integer;
   }
-  info;
+  info {
+    player brigadier:string single_word;
+  }
   invite {
     player brigadier:string single_word {
         accept;

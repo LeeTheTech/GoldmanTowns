@@ -68,6 +68,7 @@ public class TaxesCMD extends SubCommand {
     lines.add(Lang.COMMAND_TAXES_CLAIMS.getComponent(new String[]{CoreUtil.parseValue(claims)}));
     lines.add(Lang.COMMAND_TAXES_COST.getComponent(new String[]{Lang.VALUE_FORMAT.getString(new String[]{CoreUtil.parseValue(claimTax)})}));
     lines.add(Lang.COMMAND_TAXES_TOTAL.getComponent(new String[]{Lang.VALUE_FORMAT.getString(new String[]{CoreUtil.parseValue(claims * claimTax)})}));
+    lines.add(Lang.COMMAND_TAXES_TAX_COLLECTION.getComponent(new String[]{CoreUtil.parseTime(cacheManager.getCacheServer().getNextCollectionTime())}));
     lines.add(Component.text(""));
     lines.add(Lang.COMMAND_TAXES_FOOTER.getComponent(null));
     for (Component line : lines) player.sendMessage(line);
