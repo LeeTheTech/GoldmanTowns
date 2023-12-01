@@ -125,6 +125,12 @@ public class AdminCMD extends SubCommand {
             player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_ADMIN_UNCLAIM_UNSAFE.getComponent(new String[]{chunk, ColorAPI.getNameColor(ownerID, PlayerDataAPI.getName(ownerID))})));
             return;
           }
+          if (cacheManager.getCacheRenters().isRented(chunk)) {
+            cacheManager.getCacheRenters().removeRenter(chunk);
+          }
+          if (cacheManager.getCacheRenters().isRentable(chunk)) {
+            cacheManager.getCacheRenters().deleteRentableChunk(chunk);
+          }
           cacheManager.getCacheChunks().unclaimChunk(chunk);
           player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_ADMIN_UNCLAIM_SUCCESS.getComponent(new String[]{chunk})));
           return;
