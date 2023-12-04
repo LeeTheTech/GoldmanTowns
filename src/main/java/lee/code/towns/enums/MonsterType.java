@@ -15,6 +15,7 @@ public enum MonsterType {
   PILLAGER(EntityType.PILLAGER),
   HUSK(EntityType.HUSK),
   PIGLIN(EntityType.PIGLIN),
+  ZOMBIFIED_PIGLIN(EntityType.ZOMBIFIED_PIGLIN),
   PIGLIN_BRUTE(EntityType.PIGLIN_BRUTE),
   WITHER(EntityType.WITHER),
   WITHER_SKELETON(EntityType.WITHER_SKELETON),
