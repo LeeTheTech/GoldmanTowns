@@ -9,6 +9,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.CreatureSpawnEvent;
+
 public class MonsterSpawningListener implements Listener {
   private final Towns towns;
 
@@ -20,7 +21,7 @@ public class MonsterSpawningListener implements Listener {
   public void onPreCreatureSpawn(PreCreatureSpawnEvent e) {
     if (!towns.getData().getMonsterTypes().contains(e.getType())) return;
     if (e.getReason().equals(CreatureSpawnEvent.SpawnReason.CUSTOM)) return;
-    final MobSpawningEvent mobSpawningEvent = new MobSpawningEvent(e.getSpawnLocation());
+    MobSpawningEvent mobSpawningEvent = new MobSpawningEvent(e.getSpawnLocation());
     Bukkit.getServer().getPluginManager().callEvent(mobSpawningEvent);
     if (mobSpawningEvent.isCancelled()) e.setCancelled(true);
   }
@@ -29,7 +30,7 @@ public class MonsterSpawningListener implements Listener {
   public void onCreatureSpawn(CreatureSpawnEvent e) {
     if (!towns.getData().getMonsterTypes().contains(e.getEntity().getType())) return;
     if (e.getSpawnReason().equals(CreatureSpawnEvent.SpawnReason.CUSTOM)) return;
-    final MobSpawningEvent mobSpawningEvent = new MobSpawningEvent(e.getLocation());
+    MobSpawningEvent mobSpawningEvent = new MobSpawningEvent(e.getLocation());
     Bukkit.getServer().getPluginManager().callEvent(mobSpawningEvent);
     if (mobSpawningEvent.isCancelled()) e.setCancelled(true);
   }

@@ -11,7 +11,7 @@ public class ChunkListData {
     if (playerChunkListCache.containsKey(uuid)) {
       playerChunkListCache.get(uuid).add(chunk);
     } else {
-      final Set<String> chunks = ConcurrentHashMap.newKeySet();
+      Set<String> chunks = ConcurrentHashMap.newKeySet();
       chunks.add(chunk);
       playerChunkListCache.put(uuid, chunks);
     }

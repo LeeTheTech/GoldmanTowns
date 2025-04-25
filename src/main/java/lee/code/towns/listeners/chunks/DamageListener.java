@@ -23,7 +23,7 @@ public class DamageListener implements Listener {
   public void onPlayerDamage(EntityDamageEvent e) {
     if (!(e.getEntity() instanceof Player)) return;
     if (e.getCause().equals(EntityDamageEvent.DamageCause.ENTITY_ATTACK)) return;
-    final DamageEvent damageEvent = new DamageEvent(e.getEntity().getLocation());
+    DamageEvent damageEvent = new DamageEvent(e.getEntity().getLocation());
     Bukkit.getServer().getPluginManager().callEvent(damageEvent);
     if (damageEvent.isCancelled()) e.setCancelled(true);
   }
@@ -35,7 +35,7 @@ public class DamageListener implements Listener {
       if (projectile.getShooter() instanceof Player) return;
     }
     if (towns.getData().getMonsterTypes().contains(e.getEntity().getType())) return;
-    final DamageEvent damageEvent = new DamageEvent(e.getEntity().getLocation());
+    DamageEvent damageEvent = new DamageEvent(e.getEntity().getLocation());
     Bukkit.getServer().getPluginManager().callEvent(damageEvent);
     if (damageEvent.isCancelled()) e.setCancelled(true);
   }

@@ -12,18 +12,17 @@ import java.util.concurrent.TimeUnit;
 
 public class InviteManager {
   private final Towns towns;
+  private final ConcurrentHashMap<UUID, Set<UUID>> townInvites = new ConcurrentHashMap<>();
 
   public InviteManager(Towns towns) {
     this.towns = towns;
   }
 
-  private final ConcurrentHashMap<UUID, Set<UUID>> townInvites = new ConcurrentHashMap<>();
-
   private void setInviteRequests(UUID playerID, UUID targetID) {
     if (townInvites.containsKey(playerID)) {
       townInvites.get(playerID).add(targetID);
     } else {
-      final Set<UUID> requests = ConcurrentHashMap.newKeySet();
+      Set<UUID> requests = ConcurrentHashMap.newKeySet();
       requests.add(targetID);
       townInvites.put(playerID, requests);
     }

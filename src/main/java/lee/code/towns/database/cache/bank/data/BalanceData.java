@@ -30,14 +30,14 @@ public class BalanceData {
   }
 
   public void addTownBalance(UUID uuid, double amount) {
-    final BankTable bankTable = cacheBank.getBankTable(uuid);
+    BankTable bankTable = cacheBank.getBankTable(uuid);
     getAtomicBalance(uuid).addAndGet(amount);
     bankTable.setBalance(getAtomicBalance(uuid).get());
     cacheBank.updateBankDatabase(bankTable);
   }
 
   public void removeTownBalance(UUID uuid, double amount) {
-    final BankTable bankTable = cacheBank.getBankTable(uuid);
+    BankTable bankTable = cacheBank.getBankTable(uuid);
     getAtomicBalance(uuid).updateAndGet(currentValue -> Math.max(currentValue - amount, 0));
     bankTable.setBalance(getAtomicBalance(uuid).get());
     cacheBank.updateBankDatabase(bankTable);

@@ -16,7 +16,7 @@ public class QuitListener implements Listener {
 
   @EventHandler
   public void onQuit(PlayerQuitEvent e) {
-    final UUID uuid = e.getPlayer().getUniqueId();
+    UUID uuid = e.getPlayer().getUniqueId();
     //Map Manager
     if (towns.getMapManager().isAutoMapping(uuid)) {
       towns.getMapManager().removeAutoMapping(uuid);

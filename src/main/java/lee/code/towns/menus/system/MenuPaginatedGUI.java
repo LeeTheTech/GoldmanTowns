@@ -22,7 +22,7 @@ public abstract class MenuPaginatedGUI implements InventoryHandler {
   protected int page = 0;
   protected int index = 0;
   protected final int maxItemsPerPage = 28;
-  private Inventory inventory;
+  @Getter private Inventory inventory;
   private final ItemStack fillerGlass = MenuItem.FILLER_GLASS.createItem();
   private final DelayManager delayManager = new DelayManager();
   private final Map<Integer, MenuButton> buttonMap = new HashMap<>();
@@ -34,10 +34,6 @@ public abstract class MenuPaginatedGUI implements InventoryHandler {
 
   public void setInventory() {
     this.inventory = createInventory();
-  }
-
-  public Inventory getInventory() {
-    return inventory;
   }
 
   public void clearInventory() {
@@ -77,7 +73,7 @@ public abstract class MenuPaginatedGUI implements InventoryHandler {
 
   @Override
   public void onClick(InventoryClickEvent event) {
-    final Player player = (Player) event.getWhoClicked();
+    Player player = (Player) event.getWhoClicked();
     if (player.getInventory().equals(event.getClickedInventory())) {
       if (event.getAction().equals(InventoryAction.MOVE_TO_OTHER_INVENTORY)) {
         event.setCancelled(true);
@@ -87,8 +83,8 @@ public abstract class MenuPaginatedGUI implements InventoryHandler {
     }
     event.setCancelled(true);
     if (delayManager.hasDelayOrSchedule(player.getUniqueId())) return;
-    final int slot = event.getSlot();
-    final MenuButton button = buttonMap.get(slot);
+    int slot = event.getSlot();
+    MenuButton button = buttonMap.get(slot);
     if (button != null) {
       button.getEventConsumer().accept(event);
     }

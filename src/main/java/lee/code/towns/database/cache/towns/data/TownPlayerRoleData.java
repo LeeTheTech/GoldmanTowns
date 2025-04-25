@@ -19,7 +19,7 @@ public class TownPlayerRoleData {
     if (playerRoleCache.containsKey(uuid)) {
       playerRoleCache.get(uuid).put(target, role);
     } else {
-      final ConcurrentHashMap<UUID, String> roles = new ConcurrentHashMap<>();
+      ConcurrentHashMap<UUID, String> roles = new ConcurrentHashMap<>();
       roles.put(target, role);
       playerRoleCache.put(uuid, roles);
     }
@@ -31,12 +31,12 @@ public class TownPlayerRoleData {
 
   public void cachePlayerRoles(TownsTable townsTable) {
     if (townsTable.getPlayerRoles() == null) return;
-    final String[] pairs = townsTable.getPlayerRoles().split(",");
+    String[] pairs = townsTable.getPlayerRoles().split(",");
     for (String pair : pairs) {
-      final String[] parts = pair.split("\\+");
+      String[] parts = pair.split("\\+");
       if (parts.length == 2) {
-        final String target = parts[0];
-        final String role = parts[1];
+        String target = parts[0];
+        String role = parts[1];
         setPlayerRoleCache(townsTable.getUniqueId(), UUID.fromString(target), role);
       }
     }
@@ -57,7 +57,7 @@ public class TownPlayerRoleData {
   }
 
   public void addPlayerRole(UUID uuid, UUID target, String role, boolean updateDatabase) {
-    final TownsTable townsTable = cacheTowns.getTownTable(uuid);
+    TownsTable townsTable = cacheTowns.getTownTable(uuid);
     if (townsTable.getPlayerRoles() == null) townsTable.setPlayerRoles(target + "+" + role);
     else townsTable.setPlayerRoles(townsTable.getPlayerRoles() + "," + target + "+" + role);
     setPlayerRoleCache(uuid, target, role);
@@ -65,8 +65,8 @@ public class TownPlayerRoleData {
   }
 
   public void removePlayerRole(UUID uuid, UUID target, boolean updateDatabase) {
-    final TownsTable townsTable = cacheTowns.getTownTable(uuid);
-    final Set<String> newRoles = Collections.synchronizedSet(new HashSet<>(List.of(townsTable.getPlayerRoles().split(","))));
+    TownsTable townsTable = cacheTowns.getTownTable(uuid);
+    Set<String> newRoles = Collections.synchronizedSet(new HashSet<>(List.of(townsTable.getPlayerRoles().split(","))));
     newRoles.remove(target + "+" + getPlayerRole(uuid, target));
     if (newRoles.isEmpty()) townsTable.setPlayerRoles(null);
     else townsTable.setPlayerRoles(StringUtils.join(newRoles, ","));

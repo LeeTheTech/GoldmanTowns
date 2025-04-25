@@ -53,25 +53,25 @@ public class BankCMD extends SubCommand {
 
   @Override
   public void perform(Player player, String[] args) {
-    final CacheManager cacheManager = towns.getCacheManager();
-    final UUID playerID = player.getUniqueId();
+    CacheManager cacheManager = towns.getCacheManager();
+    UUID playerID = player.getUniqueId();
     if (!cacheManager.getCacheTowns().hasTownOrJoinedTown(playerID)) {
       player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_NO_TOWN.getComponent(null)));
       return;
     }
-    final UUID ownerID = cacheManager.getCacheTowns().getTargetTownOwner(playerID);
+    UUID ownerID = cacheManager.getCacheTowns().getTargetTownOwner(playerID);
     if (args.length > 2) {
-      final String option = args[1].toLowerCase();
-      final String amountString = args[2];
+      String option = args[1].toLowerCase();
+      String amountString = args[2];
       if (!CoreUtil.isPositiveDoubleNumber(amountString)) {
         player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_VALUE_INVALID.getComponent(new String[]{amountString})));
         return;
       }
-      final double amount = Double.parseDouble(amountString);
+      double amount = Double.parseDouble(amountString);
       switch (option) {
         case "withdraw" -> {
           if (!playerID.equals(ownerID)) {
-            final String role = cacheManager.getCacheTowns().getPlayerRoleData().getPlayerRole(ownerID, playerID);
+            String role = cacheManager.getCacheTowns().getPlayerRoleData().getPlayerRole(ownerID, playerID);
             if (!cacheManager.getCacheTowns().getRoleData().checkRolePermissionFlag(ownerID, role, Flag.WITHDRAW)) {
               player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_BANK_WITHDRAW_NO_PERMISSION.getComponent(null)));
               return;

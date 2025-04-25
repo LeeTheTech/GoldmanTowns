@@ -51,13 +51,13 @@ public class BannerCMD extends SubCommand {
 
   @Override
   public void perform(Player player, String[] args) {
-    final CacheTowns cacheTowns = towns.getCacheManager().getCacheTowns();
-    final UUID playerID = player.getUniqueId();
+    CacheTowns cacheTowns = towns.getCacheManager().getCacheTowns();
+    UUID playerID = player.getUniqueId();
     if (!cacheTowns.hasTownOrJoinedTown(playerID)) {
       player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_NO_TOWN.getComponent(null)));
       return;
     }
-    final UUID ownerID = cacheTowns.getTargetTownOwner(playerID);
+    UUID ownerID = cacheTowns.getTargetTownOwner(playerID);
     if (!cacheTowns.hasBanner(ownerID)) {
       player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_BANNER_NOT_SET.getComponent(null)));
       return;

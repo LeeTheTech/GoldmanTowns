@@ -11,7 +11,7 @@ public class ChunkOutpostData {
     if (outpostCache.containsKey(uuid)) {
       outpostCache.get(uuid).add(chunk);
     } else {
-      final Set<String> chunks = ConcurrentHashMap.newKeySet();
+      Set<String> chunks = ConcurrentHashMap.newKeySet();
       chunks.add(chunk);
       outpostCache.put(uuid, chunks);
     }

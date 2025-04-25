@@ -11,7 +11,7 @@ public class OwnerListData {
     if (rentChunkListCache.containsKey(uuid)) {
       rentChunkListCache.get(uuid).add(chunk);
     } else {
-      final Set<String> chunks = ConcurrentHashMap.newKeySet();
+      Set<String> chunks = ConcurrentHashMap.newKeySet();
       chunks.add(chunk);
       rentChunkListCache.put(uuid, chunks);
     }

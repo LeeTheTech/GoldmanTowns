@@ -21,19 +21,19 @@ public class ChatVariableUtil {
 
   @SuppressWarnings("deprecation")
   public static Component getHandItemInfo(Player player) {
-    final StringBuilder itemInfo = new StringBuilder();
-    final ItemStack itemStack = player.getInventory().getItemInMainHand();
-    final ItemMeta itemMeta = itemStack.getItemMeta();
+    StringBuilder itemInfo = new StringBuilder();
+    ItemStack itemStack = player.getInventory().getItemInMainHand();
+    ItemMeta itemMeta = itemStack.getItemMeta();
     if (itemMeta == null) {
       itemInfo.append(CoreUtil.capitalize(itemStack.getType().name()));
       return CoreUtil.parseColorComponent(itemInfo.toString());
     }
     //name
     if (itemStack.getType().equals(Material.PLAYER_HEAD) && !itemMeta.hasDisplayName()) {
-      final SkullMeta skull = (SkullMeta) itemMeta;
-      final PlayerProfile playerProfile = skull.getPlayerProfile();
+      SkullMeta skull = (SkullMeta) itemMeta;
+      PlayerProfile playerProfile = skull.getPlayerProfile();
       if (playerProfile != null) {
-        final String name = playerProfile.getName();
+        String name = playerProfile.getName();
         itemInfo.append("&e").append(name).append("'s Head").append("\n");
       } else {
         itemInfo.append(getItemNameColor(itemStack)).append(CoreUtil.capitalize(itemStack.getType().name())).append("\n");
@@ -59,7 +59,7 @@ public class ChatVariableUtil {
     }
     //stored enchants
     if (itemStack.getType().equals(Material.ENCHANTED_BOOK)) {
-      final EnchantmentStorageMeta enchantmentStorageMeta = (EnchantmentStorageMeta) itemMeta;
+      EnchantmentStorageMeta enchantmentStorageMeta = (EnchantmentStorageMeta) itemMeta;
       for (Map.Entry<Enchantment, Integer> enchantmentInfo : enchantmentStorageMeta.getStoredEnchants().entrySet()) {
         itemInfo.append(getEnchantmentColor(enchantmentInfo.getKey())).append(CoreUtil.capitalize(enchantmentInfo.getKey().getKey().getKey())).append(" ").append(convertToRoman(enchantmentInfo.getValue())).append("\n");
       }
@@ -79,14 +79,14 @@ public class ChatVariableUtil {
   }
 
   public static Component getHandItemDisplayName(Player player) {
-    final ItemStack itemStack = player.getInventory().getItemInMainHand();
-    final ItemMeta itemMeta = itemStack.getItemMeta();
+    ItemStack itemStack = player.getInventory().getItemInMainHand();
+    ItemMeta itemMeta = itemStack.getItemMeta();
     if (itemMeta != null) {
       if (itemStack.getType().equals(Material.PLAYER_HEAD) && !itemMeta.hasDisplayName()) {
-        final SkullMeta skull = (SkullMeta) itemMeta;
-        final PlayerProfile playerProfile = skull.getPlayerProfile();
+        SkullMeta skull = (SkullMeta) itemMeta;
+        PlayerProfile playerProfile = skull.getPlayerProfile();
         if (playerProfile != null) {
-          final String name = playerProfile.getName();
+          String name = playerProfile.getName();
           return CoreUtil.parseColorComponent("&6[").append(CoreUtil.parseColorComponent("&e" + name + "'s Head")).append(CoreUtil.parseColorComponent("&6]"));
         }
       }
@@ -98,7 +98,7 @@ public class ChatVariableUtil {
   }
 
   public static String getItemNameColor(ItemStack itemStack) {
-    final boolean isEnchanted = itemStack.hasItemMeta() && itemStack.getItemMeta().hasEnchants();
+    boolean isEnchanted = itemStack.hasItemMeta() && itemStack.getItemMeta().hasEnchants();
     if (isEnchanted) return "&b";
     switch (itemStack.getType()) {
       case ENCHANTED_BOOK, TOTEM_OF_UNDYING, DRAGON_BREATH, HEART_OF_THE_SEA, NETHER_STAR, ELYTRA, DRAGON_HEAD, PLAYER_HEAD, ZOMBIE_HEAD, CREEPER_HEAD, PIGLIN_HEAD -> {
@@ -118,28 +118,28 @@ public class ChatVariableUtil {
 
   public static String convertToRoman(int num) {
     if (num > 10) num = 10;
-    final String[] romanNumerals = {"I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X"};
+    String[] romanNumerals = {"I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X"};
     return romanNumerals[num - 1];
   }
 
   public static Component getShopInfo(Player player) {
-    final String shop = Lang.CHAT_SHOP_VARIABLE.getString(new String[]{ColorAPI.getColorChar(player.getUniqueId())});
-    final String shopInfo = Lang.CHAT_SHOP_VARIABLE_TITLE.getString(new String[]{ColorAPI.getNameColor(player.getUniqueId(), player.getName())}) + "\n" + Lang.CHAT_SHOP_VARIABLE_INFO.getString();
+    String shop = Lang.CHAT_SHOP_VARIABLE.getString(new String[]{ColorAPI.getColorChar(player.getUniqueId())});
+    String shopInfo = Lang.CHAT_SHOP_VARIABLE_TITLE.getString(new String[]{ColorAPI.getNameColor(player.getUniqueId(), player.getName())}) + "\n" + Lang.CHAT_SHOP_VARIABLE_INFO.getString();
     return CoreUtil.parseColorComponent(shop)
       .clickEvent(ClickEvent.clickEvent(ClickEvent.Action.RUN_COMMAND, "/shop spawn " + player.getName()))
       .hoverEvent(CoreUtil.parseColorComponent(shopInfo));
   }
 
   public static Component getPlaytime(Player player) {
-    final long secondsPlayed = player.getStatistic(Statistic.PLAY_ONE_MINUTE) / 20;
-    final long millisecondsPlayed = secondsPlayed * 1000;
+    long secondsPlayed = player.getStatistic(Statistic.PLAY_ONE_MINUTE) / 20;
+    long millisecondsPlayed = secondsPlayed * 1000;
     return CoreUtil.parseColorComponent(CoreUtil.parseTime(millisecondsPlayed));
   }
 
   public static Component getKD(Player player) {
-    final double kills = player.getStatistic(Statistic.PLAYER_KILLS);
-    final double deaths = player.getStatistic(Statistic.DEATHS);
-    final double kdr = (deaths != 0) ? kills / deaths : 0;
+    double kills = player.getStatistic(Statistic.PLAYER_KILLS);
+    double deaths = player.getStatistic(Statistic.DEATHS);
+    double kdr = (deaths != 0) ? kills / deaths : 0;
     return Lang.KILL_DEATH_RATIO.getComponent(new String[]{CoreUtil.parseStatValue(kdr)});
   }
 }

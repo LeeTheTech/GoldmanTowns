@@ -13,6 +13,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @DatabaseTable(tableName = "chunks")
 public class ChunkTable {
+
   @DatabaseField(id = true, canBeNull = false)
   private String chunk;
 

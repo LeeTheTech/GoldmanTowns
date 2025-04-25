@@ -58,11 +58,11 @@ public class InfoCMD extends SubCommand {
 
   @Override
   public void perform(Player player, String[] args) {
-    final CacheTowns cacheTowns = towns.getCacheManager().getCacheTowns();
-    final CacheChunks cacheChunks = towns.getCacheManager().getCacheChunks();
-    final CacheServer cacheServer = towns.getCacheManager().getCacheServer();
-    final CacheBank cacheBank = towns.getCacheManager().getCacheBank();
-    final UUID playerID = args.length > 1 ? PlayerDataAPI.getUniqueId(args[1]) : player.getUniqueId();
+    CacheTowns cacheTowns = towns.getCacheManager().getCacheTowns();
+    CacheChunks cacheChunks = towns.getCacheManager().getCacheChunks();
+    CacheServer cacheServer = towns.getCacheManager().getCacheServer();
+    CacheBank cacheBank = towns.getCacheManager().getCacheBank();
+    UUID playerID = args.length > 1 ? PlayerDataAPI.getUniqueId(args[1]) : player.getUniqueId();
     if (playerID == null) {
       player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_NO_PLAYER_DATA.getComponent(new String[]{args[1]})));
       return;
@@ -71,9 +71,9 @@ public class InfoCMD extends SubCommand {
       player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_NO_TOWN.getComponent(null)));
       return;
     }
-    final List<Component> lines = new ArrayList<>();
-    final UUID ownerID = cacheTowns.getTargetTownOwner(playerID);
-    final String status = cacheTowns.isTownPublic(ownerID) ? Lang.PUBLIC.getString() : Lang.PRIVATE.getString();
+    List<Component> lines = new ArrayList<>();
+    UUID ownerID = cacheTowns.getTargetTownOwner(playerID);
+    String status = cacheTowns.isTownPublic(ownerID) ? Lang.PUBLIC.getString() : Lang.PRIVATE.getString();
     lines.add(Lang.COMMAND_INFO_HEADER.getComponent(null));
     lines.add(Component.text(""));
     lines.add(Lang.COMMAND_INFO_TOWN_TARGET_PLAYER.getComponent(new String[]{ColorAPI.getNameColor(playerID, PlayerDataAPI.getName(playerID))}));

@@ -24,7 +24,7 @@ public class TownCitizenData {
     if (citizenCache.containsKey(uuid)) {
       citizenCache.get(uuid).add(citizen);
     } else {
-      final Set<UUID> citizens = ConcurrentHashMap.newKeySet();
+      Set<UUID> citizens = ConcurrentHashMap.newKeySet();
       citizens.add(citizen);
       citizenCache.put(uuid, citizens);
     }
@@ -37,7 +37,7 @@ public class TownCitizenData {
 
   public void cacheCitizenPlayers(TownsTable townsTable) {
     if (townsTable.getTownCitizens() == null) return;
-    final String[] players = townsTable.getTownCitizens().split(",");
+    String[] players = townsTable.getTownCitizens().split(",");
     for (String player : players) setCitizenCache(townsTable.getUniqueId(), UUID.fromString(player));
   }
 
@@ -64,7 +64,7 @@ public class TownCitizenData {
 
   public List<String> getCitizenNames(UUID uuid) {
     if (cacheTowns.getTownTable(uuid).getTownCitizens() == null) new ArrayList<>();
-    final List<String> playerNames = new ArrayList<>();
+    List<String> playerNames = new ArrayList<>();
     for (UUID citizen : getCitizensList(uuid)) playerNames.add(PlayerDataAPI.getName(citizen));
     return playerNames;
   }
@@ -75,7 +75,7 @@ public class TownCitizenData {
   }
 
   public void addCitizen(UUID owner, UUID target) {
-    final TownsTable townsTable = cacheTowns.getTownTable(owner);
+    TownsTable townsTable = cacheTowns.getTownTable(owner);
     if (townsTable.getTownCitizens() == null) townsTable.setTownCitizens(target.toString());
     else townsTable.setTownCitizens(townsTable.getTownCitizens() + "," + target);
     setCitizenCache(owner, target);
@@ -85,8 +85,8 @@ public class TownCitizenData {
   }
 
   public void removeCitizen(UUID owner, UUID target) {
-    final TownsTable townsTable = cacheTowns.getTownTable(owner);
-    final Set<String> citizens = Collections.synchronizedSet(new HashSet<>(List.of(townsTable.getTownCitizens().split(","))));
+    TownsTable townsTable = cacheTowns.getTownTable(owner);
+    Set<String> citizens = Collections.synchronizedSet(new HashSet<>(List.of(townsTable.getTownCitizens().split(","))));
     citizens.remove(target.toString());
     if (citizens.isEmpty()) townsTable.setTownCitizens(null);
     else townsTable.setTownCitizens(StringUtils.join(citizens, ","));

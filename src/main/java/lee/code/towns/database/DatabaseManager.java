@@ -42,7 +42,7 @@ public class DatabaseManager {
   public void initialize(boolean debug) {
     if (!debug) LoggerFactory.setLogBackendFactory(LogBackendType.NULL);
     try {
-      final String databaseURL = getDatabaseURL();
+      String databaseURL = getDatabaseURL();
       connectionSource = new JdbcConnectionSource(
         databaseURL,
         "test",
@@ -64,7 +64,7 @@ public class DatabaseManager {
   }
 
   private void createOrCacheTables() throws SQLException {
-    final CacheManager cacheManager = towns.getCacheManager();
+    CacheManager cacheManager = towns.getCacheManager();
     //Permission data
     TableUtils.createTableIfNotExists(connectionSource, PermissionTable.class);
     permissionDao = DaoManager.createDao(connectionSource, PermissionTable.class);
@@ -113,7 +113,7 @@ public class DatabaseManager {
 
   private void createDefaultServerData() {
     if (towns.getCacheManager().getCacheServer().getServerTable() == null) {
-      final ServerTable serverTable = new ServerTable();
+      ServerTable serverTable = new ServerTable();
       towns.getCacheManager().getCacheServer().setServerTable(serverTable);
       createServerTable(serverTable);
     }
@@ -122,7 +122,7 @@ public class DatabaseManager {
 
   private PermissionTable queryPermChunkTable(ChunkTable chunkTable) {
     try {
-      final QueryBuilder<PermissionTable, Integer> queryBuilder = permissionDao.queryBuilder();
+      QueryBuilder<PermissionTable, Integer> queryBuilder = permissionDao.queryBuilder();
       queryBuilder.where().eq("uuid", chunkTable.getOwner())
         .and()
         .like("permission_type", PermissionType.CHUNK)
@@ -136,7 +136,7 @@ public class DatabaseManager {
 
   private List<BankTable> queryBankTownsTable(TownsTable townsTable) {
     try {
-      final QueryBuilder<BankTable, UUID> queryBuilder = bankDao.queryBuilder();
+      QueryBuilder<BankTable, UUID> queryBuilder = bankDao.queryBuilder();
       queryBuilder.where().eq("uniqueId", townsTable.getUniqueId());
       return queryBuilder.query();
     } catch (SQLException e) {
@@ -146,7 +146,7 @@ public class DatabaseManager {
 
   private List<PermissionTable> queryPermTownsTable(TownsTable townsTable) {
     try {
-      final QueryBuilder<PermissionTable, Integer> queryBuilder = permissionDao.queryBuilder();
+      QueryBuilder<PermissionTable, Integer> queryBuilder = permissionDao.queryBuilder();
       queryBuilder.where().eq("uuid", townsTable.getUniqueId())
         .and()
         .like("permission_type", PermissionType.TOWN);
@@ -158,7 +158,7 @@ public class DatabaseManager {
 
   private List<PermissionTable> queryPermTownsRoleTable(TownsTable townsTable) {
     try {
-      final QueryBuilder<PermissionTable, Integer> queryBuilder = permissionDao.queryBuilder();
+      QueryBuilder<PermissionTable, Integer> queryBuilder = permissionDao.queryBuilder();
       queryBuilder.where().eq("uuid", townsTable.getUniqueId())
         .and()
         .like("permission_type", PermissionType.ROLE);

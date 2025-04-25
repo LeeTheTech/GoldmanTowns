@@ -21,14 +21,14 @@ public class AutoMapListener implements Listener {
 
   @EventHandler
   public void onPlayerMoveListener(PlayerMoveEvent e) {
-    final MapManager mapManager = towns.getMapManager();
-    final UUID uuid = e.getPlayer().getUniqueId();
+    MapManager mapManager = towns.getMapManager();
+    UUID uuid = e.getPlayer().getUniqueId();
     if (mapManager.isAutoMapping(uuid)) {
-      final Location location = e.getTo();
-      final String chunk = ChunkUtil.serializeChunkLocation(location.getChunk());
+      Location location = e.getTo();
+      String chunk = ChunkUtil.serializeChunkLocation(location.getChunk());
       if (mapManager.getLastAutoMapChunkChecked(uuid).equals(chunk)) return;
       mapManager.setLastAutoMapChunkChecked(uuid, chunk);
-      final AutoMapEvent autoMapEvent = new AutoMapEvent(e.getPlayer(), location);
+      AutoMapEvent autoMapEvent = new AutoMapEvent(e.getPlayer(), location);
       Bukkit.getServer().getPluginManager().callEvent(autoMapEvent);
     }
   }

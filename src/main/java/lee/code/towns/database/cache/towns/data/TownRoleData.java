@@ -27,18 +27,18 @@ public class TownRoleData extends DatabaseHandler {
   }
 
   public void setRolePermissionFlag(UUID uuid, String role, Flag flag, boolean result) {
-    final PermissionTable permissionTable = getRolePermissionTable(uuid, role);
+    PermissionTable permissionTable = getRolePermissionTable(uuid, role);
     FlagUtil.setPermissionFlag(permissionTable, flag, result);
     updatePermissionDatabase(permissionTable);
   }
 
   public boolean checkRolePermissionFlag(UUID uuid, String role, Flag flag) {
-    final PermissionTable permissionTable = getRolePermissionTable(uuid, role);
+    PermissionTable permissionTable = getRolePermissionTable(uuid, role);
     return FlagUtil.checkPermissionFlag(permissionTable, flag);
   }
 
   public void createDefaultRolePermissionTable(UUID uuid) {
-    final PermissionTable permissionTable = new PermissionTable(uuid, PermissionType.ROLE);
+    PermissionTable permissionTable = new PermissionTable(uuid, PermissionType.ROLE);
     permissionTable.setRole(CoreUtil.capitalize(TownRole.CITIZEN.name()));
     setRolePermissionTable(permissionTable);
     createPermissionDatabase(permissionTable);
@@ -48,7 +48,7 @@ public class TownRoleData extends DatabaseHandler {
     if (rolePermissionCache.containsKey(permissionTable.getUniqueID())) {
       rolePermissionCache.get(permissionTable.getUniqueID()).put(permissionTable.getRole(), permissionTable);
     } else {
-      final ConcurrentHashMap<String, PermissionTable> newRolePermTable = new ConcurrentHashMap<>();
+      ConcurrentHashMap<String, PermissionTable> newRolePermTable = new ConcurrentHashMap<>();
       newRolePermTable.put(permissionTable.getRole(), permissionTable);
       rolePermissionCache.put(permissionTable.getUniqueID(), newRolePermTable);
     }
@@ -59,7 +59,7 @@ public class TownRoleData extends DatabaseHandler {
   }
 
   public void createRolePermissionData(UUID uuid, String role) {
-    final PermissionTable permissionTable = new PermissionTable(uuid, PermissionType.ROLE);
+    PermissionTable permissionTable = new PermissionTable(uuid, PermissionType.ROLE);
     permissionTable.setRole(role);
     setRolePermissionTable(permissionTable);
     createPermissionDatabase(permissionTable);
@@ -75,7 +75,7 @@ public class TownRoleData extends DatabaseHandler {
   }
 
   public List<String> getAllRolesAndMayor(UUID uuid) {
-    final List<String> roles = new ArrayList<>(Collections.list(rolePermissionCache.get(uuid).keys()));
+    List<String> roles = new ArrayList<>(Collections.list(rolePermissionCache.get(uuid).keys()));
     roles.add(CoreUtil.capitalize(TownRole.MAYOR.name()));
     return roles;
   }

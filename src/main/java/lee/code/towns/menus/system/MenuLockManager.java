@@ -20,11 +20,11 @@ public class MenuLockManager {
   }
 
   public boolean checkTownMenuLocked(Player player, String town) {
-    final Optional<Map.Entry<UUID, String>> result = townMenus.entrySet().stream()
+    Optional<Map.Entry<UUID, String>> result = townMenus.entrySet().stream()
       .filter(entry -> entry.getValue().equals(town))
       .findFirst();
     if (result.isPresent()) {
-      final UUID editorID = result.get().getKey();
+      UUID editorID = result.get().getKey();
       player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_FLAG_MANAGER_TOWN_LOCKED.getComponent(new String[]{town, ColorAPI.getNameColor(editorID, PlayerDataAPI.getName(editorID))})));
     } else {
       addTownMenuLock(player.getUniqueId(), town);
@@ -33,11 +33,11 @@ public class MenuLockManager {
   }
 
   public boolean checkChunkMenuLocked(Player player, String chunk) {
-    final Optional<Map.Entry<UUID, String>> result = chunkMenus.entrySet().stream()
+    Optional<Map.Entry<UUID, String>> result = chunkMenus.entrySet().stream()
       .filter(entry -> entry.getValue().equals(chunk))
       .findFirst();
     if (result.isPresent()) {
-      final UUID editorID = result.get().getKey();
+      UUID editorID = result.get().getKey();
       player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_FLAG_MANAGER_CHUNK_LOCKED.getComponent(new String[]{chunk, ColorAPI.getNameColor(editorID, PlayerDataAPI.getName(editorID))})));
     } else {
       addChunkMenuLock(player.getUniqueId(), chunk);

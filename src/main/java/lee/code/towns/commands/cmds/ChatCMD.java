@@ -52,13 +52,13 @@ public class ChatCMD extends SubCommand {
 
   @Override
   public void perform(Player player, String[] args) {
-    final CacheManager cacheManager = towns.getCacheManager();
-    final UUID playerID = player.getUniqueId();
+    CacheManager cacheManager = towns.getCacheManager();
+    UUID playerID = player.getUniqueId();
     if (!cacheManager.getCacheTowns().hasTown(playerID) && !cacheManager.getCacheTowns().hasJoinedTown(playerID)) {
       player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_NO_TOWN.getComponent(null)));
       return;
     }
-    final ChatChannelManager chatChannelManager = towns.getChatChannelManager();
+    ChatChannelManager chatChannelManager = towns.getChatChannelManager();
     switch (chatChannelManager.getChatChannel(playerID)) {
       case GLOBAL -> {
         chatChannelManager.setChatChannel(playerID, ChatChannel.TOWN);

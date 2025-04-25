@@ -52,10 +52,10 @@ public class ClaimCMD extends SubCommand {
 
   @Override
   public void perform(Player player, String[] args) {
-    final CacheManager cacheManager = towns.getCacheManager();
-    final BorderParticleManager borderParticleManager = towns.getBorderParticleManager();
-    final String chunk = ChunkUtil.serializeChunkLocation(player.getLocation().getChunk());
-    final UUID playerID = player.getUniqueId();
+    CacheManager cacheManager = towns.getCacheManager();
+    BorderParticleManager borderParticleManager = towns.getBorderParticleManager();
+    String chunk = ChunkUtil.serializeChunkLocation(player.getLocation().getChunk());
+    UUID playerID = player.getUniqueId();
     if (!cacheManager.getCacheTowns().hasTownOrJoinedTown(playerID)) {
       player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_NO_TOWN.getComponent(null)));
       return;
@@ -64,28 +64,28 @@ public class ClaimCMD extends SubCommand {
       player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_CLAIM_AUTO_CLAIM_ON.getComponent(new String[]{Lang.ON.getString()})));
       return;
     }
-    final UUID ownerID = cacheManager.getCacheTowns().getTargetTownOwner(playerID);
+    UUID ownerID = cacheManager.getCacheTowns().getTargetTownOwner(playerID);
     if (!playerID.equals(ownerID)) {
-      final String role = cacheManager.getCacheTowns().getPlayerRoleData().getPlayerRole(ownerID, playerID);
+      String role = cacheManager.getCacheTowns().getPlayerRoleData().getPlayerRole(ownerID, playerID);
       if (!cacheManager.getCacheTowns().getRoleData().checkRolePermissionFlag(ownerID, role, Flag.CLAIM)) {
         player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_CLAIM_NO_PERMISSION.getComponent(null)));
         return;
       }
     }
     if (cacheManager.getCacheChunks().isClaimed(chunk)) {
-      final String chunkTown = cacheManager.getCacheTowns().getTownName(cacheManager.getCacheChunks().getChunkOwner(chunk));
+      String chunkTown = cacheManager.getCacheTowns().getTownName(cacheManager.getCacheChunks().getChunkOwner(chunk));
       player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_CLAIM_ALREADY_CLAIMED.getComponent(new String[]{chunk, chunkTown})));
       return;
     }
-    final int currentChunks = cacheManager.getCacheChunks().getChunkListData().getChunkClaims(ownerID);
-    final int maxChunks = cacheManager.getCacheTowns().getMaxChunkClaims(ownerID);
+    int currentChunks = cacheManager.getCacheChunks().getChunkListData().getChunkClaims(ownerID);
+    int maxChunks = cacheManager.getCacheTowns().getMaxChunkClaims(ownerID);
     if (maxChunks < currentChunks + 1) {
       player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_CLAIM_MAX_CLAIMS.getComponent(new String[]{String.valueOf(maxChunks)})));
       return;
     }
     if (args.length > 1 && args[1].equalsIgnoreCase("outpost")) {
-      final int currentOutposts = cacheManager.getCacheChunks().getChunkOutpostData().getOutpostAmount(ownerID);
-      final int maxOutposts = cacheManager.getCacheChunks().getChunkOutpostData().getMaxOutpostAmount();
+      int currentOutposts = cacheManager.getCacheChunks().getChunkOutpostData().getOutpostAmount(ownerID);
+      int maxOutposts = cacheManager.getCacheChunks().getChunkOutpostData().getMaxOutpostAmount();
       if (maxOutposts < currentOutposts + 1) {
         player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_CLAIM_MAX_OUTPOSTS.getComponent(new String[]{String.valueOf(maxChunks)})));
         return;

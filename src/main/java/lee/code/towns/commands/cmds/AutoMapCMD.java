@@ -51,12 +51,12 @@ public class AutoMapCMD extends SubCommand {
 
   @Override
   public void perform(Player player, String[] args) {
-    final MapManager mapManager = towns.getMapManager();
-    final UUID playerID = player.getUniqueId();
-    final boolean active = mapManager.isAutoMapping(playerID);
+    MapManager mapManager = towns.getMapManager();
+    UUID playerID = player.getUniqueId();
+    boolean active = mapManager.isAutoMapping(playerID);
     if (active) mapManager.removeAutoMapping(playerID);
     else mapManager.setAutoMapping(playerID, ChunkUtil.serializeChunkLocation(player.getLocation().getChunk()));
-    final String result = active ? Lang.OFF.getString() : Lang.ON.getString();
+    String result = active ? Lang.OFF.getString() : Lang.ON.getString();
     player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_AUTO_MAP_SUCCESS.getComponent(new String[]{result})));
   }
 

@@ -58,14 +58,14 @@ public class KickCMD extends SubCommand {
       player.sendMessage(Lang.USAGE.getComponent(new String[]{getSyntax()}));
       return;
     }
-    final UUID playerID = player.getUniqueId();
-    final String targetString = args[1];
-    final UUID targetID = PlayerDataAPI.getUniqueId(targetString);
+    UUID playerID = player.getUniqueId();
+    String targetString = args[1];
+    UUID targetID = PlayerDataAPI.getUniqueId(targetString);
     if (targetID == null) {
       player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_NO_PLAYER_DATA.getComponent(new String[]{targetString})));
       return;
     }
-    final CacheManager cacheManager = towns.getCacheManager();
+    CacheManager cacheManager = towns.getCacheManager();
     if (!cacheManager.getCacheTowns().hasTown(playerID)) {
       player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_NOT_TOWN_OWNER.getComponent(null)));
       return;

@@ -53,16 +53,16 @@ public class TaxesCMD extends SubCommand {
 
   @Override
   public void perform(Player player, String[] args) {
-    final CacheManager cacheManager = towns.getCacheManager();
-    final UUID playerID = player.getUniqueId();
+    CacheManager cacheManager = towns.getCacheManager();
+    UUID playerID = player.getUniqueId();
     if (!cacheManager.getCacheTowns().hasTownOrJoinedTown(playerID)) {
       player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_NO_TOWN.getComponent(null)));
       return;
     }
-    final UUID ownerID = cacheManager.getCacheTowns().getTargetTownOwner(playerID);
-    final double claimTax = GlobalValue.CLAIM_TAX_AMOUNT.getValue();
-    final int claims = cacheManager.getCacheChunks().getChunkListData().getChunkClaims(ownerID);
-    final List<Component> lines = new ArrayList<>();
+    UUID ownerID = cacheManager.getCacheTowns().getTargetTownOwner(playerID);
+    double claimTax = GlobalValue.CLAIM_TAX_AMOUNT.getValue();
+    int claims = cacheManager.getCacheChunks().getChunkListData().getChunkClaims(ownerID);
+    List<Component> lines = new ArrayList<>();
     lines.add(Lang.COMMAND_TAXES_TITLE.getComponent(null));
     lines.add(Component.text(""));
     lines.add(Lang.COMMAND_TAXES_CLAIMS.getComponent(new String[]{CoreUtil.parseValue(claims)}));

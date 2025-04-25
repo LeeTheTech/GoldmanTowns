@@ -19,9 +19,9 @@ public class IceMeltListener implements Listener {
 
   @EventHandler
   public void onIceMeltListener(BlockFadeEvent e) {
-    final Material material = e.getBlock().getType();
+    Material material = e.getBlock().getType();
     if (!material.equals(Material.ICE) && !material.equals(Material.BLUE_ICE) && !material.equals(Material.PACKED_ICE) && !material.equals(Material.SNOW) && !material.equals(Material.POWDER_SNOW)) return;
-    final IceMeltEvent iceMeltEvent = new IceMeltEvent(e.getBlock().getLocation());
+    IceMeltEvent iceMeltEvent = new IceMeltEvent(e.getBlock().getLocation());
     Bukkit.getServer().getPluginManager().callEvent(iceMeltEvent);
     if (iceMeltEvent.isCancelled()) e.setCancelled(true);
   }

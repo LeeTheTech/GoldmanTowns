@@ -56,10 +56,10 @@ public class TeleportCMD extends SubCommand {
       player.sendMessage(Lang.USAGE.getComponent(new String[]{getSyntax()}));
       return;
     }
-    final UUID playerID = player.getUniqueId();
-    final String option = args[1].toLowerCase();
-    final String target = CoreUtil.buildStringFromArgs(args, 2);
-    final CacheManager cacheManager = towns.getCacheManager();
+    UUID playerID = player.getUniqueId();
+    String option = args[1].toLowerCase();
+    String target = CoreUtil.buildStringFromArgs(args, 2);
+    CacheManager cacheManager = towns.getCacheManager();
     switch (option) {
       case "chunk" -> {
         if (!cacheManager.getCacheChunks().isClaimed(target) || !cacheManager.getCacheTowns().hasTownOrJoinedTown(playerID)) {
@@ -77,7 +77,7 @@ public class TeleportCMD extends SubCommand {
           player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_TELEPORT_TOWN_DOES_NOT_EXIST.getComponent(new String[]{target})));
           return;
         }
-        final UUID owner = cacheManager.getCacheTowns().getTownNameListData().getTownNameOwner(target);
+        UUID owner = cacheManager.getCacheTowns().getTownNameListData().getTownNameOwner(target);
         if (!cacheManager.getCacheTowns().isTownPublic(owner)) {
           player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_TELEPORT_TOWN_PRIVATE.getComponent(new String[]{Lang.PRIVATE.getString()})));
           return;

@@ -14,6 +14,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @DatabaseTable(tableName = "permissions")
 public class PermissionTable {
+
   @DatabaseField(generatedId = true)
   private int id;
 

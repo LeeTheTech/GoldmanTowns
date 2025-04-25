@@ -46,16 +46,16 @@ public class MapManager {
   }
 
   public void sendMap(Player player, boolean sendKey, int gridSize) {
-    final CacheManager cacheManager = towns.getCacheManager();
-    final UUID playerID = player.getUniqueId();
-    final Chunk chunk = player.getLocation().getChunk();
-    final String chunkString = ChunkUtil.serializeChunkLocation(chunk);
-    final int playerChunkX = chunk.getX();
-    final int playerChunkZ = chunk.getZ();
-    final BlockFace playerDirection = CoreUtil.getPlayerFacingDirection(player);
-    final ArrayList<Component> lines = new ArrayList<>();
+    CacheManager cacheManager = towns.getCacheManager();
+    UUID playerID = player.getUniqueId();
+    Chunk chunk = player.getLocation().getChunk();
+    String chunkString = ChunkUtil.serializeChunkLocation(chunk);
+    int playerChunkX = chunk.getX();
+    int playerChunkZ = chunk.getZ();
+    BlockFace playerDirection = CoreUtil.getPlayerFacingDirection(player);
+    ArrayList<Component> lines = new ArrayList<>();
     if (sendKey) {
-      final Component spacer = Component.text("");
+      Component spacer = Component.text("");
       lines.add(Lang.COMMAND_MAP_HEADER.getComponent(null));
       lines.add(spacer);
       lines.add(Lang.COMMAND_MAP_LINE_1.getComponent(new String[]{playerDirection.equals(BlockFace.NORTH) ? "&9" : "&b"}));
@@ -69,14 +69,14 @@ public class MapManager {
     for (int z = playerChunkZ - (gridSize / 2); z <= playerChunkZ + (gridSize / 2); z++) {
       Component rowBuilder = Component.empty();
       for (int x = playerChunkX - 10; x <= playerChunkX + 10; x++) {
-        final String targetChunkString = chunk.getWorld().getName() + "," + x + "," + z;
-        final boolean isClaimed = cacheManager.getCacheChunks().isClaimed(targetChunkString);
+        String targetChunkString = chunk.getWorld().getName() + "," + x + "," + z;
+        boolean isClaimed = cacheManager.getCacheChunks().isClaimed(targetChunkString);
 
-        final StringBuilder info = new StringBuilder();
+        StringBuilder info = new StringBuilder();
         info.append(Lang.COMMAND_MAP_CHUNK_HOVER_CHUNK.getString(new String[]{targetChunkString}));
         NamedTextColor color = NamedTextColor.GRAY;
         if (chunkString.equals(targetChunkString)) {
-          final String directionArrow = switch (playerDirection) {
+          String directionArrow = switch (playerDirection) {
             case NORTH -> "↑";
             case SOUTH -> "↓";
             case WEST -> "←";
@@ -88,9 +88,9 @@ public class MapManager {
         }
         if (isClaimed) {
           if (!color.equals(NamedTextColor.BLUE)) color = NamedTextColor.RED;
-          final UUID owner = cacheManager.getCacheChunks().getChunkOwner(targetChunkString);
-          final boolean isCitizen = cacheManager.getCacheTowns().getCitizenData().isCitizen(owner, playerID);
-          final boolean isOwner = cacheManager.getCacheChunks().isChunkOwner(targetChunkString, playerID);
+          UUID owner = cacheManager.getCacheChunks().getChunkOwner(targetChunkString);
+          boolean isCitizen = cacheManager.getCacheTowns().getCitizenData().isCitizen(owner, playerID);
+          boolean isOwner = cacheManager.getCacheChunks().isChunkOwner(targetChunkString, playerID);
           info.append(Lang.COMMAND_MAP_CHUNK_HOVER_TOWN.getString(new String[]{cacheManager.getChunkTownName(targetChunkString)}));
           info.append(Lang.COMMAND_MAP_CHUNK_HOVER_TOWN_OWNER.getString(new String[]{cacheManager.getChunkTownOwnerName(targetChunkString)}));
           if (isOwner) {
@@ -100,14 +100,14 @@ public class MapManager {
             if (!color.equals(NamedTextColor.BLUE)) color = NamedTextColor.GREEN;
           }
           if (cacheManager.getCacheRenters().isRented(targetChunkString)) {
-            final UUID renterID = cacheManager.getCacheRenters().getRenter(targetChunkString);
+            UUID renterID = cacheManager.getCacheRenters().getRenter(targetChunkString);
             info.append(Lang.COMMAND_MAP_CHUNK_HOVER_RENTED.getString(new String[]{ColorAPI.getNameColor(renterID, cacheManager.getCacheRenters().getRenterName(targetChunkString))}));
             info.append(Lang.COMMAND_MAP_CHUNK_HOVER_RENT_COST.getString(new String[]{Lang.VALUE_FORMAT.getString(new String[]{CoreUtil.parseValue(cacheManager.getCacheRenters().getRentPrice(targetChunkString))})}));
             if (!color.equals(NamedTextColor.BLUE) && renterID.equals(playerID)) color = NamedTextColor.DARK_GREEN;
           }
           if (cacheManager.getCacheRenters().isRentable(targetChunkString)) {
             info.append(Lang.COMMAND_MAP_CHUNK_HOVER_RENT_COST.getString(new String[]{Lang.VALUE_FORMAT.getString(new String[]{CoreUtil.parseValue(cacheManager.getCacheRenters().getRentPrice(targetChunkString))})}));
-            final UUID townOwner = cacheManager.getCacheTowns().getTargetTownOwner(playerID);
+            UUID townOwner = cacheManager.getCacheTowns().getTargetTownOwner(playerID);
             if (!color.equals(NamedTextColor.BLUE) && owner.equals(townOwner)) color = NamedTextColor.YELLOW;
           }
           if (cacheManager.getCacheChunks().isOutpostChunk(targetChunkString)) {
@@ -119,7 +119,7 @@ public class MapManager {
         } else {
           info.append(Lang.COMMAND_MAP_CHUNK_HOVER_WILD.getString(null));
         }
-        final Component chunkSquare = Component.text("■ ").color(color)
+        Component chunkSquare = Component.text("■ ").color(color)
           .hoverEvent(CoreUtil.parseColorComponent(info.toString()))
           .clickEvent(ClickEvent.clickEvent(ClickEvent.Action.RUN_COMMAND, "/towns teleport chunk " + targetChunkString));
         rowBuilder = rowBuilder.append(chunkSquare);

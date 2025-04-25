@@ -43,7 +43,7 @@ public class CacheTowns extends DatabaseHandler {
   }
 
   public void createPlayerData(UUID uuid) {
-    final TownsTable townsTable = new TownsTable(uuid);
+    TownsTable townsTable = new TownsTable(uuid);
     setTownsTable(townsTable);
     createTownsDatabase(townsTable);
   }
@@ -78,19 +78,19 @@ public class CacheTowns extends DatabaseHandler {
   }
 
   public void setTownName(UUID uuid, String town) {
-    final TownsTable townsTable = getTownTable(uuid);
+    TownsTable townsTable = getTownTable(uuid);
     townsTable.setTown(town);
     updateTownsDatabase(townsTable);
   }
 
   public void setJoinedTown(UUID uuid, UUID townOwner) {
-    final TownsTable townsTable = getTownTable(uuid);
+    TownsTable townsTable = getTownTable(uuid);
     townsTable.setJoinedTown(townOwner);
     updateTownsDatabase(townsTable);
   }
 
   public void removeJoinedTown(UUID uuid) {
-    final TownsTable townsTable = getTownTable(uuid);
+    TownsTable townsTable = getTownTable(uuid);
     townsTable.setJoinedTown(null);
     updateTownsDatabase(townsTable);
   }
@@ -120,29 +120,29 @@ public class CacheTowns extends DatabaseHandler {
   public String getTargetTownRole(UUID target) {
     if (!hasJoinedTown(target) && !hasTown(target)) return "None";
     if (hasTown(target)) {
-      final String mayorRole = CoreUtil.capitalize(TownRole.MAYOR.name());
+      String mayorRole = CoreUtil.capitalize(TownRole.MAYOR.name());
       return roleColorData.getRoleColor(target, mayorRole) + mayorRole;
     }
-    final UUID owner = getJoinedTownOwner(target);
-    final String role = getPlayerRoleData().getPlayerRole(owner, target);
+    UUID owner = getJoinedTownOwner(target);
+    String role = getPlayerRoleData().getPlayerRole(owner, target);
     return roleColorData.getRoleColor(owner, role) + role;
   }
 
   public Location getTownSpawn(UUID uuid) {
-    final TownsTable townsTable = getTownTable(uuid);
+    TownsTable townsTable = getTownTable(uuid);
     if (townsTable.getSpawn() != null) return CoreUtil.parseLocation(townsTable.getSpawn());
     else return CoreUtil.parseLocation(getTownTable(townsTable.getJoinedTown()).getSpawn());
   }
 
   public void setTownSpawn(UUID uuid, Location location) {
-    final TownsTable townsTable = getTownTable(uuid);
+    TownsTable townsTable = getTownTable(uuid);
     townsTable.setSpawn(CoreUtil.serializeLocation(location));
     updateTownsDatabase(townsTable);
   }
 
   public int getMaxChunkClaims(UUID uuid) {
-    final int defaultAmount = 10;
-    final int size = citizenData.hasCitizens(uuid) ? citizenData.getCitizenAmount(uuid) : 0;
+    int defaultAmount = 10;
+    int size = citizenData.hasCitizens(uuid) ? citizenData.getCitizenAmount(uuid) : 0;
     return (size * 10 + defaultAmount + getBonusClaims(uuid));
   }
 
@@ -151,14 +151,14 @@ public class CacheTowns extends DatabaseHandler {
   }
 
   public void setTownPublic(UUID uuid, boolean result) {
-    final TownsTable townsTable = getTownTable(uuid);
+    TownsTable townsTable = getTownTable(uuid);
     townsTable.setTownPublic(result);
     updateTownsDatabase(townsTable);
   }
 
   public void sendTownMessage(UUID uuid, Component message) {
-    final UUID owner = getTargetTownOwner(uuid);
-    final Set<UUID> players = ConcurrentHashMap.newKeySet();
+    UUID owner = getTargetTownOwner(uuid);
+    Set<UUID> players = ConcurrentHashMap.newKeySet();
     players.addAll(citizenData.getCitizensList(owner));
     players.add(owner);
     for (UUID citizen : players) PlayerDataAPI.sendPlayerMessageIfOnline(citizen, message);
@@ -185,25 +185,25 @@ public class CacheTowns extends DatabaseHandler {
   }
 
   public void setBonusClaims(UUID uuid, int amount) {
-    final TownsTable townsTable = getTownTable(uuid);
+    TownsTable townsTable = getTownTable(uuid);
     townsTable.setBonusClaims(amount);
     updateTownsDatabase(townsTable);
   }
 
   public void addBonusClaims(UUID uuid, int amount) {
-    final TownsTable townsTable = getTownTable(uuid);
+    TownsTable townsTable = getTownTable(uuid);
     townsTable.setBonusClaims(townsTable.getBonusClaims() + amount);
     updateTownsDatabase(townsTable);
   }
 
   public void removeBonusClaims(UUID uuid, int amount) {
-    final TownsTable townsTable = getTownTable(uuid);
+    TownsTable townsTable = getTownTable(uuid);
     townsTable.setBonusClaims(Math.max(townsTable.getBonusClaims() - amount, 0));
     updateTownsDatabase(townsTable);
   }
 
   public void setBanner(UUID uuid, ItemStack banner) {
-    final TownsTable townsTable = getTownTable(uuid);
+    TownsTable townsTable = getTownTable(uuid);
     townsTable.setBanner(ItemUtil.serializeItemStack(banner));
     updateTownsDatabase(townsTable);
   }
@@ -221,7 +221,7 @@ public class CacheTowns extends DatabaseHandler {
   }
 
   public void setFlying(UUID uuid, boolean result) {
-    final TownsTable townsTable = getTownTable(uuid);
+    TownsTable townsTable = getTownTable(uuid);
     townsTable.setFlying(result);
     updateTownsDatabase(townsTable);
   }

@@ -25,10 +25,10 @@ public class ChatListener implements Listener {
   public void onAsyncPlayerChatListener(AsyncChatEvent e) {
     if (e.isCancelled()) return;
     e.setCancelled(true);
-    final CacheManager cacheManager = towns.getCacheManager();
-    final ChatChannelManager chat = towns.getChatChannelManager();
-    final Player player = e.getPlayer();
-    final UUID uuid = player.getUniqueId();
+    CacheManager cacheManager = towns.getCacheManager();
+    ChatChannelManager chat = towns.getChatChannelManager();
+    Player player = e.getPlayer();
+    UUID uuid = player.getUniqueId();
     if (chat.hasChatChannelData(uuid) && !cacheManager.getCacheTowns().hasTownOrJoinedTown(uuid)) {
       chat.setChatChannel(uuid, ChatChannel.GLOBAL);
     }

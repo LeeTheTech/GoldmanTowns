@@ -24,7 +24,7 @@ public class TeleportListener implements Listener {
   @EventHandler
   public void onPlayerTeleportListener(PlayerTeleportEvent e) {
     if (!e.getCause().equals(PlayerTeleportEvent.TeleportCause.CHORUS_FRUIT)) return;
-    final TeleportEvent teleportEvent = new TeleportEvent(e.getPlayer(), e.getTo());
+    TeleportEvent teleportEvent = new TeleportEvent(e.getPlayer(), e.getTo());
     Bukkit.getServer().getPluginManager().callEvent(teleportEvent);
     if (teleportEvent.isCancelled()) e.setCancelled(true);
   }
@@ -33,7 +33,7 @@ public class TeleportListener implements Listener {
   public void onPlayerTeleportEnderPearlListener(ProjectileHitEvent e) {
     if (e.getEntity() instanceof EnderPearl enderPearl) {
       if (e.getEntity().getShooter() instanceof Player player) {
-        final TeleportEvent teleportEvent = new TeleportEvent(player, enderPearl.getLocation());
+        TeleportEvent teleportEvent = new TeleportEvent(player, enderPearl.getLocation());
         Bukkit.getServer().getPluginManager().callEvent(teleportEvent);
         if (teleportEvent.isCancelled()) enderPearl.remove();
       }
@@ -42,9 +42,9 @@ public class TeleportListener implements Listener {
 
   @EventHandler
   public void onTeleport(TeleportEvent e) {
-    final CacheManager cacheManager = towns.getCacheManager();
-    final String chunk = ChunkUtil.serializeChunkLocation(e.getLocation().getChunk());
-    final boolean result = cacheManager.checkPlayerLocationFlag(e.getPlayer().getUniqueId(), chunk, Flag.TELEPORT, true);
+    CacheManager cacheManager = towns.getCacheManager();
+    String chunk = ChunkUtil.serializeChunkLocation(e.getLocation().getChunk());
+    boolean result = cacheManager.checkPlayerLocationFlag(e.getPlayer().getUniqueId(), chunk, Flag.TELEPORT, true);
     e.setCancelled(result);
     if (result) FlagUtil.sendFlagErrorMessage(e.getPlayer(), Flag.TELEPORT, cacheManager.getChunkTownName(chunk), cacheManager.getCacheRenters().getRenter(chunk), cacheManager.getCacheRenters().getRenterName(chunk));
   }

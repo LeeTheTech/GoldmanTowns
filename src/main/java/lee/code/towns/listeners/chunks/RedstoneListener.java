@@ -19,14 +19,14 @@ public class RedstoneListener implements Listener {
 
   @EventHandler
   public void onBlockPistonRetractListener(BlockPistonRetractEvent e) {
-    final RedstoneEvent redstoneEvent = new RedstoneEvent(e.getBlock().getLocation());
+    RedstoneEvent redstoneEvent = new RedstoneEvent(e.getBlock().getLocation());
     Bukkit.getServer().getPluginManager().callEvent(redstoneEvent);
     if (redstoneEvent.isCancelled()) e.setCancelled(true);
   }
 
   @EventHandler
   public void onBlockPistonExtendListener(BlockPistonExtendEvent e) {
-    final RedstoneEvent redstoneEvent = new RedstoneEvent(e.getBlock().getLocation());
+    RedstoneEvent redstoneEvent = new RedstoneEvent(e.getBlock().getLocation());
     Bukkit.getServer().getPluginManager().callEvent(redstoneEvent);
     if (redstoneEvent.isCancelled()) e.setCancelled(true);
   }

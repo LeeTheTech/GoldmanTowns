@@ -53,24 +53,24 @@ public class ProfitCMD extends SubCommand {
 
   @Override
   public void perform(Player player, String[] args) {
-    final CacheManager cacheManager = towns.getCacheManager();
-    final UUID playerID = player.getUniqueId();
+    CacheManager cacheManager = towns.getCacheManager();
+    UUID playerID = player.getUniqueId();
     if (!cacheManager.getCacheTowns().hasTownOrJoinedTown(playerID)) {
       player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_NO_TOWN.getComponent(null)));
       return;
     }
-    final UUID ownerID = cacheManager.getCacheTowns().getTargetTownOwner(playerID);
+    UUID ownerID = cacheManager.getCacheTowns().getTargetTownOwner(playerID);
     double rentProfit = 0;
     for (String chunk : cacheManager.getCacheRenters().getOwnerListData().getChunkList(ownerID)) {
       if (!cacheManager.getCacheRenters().isRented(chunk)) continue;
       rentProfit = rentProfit + cacheManager.getCacheRenters().getRentPrice(chunk);
     }
-    final double claimTax = GlobalValue.CLAIM_TAX_AMOUNT.getValue();
-    final int claims = cacheManager.getCacheChunks().getChunkListData().getChunkClaims(ownerID);
-    final double taxTotal = claimTax * claims;
-    final double profit = rentProfit - taxTotal;
-    final String profitColor = profit > 0 ? "&a" : "&c";
-    final List<Component> lines = new ArrayList<>();
+    double claimTax = GlobalValue.CLAIM_TAX_AMOUNT.getValue();
+    int claims = cacheManager.getCacheChunks().getChunkListData().getChunkClaims(ownerID);
+    double taxTotal = claimTax * claims;
+    double profit = rentProfit - taxTotal;
+    String profitColor = profit > 0 ? "&a" : "&c";
+    List<Component> lines = new ArrayList<>();
     lines.add(Lang.COMMAND_PROFIT_TITLE.getComponent(null));
     lines.add(Component.text(""));
     lines.add(Lang.COMMAND_PROFIT_RENT.getComponent(new String[]{"&a$" + CoreUtil.parseValue(rentProfit)}));

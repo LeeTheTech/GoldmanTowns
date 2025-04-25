@@ -24,8 +24,8 @@ import java.util.*;
 public class ItemUtil {
 
   public static ItemStack createItem(Material material, String name, String lore, int modelData, String skin) {
-    final ItemStack item = new ItemStack(material);
-    final ItemMeta itemMeta = item.getItemMeta();
+    ItemStack item = new ItemStack(material);
+    ItemMeta itemMeta = item.getItemMeta();
     if (itemMeta == null) return item;
     if (skin != null) applyHeadSkin(itemMeta, skin);
     if (lore != null) setItemLore(itemMeta, lore);
@@ -37,11 +37,11 @@ public class ItemUtil {
 
   public static void applyHeadSkin(ItemMeta itemMeta, String base64) {
     try {
-      final SkullMeta skullMeta = (SkullMeta) itemMeta;
-      final GameProfile profile = new GameProfile(UUID.fromString("ffffffff-ffff-ffff-ffff-ffffffffffff"), "null");
+      SkullMeta skullMeta = (SkullMeta) itemMeta;
+      GameProfile profile = new GameProfile(UUID.fromString("ffffffff-ffff-ffff-ffff-ffffffffffff"), "null");
       profile.getProperties().put("textures", new Property("textures", base64));
       if (skullMeta != null) {
-        final Method mtd = skullMeta.getClass().getDeclaredMethod("setProfile", GameProfile.class);
+        Method mtd = skullMeta.getClass().getDeclaredMethod("setProfile", GameProfile.class);
         mtd.setAccessible(true);
         mtd.invoke(skullMeta, profile);
       }
@@ -52,14 +52,14 @@ public class ItemUtil {
 
   public static void setItemLore(ItemMeta itemMeta, String lore) {
     if (itemMeta == null) return;
-    final String[] split = StringUtils.split(lore, "\n");
-    final List<Component> pLines = new ArrayList<>();
+    String[] split = StringUtils.split(lore, "\n");
+    List<Component> pLines = new ArrayList<>();
     for (String line : split) pLines.add(CoreUtil.parseColorComponent(line));
     itemMeta.lore(pLines);
   }
 
   public static void hideItemFlags(ItemStack itemStack) {
-    final ItemMeta itemMeta = itemStack.getItemMeta();
+    ItemMeta itemMeta = itemStack.getItemMeta();
     if (itemMeta == null) return;
     itemMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
     itemMeta.addItemFlags(ItemFlag.HIDE_DYE);
@@ -69,7 +69,7 @@ public class ItemUtil {
   }
 
   public static void enchantItem(ItemStack itemStack, Enchantment enchantment, int level) {
-    final ItemMeta itemMeta = itemStack.getItemMeta();
+    ItemMeta itemMeta = itemStack.getItemMeta();
     if (itemMeta == null) return;
     itemMeta.addEnchant(enchantment, level, false);
     itemStack.setItemMeta(itemMeta);
@@ -77,11 +77,11 @@ public class ItemUtil {
 
   public static String serializeItemStack(ItemStack item) {
     try {
-      final ByteArrayOutputStream io = new ByteArrayOutputStream();
-      final BukkitObjectOutputStream os = new BukkitObjectOutputStream(io);
+      ByteArrayOutputStream io = new ByteArrayOutputStream();
+      BukkitObjectOutputStream os = new BukkitObjectOutputStream(io);
       os.writeObject(item);
       os.flush();
-      final byte[] serializedObject = io.toByteArray();
+      byte[] serializedObject = io.toByteArray();
       return Base64.getEncoder().encodeToString(serializedObject);
     } catch (IOException e) {
       e.printStackTrace();
@@ -91,9 +91,9 @@ public class ItemUtil {
 
   public static ItemStack parseItemStack(String serializedItemStack) {
     try {
-      final byte[] serializedObject = Base64.getDecoder().decode(serializedItemStack);
-      final ByteArrayInputStream in = new ByteArrayInputStream(serializedObject);
-      final BukkitObjectInputStream is = new BukkitObjectInputStream(in);
+      byte[] serializedObject = Base64.getDecoder().decode(serializedItemStack);
+      ByteArrayInputStream in = new ByteArrayInputStream(serializedObject);
+      BukkitObjectInputStream is = new BukkitObjectInputStream(in);
       return (ItemStack) is.readObject();
     } catch (IOException | ClassNotFoundException e) {
       e.printStackTrace();
@@ -104,7 +104,7 @@ public class ItemUtil {
   public static int getFreeSpace(Player player, ItemStack item) {
     int freeSpaceCount = 0;
     for (int slot = 0; slot <= 35; slot++) {
-      final ItemStack slotItem = player.getInventory().getItem(slot);
+      ItemStack slotItem = player.getInventory().getItem(slot);
       if (slotItem == null || slotItem.getType() == Material.AIR) {
         freeSpaceCount += item.getMaxStackSize();
       } else if (slotItem.isSimilar(item))

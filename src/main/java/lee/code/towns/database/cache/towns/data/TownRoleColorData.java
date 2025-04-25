@@ -21,7 +21,7 @@ public class TownRoleColorData {
     if (roleColorCache.containsKey(uuid)) {
       roleColorCache.get(uuid).put(role, color);
     } else {
-      final ConcurrentHashMap<String, String> roles = new ConcurrentHashMap<>();
+      ConcurrentHashMap<String, String> roles = new ConcurrentHashMap<>();
       roles.put(role, color);
       roleColorCache.put(uuid, roles);
     }
@@ -33,12 +33,12 @@ public class TownRoleColorData {
 
   public void cacheRoleColors(TownsTable townsTable) {
     if (townsTable.getRoleColors() == null) return;
-    final String[] pairs = townsTable.getRoleColors().split(",");
+    String[] pairs = townsTable.getRoleColors().split(",");
     for (String pair : pairs) {
-      final String[] parts = pair.split("\\+");
+      String[] parts = pair.split("\\+");
       if (parts.length == 2) {
-        final String role = parts[0];
-        final String color = parts[1];
+        String role = parts[0];
+        String color = parts[1];
         setRoleColorCache(townsTable.getUniqueId(), role, color);
       }
     }
@@ -63,7 +63,7 @@ public class TownRoleColorData {
   }
 
   public void addRoleColor(UUID uuid, String role, String color, boolean updateDatabase) {
-    final TownsTable townsTable = cacheTowns.getTownTable(uuid);
+    TownsTable townsTable = cacheTowns.getTownTable(uuid);
     if (townsTable.getRoleColors() == null) townsTable.setRoleColors(role + "+" + color);
     else townsTable.setRoleColors(townsTable.getRoleColors() + "," + role + "+" + color);
     setRoleColorCache(uuid, role, color);
@@ -71,8 +71,8 @@ public class TownRoleColorData {
   }
 
   public void removeRoleColor(UUID uuid, String role, boolean updateDatabase) {
-    final TownsTable townsTable = cacheTowns.getTownTable(uuid);
-    final Set<String> roleColors = Collections.synchronizedSet(new HashSet<>(List.of(townsTable.getRoleColors().split(","))));
+    TownsTable townsTable = cacheTowns.getTownTable(uuid);
+    Set<String> roleColors = Collections.synchronizedSet(new HashSet<>(List.of(townsTable.getRoleColors().split(","))));
     roleColors.remove(role + "+" + getRoleColor(uuid, role));
     if (roleColors.isEmpty()) townsTable.setRoleColors(null);
     else townsTable.setRoleColors(StringUtils.join(roleColors, ","));

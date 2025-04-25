@@ -42,7 +42,7 @@ public class CacheBank extends DatabaseHandler {
   }
 
   public void createBankData(UUID uuid) {
-    final BankTable bankTable = new BankTable(uuid);
+    BankTable bankTable = new BankTable(uuid);
     setBankTable(bankTable);
     createBankDatabase(bankTable);
   }

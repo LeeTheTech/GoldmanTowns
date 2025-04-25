@@ -27,7 +27,7 @@ public enum MenuItem {
   @Getter private final MenuRout menuRout;
 
   public ItemStack createItem() {
-    final ItemStack item = ItemUtil.createItem(material, name, lore, 0, skin);
+    ItemStack item = ItemUtil.createItem(material, name, lore, 0, skin);
     if (hideItemFlags) ItemUtil.hideItemFlags(item);
     if (enchantItem) ItemUtil.enchantItem(item, Enchantment.ARROW_INFINITE, 1);
     return item;

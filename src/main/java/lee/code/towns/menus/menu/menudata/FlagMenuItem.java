@@ -36,8 +36,8 @@ public enum FlagMenuItem {
   @Getter private final Flag flag;
 
   public ItemStack createItem(boolean result) {
-    final Material material = result ? Material.LIME_STAINED_GLASS_PANE : Material.RED_STAINED_GLASS_PANE;
-    final String enabled = result ? Lang.TRUE.getString() : Lang.FALSE.getString();
+    Material material = result ? Material.LIME_STAINED_GLASS_PANE : Material.RED_STAINED_GLASS_PANE;
+    String enabled = result ? Lang.TRUE.getString() : Lang.FALSE.getString();
     return ItemUtil.createItem(material, name, lore + "\n \n" + Lang.MENU_FLAG.getString(new String[]{enabled}), 0, null);
   }
 }

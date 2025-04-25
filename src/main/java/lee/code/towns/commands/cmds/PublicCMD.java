@@ -50,15 +50,15 @@ public class PublicCMD extends SubCommand {
 
   @Override
   public void perform(Player player, String[] args) {
-    final CacheManager cacheManager = towns.getCacheManager();
-    final UUID playerID = player.getUniqueId();
+    CacheManager cacheManager = towns.getCacheManager();
+    UUID playerID = player.getUniqueId();
     if (!cacheManager.getCacheTowns().hasTown(playerID)) {
       player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_NOT_TOWN_OWNER.getComponent(null)));
       return;
     }
-    final boolean result = !cacheManager.getCacheTowns().isTownPublic(playerID);
+    boolean result = !cacheManager.getCacheTowns().isTownPublic(playerID);
     cacheManager.getCacheTowns().setTownPublic(playerID, result);
-    final String status = result ? Lang.PUBLIC.getString() : Lang.PRIVATE.getString();
+    String status = result ? Lang.PUBLIC.getString() : Lang.PRIVATE.getString();
     player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_PUBLIC_SUCCESS.getComponent(new String[]{status})));
   }
 

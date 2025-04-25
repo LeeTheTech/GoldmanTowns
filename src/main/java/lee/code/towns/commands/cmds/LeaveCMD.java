@@ -51,8 +51,8 @@ public class LeaveCMD extends SubCommand {
 
   @Override
   public void perform(Player player, String[] args) {
-    final CacheManager cacheManager = towns.getCacheManager();
-    final UUID playerID = player.getUniqueId();
+    CacheManager cacheManager = towns.getCacheManager();
+    UUID playerID = player.getUniqueId();
     if (cacheManager.getCacheTowns().hasTown(playerID)) {
       player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_TOWN_OWNER_LEAVE.getComponent(null)));
       return;
@@ -61,7 +61,7 @@ public class LeaveCMD extends SubCommand {
       player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_NO_TOWN.getComponent(null)));
       return;
     }
-    final String town = cacheManager.getCacheTowns().getJoinedTownName(playerID);
+    String town = cacheManager.getCacheTowns().getJoinedTownName(playerID);
     if (args.length > 1) {
       switch (args[1].toLowerCase()) {
         case "confirm" -> {

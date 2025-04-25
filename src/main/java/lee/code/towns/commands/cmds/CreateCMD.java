@@ -55,9 +55,9 @@ public class CreateCMD extends SubCommand {
 
   @Override
   public void perform(Player player, String[] args) {
-    final UUID playerID = player.getUniqueId();
-    final String chunk = ChunkUtil.serializeChunkLocation(player.getLocation().getChunk());
-    final CacheManager cacheManager = towns.getCacheManager();
+    UUID playerID = player.getUniqueId();
+    String chunk = ChunkUtil.serializeChunkLocation(player.getLocation().getChunk());
+    CacheManager cacheManager = towns.getCacheManager();
     if (args.length <= 1) {
       player.sendMessage(Lang.USAGE.getComponent(new String[]{getSyntax()}));
       return;
@@ -70,7 +70,7 @@ public class CreateCMD extends SubCommand {
       player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_CREATE_HAS_JOINED_TOWN.getComponent(new String[]{cacheManager.getCacheTowns().getJoinedTownName(playerID)})));
       return;
     }
-    final String town = CoreUtil.shortenString(CoreUtil.removeSpecialCharacters(CoreUtil.buildStringFromArgs(args, 1)), 30).trim();
+    String town = CoreUtil.shortenString(CoreUtil.removeSpecialCharacters(CoreUtil.buildStringFromArgs(args, 1)), 30).trim();
     if (town.isBlank()) {
       player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_CREATE_BLANK.getComponent(null)));
       return;

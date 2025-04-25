@@ -48,21 +48,21 @@ public class FlagRoleMenu extends MenuGUI {
   }
 
   private MenuButton createFlagButton(Player player, FlagMenuItem flagMenuItem) {
-    final UUID uuid = player.getUniqueId();
+    UUID uuid = player.getUniqueId();
     return new MenuButton()
       .creator(p -> flagMenuItem.createItem(towns.getCacheManager().getCacheTowns().getRoleData().checkRolePermissionFlag(uuid, role, flagMenuItem.getFlag())))
       .consumer(e -> {
         getMenuSoundManager().playClickSound(player);
-        final CacheTowns cacheTowns = towns.getCacheManager().getCacheTowns();
+        CacheTowns cacheTowns = towns.getCacheManager().getCacheTowns();
         if (!cacheTowns.hasTown(uuid)) {
           e.getWhoClicked().getInventory().close();
           return;
         }
-        final boolean newResult = !cacheTowns.getRoleData().checkRolePermissionFlag(uuid, role, flagMenuItem.getFlag());
+        boolean newResult = !cacheTowns.getRoleData().checkRolePermissionFlag(uuid, role, flagMenuItem.getFlag());
         cacheTowns.getRoleData().setRolePermissionFlag(uuid, role, flagMenuItem.getFlag(), newResult);
-        final ItemStack item = e.getCurrentItem();
+        ItemStack item = e.getCurrentItem();
         if (item == null) return;
-        final ItemStack newItem = flagMenuItem.createItem(newResult);
+        ItemStack newItem = flagMenuItem.createItem(newResult);
         item.setItemMeta(newItem.getItemMeta());
         item.setType(newItem.getType());
       });

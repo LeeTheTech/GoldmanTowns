@@ -27,7 +27,7 @@ public class InteractListener implements Listener {
   public void onInteractListener(PlayerInteractEvent e) {
     if (e.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
       if (e.getClickedBlock() == null) return;
-      final InteractEvent interactEvent = new InteractEvent(e.getPlayer(), e.getClickedBlock().getLocation(), e.getClickedBlock());
+      InteractEvent interactEvent = new InteractEvent(e.getPlayer(), e.getClickedBlock().getLocation(), e.getClickedBlock());
       Bukkit.getServer().getPluginManager().callEvent(interactEvent);
       if (interactEvent.isCancelled()) e.setCancelled(true);
     }
@@ -35,30 +35,30 @@ public class InteractListener implements Listener {
 
   @EventHandler
   public void onInteractEntityListener(PlayerInteractEntityEvent e) {
-    final InteractEvent interactEvent = new InteractEvent(e.getPlayer(), e.getRightClicked().getLocation(), null);
+    InteractEvent interactEvent = new InteractEvent(e.getPlayer(), e.getRightClicked().getLocation(), null);
     Bukkit.getServer().getPluginManager().callEvent(interactEvent);
     if (interactEvent.isCancelled()) e.setCancelled(true);
   }
 
   @EventHandler
   public void onInteractAtEntityListener(PlayerInteractAtEntityEvent e) {
-    final InteractEvent interactEvent = new InteractEvent(e.getPlayer(), e.getRightClicked().getLocation(), null);
+    InteractEvent interactEvent = new InteractEvent(e.getPlayer(), e.getRightClicked().getLocation(), null);
     Bukkit.getServer().getPluginManager().callEvent(interactEvent);
     if (interactEvent.isCancelled()) e.setCancelled(true);
   }
 
   @EventHandler
   public void onPlayerBucketEmptyListener(PlayerBucketEmptyEvent e) {
-    final InteractEvent interactEvent = new InteractEvent(e.getPlayer(), e.getBlock().getLocation(), null);
+    InteractEvent interactEvent = new InteractEvent(e.getPlayer(), e.getBlock().getLocation(), null);
     Bukkit.getServer().getPluginManager().callEvent(interactEvent);
     if (interactEvent.isCancelled()) e.setCancelled(true);
   }
 
   @EventHandler
   public void onInteract(InteractEvent e) {
-    final CacheManager cacheManager = towns.getCacheManager();
-    final String chunk = ChunkUtil.serializeChunkLocation(e.getLocation().getChunk());
-    final boolean result = cacheManager.checkPlayerLocationFlag(e.getPlayer().getUniqueId(), chunk, Flag.INTERACT, true);
+    CacheManager cacheManager = towns.getCacheManager();
+    String chunk = ChunkUtil.serializeChunkLocation(e.getLocation().getChunk());
+    boolean result = cacheManager.checkPlayerLocationFlag(e.getPlayer().getUniqueId(), chunk, Flag.INTERACT, true);
     e.setCancelled(result);
     if (result) {
       if (e.getBlock() == null || !(e.getBlock().getState() instanceof Sign)) {

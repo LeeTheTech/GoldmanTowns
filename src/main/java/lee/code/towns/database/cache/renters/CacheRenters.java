@@ -46,7 +46,7 @@ public class CacheRenters extends DatabaseHandler {
   public void deleteAllRenterData(UUID uuid) {
     if (!renterListData.hasRentedChunks(uuid)) return;
     for (String chunk : renterListData.getChunkList(uuid)) {
-      final RentTable rentTable = getRentTable(chunk);
+      RentTable rentTable = getRentTable(chunk);
       rentTable.setRenter(null);
       updateRentDatabase(rentTable);
     }
@@ -54,7 +54,7 @@ public class CacheRenters extends DatabaseHandler {
   }
 
   private void createRentChunkTable(UUID uuid, String chunk, double price) {
-    final RentTable rentTable = new RentTable(chunk, uuid, price);
+    RentTable rentTable = new RentTable(chunk, uuid, price);
     setRentTable(rentTable);
     createRentDatabase(rentTable);
   }
@@ -63,21 +63,21 @@ public class CacheRenters extends DatabaseHandler {
     if (!rentCache.containsKey(chunk)) {
       createRentChunkTable(uuid, chunk, price);
     } else {
-      final RentTable rentTable = getRentTable(chunk);
+      RentTable rentTable = getRentTable(chunk);
       rentTable.setPrice(price);
       updateRentDatabase(rentTable);
     }
   }
 
   public void setRenter(UUID uuid, String chunk) {
-    final RentTable rentTable = getRentTable(chunk);
+    RentTable rentTable = getRentTable(chunk);
     rentTable.setRenter(uuid);
     renterListData.addChunkList(uuid, chunk);
     updateRentDatabase(rentTable);
   }
 
   public void removeRenter(String chunk) {
-    final RentTable rentTable = getRentTable(chunk);
+    RentTable rentTable = getRentTable(chunk);
     renterListData.removeChunkList(rentTable.getRenter(), chunk);
     rentTable.setRenter(null);
     updateRentDatabase(rentTable);

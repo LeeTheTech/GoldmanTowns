@@ -27,43 +27,43 @@ public class AutoClaimListener implements Listener {
 
   @EventHandler
   public void onPlayerMoveListener(PlayerMoveEvent e) {
-    final UUID uuid = e.getPlayer().getUniqueId();
+    UUID uuid = e.getPlayer().getUniqueId();
     if (towns.getAutoClaimManager().isAutoClaiming(uuid)) {
-      final Location location = e.getTo();
-      final String chunk = ChunkUtil.serializeChunkLocation(location.getChunk());
+      Location location = e.getTo();
+      String chunk = ChunkUtil.serializeChunkLocation(location.getChunk());
       if (towns.getAutoClaimManager().getLastAutoClaimChunkChecked(uuid).equals(chunk)) return;
       towns.getAutoClaimManager().setLastAutoClaimChunkChecked(uuid, chunk);
-      final AutoClaimEvent autoClaimEvent = new AutoClaimEvent(e.getPlayer(), location, chunk);
+      AutoClaimEvent autoClaimEvent = new AutoClaimEvent(e.getPlayer(), location, chunk);
       Bukkit.getServer().getPluginManager().callEvent(autoClaimEvent);
     }
   }
 
   @EventHandler
   public void onAutoClaim(AutoClaimEvent e) {
-    final Player player = e.getPlayer();
-    final UUID playerID = e.getPlayer().getUniqueId();
-    final String chunk = e.getChunk();
+    Player player = e.getPlayer();
+    UUID playerID = e.getPlayer().getUniqueId();
+    String chunk = e.getChunk();
     synchronized (CoreUtil.getSynchronizedThreadLock()) {
       Bukkit.getAsyncScheduler().runNow(towns, scheduledTask -> {
-        final CacheManager cacheManager = towns.getCacheManager();
-        final AutoClaimManager autoClaimManager = towns.getAutoClaimManager();
+        CacheManager cacheManager = towns.getCacheManager();
+        AutoClaimManager autoClaimManager = towns.getAutoClaimManager();
         if (!cacheManager.getCacheTowns().hasTownOrJoinedTown(playerID)) {
           autoClaimManager.removeAutoClaiming(playerID);
           player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_AUTO_CLAIM_TOWN_DOES_NOT_EXIST.getComponent(new String[]{Lang.OFF.getString()})));
           return;
         }
         if (cacheManager.getCacheChunks().isClaimed(chunk)) return;
-        final UUID ownerID = cacheManager.getCacheTowns().getTargetTownOwner(playerID);
+        UUID ownerID = cacheManager.getCacheTowns().getTargetTownOwner(playerID);
         if (!playerID.equals(ownerID)) {
-          final String role = cacheManager.getCacheTowns().getPlayerRoleData().getPlayerRole(ownerID, playerID);
+          String role = cacheManager.getCacheTowns().getPlayerRoleData().getPlayerRole(ownerID, playerID);
           if (!cacheManager.getCacheTowns().getRoleData().checkRolePermissionFlag(ownerID, role, Flag.CLAIM)) {
             autoClaimManager.removeAutoClaiming(playerID);
             player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_AUTO_CLAIM_NO_PERMISSION.getComponent(new String[]{Lang.OFF.getString()})));
             return;
           }
         }
-        final int currentChunks = cacheManager.getCacheChunks().getChunkListData().getChunkClaims(ownerID);
-        final int maxChunks = cacheManager.getCacheTowns().getMaxChunkClaims(ownerID);
+        int currentChunks = cacheManager.getCacheChunks().getChunkListData().getChunkClaims(ownerID);
+        int maxChunks = cacheManager.getCacheTowns().getMaxChunkClaims(ownerID);
         if (maxChunks < currentChunks + 1) {
           autoClaimManager.removeAutoClaiming(playerID);
           player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_AUTO_CLAIM_MAX_CLAIMS.getComponent(new String[]{String.valueOf(maxChunks), Lang.OFF.getString()})));

@@ -14,7 +14,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public abstract class MenuGUI implements InventoryHandler {
-  private Inventory inventory;
+  @Getter private Inventory inventory;
   private final ItemStack fillerGlass = MenuItem.FILLER_GLASS.createItem();
   private final DelayManager delayManager = new DelayManager();
   private final Map<Integer, MenuButton> buttonMap = new HashMap<>();
@@ -25,17 +25,13 @@ public abstract class MenuGUI implements InventoryHandler {
     this.inventory = createInventory();
   }
 
-  public Inventory getInventory() {
-    return inventory;
-  }
-
   public void addButton(int slot, MenuButton button) {
     buttonMap.put(slot, button);
   }
 
   public void decorate(Player player) {
     buttonMap.forEach((slot, button) -> {
-      final ItemStack icon = button.getIconCreator().apply(player);
+      ItemStack icon = button.getIconCreator().apply(player);
       inventory.setItem(slot, icon);
     });
   }
@@ -48,7 +44,7 @@ public abstract class MenuGUI implements InventoryHandler {
 
   @Override
   public void onClick(InventoryClickEvent event) {
-    final Player player = (Player) event.getWhoClicked();
+    Player player = (Player) event.getWhoClicked();
     if (player.getInventory().equals(event.getClickedInventory())) {
       if (event.getAction().equals(InventoryAction.MOVE_TO_OTHER_INVENTORY)) {
         event.setCancelled(true);
@@ -58,8 +54,8 @@ public abstract class MenuGUI implements InventoryHandler {
     }
     event.setCancelled(true);
     if (delayManager.hasDelayOrSchedule(player.getUniqueId())) return;
-    final int slot = event.getSlot();
-    final MenuButton button = buttonMap.get(slot);
+    int slot = event.getSlot();
+    MenuButton button = buttonMap.get(slot);
     if (button != null) {
       button.getEventConsumer().accept(event);
     }

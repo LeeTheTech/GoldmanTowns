@@ -28,7 +28,7 @@ public class TownNameListData {
   }
 
   public void setTownName(String name, UUID uuid, boolean updateDatabase) {
-    final TownsTable townsTable = cacheTowns.getTownTable(uuid);
+    TownsTable townsTable = cacheTowns.getTownTable(uuid);
     townsTable.setTown(name);
     setTownNameCache(name, uuid);
     if (updateDatabase) cacheTowns.updateTownsDatabase(townsTable);

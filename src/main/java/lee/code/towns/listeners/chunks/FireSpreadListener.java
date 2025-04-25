@@ -20,7 +20,7 @@ public class FireSpreadListener implements Listener {
   @EventHandler
   public void onFireSpreadListener(BlockSpreadEvent e) {
     if (!e.getSource().getType().equals(Material.FIRE)) return;
-    final FireSpreadEvent fireSpreadEvent = new FireSpreadEvent(e.getBlock().getLocation());
+    FireSpreadEvent fireSpreadEvent = new FireSpreadEvent(e.getBlock().getLocation());
     Bukkit.getServer().getPluginManager().callEvent(fireSpreadEvent);
     if (fireSpreadEvent.isCancelled()) e.setCancelled(true);
   }

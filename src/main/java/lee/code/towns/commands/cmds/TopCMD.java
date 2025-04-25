@@ -56,27 +56,27 @@ public class TopCMD extends SubCommand {
       player.sendMessage(Lang.USAGE.getComponent(new String[]{getSyntax()}));
       return;
     }
-    final CacheManager cacheManager = towns.getCacheManager();
-    final String option = args[1].toLowerCase();
+    CacheManager cacheManager = towns.getCacheManager();
+    String option = args[1].toLowerCase();
     switch (option) {
       case "bank" -> {
-        final Map<UUID, Double> sortedBalances = CoreUtil.sortByValue(cacheManager.getCacheBank().getData().getTownBalances(), Comparator.reverseOrder());
-        final ArrayList<UUID> owners = new ArrayList<>(sortedBalances.keySet());
+        Map<UUID, Double> sortedBalances = CoreUtil.sortByValue(cacheManager.getCacheBank().getData().getTownBalances(), Comparator.reverseOrder());
+        ArrayList<UUID> owners = new ArrayList<>(sortedBalances.keySet());
         int index;
         int page = 0;
-        final int maxDisplayed = 10;
+        int maxDisplayed = 10;
         if (args.length > 2) {
           if (CoreUtil.isPositiveIntNumber(args[2])) page = Integer.parseInt(args[2]);
         }
         int position = page * maxDisplayed + 1;
-        final ArrayList<Component> lines = new ArrayList<>();
+        ArrayList<Component> lines = new ArrayList<>();
         lines.add(Lang.COMMAND_TOP_BANK_TITLE.getComponent(null));
         lines.add(Component.text(" "));
 
         for (int i = 0; i < maxDisplayed; i++) {
           index = maxDisplayed * page + i;
           if (index >= owners.size()) break;
-          final UUID targetID = owners.get(index);
+          UUID targetID = owners.get(index);
           lines.add(Lang.COMMAND_TOP_BANK_LINE.getComponent(new String[]{
             String.valueOf(position),
             cacheManager.getCacheTowns().getTownName(targetID),
@@ -91,27 +91,27 @@ public class TopCMD extends SubCommand {
         for (Component line : lines) player.sendMessage(line);
       }
       case "size" -> {
-        final TownCitizenData townCitizenData = cacheManager.getCacheTowns().getCitizenData();
-        final Map<UUID, Integer> ownerCitizens = new HashMap<>();
+        TownCitizenData townCitizenData = cacheManager.getCacheTowns().getCitizenData();
+        Map<UUID, Integer> ownerCitizens = new HashMap<>();
         for (UUID owner : townCitizenData.getCitizenOwnerList()) ownerCitizens.put(owner, townCitizenData.getCitizenAmount(owner));
-        final Map<UUID, Integer> sortedOwnerCitizens = CoreUtil.sortByValue(ownerCitizens, Comparator.reverseOrder());
-        final ArrayList<UUID> owners = new ArrayList<>(sortedOwnerCitizens.keySet());
+        Map<UUID, Integer> sortedOwnerCitizens = CoreUtil.sortByValue(ownerCitizens, Comparator.reverseOrder());
+        ArrayList<UUID> owners = new ArrayList<>(sortedOwnerCitizens.keySet());
 
         int index;
         int page = 0;
-        final int maxDisplayed = 10;
+        int maxDisplayed = 10;
         if (args.length > 2) {
           if (CoreUtil.isPositiveIntNumber(args[2])) page = Integer.parseInt(args[2]);
         }
         int position = page * maxDisplayed + 1;
-        final ArrayList<Component> lines = new ArrayList<>();
+        ArrayList<Component> lines = new ArrayList<>();
         lines.add(Lang.COMMAND_TOP_SIZE_TITLE.getComponent(null));
         lines.add(Component.text(" "));
 
         for (int i = 0; i < maxDisplayed; i++) {
           index = maxDisplayed * page + i;
           if (index >= owners.size()) break;
-          final UUID targetID = owners.get(index);
+          UUID targetID = owners.get(index);
           lines.add(Lang.COMMAND_TOP_SIZE_LINE.getComponent(new String[]{
             String.valueOf(position),
             towns.getCacheManager().getCacheTowns().getTownName(targetID),

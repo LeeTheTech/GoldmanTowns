@@ -79,7 +79,7 @@ public class CommandManager implements CommandExecutor {
     if (args.length > 0) {
       if (sender instanceof Player player) {
         if (subCommands.containsKey(args[0].toLowerCase())) {
-          final SubCommand subCommand = getSubCommand(args[0].toLowerCase());
+          SubCommand subCommand = getSubCommand(args[0].toLowerCase());
           if (!player.hasPermission(subCommand.getPermission())) {
             player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_NO_PERMISSION.getComponent(null)));
             return true;
@@ -90,7 +90,7 @@ public class CommandManager implements CommandExecutor {
         }
       } else {
         if (subCommands.containsKey(args[0].toLowerCase())) {
-          final SubCommand subCommand = getSubCommand(args[0].toLowerCase());
+          SubCommand subCommand = getSubCommand(args[0].toLowerCase());
           if (subCommand.performAsync()) performAsync(sender, subCommand, args);
           else subCommand.performConsole(sender, args);
           return true;
@@ -103,7 +103,7 @@ public class CommandManager implements CommandExecutor {
 
   public void performAsync(CommandSender sender, SubCommand subCommand, String[] args) {
     if (sender instanceof Player player) {
-      final UUID uuid = player.getUniqueId();
+      UUID uuid = player.getUniqueId();
       if (asyncTasks.containsKey(uuid)) {
         player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_ONE_COMMAND_AT_A_TIME.getComponent(null)));
         return;

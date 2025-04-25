@@ -54,10 +54,10 @@ public class FlagManagerCMD extends SubCommand {
 
   @Override
   public void perform(Player player, String[] args) {
-    final UUID playerID = player.getUniqueId();
-    final MenuManager menuManager = towns.getMenuManager();
-    final CacheManager cacheManager = towns.getCacheManager();
-    final String chunk = ChunkUtil.serializeChunkLocation(player.getLocation().getChunk());
+    UUID playerID = player.getUniqueId();
+    MenuManager menuManager = towns.getMenuManager();
+    CacheManager cacheManager = towns.getCacheManager();
+    String chunk = ChunkUtil.serializeChunkLocation(player.getLocation().getChunk());
     if (cacheManager.getCacheRenters().isRented(chunk)) {
       if (cacheManager.getCacheRenters().isPlayerRenting(playerID, chunk)) {
         menuManager.openMenu(new FlagChunkMenu(towns, chunk, false), player);

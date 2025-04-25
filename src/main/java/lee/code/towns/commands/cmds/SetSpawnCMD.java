@@ -51,13 +51,13 @@ public class SetSpawnCMD extends SubCommand {
 
   @Override
   public void perform(Player player, String[] args) {
-    final CacheManager cacheManager = towns.getCacheManager();
-    final UUID ownerID = player.getUniqueId();
+    CacheManager cacheManager = towns.getCacheManager();
+    UUID ownerID = player.getUniqueId();
     if (!cacheManager.getCacheTowns().hasTown(ownerID)) {
       player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_NOT_TOWN_OWNER.getComponent(null)));
       return;
     }
-    final String chunk = ChunkUtil.serializeChunkLocation(player.getChunk());
+    String chunk = ChunkUtil.serializeChunkLocation(player.getChunk());
     if (!cacheManager.getCacheChunks().isClaimed(chunk) || !cacheManager.getCacheChunks().getChunkOwner(chunk).equals(ownerID)) {
       player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_SET_SPAWN_NOT_CLAIMED.getComponent(null)));
       return;

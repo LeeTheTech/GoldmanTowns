@@ -20,16 +20,16 @@ public class BreakListener implements Listener {
 
   @EventHandler
   public void onBlockBreakListener(BlockBreakEvent e) {
-    final BreakEvent breakEvent = new BreakEvent(e.getPlayer(), e.getBlock().getLocation());
+    BreakEvent breakEvent = new BreakEvent(e.getPlayer(), e.getBlock().getLocation());
     Bukkit.getServer().getPluginManager().callEvent(breakEvent);
     if (breakEvent.isCancelled()) e.setCancelled(true);
   }
 
   @EventHandler
   public void onBreak(BreakEvent e) {
-    final CacheManager cacheManager = towns.getCacheManager();
-    final String chunk = ChunkUtil.serializeChunkLocation(e.getLocation().getChunk());
-    final boolean result = cacheManager.checkPlayerLocationFlag(e.getPlayer().getUniqueId(), chunk, Flag.BREAK, true);
+    CacheManager cacheManager = towns.getCacheManager();
+    String chunk = ChunkUtil.serializeChunkLocation(e.getLocation().getChunk());
+    boolean result = cacheManager.checkPlayerLocationFlag(e.getPlayer().getUniqueId(), chunk, Flag.BREAK, true);
     e.setCancelled(result);
     if (result) FlagUtil.sendFlagErrorMessage(e.getPlayer(), Flag.BREAK, cacheManager.getChunkTownName(chunk), cacheManager.getCacheRenters().getRenter(chunk), cacheManager.getCacheRenters().getRenterName(chunk));
   }

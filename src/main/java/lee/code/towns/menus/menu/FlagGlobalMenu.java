@@ -36,7 +36,7 @@ public class FlagGlobalMenu extends MenuGUI {
   @Override
   public void decorate(Player player) {
     addFillerGlass();
-    final UUID owner = towns.getCacheManager().getCacheTowns().getTargetTownOwner(player.getUniqueId());
+    UUID owner = towns.getCacheManager().getCacheTowns().getTargetTownOwner(player.getUniqueId());
     addButton(10, createFlagButton(player, FlagMenuItem.BREAK, owner));
     addButton(11, createFlagButton(player, FlagMenuItem.BUILD, owner));
     addButton(12, createFlagButton(player, FlagMenuItem.INTERACT, owner));
@@ -58,16 +58,16 @@ public class FlagGlobalMenu extends MenuGUI {
       .creator(p -> flagMenuItem.createItem(towns.getCacheManager().getCacheTowns().getPermData().checkGlobalPermissionFlag(owner, flagMenuItem.getFlag())))
       .consumer(e -> {
         getMenuSoundManager().playClickSound(player);
-        final CacheTowns cacheTowns = towns.getCacheManager().getCacheTowns();
+        CacheTowns cacheTowns = towns.getCacheManager().getCacheTowns();
         if (!cacheTowns.hasTownOrJoinedTown(owner)) {
           e.getWhoClicked().getInventory().close();
           return;
         }
-        final boolean newResult = !cacheTowns.getPermData().checkGlobalPermissionFlag(owner, flagMenuItem.getFlag());
+        boolean newResult = !cacheTowns.getPermData().checkGlobalPermissionFlag(owner, flagMenuItem.getFlag());
         cacheTowns.getPermData().setGlobalPermissionFlag(owner, flagMenuItem.getFlag(), newResult);
-        final ItemStack item = e.getCurrentItem();
+        ItemStack item = e.getCurrentItem();
         if (item == null) return;
-        final ItemStack newItem = flagMenuItem.createItem(newResult);
+        ItemStack newItem = flagMenuItem.createItem(newResult);
         item.setItemMeta(newItem.getItemMeta());
         item.setType(newItem.getType());
       });

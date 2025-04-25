@@ -31,18 +31,18 @@ public class TownPermData extends DatabaseHandler {
   }
 
   public void setGlobalPermissionFlag(UUID uuid, Flag flag, boolean result) {
-    final PermissionTable permissionTable = getPermissionTable(uuid);
+    PermissionTable permissionTable = getPermissionTable(uuid);
     FlagUtil.setPermissionFlag(permissionTable, flag, result);
     updatePermissionDatabase(permissionTable);
   }
 
   public boolean checkGlobalPermissionFlag(UUID uuid, Flag flag) {
-    final PermissionTable permissionTable = getPermissionTable(uuid);
+    PermissionTable permissionTable = getPermissionTable(uuid);
     return FlagUtil.checkPermissionFlag(permissionTable, flag);
   }
 
   public void createDefaultTownPermissionTable(UUID uuid) {
-    final PermissionTable permissionTable = new PermissionTable(uuid, PermissionType.TOWN);
+    PermissionTable permissionTable = new PermissionTable(uuid, PermissionType.TOWN);
     setPermissionTable(permissionTable);
     createPermissionDatabase(permissionTable);
   }

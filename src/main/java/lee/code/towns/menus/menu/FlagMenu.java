@@ -43,22 +43,22 @@ public class FlagMenu extends MenuGUI {
       .creator(p -> MenuItem.FLAG_MANAGER_CHUNK.createItem())
       .consumer(e -> {
         getMenuSoundManager().playClickSound(player);
-        final UUID uuid = player.getUniqueId();
-        final CacheManager cacheManager = towns.getCacheManager();
-        final MenuManager menuManager = towns.getMenuManager();
-        final String chunk = ChunkUtil.serializeChunkLocation(player.getLocation().getChunk());
+        UUID uuid = player.getUniqueId();
+        CacheManager cacheManager = towns.getCacheManager();
+        MenuManager menuManager = towns.getMenuManager();
+        String chunk = ChunkUtil.serializeChunkLocation(player.getLocation().getChunk());
         if (!cacheManager.getCacheChunks().isClaimed(chunk)) {
           player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_FLAG_MANAGER_CHUNK_NOT_CLAIMED.getComponent(null)));
           return;
         }
         if (!cacheManager.getCacheChunks().isChunkOwner(chunk, uuid)) {
-          final UUID chunkOwner = cacheManager.getCacheChunks().getChunkOwner(chunk);
-          final UUID townOwner = cacheManager.getCacheTowns().getTargetTownOwner(uuid);
+          UUID chunkOwner = cacheManager.getCacheChunks().getChunkOwner(chunk);
+          UUID townOwner = cacheManager.getCacheTowns().getTargetTownOwner(uuid);
           if (!chunkOwner.equals(townOwner)) {
             player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_FLAG_MANAGER_CHUNK_NOT_TOWN.getComponent(null)));
             return;
           }
-          final String role = cacheManager.getCacheTowns().getPlayerRoleData().getPlayerRole(chunkOwner, uuid);
+          String role = cacheManager.getCacheTowns().getPlayerRoleData().getPlayerRole(chunkOwner, uuid);
           if (!cacheManager.getCacheTowns().getRoleData().checkRolePermissionFlag(chunkOwner, role, Flag.CHANGE_CHUNK_FLAGS)) {
             player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_FLAG_MANAGER_CHUNK_NO_PERMS.getComponent(null)));
             return;
@@ -80,16 +80,16 @@ public class FlagMenu extends MenuGUI {
       .creator(p -> MenuItem.FLAG_MANAGER_GLOBAL.createItem())
       .consumer(e -> {
         getMenuSoundManager().playClickSound(player);
-        final UUID uuid = player.getUniqueId();
-        final CacheManager cacheManager = towns.getCacheManager();
-        final MenuManager menuManager = towns.getMenuManager();
+        UUID uuid = player.getUniqueId();
+        CacheManager cacheManager = towns.getCacheManager();
+        MenuManager menuManager = towns.getMenuManager();
         if (!cacheManager.getCacheTowns().hasTownOrJoinedTown(uuid)) {
           player.getInventory().close();
           return;
         }
-        final UUID owner = cacheManager.getCacheTowns().getTargetTownOwner(uuid);
+        UUID owner = cacheManager.getCacheTowns().getTargetTownOwner(uuid);
         if (!uuid.equals(owner)) {
-          final String role = cacheManager.getCacheTowns().getPlayerRoleData().getPlayerRole(owner, uuid);
+          String role = cacheManager.getCacheTowns().getPlayerRoleData().getPlayerRole(owner, uuid);
           if (!cacheManager.getCacheTowns().getRoleData().checkRolePermissionFlag(owner, role, Flag.CHANGE_GLOBAL_FLAGS)) {
             player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_FLAG_MANAGER_GLOBAL_NO_PERMS.getComponent(null)));
             return;
@@ -105,13 +105,13 @@ public class FlagMenu extends MenuGUI {
       .creator(p -> MenuItem.FLAG_MANAGER_ROLE.createItem())
       .consumer(e -> {
         getMenuSoundManager().playClickSound(player);
-        final UUID uuid = player.getUniqueId();
-        final CacheManager cacheManager = towns.getCacheManager();
+        UUID uuid = player.getUniqueId();
+        CacheManager cacheManager = towns.getCacheManager();
         if (!cacheManager.getCacheTowns().hasTownOrJoinedTown(uuid)) {
           player.getInventory().close();
           return;
         }
-        final UUID owner = cacheManager.getCacheTowns().getTargetTownOwner(uuid);
+        UUID owner = cacheManager.getCacheTowns().getTargetTownOwner(uuid);
         if (!uuid.equals(owner)) {
           player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_FLAG_MANAGER_ROLE_NOT_OWNER.getComponent(null)));
           return;

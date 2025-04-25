@@ -22,29 +22,29 @@ public class AutoMessageListener implements Listener {
 
   @EventHandler
   public void onAutoMessageListener(PlayerMoveEvent e) {
-    final AutoMessageManager autoMessageManager = towns.getAutoMessageManager();
-    final UUID uuid = e.getPlayer().getUniqueId();
-    final String chunk = ChunkUtil.serializeChunkLocation(e.getPlayer().getLocation().getChunk());
+    AutoMessageManager autoMessageManager = towns.getAutoMessageManager();
+    UUID uuid = e.getPlayer().getUniqueId();
+    String chunk = ChunkUtil.serializeChunkLocation(e.getPlayer().getLocation().getChunk());
     if (autoMessageManager.isLastChunkChecked(uuid, chunk)) return;
     autoMessageManager.setLastChunkChecked(uuid, chunk);
-    final AutoMessageEvent autoMessageEvent = new AutoMessageEvent(e.getPlayer(), e.getPlayer().getLocation(), chunk);
+    AutoMessageEvent autoMessageEvent = new AutoMessageEvent(e.getPlayer(), e.getPlayer().getLocation(), chunk);
     Bukkit.getServer().getPluginManager().callEvent(autoMessageEvent);
   }
 
   @EventHandler
   public void onAutoMessage(AutoMessageEvent e) {
-    final CacheManager cacheManager = towns.getCacheManager();
-    final AutoMessageManager autoMessageManager = towns.getAutoMessageManager();
-    final Player player = e.getPlayer();
-    final UUID uuid = player.getUniqueId();
+    CacheManager cacheManager = towns.getCacheManager();
+    AutoMessageManager autoMessageManager = towns.getAutoMessageManager();
+    Player player = e.getPlayer();
+   UUID uuid = player.getUniqueId();
     if (!cacheManager.getCacheChunks().isClaimed(e.getChunk())) {
       autoMessageManager.removeLastTownChecked(uuid);
       return;
     }
-    final String town = cacheManager.getChunkTownName(e.getChunk());
+    String town = cacheManager.getChunkTownName(e.getChunk());
     if (cacheManager.getCacheRenters().isRentable(e.getChunk())) {
       if (cacheManager.getCacheTowns().hasTownOrJoinedTown(uuid)) {
-        final UUID owner = cacheManager.getCacheTowns().getTargetTownOwner(uuid);
+        UUID owner = cacheManager.getCacheTowns().getTargetTownOwner(uuid);
         if (cacheManager.getCacheTowns().getTownName(owner).equals(town)) {
           autoMessageManager.sendChunkRentableMessage(player, cacheManager.getCacheRenters().getRentPrice(e.getChunk()));
         }

@@ -28,19 +28,19 @@ public class BorderParticleManager {
   }
 
   private void renderBorderParticlesAroundChunks(Player player, Set<String> chunks) {
-    final int playerY = player.getLocation().getBlockY();
-    final int maxDistanceChunks = 10;
+    int playerY = player.getLocation().getBlockY();
+    int maxDistanceChunks = 10;
 
     for (String chunkStr : chunks) {
-      final String[] parts = chunkStr.split(",");
-      final World world = Bukkit.getWorld(parts[0]);
-      final int chunkX = Integer.parseInt(parts[1]);
-      final int chunkZ = Integer.parseInt(parts[2]);
+      String[] parts = chunkStr.split(",");
+      World world = Bukkit.getWorld(parts[0]);
+      int chunkX = Integer.parseInt(parts[1]);
+      int chunkZ = Integer.parseInt(parts[2]);
 
       if (player.getWorld() != world) continue;
 
-      final Location chunkLocation = new Location(world, (chunkX << 4) + 8, playerY, (chunkZ << 4) + 8);
-      final double distance = player.getLocation().distance(chunkLocation) / 16;
+      Location chunkLocation = new Location(world, (chunkX << 4) + 8, playerY, (chunkZ << 4) + 8);
+      double distance = player.getLocation().distance(chunkLocation) / 16;
 
       if (distance <= maxDistanceChunks) {
 
@@ -78,16 +78,16 @@ public class BorderParticleManager {
   }
 
   private void spawnParticleLine(Player player, int y, Location start, Location end) {
-    final Particle particle = Particle.VILLAGER_HAPPY;
-    final Vector direction = end.toVector().subtract(start.toVector()).normalize();
-    final double distance = end.distance(start);
+    Particle particle = Particle.VILLAGER_HAPPY;
+    Vector direction = end.toVector().subtract(start.toVector()).normalize();
+    double distance = end.distance(start);
 
     start.setY(y);
     player.spawnParticle(particle, start, 1);
     for (int p = 0; p < 4; p++) player.spawnParticle(particle, start.add(0, 1, 0), 1);
 
     for (double i = 1; i < distance; i += 1) {
-      final Location location = start.clone().add(direction.clone().multiply(i));
+      Location location = start.clone().add(direction.clone().multiply(i));
       location.setY(y);
       player.spawnParticle(particle, location, 1);
       for (int p = 0; p < 4; p++) player.spawnParticle(particle, location.add(0, 1, 0), 1);
@@ -99,20 +99,20 @@ public class BorderParticleManager {
   }
 
   public void spawnParticleChunkBorder(Player player, Chunk chunk, ChunkRenderType type, boolean clientSide) {
-    final Particle particle = switch (type) {
+    Particle particle = switch (type) {
       case UNCLAIM -> Particle.FLAME;
       case INFO -> Particle.END_ROD;
       default -> Particle.VILLAGER_HAPPY;
     };
-    final Location location = player.getLocation();
+    Location location = player.getLocation();
 
-    final int minX = chunk.getX() * 16;
-    final int minZ = chunk.getZ() * 16;
-    final int minY = location.getBlockY();
+    int minX = chunk.getX() * 16;
+    int minZ = chunk.getZ() * 16;
+    int minY = location.getBlockY();
 
-    final int maxX = minX + 16;
-    final int maxZ = minZ + 16;
-    final int maxY = minY + 5;
+    int maxX = minX + 16;
+    int maxZ = minZ + 16;
+    int maxY = minY + 5;
 
     for (int y = minY; y < maxY; y++) {
       for (int x = minX; x <= maxX; x++) {
@@ -136,20 +136,20 @@ public class BorderParticleManager {
   public void scheduleBorder(Player player, BorderType borderType) {
     if (borderTaskID.containsKey(player.getUniqueId())) return;
     borderTaskID.put(player.getUniqueId(), Bukkit.getAsyncScheduler().runAtFixedRate(towns, (scheduledTask) -> {
-        final CacheManager cacheManager = towns.getCacheManager();
-        final UUID uuid = player.getUniqueId();
+        CacheManager cacheManager = towns.getCacheManager();
+         UUID uuid = player.getUniqueId();
         switch (borderType) {
           case TOWN -> {
             if (!cacheManager.getCacheTowns().hasTownOrJoinedTown(uuid)) {
               stopBorder(uuid);
               return;
             }
-            final UUID owner = cacheManager.getCacheTowns().getTargetTownOwner(uuid);
-            final Set<String> chunks = cacheManager.getCacheChunks().getChunkListData().getChunkList(owner);
+            UUID owner = cacheManager.getCacheTowns().getTargetTownOwner(uuid);
+            Set<String> chunks = cacheManager.getCacheChunks().getChunkListData().getChunkList(owner);
             renderBorderParticlesAroundChunks(player, chunks);
           }
           case CHUNK -> {
-            final Set<String> chunks = ConcurrentHashMap.newKeySet();
+            Set<String> chunks = ConcurrentHashMap.newKeySet();
             chunks.add(ChunkUtil.serializeChunkLocation(player.getLocation().getChunk()));
             renderBorderParticlesAroundChunks(player, chunks);
           }
@@ -158,7 +158,7 @@ public class BorderParticleManager {
               stopBorder(uuid);
               return;
             }
-            final Set<String> chunks = cacheManager.getCacheRenters().getRenterListData().getChunkList(uuid);
+            Set<String> chunks = cacheManager.getCacheRenters().getRenterListData().getChunkList(uuid);
             renderBorderParticlesAroundChunks(player, chunks);
           }
         }

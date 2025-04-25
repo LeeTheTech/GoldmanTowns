@@ -25,7 +25,7 @@ public class ExplosionListener implements Listener {
   @EventHandler
   public void onEntityExplodeListener(EntityExplodeEvent e) {
     for (Block block : new ArrayList<>(e.blockList())) {
-      final ExplosionEvent explosionEvent = new ExplosionEvent(block.getLocation());
+      ExplosionEvent explosionEvent = new ExplosionEvent(block.getLocation());
       Bukkit.getServer().getPluginManager().callEvent(explosionEvent);
       if (explosionEvent.isCancelled()) e.blockList().remove(block);
     }
@@ -34,7 +34,7 @@ public class ExplosionListener implements Listener {
   @EventHandler
   public void onEntityChangeListener(EntityChangeBlockEvent e) {
     if (e.getEntity() instanceof Wither || e.getEntity() instanceof EnderDragon) {
-      final ExplosionEvent explosionEvent = new ExplosionEvent(e.getBlock().getLocation());
+      ExplosionEvent explosionEvent = new ExplosionEvent(e.getBlock().getLocation());
       Bukkit.getServer().getPluginManager().callEvent(explosionEvent);
       if (explosionEvent.isCancelled()) e.setCancelled(true);
     }

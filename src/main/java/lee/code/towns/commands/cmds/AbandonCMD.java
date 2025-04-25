@@ -52,13 +52,13 @@ public class AbandonCMD extends SubCommand {
 
   @Override
   public void perform(Player player, String[] args) {
-    final CacheManager cacheManager = towns.getCacheManager();
-    final UUID playerID = player.getUniqueId();
+    CacheManager cacheManager = towns.getCacheManager();
+    UUID playerID = player.getUniqueId();
     if (!cacheManager.getCacheTowns().hasTown(playerID)) {
       player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_NOT_TOWN_OWNER.getComponent(null)));
       return;
     }
-    final String town = cacheManager.getCacheTowns().getTownName(playerID);
+    String town = cacheManager.getCacheTowns().getTownName(playerID);
     if (args.length > 1) {
       switch (args[1].toLowerCase()) {
         case "confirm" -> {

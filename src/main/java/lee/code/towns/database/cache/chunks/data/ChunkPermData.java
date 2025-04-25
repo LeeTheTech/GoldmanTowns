@@ -28,12 +28,12 @@ public class ChunkPermData extends DatabaseHandler {
   }
 
   public boolean checkChunkPermissionFlag(String chunk, Flag flag) {
-    final PermissionTable permissionTable = permissionCache.get(chunk);
+    PermissionTable permissionTable = permissionCache.get(chunk);
     return FlagUtil.checkPermissionFlag(permissionTable, flag);
   }
 
   public void setChunkPermissionFlag(String chunk, Flag flag, boolean result) {
-    final PermissionTable permissionTable = permissionCache.get(chunk);
+    PermissionTable permissionTable = permissionCache.get(chunk);
     FlagUtil.setPermissionFlag(permissionTable, flag, result);
     updatePermissionDatabase(permissionTable);
   }

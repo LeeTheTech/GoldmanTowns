@@ -41,19 +41,19 @@ public class MenuManager {
   }
 
   public void handleClick(InventoryClickEvent e) {
-    final InventoryHandler handler = activeInventories.get(e.getInventory());
+    InventoryHandler handler = activeInventories.get(e.getInventory());
     if (handler != null) handler.onClick(e);
   }
 
   public void handleOpen(InventoryOpenEvent e) {
-    final InventoryHandler handler = activeInventories.get(e.getInventory());
+    InventoryHandler handler = activeInventories.get(e.getInventory());
     if (handler != null) handler.onOpen(e);
 
   }
 
   public void handleClose(InventoryCloseEvent e) {
-    final Inventory inventory = e.getInventory();
-    final InventoryHandler handler = activeInventories.get(inventory);
+    Inventory inventory = e.getInventory();
+    InventoryHandler handler = activeInventories.get(inventory);
     if (handler != null) {
       handler.onClose(e);
       unregisterInventory(inventory);

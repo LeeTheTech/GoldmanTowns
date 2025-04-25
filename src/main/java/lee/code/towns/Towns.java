@@ -91,7 +91,7 @@ public class Towns extends JavaPlugin {
 
   private void loadCommodoreData() {
     try {
-      final LiteralCommandNode<?> towns = CommodoreFileReader.INSTANCE.parse(getResource("towns.commodore"));
+      LiteralCommandNode<?> towns = CommodoreFileReader.INSTANCE.parse(getResource("towns.commodore"));
       CommodoreProvider.getCommodore(this).register(getCommand("towns"), towns);
     } catch (IOException e) {
       throw new RuntimeException(e);

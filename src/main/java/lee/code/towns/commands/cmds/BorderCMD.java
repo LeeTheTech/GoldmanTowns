@@ -56,10 +56,10 @@ public class BorderCMD extends SubCommand {
       player.sendMessage(Lang.USAGE.getComponent(new String[]{getSyntax()}));
       return;
     }
-    final String option = args[1].toLowerCase();
-    final CacheManager cacheManager = towns.getCacheManager();
-    final UUID playerID = player.getUniqueId();
-    final BorderParticleManager borderParticleManager = towns.getBorderParticleManager();
+    String option = args[1].toLowerCase();
+    CacheManager cacheManager = towns.getCacheManager();
+    UUID playerID = player.getUniqueId();
+    BorderParticleManager borderParticleManager = towns.getBorderParticleManager();
     switch (option) {
       case "town" -> {
         if (!cacheManager.getCacheTowns().hasTownOrJoinedTown(playerID)) {

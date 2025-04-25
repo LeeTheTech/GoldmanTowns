@@ -54,7 +54,7 @@ public class BonusClaimCMD extends SubCommand {
 
   @Override
   public void perform(Player player, String[] args) {
-    final int playerBonusClaims = towns.getCacheManager().getCacheTowns().getBonusClaims(player.getUniqueId());
+    int playerBonusClaims = towns.getCacheManager().getCacheTowns().getBonusClaims(player.getUniqueId());
     if (args.length == 1) {
       player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_BONUS_CLAIM_SUCCESS.getComponent(new String[]{CoreUtil.parseValue(playerBonusClaims)})));
       return;
@@ -63,8 +63,8 @@ public class BonusClaimCMD extends SubCommand {
       player.sendMessage(Lang.USAGE.getComponent(new String[]{getSyntax()}));
       return;
     }
-    final String targetString = args[2];
-    final UUID targetID = PlayerDataAPI.getUniqueId(targetString);
+    String targetString = args[2];
+    UUID targetID = PlayerDataAPI.getUniqueId(targetString);
     if (targetID == null) {
       player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_NO_PLAYER_DATA.getComponent(new String[]{targetString})));
       return;
@@ -73,17 +73,17 @@ public class BonusClaimCMD extends SubCommand {
       player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_BONUS_CLAIM_GIFT_SELF.getComponent(null)));
       return;
     }
-    final String amountString = args[3];
+    String amountString = args[3];
     if (!CoreUtil.isPositiveIntNumber(amountString)){
       player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_VALUE_INVALID.getComponent(new String[]{amountString})));
       return;
     }
-    final int amountBeingSent = Integer.parseInt(amountString);
+    int amountBeingSent = Integer.parseInt(amountString);
     if (amountBeingSent > playerBonusClaims) {
       player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_BONUS_CLAIM_GIFT_INSUFFICIENT_BONUS_CLAIMS.getComponent(new String[]{CoreUtil.parseValue(playerBonusClaims), CoreUtil.parseValue(amountBeingSent)})));
       return;
     }
-    final CacheTowns cacheTowns = towns.getCacheManager().getCacheTowns();
+    CacheTowns cacheTowns = towns.getCacheManager().getCacheTowns();
     cacheTowns.removeBonusClaims(player.getUniqueId(), amountBeingSent);
     cacheTowns.addBonusClaims(targetID, amountBeingSent);
     player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_BONUS_CLAIM_GIFT_SUCCESS.getComponent(new String[]{ColorAPI.getNameColor(targetID, targetString), CoreUtil.parseValue(amountBeingSent)})));

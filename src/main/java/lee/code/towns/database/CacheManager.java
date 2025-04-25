@@ -49,11 +49,11 @@ public class CacheManager {
       }
       return true;
     }
-    final UUID owner = cacheChunks.getChunkOwner(chunk);
+    UUID owner = cacheChunks.getChunkOwner(chunk);
     if (ownerBypass && uuid.equals(owner)) return false;
     if (cacheTowns.getCitizenData().isCitizen(owner, uuid)) {
       if (FlagUtil.isRoleFlag(flag)) {
-        final String role = cacheTowns.getPlayerRoleData().getPlayerRole(owner, uuid);
+        String role = cacheTowns.getPlayerRoleData().getPlayerRole(owner, uuid);
         return !cacheTowns.getRoleData().checkRolePermissionFlag(owner, role, flag);
       }
     }
@@ -65,7 +65,7 @@ public class CacheManager {
 
   public boolean checkLocationFlag(String chunk, Flag flag) {
     if (!cacheChunks.isClaimed(chunk)) return false;
-    final UUID owner = cacheChunks.getChunkOwner(chunk);
+    UUID owner = cacheChunks.getChunkOwner(chunk);
     if (cacheChunks.getChunkPermData().checkChunkPermissionFlag(chunk, Flag.CHUNK_FLAGS_ENABLED)) {
       return !cacheChunks.getChunkPermData().checkChunkPermissionFlag(chunk, flag);
     }
@@ -73,7 +73,7 @@ public class CacheManager {
   }
 
   public String getChunkTownName(Location location) {
-    final String chunk = ChunkUtil.serializeChunkLocation(location.getChunk());
+    String chunk = ChunkUtil.serializeChunkLocation(location.getChunk());
     return cacheTowns.getTownName(cacheChunks.getChunkOwner(chunk));
   }
 
@@ -87,7 +87,7 @@ public class CacheManager {
 
   public void createTown(UUID uuid, String town, Location spawn) {
     cacheChunks.claimEstablishedChunk(ChunkUtil.serializeChunkLocation(spawn.getChunk()), uuid);
-    final TownsTable townsTable = cacheTowns.getTownTable(uuid);
+    TownsTable townsTable = cacheTowns.getTownTable(uuid);
     cacheTowns.getTownNameListData().setTownName(town, uuid, false);
     townsTable.setSpawn(CoreUtil.serializeLocation(spawn));
     cacheTowns.getRoleColorData().setDefaultRoleColor(uuid, false);
@@ -98,9 +98,9 @@ public class CacheManager {
   }
 
   public void deleteTown(UUID uuid) {
-    final TownsTable townsTable = cacheTowns.getTownTable(uuid);
+    TownsTable townsTable = cacheTowns.getTownTable(uuid);
     for (UUID citizen : cacheTowns.getCitizenData().getCitizensList(uuid)) {
-      final TownsTable citizenTable = cacheTowns.getTownTable(citizen);
+      TownsTable citizenTable = cacheTowns.getTownTable(citizen);
       citizenTable.setJoinedTown(null);
       cacheTowns.getTrustData().removeAllTrustedData(citizen);
       cacheTowns.updateTownsDatabase(citizenTable);
@@ -148,8 +148,8 @@ public class CacheManager {
       double amount = 0;
       for (String chunk : cacheRenters.getRenterListData().getChunkList(uuid)) {
         if (!cacheRenters.isRented(chunk)) continue;
-        final double rentCost = cacheRenters.getRentPrice(chunk);
-        final double balance = EcoAPI.getBalance(uuid);
+        double rentCost = cacheRenters.getRentPrice(chunk);
+        double balance = EcoAPI.getBalance(uuid);
         if (balance < rentCost) {
           synchronized (CoreUtil.getSynchronizedThreadLock()) {
             Bukkit.getAsyncScheduler().runNow(towns, scheduledTask -> {
@@ -171,11 +171,11 @@ public class CacheManager {
   private void startTaxCollection() {
     for (UUID playerID : cacheTowns.getAllPlayers()) {
       if (!cacheTowns.hasTown(playerID)) continue;
-      final int claimAmount = cacheChunks.getChunkListData().getChunkClaims(playerID);
-      final double cost = claimAmount * GlobalValue.CLAIM_TAX_AMOUNT.getValue();
-      final double townBank = cacheBank.getData().getTownBalance(playerID);
+      int claimAmount = cacheChunks.getChunkListData().getChunkClaims(playerID);
+      double cost = claimAmount * GlobalValue.CLAIM_TAX_AMOUNT.getValue();
+      double townBank = cacheBank.getData().getTownBalance(playerID);
       if (cost > townBank) {
-        final double remainingBalance = cost - townBank;
+        double remainingBalance = cost - townBank;
         cacheBank.getData().removeTownBalance(playerID, townBank);
         EcoAPI.removeBalance(playerID, remainingBalance);
         PlayerDataAPI.sendPlayerMessageIfOnline(playerID, Lang.PREFIX.getComponent(null).append(Lang.AUTO_TAX_COLLECTION_MESSAGE_MAYOR.getComponent(new String[]{Lang.VALUE_FORMAT.getString(new String[]{CoreUtil.parseValue(remainingBalance)})})));

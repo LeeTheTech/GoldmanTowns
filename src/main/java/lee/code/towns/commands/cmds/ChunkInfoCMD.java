@@ -54,13 +54,13 @@ public class ChunkInfoCMD extends SubCommand {
 
   @Override
   public void perform(Player player, String[] args) {
-    final CacheManager cacheManager = towns.getCacheManager();
-    final String chunk = ChunkUtil.serializeChunkLocation(player.getLocation().getChunk());
+    CacheManager cacheManager = towns.getCacheManager();
+    String chunk = ChunkUtil.serializeChunkLocation(player.getLocation().getChunk());
     if (!cacheManager.getCacheChunks().isClaimed(chunk)) {
       player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_CHUNK_INFO_NOT_CLAIMED.getComponent(null)));
       return;
     }
-    final ArrayList<Component> lines = new ArrayList<>();
+    ArrayList<Component> lines = new ArrayList<>();
     lines.add(Lang.COMMAND_CHUNK_INFO_HEADER.getComponent(null));
     lines.add(Component.text(""));
     lines.add(Lang.COMMAND_CHUNK_INFO_CHUNK.getComponent(new String[]{chunk}));

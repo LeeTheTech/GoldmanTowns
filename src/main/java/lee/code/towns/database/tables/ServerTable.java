@@ -9,6 +9,7 @@ import lombok.Setter;
 @Getter
 @DatabaseTable(tableName = "server")
 public class ServerTable {
+
   @DatabaseField(generatedId = true)
   private int id;
 

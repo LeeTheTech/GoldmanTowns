@@ -13,6 +13,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @DatabaseTable(tableName = "renters")
 public class RentTable {
+
   @DatabaseField(id = true, canBeNull = false)
   private String chunk;
 

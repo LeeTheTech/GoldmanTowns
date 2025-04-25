@@ -53,20 +53,20 @@ public class UnclaimCMD extends SubCommand {
 
   @Override
   public void perform(Player player, String[] args) {
-    final CacheManager cacheManager = towns.getCacheManager();
-    final String chunk = ChunkUtil.serializeChunkLocation(player.getLocation().getChunk());
-    final UUID playerID = player.getUniqueId();
+    CacheManager cacheManager = towns.getCacheManager();
+    String chunk = ChunkUtil.serializeChunkLocation(player.getLocation().getChunk());
+    UUID playerID = player.getUniqueId();
     if (!cacheManager.getCacheChunks().isClaimed(chunk)) {
       player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_UNCLAIM_NOT_CLAIMED.getComponent(new String[]{chunk})));
       return;
     }
-    final UUID ownerID = cacheManager.getCacheTowns().getTargetTownOwner(playerID);
+    UUID ownerID = cacheManager.getCacheTowns().getTargetTownOwner(playerID);
     if (!cacheManager.getCacheChunks().isChunkOwner(chunk, ownerID)) {
       player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_UNCLAIM_NOT_OWNER.getComponent(new String[]{chunk})));
       return;
     }
     if (!playerID.equals(ownerID)) {
-      final String role = cacheManager.getCacheTowns().getPlayerRoleData().getPlayerRole(ownerID, playerID);
+      String role = cacheManager.getCacheTowns().getPlayerRoleData().getPlayerRole(ownerID, playerID);
       if (!cacheManager.getCacheTowns().getRoleData().checkRolePermissionFlag(ownerID, role, Flag.UNCLAIM)) {
         player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_UNCLAIM_NO_PERMISSION.getComponent(null)));
         return;

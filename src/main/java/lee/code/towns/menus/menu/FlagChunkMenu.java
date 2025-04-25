@@ -27,7 +27,7 @@ public class FlagChunkMenu extends MenuGUI {
 
   @Override
   protected Inventory createInventory() {
-    final int size = backSupport ? 54 : 45;
+    int size = backSupport ? 54 : 45;
     return Bukkit.createInventory(null, size, Lang.MENU_FLAG_MANAGER_CHUNK_TITLE.getComponent(null));
   }
 
@@ -61,16 +61,16 @@ public class FlagChunkMenu extends MenuGUI {
       .creator(p -> flagMenuItem.createItem(towns.getCacheManager().getCacheChunks().getChunkPermData().checkChunkPermissionFlag(chunk, flagMenuItem.getFlag())))
       .consumer(e -> {
         getMenuSoundManager().playClickSound(player);
-        final CacheChunks cacheChunks = towns.getCacheManager().getCacheChunks();
+        CacheChunks cacheChunks = towns.getCacheManager().getCacheChunks();
         if (!cacheChunks.isClaimed(chunk)) {
           e.getWhoClicked().getInventory().close();
           return;
         }
-        final boolean newResult = !cacheChunks.getChunkPermData().checkChunkPermissionFlag(chunk, flagMenuItem.getFlag());
+        boolean newResult = !cacheChunks.getChunkPermData().checkChunkPermissionFlag(chunk, flagMenuItem.getFlag());
         cacheChunks.getChunkPermData().setChunkPermissionFlag(chunk, flagMenuItem.getFlag(), newResult);
-        final ItemStack item = e.getCurrentItem();
+        ItemStack item = e.getCurrentItem();
         if (item == null) return;
-        final ItemStack newItem = flagMenuItem.createItem(newResult);
+        ItemStack newItem = flagMenuItem.createItem(newResult);
         item.setItemMeta(newItem.getItemMeta());
         item.setType(newItem.getType());
       });

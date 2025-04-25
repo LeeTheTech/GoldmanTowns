@@ -72,23 +72,23 @@ public class AdminCMD extends SubCommand {
       sender.sendMessage(Lang.USAGE.getComponent(new String[]{getSyntax()}));
       return;
     }
-    final CacheManager cacheManager = towns.getCacheManager();
-    final String option = args[1].toLowerCase();
+    CacheManager cacheManager = towns.getCacheManager();
+    String option = args[1].toLowerCase();
     switch (option) {
       case "bonusclaims" -> {
         if (args.length < 5) {
           sender.sendMessage(Lang.USAGE.getComponent(new String[]{SubSyntax.COMMAND_ADMIN_BONUSCLAIMS_SYNTAX.getString()}));
           return;
         }
-        final String bonusOption = args[2].toLowerCase();
-        final String targetString = args[3];
-        final String amountString = args[4];
+        String bonusOption = args[2].toLowerCase();
+        String targetString = args[3];
+        String amountString = args[4];
         if (!CoreUtil.isPositiveIntNumber(amountString)) {
           sender.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_VALUE_INVALID.getComponent(new String[]{amountString})));
           return;
         }
-        final int amount = Integer.parseInt(amountString);
-        final UUID targetID = PlayerDataAPI.getUniqueId(targetString);
+        int amount = Integer.parseInt(amountString);
+        UUID targetID = PlayerDataAPI.getUniqueId(targetString);
         if (targetID == null) {
           sender.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_NO_PLAYER_DATA.getComponent(new String[]{targetString})));
           return;
@@ -111,7 +111,7 @@ public class AdminCMD extends SubCommand {
       }
       case "unclaim" -> {
         if (sender instanceof Player player) {
-          final String chunk = ChunkUtil.serializeChunkLocation(player.getLocation().getChunk());
+          String chunk = ChunkUtil.serializeChunkLocation(player.getLocation().getChunk());
           if (!cacheManager.getCacheChunks().isClaimed(chunk)) {
             player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_ADMIN_UNCLAIM_NOT_CLAIMED.getComponent(new String[]{chunk})));
             return;
@@ -120,7 +120,7 @@ public class AdminCMD extends SubCommand {
             player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_ADMIN_UNCLAIM_ESTABLISHED_CHUNK.getComponent(null)));
             return;
           }
-          final UUID ownerID = cacheManager.getCacheChunks().getChunkOwner(chunk);
+          UUID ownerID = cacheManager.getCacheChunks().getChunkOwner(chunk);
           if (!cacheManager.getCacheChunks().isUnclaimSafe(ownerID, chunk)) {
             player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_ADMIN_UNCLAIM_UNSAFE.getComponent(new String[]{chunk, ColorAPI.getNameColor(ownerID, PlayerDataAPI.getName(ownerID))})));
             return;
@@ -142,8 +142,8 @@ public class AdminCMD extends SubCommand {
           sender.sendMessage(Lang.USAGE.getComponent(new String[]{SubSyntax.COMMAND_ADMIN_DELETE_SYNTAX.getString()}));
           return;
         }
-        final String targetString = args[2];
-        final UUID targetID = PlayerDataAPI.getUniqueId(targetString);
+        String targetString = args[2];
+        UUID targetID = PlayerDataAPI.getUniqueId(targetString);
         if (targetID == null) {
           sender.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_NO_PLAYER_DATA.getComponent(new String[]{targetString})));
           return;

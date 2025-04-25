@@ -62,8 +62,8 @@ public class ChatChannelManager {
   }
 
   private Component parseChatVariables(Player player, Component chatFormat, Component message) {
-    final CacheManager cacheManager = towns.getCacheManager();
-    final UUID uuid = player.getUniqueId();
+    CacheManager cacheManager = towns.getCacheManager();
+    UUID uuid = player.getUniqueId();
     chatFormat = chatFormat.replaceText(createTextReplacementConfig(nameColorPattern, CoreUtil.parseColorComponent(ColorAPI.getNameColor(player.getUniqueId(), player.getName()))));
     chatFormat = chatFormat.replaceText(createTextReplacementConfig(namePattern, player.getName()));
     chatFormat = chatFormat.replaceText(createTextReplacementConfig(displayNamePattern, player.displayName()));
@@ -82,21 +82,21 @@ public class ChatChannelManager {
     message = message.replaceText(createTextReplacementConfig(shopPattern, ChatVariableUtil.getShopInfo(player)));
     if (!getChatChannel(player.getUniqueId()).equals(ChatChannel.GLOBAL)) return message;
 
-    final String tempMessage = PlainTextComponentSerializer.plainText().serialize(message);
-    final Matcher matcherTag = tagPattern.matcher(tempMessage);
+    String tempMessage = PlainTextComponentSerializer.plainText().serialize(message);
+    Matcher matcherTag = tagPattern.matcher(tempMessage);
     while (matcherTag.find()) {
-      final String group = matcherTag.group();
-      final String target = group.substring(1);
-      final Player targetPlayer = PlayerDataAPI.getOnlinePlayer(target);
+      String group = matcherTag.group();
+      String target = group.substring(1);
+      Player targetPlayer = PlayerDataAPI.getOnlinePlayer(target);
       if (targetPlayer == null) continue;
-      final String mention = ColorAPI.getColorChar(targetPlayer.getUniqueId()) + group;
+      String mention = ColorAPI.getColorChar(targetPlayer.getUniqueId()) + group;
       targetPlayer.playSound(targetPlayer, Sound.BLOCK_NOTE_BLOCK_PLING, (float) 0.3, (float) 1);
       message = message.replaceText(createTextReplacementConfig(Pattern.compile(group), CoreUtil.parseColorComponent(mention)));
     }
 
-    final Matcher matcherLink = linkPattern.matcher(tempMessage);
+    Matcher matcherLink = linkPattern.matcher(tempMessage);
     while (matcherLink.find()) {
-      final String group = matcherLink.group();
+      String group = matcherLink.group();
       message = message.replaceText(createTextReplacementConfig(Pattern.compile(group, Pattern.LITERAL), Lang.LINK.getComponent(null).hoverEvent(Lang.LINK_HOVER.getComponent(null)).clickEvent(ClickEvent.clickEvent(ClickEvent.Action.OPEN_URL, group))));
     }
     return message;

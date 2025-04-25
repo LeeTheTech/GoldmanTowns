@@ -58,14 +58,14 @@ public class InviteCMD extends SubCommand {
       player.sendMessage(Lang.USAGE.getComponent(new String[]{getSyntax()}));
       return;
     }
-    final UUID playerID = player.getUniqueId();
-    final CacheManager cacheManager = towns.getCacheManager();
-    final InviteManager inviteManager = towns.getInviteManager();
+    UUID playerID = player.getUniqueId();
+    CacheManager cacheManager = towns.getCacheManager();
+    InviteManager inviteManager = towns.getInviteManager();
 
     if (args.length > 2) {
-      final String targetString = args[1];
-      final String option = args[2].toLowerCase();
-      final UUID targetID = PlayerDataAPI.getUniqueId(targetString);
+      String targetString = args[1];
+      String option = args[2].toLowerCase();
+      UUID targetID = PlayerDataAPI.getUniqueId(targetString);
       if (targetID == null) {
         player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_NO_PLAYER_DATA.getComponent(new String[]{targetString})));
         return;
@@ -97,8 +97,8 @@ public class InviteCMD extends SubCommand {
     }
     if (!cacheManager.getCacheTowns().hasTown(playerID)) {
       if (cacheManager.getCacheTowns().hasJoinedTown(playerID)) {
-        final UUID ownerID = cacheManager.getCacheTowns().getJoinedTownOwner(playerID);
-        final String role = cacheManager.getCacheTowns().getPlayerRoleData().getPlayerRole(ownerID, playerID);
+        UUID ownerID = cacheManager.getCacheTowns().getJoinedTownOwner(playerID);
+        String role = cacheManager.getCacheTowns().getPlayerRoleData().getPlayerRole(ownerID, playerID);
         if (!cacheManager.getCacheTowns().getRoleData().checkRolePermissionFlag(ownerID, role, Flag.INVITE)) {
           player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_INVITE_INVALID_PERMISSION.getComponent(new String[]{CoreUtil.capitalize(Flag.INVITE.name())})));
           return;
@@ -108,8 +108,8 @@ public class InviteCMD extends SubCommand {
         return;
       }
     }
-    final String targetString = args[1];
-    final Player target = PlayerDataAPI.getOnlinePlayer(targetString);
+    String targetString = args[1];
+    Player target = PlayerDataAPI.getOnlinePlayer(targetString);
     if (target == null) {
       player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_PLAYER_NOT_ONLINE.getComponent(new String[]{targetString})));
       return;

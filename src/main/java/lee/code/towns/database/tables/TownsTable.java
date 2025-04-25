@@ -13,6 +13,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @DatabaseTable(tableName = "towns")
 public class TownsTable {
+
   @DatabaseField(id = true, canBeNull = false)
   private UUID uniqueId;
 

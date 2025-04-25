@@ -26,27 +26,27 @@ public class FlyListener implements Listener {
 
   @EventHandler
   public void onPlayerFlyListener(PlayerMoveEvent e) {
-    final UUID playerID = e.getPlayer().getUniqueId();
-    final FlyManager flyManager = towns.getFlyManager();
+    UUID playerID = e.getPlayer().getUniqueId();
+    FlyManager flyManager = towns.getFlyManager();
     if (flyManager.isFlying(playerID)) {
-      final Location location = e.getTo();
-      final String chunk = ChunkUtil.serializeChunkLocation(location.getChunk());
+      Location location = e.getTo();
+      String chunk = ChunkUtil.serializeChunkLocation(location.getChunk());
       if (flyManager.hasChunkChecked(playerID) && flyManager.getLastChunkChecked(playerID).equals(chunk)) return;
       if (towns.getAutoClaimManager().isAutoClaiming(playerID)) return;
       flyManager.setLastChunkChecked(playerID, chunk);
-      final FlyEvent flyEvent = new FlyEvent(e.getPlayer(), location, chunk);
+      FlyEvent flyEvent = new FlyEvent(e.getPlayer(), location, chunk);
       Bukkit.getServer().getPluginManager().callEvent(flyEvent);
     }
   }
 
   @EventHandler
   public void onFly(FlyEvent e) {
-    final CacheManager cacheManager = towns.getCacheManager();
-    final Player player = e.getPlayer();
-    final UUID playerID = player.getUniqueId();
+    CacheManager cacheManager = towns.getCacheManager();
+    Player player = e.getPlayer();
+    UUID playerID = player.getUniqueId();
     if (cacheManager.getCacheChunks().isClaimed(e.getChunk())) {
       if (cacheManager.getCacheTowns().hasTownOrJoinedTown(playerID)) {
-        final UUID ownerID = cacheManager.getCacheTowns().getTargetTownOwner(playerID);
+        UUID ownerID = cacheManager.getCacheTowns().getTargetTownOwner(playerID);
         if (cacheManager.getCacheChunks().isChunkOwner(e.getChunk(), ownerID)) {
           return;
         }

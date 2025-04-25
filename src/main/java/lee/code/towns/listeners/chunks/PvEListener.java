@@ -27,13 +27,13 @@ public class PvEListener implements Listener {
     if (towns.getData().getMonsterTypes().contains(e.getEntity().getType())) return;
     if (e.getDamager() instanceof Player attacker) {
       if (!(e.getEntity() instanceof Player)) {
-        final PvEEvent pveEvent = new PvEEvent(attacker, e.getEntity().getLocation());
+        PvEEvent pveEvent = new PvEEvent(attacker, e.getEntity().getLocation());
         Bukkit.getServer().getPluginManager().callEvent(pveEvent);
         if (pveEvent.isCancelled()) e.setCancelled(true);
       }
     } else if (e.getDamager() instanceof Projectile projectile) {
       if (projectile.getShooter() instanceof Player attacker) {
-        final PvEEvent pveEvent = new PvEEvent(attacker, e.getEntity().getLocation());
+        PvEEvent pveEvent = new PvEEvent(attacker, e.getEntity().getLocation());
         Bukkit.getServer().getPluginManager().callEvent(pveEvent);
         if (pveEvent.isCancelled()) e.setCancelled(true);
       }
@@ -43,7 +43,7 @@ public class PvEListener implements Listener {
   @EventHandler
   public void onVehicleDestroyListener(VehicleDestroyEvent e) {
     if (e.getAttacker() instanceof Player attacker) {
-      final PvEEvent pveEvent = new PvEEvent(attacker, e.getVehicle().getLocation());
+      PvEEvent pveEvent = new PvEEvent(attacker, e.getVehicle().getLocation());
       Bukkit.getServer().getPluginManager().callEvent(pveEvent);
       if (pveEvent.isCancelled()) e.setCancelled(true);
     }
@@ -52,7 +52,7 @@ public class PvEListener implements Listener {
   @EventHandler
   public void onHangingBreakByEntityListener(HangingBreakByEntityEvent e) {
     if (e.getRemover() instanceof Player attacker) {
-      final PvEEvent pveEvent = new PvEEvent(attacker, e.getEntity().getLocation());
+      PvEEvent pveEvent = new PvEEvent(attacker, e.getEntity().getLocation());
       Bukkit.getServer().getPluginManager().callEvent(pveEvent);
       if (pveEvent.isCancelled()) e.setCancelled(true);
     }
@@ -60,9 +60,9 @@ public class PvEListener implements Listener {
 
   @EventHandler
   public void onPvE(PvEEvent e) {
-    final CacheManager cacheManager = towns.getCacheManager();
-    final String chunk = ChunkUtil.serializeChunkLocation(e.getLocation().getChunk());
-    final boolean result = cacheManager.checkPlayerLocationFlag(e.getAttacker().getUniqueId(), chunk, Flag.PVE, true);
+    CacheManager cacheManager = towns.getCacheManager();
+    String chunk = ChunkUtil.serializeChunkLocation(e.getLocation().getChunk());
+    boolean result = cacheManager.checkPlayerLocationFlag(e.getAttacker().getUniqueId(), chunk, Flag.PVE, true);
     e.setCancelled(result);
     if (result) FlagUtil.sendFlagErrorMessage(e.getAttacker(), Flag.PVE, cacheManager.getChunkTownName(chunk), cacheManager.getCacheRenters().getRenter(chunk), cacheManager.getCacheRenters().getRenterName(chunk));
   }

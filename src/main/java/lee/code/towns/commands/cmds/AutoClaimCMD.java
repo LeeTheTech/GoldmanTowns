@@ -53,33 +53,33 @@ public class AutoClaimCMD extends SubCommand {
 
   @Override
   public void perform(Player player, String[] args) {
-    final CacheManager cacheManager = towns.getCacheManager();
-    final AutoClaimManager autoClaimManager = towns.getAutoClaimManager();
-    final UUID playerID = player.getUniqueId();
+    CacheManager cacheManager = towns.getCacheManager();
+    AutoClaimManager autoClaimManager = towns.getAutoClaimManager();
+    UUID playerID = player.getUniqueId();
     if (!cacheManager.getCacheTowns().hasTownOrJoinedTown(playerID)) {
       player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_NO_TOWN.getComponent(null)));
       return;
     }
-    final UUID ownerID = cacheManager.getCacheTowns().getTargetTownOwner(playerID);
+    UUID ownerID = cacheManager.getCacheTowns().getTargetTownOwner(playerID);
     if (!playerID.equals(ownerID)) {
-      final String role = cacheManager.getCacheTowns().getPlayerRoleData().getPlayerRole(ownerID, playerID);
+      String role = cacheManager.getCacheTowns().getPlayerRoleData().getPlayerRole(ownerID, playerID);
       if (!cacheManager.getCacheTowns().getRoleData().checkRolePermissionFlag(ownerID, role, Flag.CLAIM)) {
         player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_CLAIM_NO_PERMISSION.getComponent(null)));
         return;
       }
     }
-    final boolean active = autoClaimManager.isAutoClaiming(playerID);
+    boolean active = autoClaimManager.isAutoClaiming(playerID);
     if (active) {
       autoClaimManager.removeAutoClaiming(playerID);
     } else {
-      final String chunkString = ChunkUtil.serializeChunkLocation(player.getLocation().getChunk());
+      String chunkString = ChunkUtil.serializeChunkLocation(player.getLocation().getChunk());
       if (!cacheManager.getCacheChunks().isClaimed(chunkString) || !cacheManager.getCacheChunks().isChunkOwner(chunkString, ownerID)) {
         player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_AUTO_CLAIM_NOT_OWNER.getComponent(null)));
         return;
       }
       autoClaimManager.setAutoClaiming(playerID, chunkString);
     }
-    final String result = active ? Lang.OFF.getString() : Lang.ON.getString();
+    String result = active ? Lang.OFF.getString() : Lang.ON.getString();
     player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_AUTO_CLAIM_SUCCESS.getComponent(new String[]{result})));
   }
 

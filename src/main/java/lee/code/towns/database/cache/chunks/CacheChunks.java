@@ -29,7 +29,7 @@ public class CacheChunks extends DatabaseHandler {
   }
 
   private void deleteChunkData(String chunk) {
-    final ChunkTable chunkTable = chunksCache.get(chunk);
+    ChunkTable chunkTable = chunksCache.get(chunk);
     deleteChunkDatabase(chunkTable);
     deletePermissionDatabase(chunkPermData.getPermissionTable(chunk));
     if (chunkTable.isOutpost()) chunkOutpostData.removeChunkList(chunkTable.getOwner(), chunk);
@@ -39,11 +39,11 @@ public class CacheChunks extends DatabaseHandler {
   }
 
   private void createChunkData(String chunk, UUID uuid, boolean outpost, boolean establishedChunk) {
-    final ChunkTable chunkTable = new ChunkTable(chunk, uuid);
+    ChunkTable chunkTable = new ChunkTable(chunk, uuid);
     chunkTable.setOutpost(outpost);
     chunkTable.setEstablishedChunk(establishedChunk);
     setChunkTable(chunkTable);
-    final PermissionTable permissionTable = new PermissionTable(uuid, PermissionType.CHUNK);
+    PermissionTable permissionTable = new PermissionTable(uuid, PermissionType.CHUNK);
     permissionTable.setChunk(chunk);
     chunkPermData.setPermissionTable(permissionTable);
     createChunkAndPermissionDatabase(chunkTable, permissionTable);
@@ -70,17 +70,17 @@ public class CacheChunks extends DatabaseHandler {
   }
 
   public boolean isConnectedChunk(UUID uuid, String chunk) {
-    final Set<String> outposts = chunkOutpostData.getChunkList(uuid);
-    final String[] chunkParts = StringUtils.split(chunk, ",");
-    final int[] offset = {-1, 0, 1};
-    final String world = chunkParts[0];
-    final int baseX = Integer.parseInt(chunkParts[1]);
-    final int baseZ = Integer.parseInt(chunkParts[2]);
+    Set<String> outposts = chunkOutpostData.getChunkList(uuid);
+    String[] chunkParts = StringUtils.split(chunk, ",");
+    int[] offset = {-1, 0, 1};
+    String world = chunkParts[0];
+    int baseX = Integer.parseInt(chunkParts[1]);
+    int baseZ = Integer.parseInt(chunkParts[2]);
 
     for (int x : offset) {
       for (int z : offset) {
         if (x == 0 && z == 0) continue;
-        final String sChunk = world + "," + (baseX + x) + "," + (baseZ + z);
+        String sChunk = world + "," + (baseX + x) + "," + (baseZ + z);
         if (outposts.contains(sChunk)) continue;
         if (isClaimed(sChunk)) {
           if (isChunkOwner(sChunk, uuid)) return true;

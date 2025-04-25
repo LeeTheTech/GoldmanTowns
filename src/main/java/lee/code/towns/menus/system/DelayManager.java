@@ -8,7 +8,7 @@ public class DelayManager {
   private final Map<UUID, Long> delays = new HashMap<>();
 
   private void addDelay(UUID uuid) {
-    final long expirationTime = System.currentTimeMillis() + 200;
+    long expirationTime = System.currentTimeMillis() + 200;
     delays.put(uuid, expirationTime);
   }
 

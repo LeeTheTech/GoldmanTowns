@@ -52,19 +52,19 @@ public class FlyCMD extends SubCommand {
 
   @Override
   public void perform(Player player, String[] args) {
-    final UUID playerID = player.getUniqueId();
-    final FlyManager flyManager = towns.getFlyManager();
+    UUID playerID = player.getUniqueId();
+    FlyManager flyManager = towns.getFlyManager();
     if (flyManager.isFlying(playerID)) {
       flyManager.disableFlying(player);
       player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.COMMAND_FLY_SUCCESS.getComponent(new String[]{Lang.OFF.getString()})));
     } else {
-      final CacheManager cacheManager = towns.getCacheManager();
+      CacheManager cacheManager = towns.getCacheManager();
       if (!cacheManager.getCacheTowns().hasTownOrJoinedTown(playerID)) {
         player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_NO_TOWN.getComponent(null)));
         return;
       }
-      final UUID ownerID = cacheManager.getCacheTowns().getTargetTownOwner(playerID);
-      final String chunk = ChunkUtil.serializeChunkLocation(player.getLocation().getChunk());
+      UUID ownerID = cacheManager.getCacheTowns().getTargetTownOwner(playerID);
+      String chunk = ChunkUtil.serializeChunkLocation(player.getLocation().getChunk());
       if (!cacheManager.getCacheChunks().isClaimed(chunk) || !cacheManager.getCacheChunks().isChunkOwner(chunk, ownerID)) {
         player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ERROR_FLY_NOT_TOWN_CHUNK.getComponent(null)));
         return;
